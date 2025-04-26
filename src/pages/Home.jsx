@@ -1,0 +1,345 @@
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from 'react'
+import herobg from "../assets/hero/herobg.png"
+import { Link } from 'react-router-dom'
+import Partners from '../components/Partners'
+import svgbg from "../assets/bgsvg/Background.png"
+import imagesvg from "../assets/bgsvg/image.png"
+import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+import subtract from "../assets/sub/subtract.png"
+import infra from "../assets/sub/infra.png"
+import infra1 from "../assets/sub/infra1.png"
+import infra2 from "../assets/sub/infra2.png"
+import infra3 from "../assets/sub/infra3.png"
+
+import mid1 from "../assets/mid/mid1.png"
+import mid2 from "../assets/mid/mid2.png"
+import mid3 from "../assets/mid/mid3.png"
+import mid4 from "../assets/mid/mid4.png"
+
+import ban from "../assets/hero/ban1.png"
+import ban1 from "../assets/hero/ban2.png"
+import MainPartners from '../components/MainPartners'
+import TestimonialSlider from '../components/TestimonialSlider'
+
+
+
+export default function Home() {
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    const base = "transform transition-all duration-[600ms] ease-out"
+
+    return (
+        <>
+            <div className="relative w-full">
+                <img src={herobg} alt="herobg" className="object-cover w-full lg:h-auto md:h-[60vh] h-[60vh]" />
+                <div className="absolute inset-0 bg-black/30" />
+
+                <div
+                    className=" absolute top-5 xxsm:top-20 md:top-28 lg:top-8 4xl:top-[100px] left-0 p-4 md:p-0 w-full md:w-[571px] h-auto md:left-10 lg:left-[200px] 4xl:left-[250px] flex flex-col justify-center items-start"
+                >
+                    <h1
+                        className={`${base}${mounted ? "translate-y-0 opacity-100 delay-[800ms]" : "translate-y-[50px] opacity-0"}
+                    text-3xl md:text-5xl lg:text-[60px] font-bold text-white leading-tight md:leading-[71px] mb-4`}
+                    >
+                        Architecting Your Future: Resilient IT Solutions for Global Ambition
+                    </h1>
+
+                    <p
+                        className={`
+            ${base}
+            ${mounted ? "translate-y-0 opacity-100 delay-[1100ms]" : "translate-y-[50px] opacity-0"} text-base md:text-lg text-white  mb-6
+          `}
+                    >
+                        Inflexions I.T. Services partners with businesses to design, implement,
+                        and manage robust technology infrastructures that drive efficiency,
+                        innovation, and growth.
+                    </p>
+
+                    <div
+                        className={`
+            ${base}
+            ${mounted
+                                ? "translate-y-0 opacity-100 delay-[1400ms]"
+                                : "translate-y-[50px] opacity-0"
+                            }
+            w-full md:w-[254px] 
+            h-[60px] 
+            bg-[#BD2E25] 
+            flex items-center justify-center
+          `}
+                    >
+                        <Link to="" className="text-white font-semibold">
+                            Request consultation
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
+            <Partners />
+
+            <section>
+                <div className='flex flex-col md:flex-col lg:flex-row 4xl:flex-row w-full lg:h-[554px] px-4 lg:px-[200px] 4xl:px-[250px]'>
+                    <div className='flex-1 md:px-8 lg:px-0 md:py-10 lg:py-14'>
+                        <h2 className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[800ms]" : "translate-y-[50px] opacity-0"} lg:w-[486px] lg:h-[144px] lg:text-[40px] md:text-[28px] text-[24px] lg:leading-[45px] mb-2 py-2`}>
+                            Your Strategic Technology Partner, From Foundation to Future.
+                        </h2>
+                        <span className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[1200ms]" : "translate-y-[50px] opacity-0"} text-[18px] leading-[30px]`}>
+                            In today's hyper-connected world... achieve your strategic objectives. (As drafted previously).
+                        </span>
+
+                        <div className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[1400ms]" : "translate-y-[50px] opacity-0"} bg-[#BD2E25] w-[201.32px] h-[53px] mt-2 flex items-center justify-center`}>
+                            <Link to="#" className="text-white font-normal">
+                                Request consultation
+                            </Link>
+                        </div>
+                    </div>
+                    <div className='relative flex flex-1 items-center justify-center'>
+                        <div className=''>
+                            <img src={svgbg} alt='svgbg' className='w-[419px] h-full object-contain' loading='lazy' />
+                            <div className='absolute top-20 md:top-32 lg:top-32 4xl:top-32 md:left-[17%] lg:left-[6%] 4xl:left-[15%]'>
+                                <img src={imagesvg} alt='svgbg' className='w-[490px] h-[353px] object-contain' loading='lazy' />
+                            </div>
+                            <div className='absolute top-[165px] md:left-[80px] lg:left-0 4xl:left-[60px] flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white'>
+                                <IoIosCheckmarkCircleOutline className='text-[#BD2E25]' />
+                                <span className='text-[16px] leading-[30px] text-[#1D3C6D]'>Robust Infrastructure</span>
+                            </div>
+                            <div className='absolute top-[220px] md:top-[240px] lg:top-[240px] left-[30px] md:left-[45px] lg:left-[-30px] 4xl:left-[10px] flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white'>
+                                <IoIosCheckmarkCircleOutline className='text-[#BD2E25]' />
+                                <span className='text-[16px] leading-[30px] text-[#1D3C6D]'>Cloud Infrastructure </span>
+                            </div>
+                            <div className='absolute top-[280px] md:top-[315px] lg:top-[315px] md:left-[80px] lg:left-0 4xl:left-[60px] flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white'>
+                                <IoIosCheckmarkCircleOutline className='text-[#BD2E25]' />
+                                <span className='text-[16px] leading-[30px] text-[#1D3C6D]'>Security & Support</span>
+                            </div>
+                            <div className='absolute top-[340px] md:top-[390px] lg:top-[390px] left-[30px] md:left-[45px] lg:left-[-30px] 4xl:left-[10px] flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white'>
+                                <IoIosCheckmarkCircleOutline className='text-[#BD2E25]' />
+                                <span className='text-[16px] leading-[30px] text-[#1D3C6D]'>Data Intelligence</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div className="flex flex-col md:flex-col lg:flex-row lg:h-[800px] h-full w-full gap-x-10">
+                <div className="flex-1 py-2 md:py-4 lg:py-0 md:px-4 lg:px-0 px-0 4xl:px-0">
+                    <img
+                        src={subtract}
+                        alt="sub"
+                        className="w-full lg:w-[710px] md:w-[700px] 4xl:w-full lg:h-[800px] object-contain"
+                        loading="lazy"
+                    />
+                </div>
+                <div className="flex-1 py-4 md:py-10 lg:py-20 lg:pl-10 px-4 md:px-8 lg:px-0">
+                    <div className='flex flex-col gap-8 w-full lg:w-[500px] 4xl:w-[600px] lg:h-[700px]'>
+                        <h2 className="lg:w-[400px] lg:h-[93px] lg:text-[32px] md:text-[32px] text-[20px] lg:leading-[40px] text-[#265982]">
+                            Comprehensive Solutions for Modern Challenges
+                        </h2>
+                        <div className="lg:w-[400px] 4xl:w-full 4xl:space-y-8 lg:space-y-4 space-y-4">
+                            {/* Top card */}
+                            <div className="relative rounded-[30px] overflow-hidden h-[226px]">
+                                <img
+                                    src={infra}
+                                    alt="Network Infrastructure"
+                                    className="w-full h-full object-cover"
+                                    loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-[#ED0707] bg-opacity-60 rounded-[30px]" />
+                                <div className="absolute inset-0 flex flex-col justify-center items-start p-6 text-white">
+                                    <h3 className="text-[22px] font-bold leading-[28px] tracking-[0.24px]">
+                                        Network Infrastructure
+                                    </h3>
+                                    <p className="mt-2 text-[18px] leading-[34px]">
+                                        Accept payment across all networks
+                                    </p>
+                                    <p className="mt-1 text-[14px] leading-[28px]">
+                                        Receive payments from all networks via a shortcode. It’s quick, easy, and no internet is needed.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Middle row */}
+                            <div className="flex gap-4 4xl:gap-10">
+                                {/* Data‑science */}
+                                <div className="relative w-[327px] h-[100px] rounded-[30px] overflow-hidden">
+                                    <img
+                                        src={infra1}
+                                        alt="Data‑science"
+                                        className="w-full h-full object-cover"
+                                        loading="lazy"
+                                    />
+                                    <div className="absolute inset-0 bg-[#ED0707] bg-opacity-55 rounded-[30px]" />
+                                    <div className="absolute inset-0 flex items-center justify-center text-white">
+                                        <h3 className="text-[18px] font-bold leading-[28px]">
+                                            Data‑science
+                                        </h3>
+                                    </div>
+                                </div>
+
+                                {/* Cloud Services – narrower */}
+                                <div className="relative 4xl:w-[220px] w-[192px] h-[100px] rounded-[30px] overflow-hidden">
+                                    <img
+                                        src={infra2}
+                                        alt="Cloud Services"
+                                        className="w-full h-full object-cover"
+                                        loading="lazy"
+                                    />
+                                    <div className="absolute inset-0 bg-black bg-opacity-30 rounded-[30px]" />
+                                    <div className="absolute inset-0 flex items-center justify-center text-white">
+                                        <h3 className="lg:text-[18px] text-[12px] font-bold leading-[28px]">
+                                            Cloud Services
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Bottom card */}
+                            <div className="relative rounded-[30px] overflow-hidden h-[137px]">
+                                <img
+                                    src={infra3}
+                                    alt="Data‑centre Solutions"
+                                    className="w-full h-full object-cover"
+                                    loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-black bg-opacity-30 rounded-[30px]" />
+                                <div className="absolute inset-0 flex items-center justify-center p-6 text-white">
+                                    <h3 className="text-[22px] font-bold leading-[28px] tracking-[0.24px]">
+                                        Data‑centre Solutions
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-12">
+                {/* Heading */}
+                <h2 className="text-3xl font-medium text-gray-900 mb-12">
+                    Your The Inflexions
+                    <br />
+                    Advantage
+                </h2>
+
+                {/* Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4">
+                    {/* 1) Top‑left */}
+                    <div className="relative w-full h-[260px] rounded-lg overflow-hidden">
+                        <img
+                            src={mid1}
+                            alt="Person using tablet"
+                            className="object-cover w-full h-full"
+                            loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-black/20" />
+                    </div>
+
+                    {/* 2) Top‑middle */}
+                    <div className="relative w-full h-[260px] rounded-lg overflow-hidden">
+                        <img
+                            src={mid2}
+                            alt="People working at desk"
+                            className="object-cover w-full h-full"
+                            loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-black/30" />
+                        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white">
+                            <h3 className="text-xl font-semibold">Client‑Centric Approach:</h3>
+                            <p>Solutions tailored...</p>
+                        </div>
+                    </div>
+
+                    {/* 3) Right side (spans 2 rows on md) */}
+                    <div className="relative w-full h-[214px] lg:h-[530px] md:h-[540px] rounded-lg overflow-hidden md:row-span-2">
+                        <img
+                            src={mid3}
+                            alt="Technology with red overlay"
+                            className="object-cover w-full h-full"
+                            loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-red-900/70" />
+                        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white">
+                            <h3 className="text-xl font-semibold">Reliable Partnership:</h3>
+                            <p>Committed to proactive...</p>
+                        </div>
+                    </div>
+
+                    {/* 4) Bottom (spans 2 columns on md) */}
+                    <div className="relative w-full h-[259px] md:col-span-2 rounded-lg overflow-hidden">
+                        <img
+                            src={mid4}
+                            alt="Person working on design"
+                            className="object-cover w-full h-full"
+                            loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-black/30" />
+                        <div className="absolute inset-0 flex items-center justify-center p-6 text-white">
+                            <h3 className="text-xl font-semibold">Future‑Focused:</h3>
+                            <p>Designing scalable...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <MainPartners />
+            <TestimonialSlider />
+
+            <section>
+                <div className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[440px] overflow-hidden">
+                    <img
+                        src={ban}
+                        alt="banner"
+                        loading="lazy"
+                        className="w-full h-full object-cover"
+                    />
+
+                    <div
+                        className="
+            absolute top-4 sm:top-8 md:top-20 lg:top-[20%]
+            left-4 sm:left-6 md:left-4 lg:left-[165px]
+            w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:w-[400px] lg:w-[568px] bg-opacity-90
+            p-4 sm:p-6 md:p-8
+            flex flex-col gap-3 sm:gap-4
+          "
+                    >
+                        <h2 className="
+            text-lg sm:text-xl md:text-2xl lg:text-[43px]
+            leading-snug md:leading-tight lg:leading-[43px]
+            font-normal text-white
+          ">
+                            Ready to Transform Your Technology Landscape?
+                        </h2>
+
+                        <p className="text-sm sm:text-base text-white">
+                            Let&apos;s discuss how Inflexions can empower your business growth.
+                        </p>
+
+                        <div className="
+            bg-white
+            w-[285px] h-[50px] items-center justify-center flex
+          ">
+                            <Link to="" className="text-[#BD2E25] font-semibold block text-center">
+                                Schedule a Discovery Call
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <img
+                    src={ban1}
+                    alt="banner"
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                />
+            </section>
+        </>
+    )
+}
