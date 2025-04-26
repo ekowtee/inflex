@@ -52,7 +52,7 @@ export default function Navbar() {
                     <Link to="/services" className="text-[#5C5D5D] hover:text-red-600 font-medium">
                         Services
                     </Link>
-                    <Link to="/case-study" className="text-[#5C5D5D] hover:text-red-600 font-medium">
+                    <Link to="/case-studies" className="text-[#5C5D5D] hover:text-red-600 font-medium">
                         Case study
                     </Link>
                     <Link to="/careers" className="text-[#5C5D5D] hover:text-red-600 font-medium">
@@ -117,7 +117,7 @@ export default function Navbar() {
                             Services
                         </Link>
                         <Link
-                            to="/case-study"
+                            to="/case-studies"
                             onClick={() => setIsMenuOpen(false)}
                             className="block text-gray-700 hover:text-red-600 font-medium py-2"
                         >
