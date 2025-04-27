@@ -1,12 +1,26 @@
 /* eslint-disable no-unused-vars */
+// src/components/Navbar.jsx
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { FaInstagram, FaFacebookF, FaTwitter, FaLinkedinIn } from 'react-icons/fa'
+import { NavLink, Link } from 'react-router-dom'
+import {
+    FaInstagram,
+    FaFacebookF,
+    FaTwitter,
+    FaLinkedinIn,
+} from 'react-icons/fa'
 import { FiMenu, FiX } from 'react-icons/fi'
 import logo from '../assets/logo.png'
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+    // Shared function for link classes
+    const navLinkClasses = ({ isActive }) =>
+        `pb-2 border-b-4 transition-colors duration-200 font-medium
+     ${isActive
+            ? 'text-red-600 border-red-600'
+            : 'text-[#5C5D5D] border-transparent'} 
+     hover:text-red-600 hover:border-red-600`
 
     return (
         <header className="w-full bg-white shadow-sm">
@@ -14,9 +28,7 @@ export default function Navbar() {
                 className="
           container mx-auto
           px-4 sm:px-6 md:px-8
-          lg:px-12
-          xl:px-20
-          2xl:px-40
+          lg:px-12 xl:px-20 2xl:px-40
           flex items-center justify-between
           h-[70px]
         "
@@ -28,7 +40,7 @@ export default function Navbar() {
                     </Link>
                 </div>
 
-                {/* Hamburger button: visible on all screens below lg */}
+                {/* Hamburger (below lg) */}
                 <div className="lg:hidden">
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -38,28 +50,29 @@ export default function Navbar() {
                     </button>
                 </div>
 
-                {/* Desktop Navigation & Social (lg and up) */}
+                {/* Desktop nav */}
                 <nav className="hidden lg:flex items-center space-x-8">
-                    <Link to="/" className="text-[#5C5D5D] hover:text-red-600 font-medium">
+                    <NavLink to="/" className={navLinkClasses}>
                         Home
-                    </Link>
-                    <Link to="/about" className="text-[#5C5D5D] hover:text-red-600 font-medium">
+                    </NavLink>
+                    <NavLink to="/about" className={navLinkClasses}>
                         About
-                    </Link>
-                    <Link to="/solutions" className="text-[#5C5D5D] hover:text-red-600 font-medium">
+                    </NavLink>
+                    <NavLink to="/solutions" className={navLinkClasses}>
                         Solutions
-                    </Link>
-                    <Link to="/services" className="text-[#5C5D5D] hover:text-red-600 font-medium">
+                    </NavLink>
+                    <NavLink to="/services" className={navLinkClasses}>
                         Services
-                    </Link>
-                    <Link to="/case-studies" className="text-[#5C5D5D] hover:text-red-600 font-medium">
+                    </NavLink>
+                    <NavLink to="/case-studies" className={navLinkClasses}>
                         Case study
-                    </Link>
-                    <Link to="/careers" className="text-[#5C5D5D] hover:text-red-600 font-medium">
+                    </NavLink>
+                    <NavLink to="/careers" className={navLinkClasses}>
                         Careers
-                    </Link>
+                    </NavLink>
                 </nav>
 
+                {/* Desktop social + contact */}
                 <div className="hidden lg:flex items-center space-x-4">
                     <div className="flex items-center space-x-3 mr-4">
                         <Link to="#" className="text-gray-500 hover:text-[#5C5D5D]">
@@ -84,52 +97,64 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile / MD menu: visible below lg when open */}
+            {/* Mobile menu */}
             {isMenuOpen && (
                 <div className="lg:hidden bg-white border-t">
                     <div className="container mx-auto px-4 py-3 space-y-3">
-                        <Link
+                        <NavLink
                             to="/"
                             onClick={() => setIsMenuOpen(false)}
-                            className="block text-gray-700 hover:text-red-600 font-medium py-2"
+                            className={({ isActive }) =>
+                                `block ${navLinkClasses({ isActive })} py-2`
+                            }
                         >
                             Home
-                        </Link>
-                        <Link
+                        </NavLink>
+                        <NavLink
                             to="/about"
                             onClick={() => setIsMenuOpen(false)}
-                            className="block text-gray-700 hover:text-red-600 font-medium py-2"
+                            className={({ isActive }) =>
+                                `block ${navLinkClasses({ isActive })} py-2`
+                            }
                         >
                             About
-                        </Link>
-                        <Link
+                        </NavLink>
+                        <NavLink
                             to="/solutions"
                             onClick={() => setIsMenuOpen(false)}
-                            className="block text-gray-700 hover:text-red-600 font-medium py-2"
+                            className={({ isActive }) =>
+                                `block ${navLinkClasses({ isActive })} py-2`
+                            }
                         >
                             Solutions
-                        </Link>
-                        <Link
+                        </NavLink>
+                        <NavLink
                             to="/services"
                             onClick={() => setIsMenuOpen(false)}
-                            className="block text-gray-700 hover:text-red-600 font-medium py-2"
+                            className={({ isActive }) =>
+                                `block ${navLinkClasses({ isActive })} py-2`
+                            }
                         >
                             Services
-                        </Link>
-                        <Link
+                        </NavLink>
+                        <NavLink
                             to="/case-studies"
                             onClick={() => setIsMenuOpen(false)}
-                            className="block text-gray-700 hover:text-red-600 font-medium py-2"
+                            className={({ isActive }) =>
+                                `block ${navLinkClasses({ isActive })} py-2`
+                            }
                         >
                             Case study
-                        </Link>
-                        <Link
+                        </NavLink>
+                        <NavLink
                             to="/careers"
                             onClick={() => setIsMenuOpen(false)}
-                            className="block text-gray-700 hover:text-red-600 font-medium py-2"
+                            className={({ isActive }) =>
+                                `block ${navLinkClasses({ isActive })} py-2`
+                            }
                         >
                             Careers
-                        </Link>
+                        </NavLink>
 
                         <div className="flex items-center space-x-3 py-2">
                             <Link to="#" className="text-gray-500 hover:text-gray-700">
