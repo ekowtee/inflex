@@ -136,7 +136,7 @@ export default function Home() {
                         loading="lazy"
                     />
                 </div>
-                <div className="flex-1 py-4 md:py-10 lg:py-20 lg:pl-10 px-4 md:px-8 lg:px-0">
+                <div className="flex-1 py-4 md:py-10 lg:py-20 lg:pl-[200px] px-4 md:px-8 lg:px-0">
                     <div className='flex flex-col gap-8 w-full lg:w-[500px] 4xl:w-[600px] lg:h-[700px]'>
                         <h2 className="lg:w-[400px] lg:h-[93px] lg:text-[32px] md:text-[32px] text-[20px] lg:leading-[40px] text-[#265982]">
                             Comprehensive Solutions for Modern Challenges

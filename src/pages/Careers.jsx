@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
-import careerbg from "../assets/case/casebg.png"
+import careerbg from "../assets/career/careerbg.png"
 import { Search } from 'lucide-react'
 import career1 from "../assets/career/career1.png"
 import { Link } from 'react-router-dom'
