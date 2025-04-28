@@ -150,7 +150,7 @@ export default function Home() {
                                     className="w-full h-full object-cover"
                                     loading="lazy"
                                 />
-                                <div className="absolute inset-0 bg-[#ED0707] bg-opacity-60 rounded-[30px]" />
+                                {/* <div className="absolute inset-0 bg-[#ED0707] bg-opacity-60 rounded-[30px]" /> */}
                                 <div className="absolute inset-0 flex flex-col justify-center items-start p-6 text-white">
                                     <h3 className="text-[22px] font-bold leading-[28px] tracking-[0.24px]">
                                         Network Infrastructure
@@ -174,7 +174,7 @@ export default function Home() {
                                         className="w-full h-full object-cover"
                                         loading="lazy"
                                     />
-                                    <div className="absolute inset-0 bg-[#ED0707] bg-opacity-55 rounded-[30px]" />
+                                    {/* <div className="absolute inset-0 bg-[#ED0707] bg-opacity-55 rounded-[30px]" /> */}
                                     <div className="absolute inset-0 flex items-center justify-center text-white">
                                         <h3 className="text-[18px] font-bold leading-[28px]">
                                             Data‑science
@@ -263,7 +263,7 @@ export default function Home() {
                             className="object-cover w-full h-full"
                             loading="lazy"
                         />
-                        <div className="absolute inset-0 bg-red-900/70" />
+                        {/* <div className="absolute inset-0 bg-red-900/70" /> */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white">
                             <h3 className="text-xl font-semibold">Reliable Partnership:</h3>
                             <p>Committed to proactive...</p>
