@@ -67,7 +67,7 @@ export default function Faq() {
                 </div>
 
                 {/* Right: Hero image + consultation box */}
-                <div className="relative w-full md:hidden">
+                <div className="relative w-full md:hidden lg:block">
                     <img
                         src={faq}
                         alt="Consultation"
