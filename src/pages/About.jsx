@@ -6,7 +6,7 @@ import { ChartBar, Phone, Play } from 'lucide-react'
 import about1 from "../assets/about/about1.png"
 import about2 from "../assets/about/about2.png"
 import aboutsect from "../assets/about/aboutsect.png"
-import ekowimg from "../assets/about/imagesssss.jpg"
+import ekowimg from "../assets/about/view.png"
 import exp from "../assets/about/exp.png"
 import exp1 from "../assets/about/exp1.png"
 

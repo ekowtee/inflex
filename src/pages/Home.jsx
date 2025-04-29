@@ -24,6 +24,9 @@ import ban1 from "../assets/hero/ban2.png"
 import MainPartners from '../components/MainPartners'
 import TestimonialSlider from '../components/TestimonialSlider'
 
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 
 
 export default function Home() {
@@ -32,6 +35,13 @@ export default function Home() {
     useEffect(() => {
         setMounted(true)
     }, [])
+
+    useEffect(() => {
+        AOS.init({
+            duration: 3000,
+        });
+        AOS.refresh();
+    }, []);
 
     const base = "transform transition-all duration-[600ms] ease-out"
 
@@ -94,33 +104,95 @@ export default function Home() {
                             In today's hyper-connected world... achieve your strategic objectives. (As drafted previously).
                         </span>
 
-                        <div className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[1400ms]" : "translate-y-[50px] opacity-0"} bg-[#BD2E25] w-[201.32px] h-[53px] mt-2 flex items-center justify-center`}>
+                        <div className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[1400ms]" : "translate-y-[50px] opacity-0"} bg-[#BD2E25] w-[201.32px] h-[53px] mt-6 flex items-center justify-center`}>
                             <Link to="#" className="text-white font-normal">
                                 Request consultation
                             </Link>
                         </div>
                     </div>
-                    <div className='relative flex flex-1 items-center justify-center'>
+                    <div className='relative flex flex-1 items-center justify-center mt-2 md:mt-0 lg:mt-0'>
                         <div className=''>
                             <img src={svgbg} alt='svgbg' className='w-[419px] h-full object-contain' loading='lazy' />
                             <div className='absolute top-20 md:top-32 lg:top-32 4xl:top-32 md:left-[17%] lg:left-[6%] 4xl:left-[15%]'>
                                 <img src={imagesvg} alt='svgbg' className='w-[490px] h-[353px] object-contain' loading='lazy' />
                             </div>
-                            <div className='absolute top-[165px] md:left-[80px] lg:left-0 4xl:left-[60px] flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white'>
+                            {/* 1) Robust Infrastructure */}
+                            <div
+                                className={`
+            ${base}
+            ${mounted
+                                        ? "translate-x-0 opacity-100 delay-[1600ms]"
+                                        : "translate-x-[50px] opacity-0"
+                                    }
+            absolute top-[165px] md:left-[80px] lg:left-0 4xl:left-[60px]
+            flex gap-2 items-center justify-center
+            w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white
+          `}
+                            >
                                 <IoIosCheckmarkCircleOutline className='text-[#BD2E25]' />
-                                <span className='text-[16px] leading-[30px] text-[#1D3C6D]'>Robust Infrastructure</span>
+                                <span className='text-[16px] leading-[30px] text-[#1D3C6D]'>
+                                    Robust Infrastructure
+                                </span>
                             </div>
-                            <div className='absolute top-[220px] md:top-[240px] lg:top-[240px] left-[30px] md:left-[45px] lg:left-[-30px] 4xl:left-[10px] flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white'>
+
+                            {/* 2) Cloud Infrastructure */}
+                            <div
+                                className={`
+            ${base}
+            ${mounted
+                                        ? "translate-x-0 opacity-100 delay-[1800ms]"
+                                        : "translate-x-[50px] opacity-0"
+                                    }
+            absolute top-[220px] md:top-[240px] lg:top-[240px]
+            left-[30px] md:left-[45px] lg:left-[-30px] 4xl:left-[10px]
+            flex gap-2 items-center justify-center
+            w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white
+          `}
+                            >
                                 <IoIosCheckmarkCircleOutline className='text-[#BD2E25]' />
-                                <span className='text-[16px] leading-[30px] text-[#1D3C6D]'>Cloud Infrastructure </span>
+                                <span className='text-[16px] leading-[30px] text-[#1D3C6D]'>
+                                    Cloud Infrastructure
+                                </span>
                             </div>
-                            <div className='absolute top-[280px] md:top-[315px] lg:top-[315px] md:left-[80px] lg:left-0 4xl:left-[60px] flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white'>
+
+                            {/* 3) Security & Support */}
+                            <div
+                                className={`
+            ${base}
+            ${mounted
+                                        ? "translate-x-0 opacity-100 delay-[2000ms]"
+                                        : "translate-x-[50px] opacity-0"
+                                    }
+            absolute top-[280px] md:top-[315px] lg:top-[315px]
+            md:left-[80px] lg:left-0 4xl:left-[60px]
+            flex gap-2 items-center justify-center
+            w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white
+          `}
+                            >
                                 <IoIosCheckmarkCircleOutline className='text-[#BD2E25]' />
-                                <span className='text-[16px] leading-[30px] text-[#1D3C6D]'>Security & Support</span>
+                                <span className='text-[16px] leading-[30px] text-[#1D3C6D]'>
+                                    Security &amp; Support
+                                </span>
                             </div>
-                            <div className='absolute top-[340px] md:top-[390px] lg:top-[390px] left-[30px] md:left-[45px] lg:left-[-30px] 4xl:left-[10px] flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white'>
+
+                            {/* 4) Data Intelligence */}
+                            <div
+                                className={`
+            ${base}
+            ${mounted
+                                        ? "translate-x-0 opacity-100 delay-[2200ms]"
+                                        : "translate-x-[50px] opacity-0"
+                                    }
+            absolute top-[340px] md:top-[390px] lg:top-[390px]
+            left-[30px] md:left-[45px] lg:left-[-30px] 4xl:left-[10px]
+            flex gap-2 items-center justify-center
+            w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white
+          `}
+                            >
                                 <IoIosCheckmarkCircleOutline className='text-[#BD2E25]' />
-                                <span className='text-[16px] leading-[30px] text-[#1D3C6D]'>Data Intelligence</span>
+                                <span className='text-[16px] leading-[30px] text-[#1D3C6D]'>
+                                    Data Intelligence
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -128,7 +200,7 @@ export default function Home() {
             </section>
 
             <div className="flex flex-col md:flex-col lg:flex-row lg:h-[800px] h-full w-full gap-x-10">
-                <div className="flex-1 py-2 md:py-4 lg:py-0 md:px-4 lg:px-0 px-0 4xl:px-0">
+                <div data-aos="flip-right" className="flex-1 py-2 md:py-4 lg:py-0 md:px-4 lg:px-0 px-0 4xl:px-0">
                     <img
                         src={subtract}
                         alt="sub"
@@ -143,7 +215,7 @@ export default function Home() {
                         </h2>
                         <div className="lg:w-[400px] 4xl:w-full 4xl:space-y-8 lg:space-y-4 space-y-4">
                             {/* Top card */}
-                            <div className="relative rounded-[30px] overflow-hidden h-[226px]">
+                            <div data-aos="fade-down" className="relative rounded-[30px] overflow-hidden h-[226px]">
                                 <img
                                     src={infra}
                                     alt="Network Infrastructure"
@@ -167,7 +239,7 @@ export default function Home() {
                             {/* Middle row */}
                             <div className="flex gap-4 4xl:gap-10">
                                 {/* Data‑science */}
-                                <div className="relative w-[327px] h-[100px] rounded-[30px] overflow-hidden">
+                                <div data-aos="fade-right" className="relative w-[327px] h-[100px] rounded-[30px] overflow-hidden">
                                     <img
                                         src={infra1}
                                         alt="Data‑science"
@@ -183,7 +255,7 @@ export default function Home() {
                                 </div>
 
                                 {/* Cloud Services – narrower */}
-                                <div className="relative 4xl:w-[220px] w-[192px] h-[100px] rounded-[30px] overflow-hidden">
+                                <div data-aos="fade-left" className="relative 4xl:w-[220px] w-[192px] h-[100px] rounded-[30px] overflow-hidden">
                                     <img
                                         src={infra2}
                                         alt="Cloud Services"
@@ -200,7 +272,7 @@ export default function Home() {
                             </div>
 
                             {/* Bottom card */}
-                            <div className="relative rounded-[30px] overflow-hidden h-[137px]">
+                            <div data-aos="fade-up" className="relative rounded-[30px] overflow-hidden h-[137px]">
                                 <img
                                     src={infra3}
                                     alt="Data‑centre Solutions"
@@ -322,10 +394,10 @@ export default function Home() {
 
                         <div className="
             bg-white
-            w-[285px] h-[50px] items-center justify-center flex
+            w-[180px] h-[50px] items-center justify-center flex
           ">
                             <Link to="" className="text-[#BD2E25] font-semibold block text-center">
-                                Schedule a Discovery Call
+                                Schedule a Call
                             </Link>
                         </div>
                     </div>
