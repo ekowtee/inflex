@@ -100,9 +100,11 @@ export default function Home() {
                         <h2 className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[800ms]" : "translate-y-[50px] opacity-0"} lg:w-[486px] lg:h-[144px] lg:text-[40px] md:text-[28px] text-[24px] lg:leading-[45px] mb-2 py-2`}>
                             Your Strategic Technology Partner, From Foundation to Future.
                         </h2>
-                        <span className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[1200ms]" : "translate-y-[50px] opacity-0"} text-[18px] leading-[30px]`}>
-                            In today's hyper-connected world... achieve your strategic objectives. (As drafted previously).
-                        </span>
+                        <div className='w-full md:w-[600px] lg:w-[500px] 4xl:w-[650px] text-justify'>
+                            <span className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[1200ms]" : "translate-y-[50px] opacity-0"} text-[18px] w-[300px] leading-[30px]`}>
+                                In today's hyper-connected world, your IT infrastructure isn't just support – it's the engine of your success. Inflexions I.T. Services understands the critical link between technology and business outcomes. We deliver tailored IT solutions – from robust network infrastructure and secure cloud services to intelligent data insights – empowering you to navigate complexity, scale efficiently, and achieve your strategic objectives.
+                            </span>
+                        </div>
 
                         <div className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[1400ms]" : "translate-y-[50px] opacity-0"} bg-[#BD2E25] w-[201.32px] h-[53px] mt-6 flex items-center justify-center`}>
                             <Link to="#" className="text-white font-normal">

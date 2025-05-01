@@ -364,8 +364,7 @@ const About = () => {
                     {/* full-width map, shorter on mobile, taller on desktop */}
                     <iframe
                         title="Location map of Tsui Bleoo Rd, Accra"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3970.7789827001448!2d-0.11599952525459538!3d5.599636594381216!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdf85074b000bc5%3A0x72c8d047d688b03e!2sTsui%20Bleoo%20Rd%2C%20Accra%2C%20Ghana!5e0!3m2!1sen!2sde!4v1745518529023!5m2!1sen!2sde"
-                        width="100%"
+                        src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3970.5144110567144!2d-0.15543999999999997!3d5.63844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNcKwMzgnMTguNCJOIDDCsDA5JzE5LjYiVw!5e0!3m2!1sen!2sgh!4v1746030715393!5m2!1sen!2sgh" width="100%"
                         height="450"
                         className="w-full h-[200px] sm:h-[300px] md:h-[450px]"
                         style={{ border: 0 }}
@@ -373,6 +372,7 @@ const About = () => {
                         allowFullScreen
                         referrerPolicy="no-referrer-when-downgrade"
                     />
+
 
                     {/* contact info: column on mobile, row on md+ */}
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row mb-48 md:mb-0 lg:mb-0">
