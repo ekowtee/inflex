@@ -91,7 +91,7 @@ export default function Faq() {
                                 </div>
                                 <div>
                                     <p className="text-sm">Have Any Questions</p>
-                                    <p className="font-medium">(233) 0000000000</p>
+                                    <p className="font-medium">(233) 208 889 270</p>
                                 </div>
                             </div>
                             <button className="bg-white text-[#BD2E25] px-6 py-2 font-medium hover:bg-gray-100 transition">

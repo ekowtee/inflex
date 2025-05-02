@@ -21,6 +21,8 @@ const team = [
         name: 'Ekow M. Thompson',
         title: 'Director, Business Development',
         image: ekowimg,
+        profile:
+            `Ekow Thompson is a visionary business leader with over 18 years of executive experience in technology, media, and telecommunications across Africa. As Managing Director of Inflexions, he brings a proven track record of driving digital transformation and substantial growth. His strategic leadership was instrumental in transforming Interactive Digital into one of Ghana's most respected digital agencies(achieving 750% revenue growth) and co - founding Blu Telecommunications, Ghana's innovative 4G network. Ekow excels at aligning technological capabilities with business objectives, ensuring clients receive solutions that create lasting competitive advantage. He holds a Bachelor's degree in Electrical / Electronic Engineering and is dedicated to continuous learning in leadership and digital innovation.`,
         socials: {
             facebook: 'https://facebook.com/ekow',
             instagram: 'https://instagram.com/ekow',
@@ -31,6 +33,8 @@ const team = [
         name: 'Jade Appiah-Lartey',
         title: 'Director – Marketing',
         image: ekowimg,
+        profile:
+            `Dr. Jade Appiah-Lartey is a results-driven executive spearheading Inflexions' strategic growth initiatives, brand development, and digital transformation efforts.Leading the company's revitalization and strategic relaunch, she brings over 15 years of experience from the technology, telecommunications, and digital marketing sectors. Dr. Appiah-Lartey excels at identifying high-value market opportunities, crafting effective go-to-market strategies, and building strategic partnerships. Her background includes roles as Brand Strategy Consultant at Interactive Digital, Customer Experience Design Manager at Millicom, and Product Manager, providing her with multifaceted expertise to design customer-centric technology solutions and maximize revenue potential for Inflexions and its clients.`,
         socials: {
             facebook: 'https://facebook.com/jade',
             instagram: 'https://instagram.com/jade',
@@ -39,8 +43,9 @@ const team = [
     },
     {
         name: 'Anthony Getor',
-        title: 'Director, Business Solutions',
+        title: 'Executive Director, Business Solutions',
         image: ekowimg,
+        profile: `Anthony Getor is a technology leader delivering innovative solutions that fuel business growth, leveraging over 15 years of experience in digital transformation across Africa. His expertise spans information security, enterprise architecture, cloud infrastructure (design, migration, optimization), and telecommunications. He holds an M.Sc. in Cyber Security & Digital Forensics (KNUST), an M.Sc. in Information Technology (Nottingham), and industry certifications including CHFI and CEH.`,
         socials: {
             facebook: 'https://facebook.com/anthony',
             instagram: 'https://instagram.com/anthony',
@@ -125,7 +130,7 @@ const About = () => {
                         <div className="w-full lg:w-1/2 space-y-10">
                             <h1
                                 className="
-            w-full md:w-[335px]
+            w-full lg:w-[350px] md:w-[335px]
             h-auto md:h-[120px]
             text-[24px] md:text-[33.35px]
             font-normal
@@ -146,11 +151,7 @@ const About = () => {
             font-normal
           "
                             >
-                                Founded in 2012 and headquartered in Accra, Ghana, Inflexions I.T. Services
-                                Limited is a dynamic technology solutions provider built on a foundation
-                                of deep industry expertise. With a core team possessing decades of
-                                collective experience in IT and systems integration, we were established
-                                to bridge the gap between complex technology and strategic business goals...
+                                Founded in 2012 and headquartered in Accra, Ghana, Inflexions I.T. Services Limited is a dynamic technology solutions provider built on a foundation of deep industry expertise. With a core team possessing decades of collective experience in IT and systems integration, we were established to bridge the gap between complex technology and strategic business goals....
                             </p>
                         </div>
 
@@ -209,11 +210,9 @@ const About = () => {
                             </span>
 
                             <p className="text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]">
-                                Today, we sharpened our focus to delivering innovative, cost-effective IT solutions that give our clients a distinct competitive edge. Our vision is to be the thought-leading technology partner businesses trust to navigate transformation and achieve sustainable growth.
-                            </p>
+                                Today, we sharpened our focus to delivering innovative, cost-effective IT solutions that give our clients a distinct competitive edge. Our vision is to be the thought-leading technology partner businesses trust to navigate transformation and achieve sustainable growth.                            </p>
                             <p className="text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]">
-                                From our head office in Accra, we serve clients across Ghana with the ambition and capabilities to expand our reach throughout West Africa and beyond. We are privately owned, fostering an environment sculpted for speed, accountability, and accuracy in delivering results.
-                            </p>
+                                From our head office in Accra, we serve clients across Ghana with the ambition and capabilities to expand our reach throughout West Africa and beyond. We are privately owned, fostering an environment sculpted for speed, accountability, and accuracy in delivering results.                            </p>
                             <p className="text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]">
                                 We believe that the right technology, expertly implemented and managed, is the critical inflexion point for business transformation and sustainable growth. Our journey is defined by helping our clients navigate their own technological turning points.
                             </p>
@@ -242,51 +241,54 @@ const About = () => {
 
             <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-16 bg-[#F6F6F6]">
                 <h2 className="text-3xl lg:text-[36px] font-normal text-[#1E3161] leading-[45px] text-center mb-12">
-                    Professional team ready to serve you
+                    Meet Our Strategic Leadership
                 </h2>
 
-                <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
+                <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {team.map((member) => (
-                        <div key={member.name} className="flex flex-col items-center">
-                            {/* Photo */}
-                            <div className="w-56 h-56 overflow-hidden rounded-xl mb-6">
-                                <img
-                                    src={member.image}
-                                    alt={member.name}
-                                    className="w-full h-full object-cover"
-                                />
+                        <div key={member.name} className="relative w-56 mx-auto group">
+                            {/* Front side */}
+                            <div className="flex flex-col items-center bg-white rounded-xl shadow-lg p-4 transition-opacity duration-300 ease-out group-hover:opacity-0 group-hover:pointer-events-none">
+                                <div className="w-48 h-48 overflow-hidden rounded-xl mb-4">
+                                    <img
+                                        src={member.image}
+                                        alt={member.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <h3 className="text-[16px] font-normal text-[#1E3161]">{member.name}</h3>
+                                <p className="text-[#464646] text-[14px] mt-1">{member.title}</p>
                             </div>
 
-                            {/* Name & Title */}
-                            <h3 className="text-[16px] font-normal text-[#1E3161]">{member.name}</h3>
-                            <p className="text-[#464646] text-[16px] mt-1 font-normal">{member.title}</p>
-
-                            {/* Social Icons */}
-                            <div className="flex space-x-4 mt-4">
-                                <a
-                                    href={member.socials.facebook}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="w-10 h-10 flex items-center justify-center border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition"
-                                >
-                                    <FaFacebookF size={16} />
-                                </a>
-                                <a
-                                    href={member.socials.instagram}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="w-10 h-10 flex items-center justify-center border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition"
-                                >
-                                    <FaInstagram size={16} />
-                                </a>
-                                <a
-                                    href={member.socials.twitter}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="w-10 h-10 flex items-center justify-center border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition"
-                                >
-                                    <FaTwitter size={16} />
-                                </a>
+                            {/* Back side */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white rounded-xl shadow-lg p-4 opacity-0 pointer-events-none transition-opacity duration-300 ease-out group-hover:opacity-100 group-hover:pointer-events-auto">
+                                <p className="text-sm text-gray-700 text-center">{member.profile}</p>
+                                <div className="flex space-x-4 mt-4">
+                                    <a
+                                        href={member.socials.facebook}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-10 h-10 flex items-center justify-center border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition"
+                                    >
+                                        <FaFacebookF size={16} />
+                                    </a>
+                                    <a
+                                        href={member.socials.instagram}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-10 h-10 flex items-center justify-center border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition"
+                                    >
+                                        <FaInstagram size={16} />
+                                    </a>
+                                    <a
+                                        href={member.socials.twitter}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-10 h-10 flex items-center justify-center border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition"
+                                    >
+                                        <FaTwitter size={16} />
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -301,7 +303,7 @@ const About = () => {
                             Unlock Your Potential with INFLEXIONS IT Services – Free Your Youth for a Brighter, More Purposeful Future!
                         </h2>
                         <p className="mt-2 text-base text-gray-600">
-                            Non consectetur a erat nam at. Sit amet risus nullam eget felis eget nunc lobortis mattis. Maecenas ultricies mi eget mauris. Odio morbi quis commodo odio aenean sed adipiscing diam.
+                            Inflexions is guided by a focused and experienced leadership team committed to driving innovation, client success, and strategic growth.
                         </p>
 
                         <div className="mt-2 relative">
@@ -346,7 +348,7 @@ const About = () => {
 
                         <div className="mt-8">
                             <h3 className="text-[28px] md:text-[36px] font-normal text-[#1E3161]">
-                                +01(963)-365-99
+                                0 208 889 270
                             </h3>
                             <p className="text-gray-500">Call us</p>
                             <button className="mt-4 px-6 py-3 bg-[#BD2E25] text-white rounded-lg hover:bg-red-700 transition">
@@ -364,7 +366,8 @@ const About = () => {
                     {/* full-width map, shorter on mobile, taller on desktop */}
                     <iframe
                         title="Location map of Tsui Bleoo Rd, Accra"
-                        src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3970.5144110567144!2d-0.15543999999999997!3d5.63844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNcKwMzgnMTguNCJOIDDCsDA5JzE5LjYiVw!5e0!3m2!1sen!2sgh!4v1746030715393!5m2!1sen!2sgh" width="100%"
+                        src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3970.5144110567144!2d-0.15543999999999997!3d5.63844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNcKwMzgnMTguNCJOIDDCsDA5JzE5LjYiVw!5e0!3m2!1sen!2sgh!4v1746185407560!5m2!1sen!2sgh"
+                        width="100%"
                         height="450"
                         className="w-full h-[200px] sm:h-[300px] md:h-[450px]"
                         style={{ border: 0 }}
@@ -385,10 +388,10 @@ const About = () => {
                                 <div className="flex flex-col">
                                     <small>Company Phones</small>
                                     <span className="text-[#16213E] text-[18px] font-normal leading-[26px]">
-                                        + 1234 567 890
+                                        0 208 889 270
                                     </span>
                                     <span className="text-[#16213E] text-[18px] font-normal leading-[26px]">
-                                        + 1234 567 890
+                                        0 208 889 270
                                     </span>
                                 </div>
                             </div>
@@ -418,7 +421,9 @@ const About = () => {
                         <div className="w-full sm:w-[390px] h-auto sm:h-[139px] flex flex-col p-4">
                             <span>Company Address</span>
                             <span className="text-[34px] leading-[38px] font-medium">
-                                Themeforest, Envato HQ 24 Fifth st., New Accra, Ghana
+                                #2 Dei Close
+                                East Legon
+                                Accra, Ghana
                             </span>
                         </div>
                     </div>

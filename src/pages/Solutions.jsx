@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import Banner from '../components/Banner'
@@ -54,11 +55,8 @@ const Solutions = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Red panel with text */}
                     <div className="bg-red-600 p-8 text-white flex items-center">
-                        <p className="text-lg leading-relaxed">
-                            Inflexions offers a comprehensive portfolio of technology solutions designed to address the core
-                            infrastructure, operational, and strategic needs of modern businesses. We don’t just provide technology; we
-                            architect integrated solutions tailored to drive your specific business outcomes—from enhancing
-                            operational efficiency and security to enabling innovation and market expansion.
+                        <p className="text-lg leading-relaxed text-justify">
+                            Inflexions offers a comprehensive portfolio of technology solutions designed to address the core infrastructure, operational, and strategic needs of modern businesses. We don't just provide technology; we architect integrated solutions tailored to drive your specific business outcomes – from enhancing operational efficiency and security to enabling innovation and market expansion.
                         </p>
                     </div>
 
@@ -113,22 +111,21 @@ const Solutions = () => {
                         <div className="border-l-2 border-gray-200 pl-6">
                             <h3 className="text-xl font-semibold text-gray-900">Network Infrastructure</h3>
                             <p className="mt-1 text-lg font-medium text-gray-800">
-                                Building your high performance Digital Backbone
+                                Building Your High-Performance Digital Backbone
                             </p>
                             <p className="mt-2 text-sm text-gray-600 leading-relaxed">
-                                Leverage the right hardware foundation. We procure, configure, and support servers, storage solutions (SAN, NAS, Cloud), and end-user devices, ensuring optimal performance, data availability, and lifecycle management aligned with your budget and needs.
+                                Secure, reliable, and scalable network infrastructure is non-negotiable. We design, implement, and manage LAN, WAN, SD-WAN, and wireless solutions that ensure seamless connectivity, optimal performance, and robust security for your critical operations.
                             </p>
                         </div>
 
                         {/* Card 2 */}
                         <div className="border-l-2 border-gray-200 pl-6">
-                            <h3 className="text-xl font-semibold text-gray-900">Data-Science</h3>
+                            <h3 className="text-xl font-semibold text-gray-900">IT Hardware & Storage</h3>
                             <p className="mt-1 text-lg font-medium text-gray-800">
-                                Secure, Efficient, and Resilient Datacentre Solutions
+                                Powering Performance with Reliable Hardware & Storage
                             </p>
                             <p className="mt-2 text-sm text-gray-600 leading-relaxed">
-                                Whether on-premise, co-located, or hybrid, your datacentre is the heart of your IT. We provide design, consolidation, migration, and management services for datacentres, focusing on power, cooling, security, and operational efficiency.
-                            </p>
+                                Leverage the right hardware foundation. We procure, configure, and support servers, storage solutions (SAN, NAS, Cloud), and end-user devices, ensuring optimal performance, data availability, and lifecycle management aligned with your budget and needs.                            </p>
                         </div>
 
                         {/* Card 3 */}
@@ -138,15 +135,17 @@ const Solutions = () => {
                                 Harnessing the Power and Agility of the Cloud
                             </p>
                             <p className="mt-2 text-sm text-gray-600 leading-relaxed">
-                                Navigate your cloud journey with confidence. We offer cloud strategy consulting, migration services (AWS, Azure, Google Cloud), hybrid cloud integration, and cloud management, enabling scalability, cost-efficiency, and innovation.
-                            </p>
+                                Navigate your cloud journey with confidence. We offer cloud strategy consulting, migration services (AWS, Azure, Google Cloud), hybrid cloud integration, and cloud management, enabling scalability, cost-efficiency, and innovation.                            </p>
                         </div>
 
                         {/* Card 4 */}
                         <div className="border-l-2 border-gray-200 pl-6">
                             <h3 className="text-xl font-semibold text-gray-900">Data-centre Solutions</h3>
-                            <p className="mt-1 text-sm text-gray-600 leading-relaxed">
-                                Following the quality of our service thus having gained the trust of our many clients.
+                            <p className="mt-1 text-lg font-medium text-gray-800">
+                                Secure, Efficient, and Resilient Datacentre Solutions
+                            </p>
+                            <p className='mt-2 text-sm text-gray-600 leading-relaxed'>
+                                Whether on-premise, co-located, or hybrid, your datacentre is the heart of your IT. We provide design, consolidation, migration, and management services for datacentres, focusing on power, cooling, security, and operational efficiency.
                             </p>
                         </div>
 

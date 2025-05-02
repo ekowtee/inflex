@@ -31,9 +31,8 @@ const Careers = () => {
                             {/* Left column */}
                             <div className="w-full md:w-2/2 text-white space-y-4">
                                 <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-snug md:leading-[76px]">
-                                    Proven Results: Client Success
-                                    <br className="hidden lg:block" />
-                                    Stories | Inflexions I.T. Services
+                                    Careers at Inflexions <br className="hidden lg:block" />
+                                    | Shape the Future of Technology
                                 </h2>
                             </div>
 
