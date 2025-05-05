@@ -6,53 +6,16 @@ import { ChartBar, Phone, Play } from 'lucide-react'
 import about1 from "../assets/about/about1.png"
 import about2 from "../assets/about/about2.png"
 import aboutsect from "../assets/about/aboutsect.png"
-import ekowimg from "../assets/about/view.png"
 import exp from "../assets/about/exp.png"
 import exp1 from "../assets/about/exp1.png"
 
-import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa'
 import Partners from '../components/Partners'
 import Blog from '../components/Blog'
 import Banner from '../components/Banner'
+import Leaders from '../components/Leaders'
 
 
-const team = [
-    {
-        name: 'Ekow M. Thompson',
-        title: 'Director, Business Development',
-        image: ekowimg,
-        profile:
-            `Ekow Thompson is a visionary business leader with over 18 years of executive experience in technology, media, and telecommunications across Africa. As Managing Director of Inflexions, he brings a proven track record of driving digital transformation and substantial growth. His strategic leadership was instrumental in transforming Interactive Digital into one of Ghana's most respected digital agencies(achieving 750% revenue growth) and co - founding Blu Telecommunications, Ghana's innovative 4G network. Ekow excels at aligning technological capabilities with business objectives, ensuring clients receive solutions that create lasting competitive advantage. He holds a Bachelor's degree in Electrical / Electronic Engineering and is dedicated to continuous learning in leadership and digital innovation.`,
-        socials: {
-            facebook: 'https://facebook.com/ekow',
-            instagram: 'https://instagram.com/ekow',
-            twitter: 'https://twitter.com/ekow',
-        },
-    },
-    {
-        name: 'Jade Appiah-Lartey',
-        title: 'Director – Marketing',
-        image: ekowimg,
-        profile:
-            `Dr. Jade Appiah-Lartey is a results-driven executive spearheading Inflexions' strategic growth initiatives, brand development, and digital transformation efforts.Leading the company's revitalization and strategic relaunch, she brings over 15 years of experience from the technology, telecommunications, and digital marketing sectors. Dr. Appiah-Lartey excels at identifying high-value market opportunities, crafting effective go-to-market strategies, and building strategic partnerships. Her background includes roles as Brand Strategy Consultant at Interactive Digital, Customer Experience Design Manager at Millicom, and Product Manager, providing her with multifaceted expertise to design customer-centric technology solutions and maximize revenue potential for Inflexions and its clients.`,
-        socials: {
-            facebook: 'https://facebook.com/jade',
-            instagram: 'https://instagram.com/jade',
-            twitter: 'https://twitter.com/jade',
-        },
-    },
-    {
-        name: 'Anthony Getor',
-        title: 'Executive Director, Business Solutions',
-        image: ekowimg,
-        profile: `Anthony Getor is a technology leader delivering innovative solutions that fuel business growth, leveraging over 15 years of experience in digital transformation across Africa. His expertise spans information security, enterprise architecture, cloud infrastructure (design, migration, optimization), and telecommunications. He holds an M.Sc. in Cyber Security & Digital Forensics (KNUST), an M.Sc. in Information Technology (Nottingham), and industry certifications including CHFI and CEH.`,
-        socials: {
-            facebook: 'https://facebook.com/anthony',
-            instagram: 'https://instagram.com/anthony',
-            twitter: 'https://twitter.com/anthony',
-        },
-    },
-]
+
 
 const About = () => {
     const [showVideo, setShowVideo] = useState(false)
@@ -239,60 +202,12 @@ const About = () => {
                 </div>
             </section>
 
-            <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-16 bg-[#F6F6F6]">
+            <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-16 bg-[#F6F6F6] h-[1400px] md:h-full">
                 <h2 className="text-3xl lg:text-[36px] font-normal text-[#1E3161] leading-[45px] text-center mb-12">
                     Meet Our Strategic Leadership
                 </h2>
 
-                <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {team.map((member) => (
-                        <div key={member.name} className="relative w-56 mx-auto group">
-                            {/* Front side */}
-                            <div className="flex flex-col items-center bg-white rounded-xl shadow-lg p-4 transition-opacity duration-300 ease-out group-hover:opacity-0 group-hover:pointer-events-none">
-                                <div className="w-48 h-48 overflow-hidden rounded-xl mb-4">
-                                    <img
-                                        src={member.image}
-                                        alt={member.name}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <h3 className="text-[16px] font-normal text-[#1E3161]">{member.name}</h3>
-                                <p className="text-[#464646] text-[14px] mt-1">{member.title}</p>
-                            </div>
-
-                            {/* Back side */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white rounded-xl shadow-lg p-4 opacity-0 pointer-events-none transition-opacity duration-300 ease-out group-hover:opacity-100 group-hover:pointer-events-auto">
-                                <p className="text-sm text-gray-700 text-center">{member.profile}</p>
-                                <div className="flex space-x-4 mt-4">
-                                    <a
-                                        href={member.socials.facebook}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-10 h-10 flex items-center justify-center border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition"
-                                    >
-                                        <FaFacebookF size={16} />
-                                    </a>
-                                    <a
-                                        href={member.socials.instagram}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-10 h-10 flex items-center justify-center border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition"
-                                    >
-                                        <FaInstagram size={16} />
-                                    </a>
-                                    <a
-                                        href={member.socials.twitter}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-10 h-10 flex items-center justify-center border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition"
-                                    >
-                                        <FaTwitter size={16} />
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                <Leaders />
             </section>
 
             <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-16 bg-[#F6F6F6]">
