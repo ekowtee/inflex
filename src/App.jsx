@@ -11,6 +11,7 @@ import Solutions from './pages/Solutions'
 import Navbar from './components/Navbar'
 import CaseStudyDetail from './pages/CaseStudyDetail'
 import Careers from './pages/Careers'
+import Resources from './pages/Resources'
 
 
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/case-studies/:id" element={<CaseStudyDetail />} />
           <Route path='/careers' element={<Careers />} />
           <Route path='/contact' element={<Contact />} />
+          <Route path='/resources' element={<Resources />} />
         </Routes>
         <Footer />
       </BrowserRouter>

@@ -65,7 +65,12 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link to="/career" className="hover:text-[#BD2E25]">
-                                    Carrer
+                                    Career
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/resources" className="hover:text-[#BD2E25]">
+                                    Resources
                                 </Link>
                             </li>
                         </ul>

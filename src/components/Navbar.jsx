@@ -51,7 +51,7 @@ export default function Navbar() {
                 </div>
 
                 {/* Desktop nav */}
-                <nav className="hidden lg:flex items-center space-x-8">
+                <nav className="hidden lg:flex items-center space-x-6">
                     <NavLink to="/" className={navLinkClasses}>
                         Home
                     </NavLink>
@@ -61,14 +61,38 @@ export default function Navbar() {
                     <NavLink to="/solutions" className={navLinkClasses}>
                         Solutions
                     </NavLink>
-                    <NavLink to="/services" className={navLinkClasses}>
-                        Services
-                    </NavLink>
+
+                    {/* Services with hover-dropdown */}
+                    <div className="relative group inline-flex items-center">
+                        <NavLink to="/services" className={navLinkClasses}>
+                            Services
+                        </NavLink>
+                        <div
+                            className="
+                absolute left-0 w-40 bg-white shadow-md rounded-md
+                opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0
+                transition-all duration-300
+                pointer-events-none group-hover:pointer-events-auto
+                z-10 mt-28
+              "
+                        >
+                            <NavLink
+                                to="/careers"
+                                className="block px-4 py-2 text-sm font-medium text-[#5C5D5D] hover:text-white hover:bg-red-600"
+                            >
+                                Careers
+                            </NavLink>
+                            <NavLink
+                                to="/resources"
+                                className="block px-4 py-2 text-sm font-medium text-[#5C5D5D] hover:text-white hover:bg-red-600"
+                            >
+                                Resources
+                            </NavLink>
+                        </div>
+                    </div>
+
                     <NavLink to="/case-studies" className={navLinkClasses}>
                         Case study
-                    </NavLink>
-                    <NavLink to="/careers" className={navLinkClasses}>
-                        Careers
                     </NavLink>
                 </nav>
 
@@ -97,7 +121,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile menu */}
+            {/* Mobile menu (unchanged) */}
             {isMenuOpen && (
                 <div className="lg:hidden bg-white border-t">
                     <div className="container mx-auto px-4 py-3 space-y-3">
@@ -146,6 +170,7 @@ export default function Navbar() {
                         >
                             Case study
                         </NavLink>
+                        {/* Keep Careers & Resources visible on mobile */}
                         <NavLink
                             to="/careers"
                             onClick={() => setIsMenuOpen(false)}
@@ -154,6 +179,15 @@ export default function Navbar() {
                             }
                         >
                             Careers
+                        </NavLink>
+                        <NavLink
+                            to="/resources"
+                            onClick={() => setIsMenuOpen(false)}
+                            className={({ isActive }) =>
+                                `block ${navLinkClasses({ isActive })} py-2`
+                            }
+                        >
+                            Resources
                         </NavLink>
 
                         <div className="flex items-center space-x-3 py-2">
