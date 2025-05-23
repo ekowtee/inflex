@@ -96,11 +96,11 @@ export default function Home() {
 
             <section>
                 <div className='flex flex-col md:flex-col lg:flex-row 4xl:flex-row w-full lg:h-[554px] px-4 lg:px-[200px] 4xl:px-[250px]'>
-                    <div className='flex-1 md:px-8 lg:px-0 md:py-10 lg:py-14'>
+                    <div className='flex-1 md:px-8 lg:px-0 md:py-10 lg:py-14 '>
                         <h2 className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[800ms]" : "translate-y-[50px] opacity-0"} lg:w-[486px] lg:h-[144px] lg:text-[40px] md:text-[28px] text-[24px] lg:leading-[45px] mb-2 py-2`}>
                             Your Strategic Technology Partner, From Foundation to Future.
                         </h2>
-                        <div className='w-full md:w-[600px] lg:w-[500px] 4xl:w-[650px] text-justify'>
+                        <div className='w-full md:w-[600px] lg:w-[450px] 4xl:w-[650px] text-justify'>
                             <span className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[1200ms]" : "translate-y-[50px] opacity-0"} text-[18px] w-[300px] leading-[30px]`}>
                                 In today's hyper-connected world, your IT infrastructure isn't just support – it's the engine of your success. Inflexions I.T. Services understands the critical link between technology and business outcomes. We deliver tailored IT solutions – from robust network infrastructure and secure cloud services to intelligent data insights – empowering you to navigate complexity, scale efficiently, and achieve your strategic objectives.
                             </span>
@@ -112,10 +112,10 @@ export default function Home() {
                             </Link>
                         </div>
                     </div>
-                    <div className='relative flex flex-1 items-center justify-center mt-2 md:mt-0 lg:mt-0'>
+                    <div className='relative flex flex-1 items-center lg:pl-[72px] 4xl:pl-[310px] mt-2 md:mt-0 lg:mt-0'>
                         <div className=''>
                             <img src={svgbg} alt='svgbg' className='w-[419px] h-full object-contain' loading='lazy' />
-                            <div className='absolute top-20 md:top-32 lg:top-32 4xl:top-32 md:left-[17%] lg:left-[6%] 4xl:left-[15%]'>
+                            <div className='absolute top-20 md:top-32 lg:top-32 4xl:top-32 md:left-[17%] lg:left-[6%] 4xl:left-[36%]'>
                                 <img src={imagesvg} alt='svgbg' className='w-[490px] h-[353px] object-contain' loading='lazy' />
                             </div>
                             {/* 1) Robust Infrastructure */}
@@ -126,7 +126,7 @@ export default function Home() {
                                         ? "translate-x-0 opacity-100 delay-[1600ms]"
                                         : "translate-x-[50px] opacity-0"
                                     }
-            absolute top-[165px] md:left-[80px] lg:left-0 4xl:left-[60px]
+            absolute top-[165px] md:left-[80px] lg:left-0 4xl:left-[200px]
             flex gap-2 items-center justify-center
             w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white
           `}
@@ -146,7 +146,7 @@ export default function Home() {
                                         : "translate-x-[50px] opacity-0"
                                     }
             absolute top-[220px] md:top-[240px] lg:top-[240px]
-            left-[30px] md:left-[45px] lg:left-[-30px] 4xl:left-[10px]
+            left-[30px] md:left-[45px] lg:left-[-30px] 4xl:left-[120px]
             flex gap-2 items-center justify-center
             w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white
           `}
@@ -166,7 +166,7 @@ export default function Home() {
                                         : "translate-x-[50px] opacity-0"
                                     }
             absolute top-[280px] md:top-[315px] lg:top-[315px]
-            md:left-[80px] lg:left-0 4xl:left-[60px]
+            md:left-[80px] lg:left-0 4xl:left-[200px]
             flex gap-2 items-center justify-center
             w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white
           `}
@@ -186,7 +186,7 @@ export default function Home() {
                                         : "translate-x-[50px] opacity-0"
                                     }
             absolute top-[340px] md:top-[390px] lg:top-[390px]
-            left-[30px] md:left-[45px] lg:left-[-30px] 4xl:left-[10px]
+            left-[30px] md:left-[45px] lg:left-[-30px] 4xl:left-[120px]
             flex gap-2 items-center justify-center
             w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white
           `}
