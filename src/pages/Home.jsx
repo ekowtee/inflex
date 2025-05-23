@@ -85,7 +85,7 @@ export default function Home() {
             flex items-center justify-center
           `}
                     >
-                        <Link to="" className="text-white font-semibold">
+                        <Link to="/contact" className="text-white font-semibold">
                             Request consultation
                         </Link>
                     </div>
@@ -107,7 +107,7 @@ export default function Home() {
                         </div>
 
                         <div className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[1400ms]" : "translate-y-[50px] opacity-0"} bg-[#BD2E25] w-[201.32px] h-[53px] mt-6 flex items-center justify-center`}>
-                            <Link to="#" className="text-white font-normal">
+                            <Link to="/contact" className="text-white font-normal">
                                 Request consultation
                             </Link>
                         </div>
@@ -398,7 +398,7 @@ export default function Home() {
             bg-white
             w-[180px] h-[50px] items-center justify-center flex
           ">
-                            <Link to="" className="text-[#BD2E25] font-semibold block text-center">
+                            <Link to="/contact" className="text-[#BD2E25] font-semibold block text-center">
                                 Schedule a Call
                             </Link>
                         </div>

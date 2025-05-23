@@ -85,13 +85,13 @@ const Contact = () => {
                             <div className="bg-[#A02923] p-4 rounded-full mb-2">
                                 <FiMail className="text-white" size={24} />
                             </div>
-                            <span className="text-white text-sm">Contact@gmail.com</span>
+                            <span className="text-white text-sm">info@inflexions.tech</span>
                         </div>
                         <div className="flex flex-col items-center">
                             <div className="bg-[#A02923] p-4 rounded-full mb-2">
                                 <FiPhone className="text-white" size={24} />
                             </div>
-                            <span className="text-white text-sm">(00) 112 365 489</span>
+                            <span className="text-white text-sm">(0) 208 889 270</span>
                         </div>
                         <div className="hidden md:flex flex-col items-center text-center">
                             <div className="bg-[#A02923] p-4 rounded-full mb-2">
