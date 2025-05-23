@@ -93,7 +93,7 @@ const Solutions = () => {
             </div>
 
             <section className="py-12 container mx-auto px-4 sm:px-6 md:px-8 lg:px-[200px] 4xl:px-[250px]">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                     {/* LEFT COLUMN: Headline */}
                     <div className="flex items-center justify-center">
@@ -165,30 +165,30 @@ const Solutions = () => {
                     lg:flex-row md:flex-row flex-col items-center justify-between'>
                         <div className='relative shadow-md'>
                             <img src={sol6} alt='sect' loading='lazy' className='w-[260px] h-full object-cover' />
-                            <div className='absolute bottom-0 left-4 flex flex-col'>
-                                <span className='text-white text-[18px] leading-[21px]'>Liquid Transportation</span>
-                                <span className='text-[#BD2E25] text-[14px] font-medium'>Premium Tankers</span>
+                            <div className='absolute bottom-0 left-2 lg:left-4 flex flex-col'>
+                                <span className='text-white text-[18px] leading-[21px]'>Data Science and AI</span>
+                                <span className='text-[#BD2E25] text-[14px] font-medium'>Premium Solutions</span>
                             </div>
                         </div>
                         <div className='relative'>
                             <img src={sol5} alt='sect' loading='lazy' className='w-[260px] h-full object-cover' />
-                            <div className='absolute bottom-0 left-4 flex flex-col'>
-                                <span className='text-white text-[18px] leading-[21px]'>Packaging Solutions</span>
-                                <span className='text-[#BD2E25] text-[14px] font-medium'>Warehouse Management</span>
+                            <div className='absolute bottom-0 left-2 lg:left-4 flex flex-col'>
+                                <span className='text-white text-[18px] leading-[21px]'>Network Infrastructure</span>
+                                <span className='text-[#BD2E25] text-[14px] font-medium'>Premium Solutions</span>
                             </div>
                         </div>
                         <div className='relative'>
                             <img src={sol7} alt='sect' loading='lazy' className='w-[260px] h-full object-cover' />
-                            <div className='absolute bottom-0 left-4 flex flex-col'>
-                                <span className='text-white text-[18px] leading-[21px]'>Contract Logistics</span>
-                                <span className='text-[#BD2E25] text-[14px] font-medium'>Road Transportation</span>
+                            <div className='absolute bottom-0 left-2 lg:left-4 flex flex-col'>
+                                <span className='text-white text-[18px] leading-[21px]'>Cloud Services</span>
+                                <span className='text-[#BD2E25] text-[14px] font-medium'>Premium Solutions</span>
                             </div>
                         </div>
                         <div className='relative'>
                             <img src={sol8} alt='sect' loading='lazy' className='w-[260px] h-full object-cover' />
-                            <div className='absolute bottom-0 left-4 flex flex-col'>
-                                <span className='text-white text-[18px] leading-[21px]'>Warehouse & Distribution</span>
-                                <span className='text-[#BD2E25] text-[14px] font-medium'>Large Warehouse</span>
+                            <div className='absolute bottom-0 left-2 lg:left-4 flex flex-col'>
+                                <span className='text-white text-[18px] leading-[21px]'>IT Hardware & Storage</span>
+                                <span className='text-[#BD2E25] text-[14px] font-medium'>Premium Solutions</span>
                             </div>
                         </div>
                     </div>

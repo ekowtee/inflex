@@ -36,8 +36,11 @@ export default {
         'xxl': '1620px',
         'vl': '1728px',
         '3xl': '1800px',
-        '4xl': '1920px',
+        '4xl': '1912px',
         '5xl': '5120px',
+        'pro13': '1440px',
+        'pro16': '1792px',
+        'iMac': '1867px',
 
       },
     },

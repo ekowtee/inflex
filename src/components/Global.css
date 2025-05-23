@@ -98,7 +98,20 @@
 @media screen and (max-width: 1024px) {}
 
 /* stack cards and make content auto-height on phones */
-@media screen and (max-width: 768px) {}
+@media screen and (max-width: 768px) {
+    @media screen and (max-width: 768px) {
+        .contain {
+            width: 100%;
+            padding: 0 20px;
+            justify-content: space-between;
+        }
+
+        .box {
+            width: 48%;
+            margin-bottom: 20px;
+        }
+    }
+}
 
 @media screen and (max-width: 600px) {
     .contain {
@@ -108,11 +121,22 @@
         align-items: center;
         justify-content: center;
         width: 100%;
+        margin-bottom: 20px;
+
+    }
+
+    .box {
+        width: 88%;
+        margin-bottom: 20px;
     }
 }
 
 /* tiny-phone tweaks */
 @media screen and (max-width: 400px) {
+
+    .contain {
+        margin-bottom: 30px;
+    }
 
 
     .box .content h3 {

@@ -203,7 +203,7 @@ const About = () => {
             </section>
 
             <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-16 bg-[#F6F6F6] h-[1400px] md:h-full">
-                <h2 className="text-3xl lg:text-[36px] font-normal text-[#1E3161] leading-[45px] text-center mb-12">
+                <h2 className="text-3xl lg:text-[36px] font-normal text-[#1E3161] leading-[45px] text-center lg:mb-12">
                     Meet Our Strategic Leadership
                 </h2>
 

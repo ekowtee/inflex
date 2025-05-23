@@ -8,7 +8,7 @@ import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
 
 const Leaders = () => {
     return (
-        <div className='overflow-hidden'>
+        <div className='overflow-hidden bg-red-600 4xl:pl-32'>
             <div className="contain">
                 <div className='box'>
                     <div className='imgBx'>
