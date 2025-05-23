@@ -99,16 +99,16 @@ export default function Navbar() {
                 {/* Desktop social + contact */}
                 <div className="hidden lg:flex items-center space-x-4">
                     <div className="flex items-center space-x-3 mr-4">
-                        <Link to="#" className="text-gray-500 hover:text-[#5C5D5D]">
+                        <Link to="#" className="text-gray-500 hover:text-[#BD2E25]">
                             <FaInstagram size={20} />
                         </Link>
-                        <Link to="#" className="text-gray-500 hover:text-[#5C5D5D]">
+                        <Link to="#" className="text-gray-500 hover:text-[#BD2E25]">
                             <FaFacebookF size={20} />
                         </Link>
-                        <Link to="#" className="text-gray-500 hover:text-[#5C5D5D]">
+                        <Link to="#" className="text-gray-500 hover:text-[#BD2E25]">
                             <FaTwitter size={20} />
                         </Link>
-                        <Link to="#" className="text-gray-500 hover:text-[#5C5D5D]">
+                        <Link to="#" className="text-gray-500 hover:text-[#BD2E25]">
                             <FaLinkedinIn size={20} />
                         </Link>
                     </div>
@@ -191,16 +191,16 @@ export default function Navbar() {
                         </NavLink>
 
                         <div className="flex items-center space-x-3 py-2">
-                            <Link to="#" className="text-gray-500 hover:text-gray-700">
+                            <Link to="#" className="text-gray-500 hover:text-[#BD2E25]">
                                 <FaInstagram size={20} />
                             </Link>
-                            <Link to="#" className="text-gray-500 hover:text-gray-700">
+                            <Link to="#" className="text-gray-500 hover:text-[#BD2E25]">
                                 <FaFacebookF size={20} />
                             </Link>
-                            <Link to="#" className="text-gray-500 hover:text-gray-700">
+                            <Link to="#" className="text-gray-500 hover:text-[#BD2E25]">
                                 <FaTwitter size={20} />
                             </Link>
-                            <Link to="#" className="text-gray-500 hover:text-gray-700">
+                            <Link to="#" className="text-gray-500 hover:text-[#BD2E25]">
                                 <FaLinkedinIn size={20} />
                             </Link>
                         </div>

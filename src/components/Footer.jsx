@@ -24,7 +24,14 @@ export default function Footer() {
                                 </div>
                                 <div>
                                     <p className="font-medium">Email</p>
-                                    <p className="text-gray-600">contact@logistics.com</p>
+                                    <p className="text-gray-600">
+                                        <a href="mailto:info@inflexions.tech" className="underline hover:text-blue-600">
+                                            info@inflexions.tech
+                                        </a> {' '}
+                                        <a href="mailto:sales@inflexions.tech" className="underline hover:text-blue-600">
+                                            sales@inflexions.tech
+                                        </a>
+                                    </p>
                                 </div>
                             </div>
                             <div className="flex items-center">
@@ -33,7 +40,7 @@ export default function Footer() {
                                 </div>
                                 <div>
                                     <p className="font-medium">Call Us</p>
-                                    <p className="text-gray-600">(00) 112 365 489</p>
+                                    <p className="text-gray-600">(0) 208 889 270</p>
                                 </div>
                             </div>
                         </div>
