@@ -21,7 +21,7 @@ const MainPartners = () => {
                     <div className='w-[403px] h-[353px] mb-4 md:mb-0 lg:mb-0'>
                         <div className='lg:w-[403px] lg:h-[100px]'>
                             <h3 className='font-light text-[33px] leading-[50px] tracking-[1.04px] mb-10'>
-                                Proven Expertise,<br />Training Solutions
+                                Proven Expertise,<br />Tangible Results
                             </h3>
 
                             <span className='font-normal text-[17px] leading-[27.1px]'>

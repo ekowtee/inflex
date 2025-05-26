@@ -66,13 +66,13 @@ export default function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/case-study" className="hover:text-[#BD2E25]">
+                                <Link to="/ccase-studies" className="hover:text-[#BD2E25]">
                                     Case study
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/career" className="hover:text-[#BD2E25]">
-                                    Career
+                                <Link to="/careers" className="hover:text-[#BD2E25]">
+                                    Careers
                                 </Link>
                             </li>
                             <li>
@@ -115,23 +115,30 @@ export default function Footer() {
                                 className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-[#BD2E25]"
                             />
                             <div className="flex md:flex-col lg:flex-row items-center">
-                                <button className="bg-[#BD2E25] text-white px-6 py-3 hover:bg-[#BD2E25] transition-colors">
-                                    Send Now
-                                </button>
-                                <div className="flex lg:ml-auto space-x-4 md:mt-4 lg:mt-0 mt-0 text-gray-600">
+                                {/* Social icons first */}
+                                <div className="flex lg:mr-auto space-x-4 md:mb-4 lg:mb-0 text-gray-600">
                                     <Link to="https://linkedin.com" className="hover:text-[#BD2E25]">
+                                        {/* LinkedIn SVG */}
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>
                                     </Link>
                                     <Link to="https://twitter.com" className="hover:text-[#BD2E25]">
+                                        {/* Twitter SVG */}
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" /></svg>
                                     </Link>
                                     <Link to="https://facebook.com" className="hover:text-[#BD2E25]">
+                                        {/* Facebook SVG */}
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
                                     </Link>
                                 </div>
+
+                                {/* Then the button */}
+                                <button className="bg-[#BD2E25] text-white px-6 py-3 hover:bg-[#BD2E25] transition-colors">
+                                    Send Now
+                                </button>
                             </div>
                         </div>
                     </div>
+
 
                 </div>
             </div>

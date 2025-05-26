@@ -9,10 +9,10 @@ import svgbg from "../assets/bgsvg/Background.png"
 import imagesvg from "../assets/bgsvg/image.png"
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import subtract from "../assets/sub/subtract.png"
-import infra from "../assets/sub/infra.png"
-import infra1 from "../assets/sub/infra1.png"
-import infra2 from "../assets/sub/infra2.png"
-import infra3 from "../assets/sub/infra3.png"
+// import infra from "../assets/sub/infra.png"
+// import infra1 from "../assets/sub/infra1.png"
+// import infra2 from "../assets/sub/infra2.png"
+// import infra3 from "../assets/sub/infra3.png"
 
 import mid1 from "../assets/mid/mid1.png"
 import mid2 from "../assets/mid/mid2.png"
@@ -20,12 +20,13 @@ import mid3 from "../assets/mid/mid3.png"
 import mid4 from "../assets/mid/mid4.png"
 
 import ban from "../assets/hero/ban1.png"
-import ban1 from "../assets/hero/ban2.png"
+// import ban1 from "../assets/hero/ban2.png"
 import MainPartners from '../components/MainPartners'
 import TestimonialSlider from '../components/TestimonialSlider'
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import SwapGrid from '../components/SwapGrid'
 
 
 
@@ -112,7 +113,7 @@ export default function Home() {
                             </Link>
                         </div>
                     </div>
-                    <div className='relative flex flex-1 items-center lg:pl-[72px] 4xl:pl-[310px] mt-2 md:mt-0 lg:mt-0'>
+                    <div className='relative flex flex-1 items-center md:pl-[160px] lg:pl-[72px] 4xl:pl-[310px] mt-2 md:mt-0 lg:mt-0'>
                         <div className=''>
                             <img src={svgbg} alt='svgbg' className='w-[419px] h-full object-contain' loading='lazy' />
                             <div className='absolute top-20 md:top-32 lg:top-32 4xl:top-32 md:left-[17%] lg:left-[6%] 4xl:left-[36%]'>
@@ -216,78 +217,7 @@ export default function Home() {
                             Comprehensive Solutions for Modern Challenges
                         </h2>
                         <div className="lg:w-[400px] 4xl:w-full 4xl:space-y-8 lg:space-y-4 space-y-4">
-                            {/* Top card */}
-                            <div data-aos="fade-down" className="relative rounded-[30px] overflow-hidden h-[226px]">
-                                <img
-                                    src={infra}
-                                    alt="Network Infrastructure"
-                                    className="w-full h-full object-cover"
-                                    loading="lazy"
-                                />
-                                {/* <div className="absolute inset-0 bg-[#ED0707] bg-opacity-60 rounded-[30px]" /> */}
-                                <div className="absolute inset-0 flex flex-col justify-center items-start p-6 text-white">
-                                    <h3 className="text-[22px] font-bold leading-[28px] tracking-[0.24px]">
-                                        Network Infrastructure
-                                    </h3>
-                                    <p className="mt-2 text-[18px] leading-[34px]">
-                                        Accept payment across all networks
-                                    </p>
-                                    <p className="mt-1 text-[14px] leading-[28px]">
-                                        Receive payments from all networks via a shortcode. It’s quick, easy, and no internet is needed.
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Middle row */}
-                            <div className="flex gap-4 4xl:gap-10">
-                                {/* Data‑science */}
-                                <div data-aos="fade-right" className="relative w-[327px] h-[100px] rounded-[30px] overflow-hidden">
-                                    <img
-                                        src={infra1}
-                                        alt="Data‑science"
-                                        className="w-full h-full object-cover"
-                                        loading="lazy"
-                                    />
-                                    {/* <div className="absolute inset-0 bg-[#ED0707] bg-opacity-55 rounded-[30px]" /> */}
-                                    <div className="absolute inset-0 flex items-center justify-center text-white">
-                                        <h3 className="text-[18px] font-bold leading-[28px]">
-                                            Data‑science
-                                        </h3>
-                                    </div>
-                                </div>
-
-                                {/* Cloud Services – narrower */}
-                                <div data-aos="fade-left" className="relative 4xl:w-[220px] w-[192px] h-[100px] rounded-[30px] overflow-hidden">
-                                    <img
-                                        src={infra2}
-                                        alt="Cloud Services"
-                                        className="w-full h-full object-cover"
-                                        loading="lazy"
-                                    />
-                                    <div className="absolute inset-0 bg-black bg-opacity-30 rounded-[30px]" />
-                                    <div className="absolute inset-0 flex items-center justify-center text-white">
-                                        <h3 className="lg:text-[18px] text-[12px] font-bold leading-[28px]">
-                                            Cloud Services
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Bottom card */}
-                            <div data-aos="fade-up" className="relative rounded-[30px] overflow-hidden h-[137px]">
-                                <img
-                                    src={infra3}
-                                    alt="Data‑centre Solutions"
-                                    className="w-full h-full object-cover"
-                                    loading="lazy"
-                                />
-                                <div className="absolute inset-0 bg-black bg-opacity-30 rounded-[30px]" />
-                                <div className="absolute inset-0 flex items-center justify-center p-6 text-white">
-                                    <h3 className="text-[22px] font-bold leading-[28px] tracking-[0.24px]">
-                                        Data‑centre Solutions
-                                    </h3>
-                                </div>
-                            </div>
+                            <SwapGrid />
                         </div>
                     </div>
                 </div>
@@ -398,7 +328,7 @@ export default function Home() {
             bg-white
             w-[180px] h-[50px] items-center justify-center flex
           ">
-                            <Link to="/contact" className="text-[#BD2E25] font-semibold block text-center">
+                            <Link to="" className="text-[#BD2E25] font-semibold block text-center">
                                 Schedule a Call
                             </Link>
                         </div>
@@ -406,14 +336,14 @@ export default function Home() {
                 </div>
             </section>
 
-            <section>
+            {/* <section>
                 <img
                     src={ban1}
                     alt="banner"
                     loading="lazy"
                     className="w-full h-full object-cover"
                 />
-            </section>
+            </section> */}
         </>
     )
 }

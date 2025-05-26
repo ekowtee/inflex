@@ -3,6 +3,7 @@ import React from 'react'
 import { Helmet } from 'react-helmet';
 import careerbg from "../assets/career/careerbg.png"
 import Placeholder from "../assets/blog/blog1.png"
+import Blog from '../components/Blog';
 
 
 const Resources = () => {
@@ -105,7 +106,7 @@ const Resources = () => {
                             <img
                                 src={Placeholder}
                                 alt="Insights & Resources"
-                                className="w-full h-full md:w-[400px] md:h-[300px] rounded-lg object-cover"
+                                className="w-full h-full lg:w-[400px] md:h-[300px] rounded-lg object-cover"
                             />
                         </div>
 
@@ -215,6 +216,8 @@ const Resources = () => {
                     </div>
                 </section>
             </div>
+
+            <Blog />
         </div>
     )
 }

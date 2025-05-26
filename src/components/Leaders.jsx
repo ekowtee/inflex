@@ -3,12 +3,12 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import "./Global.css";
-import ekow from "../assets/about/ekow.jpg";
+import ekow from "../assets/about/ekowmain.png";
 import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
 
 const Leaders = () => {
     return (
-        <div className='overflow-hidden bg-red-600 4xl:pl-32'>
+        <div className='overflow-hidden 4xl:pl-32'>
             <div className="contain">
                 <div className='box'>
                     <div className='imgBx'>

@@ -10,7 +10,6 @@ import exp from "../assets/about/exp.png"
 import exp1 from "../assets/about/exp1.png"
 
 import Partners from '../components/Partners'
-import Blog from '../components/Blog'
 import Banner from '../components/Banner'
 import Leaders from '../components/Leaders'
 
@@ -67,16 +66,16 @@ const About = () => {
                                 <h3 className="text-2xl font-semibold">Our Services</h3>
                                 <ul className="space-y-4 text-sm">
                                     <li>
-                                        <p className="font-semibold">Building Construction</p>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipiscing elit.</p>
+                                        <p className="font-semibold">Deep Expertise</p>
+                                        <p>Certified professionals passionate about solving complex technology challenges</p>
                                     </li>
                                     <li>
-                                        <p className="font-semibold">Foundation Work</p>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipiscing elit.</p>
+                                        <p className="font-semibold">Client-Centric Approach</p>
+                                        <p> Solutions tailored to your unique business goals and operational needs.</p>
                                     </li>
                                     <li>
-                                        <p className="font-semibold">Site Management</p>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipiscing elit.</p>
+                                        <p className="font-semibold">Growing Global Reach</p>
+                                        <p>Expanding capabilities to support your international aspirations.</p>
                                     </li>
                                 </ul>
                             </div>
@@ -195,7 +194,7 @@ const About = () => {
                                 Call for a Quote
                             </span>
                             <span className="text-[18px] lg:text-[32px] leading-[26px] lg:leading-[47px] font-medium">
-                                +233 000 000 0
+                                0 208 889 270
                             </span>
                         </div>
                     </div>
@@ -275,7 +274,7 @@ const About = () => {
             </section>
 
             <Partners />
-            <Blog />
+
             <section>
                 <div className="relative">
                     {/* full-width map, shorter on mobile, taller on desktop */}
@@ -316,12 +315,12 @@ const About = () => {
                                     <ChartBar size={24} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <small>Dustro Emails</small>
+                                    <small>InflxionS-IT Emails</small>
                                     <span className="text-[#16213E] text-[18px] font-normal leading-[26px]">
-                                        dustro@gmail.com
+                                        info@inflexions.tech
                                     </span>
                                     <span className="text-[#16213E] text-[18px] font-normal leading-[26px]">
-                                        dustro.info@gmail.com
+                                        sales@inflexions.tech
                                     </span>
                                 </div>
                             </div>
