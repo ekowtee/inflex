@@ -1,3 +1,4 @@
+// src/components/SwapGrid.jsx
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react"
 
@@ -7,8 +8,10 @@ export default function SwapGrid() {
             id: 1,
             title: "Network Infrastructure",
             subtitle: "Accept payment across all networks",
-            description: "Receive payments from all networks via a shortcode. It's quick, easy, and no internet is needed.",
-            image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=400&fit=crop",
+            description:
+                "Receive payments from all networks via a shortcode. It's quick, easy, and no internet is needed.",
+            image:
+                "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=400&fit=crop",
             size: "large",
             theme: "red",
         },
@@ -17,7 +20,8 @@ export default function SwapGrid() {
             title: "Data-science",
             subtitle: "Advanced Analytics",
             description: "Powerful data processing and machine learning capabilities.",
-            image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+            image:
+                "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
             size: "medium",
             theme: "dark",
         },
@@ -26,7 +30,8 @@ export default function SwapGrid() {
             title: "Cloud Services",
             subtitle: "Scalable Solutions",
             description: "Enterprise-grade cloud infrastructure and services.",
-            image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop",
+            image:
+                "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop",
             size: "medium",
             theme: "blue",
         },
@@ -34,8 +39,10 @@ export default function SwapGrid() {
             id: 4,
             title: "Data centre Solutions",
             subtitle: "Enterprise Infrastructure",
-            description: "Robust data center solutions for mission-critical applications.",
-            image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=300&fit=crop",
+            description:
+                "Robust data center solutions for mission-critical applications.",
+            image:
+                "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=300&fit=crop",
             size: "large",
             theme: "tech",
         },
@@ -48,15 +55,21 @@ export default function SwapGrid() {
 
     const handleCardHover = (index) => {
         setHoveredIndex(index)
-        const newCards = [...cards]
-        const randomIndex = Math.floor(Math.random() * cards.length)
 
-        if (randomIndex !== index) {
-            const temp = newCards[index]
-            newCards[index] = newCards[randomIndex]
-            newCards[randomIndex] = temp
-            setCards(newCards)
-        }
+        // perform the swap after a 3-second delay
+        setTimeout(() => {
+            setCards((prevCards) => {
+                const newCards = [...prevCards]
+                const randomIndex = Math.floor(Math.random() * newCards.length)
+                if (randomIndex !== index) {
+                    ;[newCards[index], newCards[randomIndex]] = [
+                        newCards[randomIndex],
+                        newCards[index],
+                    ]
+                }
+                return newCards
+            })
+        }, 3000) // 3000ms = 3 seconds
     }
 
     const handleMouseLeave = () => setHoveredIndex(null)
@@ -101,8 +114,12 @@ export default function SwapGrid() {
 
                         {/* Content (only visible on hover) */}
                         <div className="relative z-10 p-4 flex-grow flex flex-col justify-center text-white space-y-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <h2 className="text-sm md:text-base font-semibold leading-snug">{card.title}</h2>
-                            <h3 className="text-xs md:text-sm opacity-80">{card.subtitle}</h3>
+                            <h2 className="text-sm md:text-base font-semibold leading-snug">
+                                {card.title}
+                            </h2>
+                            <h3 className="text-xs md:text-sm opacity-80">
+                                {card.subtitle}
+                            </h3>
                             {card.size === "large" && (
                                 <p className="text-[11px] opacity-70 leading-tight max-h-[3.5rem] overflow-hidden text-ellipsis">
                                     {card.description}

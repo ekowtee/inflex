@@ -3,9 +3,9 @@ import React from 'react'
 import map from "../assets/hero/map.png"
 import { Link } from 'react-router-dom'
 
-import part1 from "../assets/hero/part1.png"
-import part2 from "../assets/hero/part2.png"
-import part3 from "../assets/hero/part3.png"
+import part1 from "../assets/hero/micro.png"
+import part2 from "../assets/hero/aws.png"
+import part3 from "../assets/hero/cisco.png"
 import part4 from "../assets/hero/part4.png"
 import part5 from "../assets/hero/part5.png"
 import part6 from "../assets/hero/part6.png"

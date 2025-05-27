@@ -233,63 +233,44 @@ export default function Home() {
 
                 {/* Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4">
-                    {/* 1) Top‑left */}
-                    <div className="relative w-full h-[260px] rounded-lg overflow-hidden">
-                        <img
-                            src={mid1}
-                            alt="Person using tablet"
-                            className="object-cover w-full h-full"
-                            loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-black/20" />
-                    </div>
+                    {[
+                        { src: mid1, title: "Embrace Agility & Scale:", text: "Seamless Cloud Services, Collaboration tools, and modern Application Platforms", overlay: "bg-black/20", rowSpan: "" },
+                        { src: mid2, title: "Client-Centric Approach:", text: "Solutions tailored to your unique business goals and operational needs.", overlay: "bg-black/30", rowSpan: "" },
+                        { src: mid3, title: "Build a Rock-Solid Foundation:", text: "Reliable Network Infrastructure, IT Hardware, and Datacentre solutions.", overlay: "", rowSpan: "md:row-span-2 lg:h-[530px] md:h-[540px] h-[214px]" },
+                        { src: mid4, title: "Unlock Future Potential:", text: "Harness the power of Data Science and AI for strategic advantage.", overlay: "bg-black/30", rowSpan: "md:col-span-2 h-[259px]" },
+                    ].map((item, idx) => (
+                        <div
+                            key={idx}
+                            className={`
+          relative w-full ${item.rowSpan || "h-[260px]"} rounded-lg overflow-hidden
+          group transition-transform duration-500
+        `}
+                        >
+                            {/* Image */}
+                            <img
+                                src={item.src}
+                                alt={item.title}
+                                loading="lazy"
+                                className="object-cover w-full h-full transform transition-transform duration-500 group-hover:scale-110"
+                            />
 
-                    {/* 2) Top‑middle */}
-                    <div className="relative w-full h-[260px] rounded-lg overflow-hidden">
-                        <img
-                            src={mid2}
-                            alt="People working at desk"
-                            className="object-cover w-full h-full"
-                            loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-black/30" />
-                        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white">
-                            <h3 className="text-xl font-semibold">Client‑Centric Approach:</h3>
-                            <p>Solutions tailored...</p>
-                        </div>
-                    </div>
+                            {/* Optional dark overlay */}
+                            {item.overlay && (
+                                <div className={`absolute inset-0 ${item.overlay} transition-opacity duration-500 opacity-0 group-hover:opacity-100`} />
+                            )}
 
-                    {/* 3) Right side (spans 2 rows on md) */}
-                    <div className="relative w-full h-[214px] lg:h-[530px] md:h-[540px] rounded-lg overflow-hidden md:row-span-2">
-                        <img
-                            src={mid3}
-                            alt="Technology with red overlay"
-                            className="object-cover w-full h-full"
-                            loading="lazy"
-                        />
-                        {/* <div className="absolute inset-0 bg-red-900/70" /> */}
-                        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white">
-                            <h3 className="text-xl font-semibold">Reliable Partnership:</h3>
-                            <p>Committed to proactive...</p>
+                            {/* Text content */}
+                            <div className="absolute inset-0 flex flex-col items-start justify-center p-6 text-white">
+                                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <h3 className="text-xl font-semibold">{item.title}</h3>
+                                    <p>{item.text}</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-
-                    {/* 4) Bottom (spans 2 columns on md) */}
-                    <div className="relative w-full h-[259px] md:col-span-2 rounded-lg overflow-hidden">
-                        <img
-                            src={mid4}
-                            alt="Person working on design"
-                            className="object-cover w-full h-full"
-                            loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-black/30" />
-                        <div className="absolute inset-0 flex items-center justify-center p-6 text-white">
-                            <h3 className="text-xl font-semibold">Future‑Focused:</h3>
-                            <p>Designing scalable...</p>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </section>
+
 
             <MainPartners />
             <TestimonialSlider />
