@@ -25,7 +25,9 @@ const MainPartners = () => {
                             </h3>
 
                             <span className='font-normal text-[17px] leading-[27.1px]'>
-                                Curriculum tailored to your organization, delivered with white-glove service and support
+                                Engineering the Future of Business, <br />
+                                One Solution at a Time
+
                             </span>
 
                             <div
@@ -36,7 +38,7 @@ const MainPartners = () => {
                                         flex items-center justify-center
                                       '
                             >
-                                <Link to="#" className="text-white font-semibold">
+                                <Link to="/case-studies" className="text-white font-semibold">
                                     View our Case studies
                                 </Link>
                             </div>

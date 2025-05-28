@@ -49,11 +49,11 @@ export default function Home() {
     return (
         <>
             <div className="relative w-full">
-                <img src={herobg} alt="herobg" className="object-cover w-full lg:h-auto md:h-[60vh] h-[60vh]" />
+                <img src={herobg} alt="herobg" className="object-cover w-full lg:h-[85vh] 4xl:h-[60vh] md:h-[60vh] h-[70vh]" />
                 <div className="absolute inset-0 bg-black/30" />
 
                 <div
-                    className=" absolute top-5 xxsm:top-20 md:top-28 lg:top-8 4xl:top-[100px] left-0 p-4 md:p-0 w-full md:w-[571px] h-auto md:left-10 lg:left-[200px] 4xl:left-[250px] flex flex-col justify-center items-start"
+                    className=" absolute top-28 xxsm:top-28 md:top-28 lg:top-24 4xl:top-[170px] left-0 p-4 md:p-0 w-full md:w-[571px] h-auto md:left-10 lg:left-[200px] 4xl:left-[250px] flex flex-col justify-center items-start"
                 >
                     <h1
                         className={`${base}${mounted ? "translate-y-0 opacity-100 delay-[800ms]" : "translate-y-[50px] opacity-0"}
@@ -234,10 +234,10 @@ export default function Home() {
                 {/* Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4">
                     {[
-                        { src: mid1, title: "Embrace Agility & Scale:", text: "Seamless Cloud Services, Collaboration tools, and modern Application Platforms", overlay: "bg-black/20", rowSpan: "" },
-                        { src: mid2, title: "Client-Centric Approach:", text: "Solutions tailored to your unique business goals and operational needs.", overlay: "bg-black/30", rowSpan: "" },
+                        { src: mid1, title: "Embrace Agility & Scale:", text: "Seamless Cloud Services, Collaboration tools, and modern Application Platforms", overlay: "bg-black/50", rowSpan: "" },
+                        { src: mid2, title: "Client-Centric Approach:", text: "Solutions tailored to your unique business goals and operational needs.", overlay: "bg-black/50", rowSpan: "" },
                         { src: mid3, title: "Build a Rock-Solid Foundation:", text: "Reliable Network Infrastructure, IT Hardware, and Datacentre solutions.", overlay: "", rowSpan: "md:row-span-2 lg:h-[530px] md:h-[540px] h-[214px]" },
-                        { src: mid4, title: "Unlock Future Potential:", text: "Harness the power of Data Science and AI for strategic advantage.", overlay: "bg-black/30", rowSpan: "md:col-span-2 h-[259px]" },
+                        { src: mid4, title: "Unlock Future Potential:", text: "Harness the power of Data Science and AI for strategic advantage.", overlay: "bg-black/50", rowSpan: "md:col-span-2 h-[259px]" },
                     ].map((item, idx) => (
                         <div
                             key={idx}

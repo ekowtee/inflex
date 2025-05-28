@@ -22,7 +22,7 @@ export default function Navbar() {
         } hover:text-red-600 hover:border-red-600`
 
     return (
-        <header className="w-full bg-white shadow-sm">
+        <header className="w-full bg-white shadow-sm fixed z-50">
             <div
                 className="
           container mx-auto
@@ -72,13 +72,13 @@ export default function Navbar() {
                     <NavLink to="/resources" className={navLinkClasses}>
                         Resources
                     </NavLink>
-
+                    {/* 
                     <NavLink
                         to="/careers"
                         className={navLinkClasses}
                     >
                         Careers
-                    </NavLink>
+                    </NavLink> */}
                 </nav>
 
                 {/* Desktop contact button */}
@@ -153,7 +153,7 @@ export default function Navbar() {
                             Resources
                         </NavLink>
 
-                        <NavLink
+                        {/* <NavLink
                             to="/careers"
                             onClick={() => setIsMenuOpen(false)}
                             className={({ isActive }) =>
@@ -161,7 +161,7 @@ export default function Navbar() {
                             }
                         >
                             Careers
-                        </NavLink>
+                        </NavLink> */}
 
                         <Link
                             to="/contact"

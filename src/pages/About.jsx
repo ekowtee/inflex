@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import aboutbg from "../assets/about/Photo.png"
 import { Link } from 'react-router-dom'
-import { ChartBar, Phone, Play } from 'lucide-react'
+import { Mail, Phone, Play } from 'lucide-react'
 import about1 from "../assets/about/about1.png"
 import about2 from "../assets/about/about2.png"
 import aboutsect from "../assets/about/aboutsect.png"
@@ -12,6 +12,7 @@ import exp1 from "../assets/about/exp1.png"
 import Partners from '../components/Partners'
 import Banner from '../components/Banner'
 import Leaders from '../components/Leaders'
+import { MdEmail } from 'react-icons/md'
 
 
 
@@ -49,34 +50,29 @@ const About = () => {
                         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
 
                             {/* Left column */}
-                            <div className="md:w-1/2 text-white space-y-4">
+                            <div className="md:w-1/2 text-white space-y-4 pt-[200px]">
                                 <h2 className="text-4xl lg:text-5xl font-bold">
                                     About <br className="hidden lg:block" />INFLEXIONS-IT
                                 </h2>
-                                <p className="text-lg">
-                                    Who we are?
-                                </p>
-                                <button className="bg-[#BD2E25] hover:bg-red-700 transition px-6 py-3 text-white font-medium">
-                                    <Link to="#">Request consultation</Link>
-                                </button>
+
                             </div>
 
                             {/* Right “Our Services” card */}
                             <div className="w-[326px] h-[360px] hidden md:block lg:block bg-[#BD2E25] p-8 text-white space-y-6">
-                                <h3 className="text-2xl font-semibold">Our Services</h3>
+                                <h3 className="text-2xl font-semibold">Our Mission</h3>
                                 <ul className="space-y-4 text-sm">
                                     <li>
-                                        <p className="font-semibold">Deep Expertise</p>
-                                        <p>Certified professionals passionate about solving complex technology challenges</p>
+                                        <p className="font-semibold">Bridge Strategy & Technology</p>
+                                        <p>
+                                            Leverage our decades of IT and systems‐integration expertise to translate complex technologies into clear, strategic business advantages.
+                                        </p>
                                     </li>
                                     <li>
-                                        <p className="font-semibold">Client-Centric Approach</p>
-                                        <p> Solutions tailored to your unique business goals and operational needs.</p>
+                                        <p className="font-semibold">Operate with Speed, Accountability & Accuracy</p>
+                                        <p>
+                                            As a privately owned firm, maintain an agile culture that ensures rapid response, clear ownership, and impeccable execution.                                            </p>
                                     </li>
-                                    <li>
-                                        <p className="font-semibold">Growing Global Reach</p>
-                                        <p>Expanding capabilities to support your international aspirations.</p>
-                                    </li>
+
                                 </ul>
                             </div>
 
@@ -93,16 +89,14 @@ const About = () => {
                             <h1
                                 className="
             w-full lg:w-[350px] md:w-[335px]
-            h-auto md:h-[120px]
+            h-auto 
             text-[24px] md:text-[33.35px]
             font-normal
             text-[#16213E]
             leading-[32px] md:leading-[40px]
           "
                             >
-                                Engineering the Future of Business,
-                                <br />
-                                One Solution at a Time
+                                Our Vision
                             </h1>
                             <p
                                 className="
@@ -113,7 +107,7 @@ const About = () => {
             font-normal
           "
                             >
-                                Founded in 2012 and headquartered in Accra, Ghana, Inflexions I.T. Services Limited is a dynamic technology solutions provider built on a foundation of deep industry expertise. With a core team possessing decades of collective experience in IT and systems integration, we were established to bridge the gap between complex technology and strategic business goals....
+                                To empower businesses across Ghana—and ultimately throughout West Africa and beyond—to harness the full potential of technology as a catalyst for sustained innovation and competitive advantage. We envision a future in which every organization, regardless of size or sector, can seamlessly navigate digital transformation through agile, tailored IT solutions delivered with unwavering integrity and excellence.
                             </p>
                         </div>
 
@@ -165,10 +159,10 @@ const About = () => {
             <section>
                 <div className="flex flex-col lg:flex-row w-full">
                     {/* Left content */}
-                    <div className="w-full lg:w-[589px] h-auto lg:h-[676px] 4xl:h-[905px] bg-[#2A2A2A] flex flex-col items-center justify-center px-6 lg:px-10 py-8 lg:py-0">
-                        <div className="w-full lg:w-[490px] h-auto lg:h-[428px]  text-white space-y-4">
-                            <span className="block text-[24px] lg:text-[33px] leading-[32px] lg:leading-[40px] font-normal">
-                                Still reading...
+                    <div className="w-full lg:w-[589px] h-auto lg:h-[676px] 4xl:h-[905px] bg-[#2A2A2A] flex flex-col items-center justify-center px-6 lg:px-10 py-4 lg:py-0">
+                        <div className="w-full lg:w-[490px] h-auto text-white space-y-4">
+                            <span className="text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]">
+                                Founded in 2012 and headquartered in Accra, Ghana, Inflexions I.T. Services Limited is a dynamic technology solutions provider built on a foundation of deep industry expertise. With a core team possessing decades of collective experience in IT and systems integration, we were established to bridge the gap between complex technology and strategic business goals....
                             </span>
 
                             <p className="text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]">
@@ -300,22 +294,20 @@ const About = () => {
                                     <Phone size={24} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <small>Company Phones</small>
                                     <span className="text-[#16213E] text-[18px] font-normal leading-[26px]">
                                         0 208 889 270
                                     </span>
                                     <span className="text-[#16213E] text-[18px] font-normal leading-[26px]">
-                                        0 208 889 270
+                                        0 205 179 937
                                     </span>
                                 </div>
                             </div>
 
                             <div className="flex items-center gap-4">
                                 <div className="flex items-center justify-center w-[45px] h-[45px] bg-[#BD2E25] text-white">
-                                    <ChartBar size={24} />
+                                    <Mail size={24} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <small>InflxionS-IT Emails</small>
                                     <span className="text-[#16213E] text-[18px] font-normal leading-[26px]">
                                         info@inflexions.tech
                                     </span>

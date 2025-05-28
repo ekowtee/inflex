@@ -14,9 +14,7 @@ export default function Footer() {
                     {/* 1) Logo & Contact */}
                     <div className="space-y-6">
                         <img src={logo} alt="Inflexions-IT" className="h-12" />
-                        <p className="text-gray-800 max-w-xs">
-                            Leverage agile frameworks to provide a robust synopsis for strategy collaborative thinking to further the overall value proposition.
-                        </p>
+
                         <div className="space-y-4 mt-8">
                             <div className="flex items-center">
                                 <div className="bg-[#BD2E25] rounded-full p-3 mr-4">
@@ -41,6 +39,8 @@ export default function Footer() {
                                 <div>
                                     <p className="font-medium">Call Us</p>
                                     <p className="text-gray-600">(0) 208 889 270</p>
+                                    <p className="text-gray-600">(0) 205 179 937</p>
+
                                 </div>
                             </div>
                         </div>
@@ -88,7 +88,7 @@ export default function Footer() {
                         <h3 className="text-xl font-bold mb-6 lg:mb-10">Access</h3>
                         <ul className="space-y-4 text-black">
                             <li>
-                                <Link to="/blog" className="hover:text-[#BD2E25]">
+                                <Link to="/resouces" className="hover:text-[#BD2E25]">
                                     Blog
                                 </Link>
                             </li>
@@ -97,11 +97,11 @@ export default function Footer() {
                                     Privacy
                                 </Link>
                             </li>
-                            <li>
+                            {/* <li>
                                 <Link to="/temporary" className="hover:text-[#BD2E25]">
                                     Temporary
                                 </Link>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
 

@@ -101,7 +101,7 @@ const Services = () => {
                             need targeted project assistance, ongoing management, or responsive support,
                             we have a service model that fits.
                         </p>
-                        <button
+                        <a href='/contact'
                             className="
           bg-[#BD2E25] hover:bg-[#A02923]
           text-white font-medium
@@ -110,7 +110,7 @@ const Services = () => {
         "
                         >
                             Contact now
-                        </button>
+                        </a>
                     </div>
                 </div>
             </section>
@@ -133,7 +133,7 @@ const Services = () => {
                         <div className="flex-1">
                             <h3 className="text-xl md:text-[25px] leading-[20px] font-normal tracking-[-1%] text-[#1B3764] my-4 flex flex-col">
                                 Professional Services:
-                                <span className="text-[16px] leading-[20px] font-normal tracking-[-1%]">
+                                <span className="text-[16px] leading-[20px] font-normal tracking-[-1%] pt-3">
                                     {' '}Expert Guidance for Strategic IT Initiatives
                                 </span>
                             </h3>
@@ -147,9 +147,9 @@ const Services = () => {
                                 <b className="text-[#666C89]">Ideal For</b>: Businesses needing expert help with specific
                                 technology implementations, upgrades, migrations, or strategic IT planning.
                             </p>
-                            <button className="bg-[#BD2E25] hover:bg-[#A02923] text-white font-medium py-4 px-6 md:px-10 transition">
+                            <a href='/contact' className="bg-[#BD2E25] hover:bg-[#A02923] text-white font-medium py-4 px-6 md:px-10 transition">
                                 Review
-                            </button>
+                            </a>
                         </div>
                     </div>
 
@@ -192,7 +192,7 @@ const Services = () => {
                         <div className="flex-1">
                             <h3 className="text-xl md:text-[25px] leading-[20px] font-normal tracking-[-1%] text-[#1B3764] my-4 flex flex-col">
                                 Managed Services:
-                                <span className="text-[16px] leading-[20px] font-normal tracking-[-1%] lg:w-[316px]">
+                                <span className="text-[16px] leading-[20px] font-normal tracking-[-1%] lg:w-[316px] pt-3">
                                     {' '}Proactive Management for Optimal Performance & Peace of Minds
                                 </span>
                             </h3>
@@ -201,9 +201,9 @@ const Services = () => {
                                 Ideal For: Organizations seeking predictable IT costs, improved system reliability, enhanced security posture, and expert ongoing management of their IT environment..
                             </p>
 
-                            <button className="bg-[#BD2E25] hover:bg-[#A02923] text-white font-medium py-4 px-6 md:px-12 transition">
+                            <a href='/contact' className="bg-[#BD2E25] hover:bg-[#A02923] text-white font-medium py-4 px-6 md:px-12 transition">
                                 Get a Quote
-                            </button>
+                            </a>
                         </div>
                     </div>
 
@@ -228,7 +228,7 @@ const Services = () => {
                         <div className="flex-1">
                             <h3 className="text-xl md:text-[25px] leading-[20px] font-normal tracking-[-1%] text-[#1B3764] my-4 flex flex-col">
                                 Support Services:
-                                <span className="text-[16px] leading-[20px] font-normal tracking-[-1%]">
+                                <span className="text-[16px] leading-[20px] font-normal tracking-[-1%] pt-3">
                                     {' '}Responsive and Reliable Technical Support
                                 </span>
                             </h3>
@@ -236,9 +236,9 @@ const Services = () => {
                                 Ensure business continuity with timely and effective technical support. Our Support Services offer various tiers of assistance, from break/fix support for specific hardware or software issues to comprehensive helpdesk services for your end-users. Our experienced technicians are ready to resolve issues quickly and minimize disruption.
                                 Ideal For: Businesses needing dependable technical assistance, troubleshooting, and issue resolution on an as-needed or contracted basis.
                             </p>
-                            <button className="bg-[#BD2E25] hover:bg-[#A02923] text-white font-medium py-4 px-6 md:px-10 transition">
+                            <a href='/contact' className="bg-[#BD2E25] hover:bg-[#A02923] text-white font-medium py-4 px-6 md:px-10 transition">
                                 Explore package
-                            </button>
+                            </a>
                         </div>
                     </div>
 

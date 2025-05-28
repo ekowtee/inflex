@@ -4,6 +4,9 @@
 import React from 'react';
 import "./Global.css";
 import ekow from "../assets/about/ekowmain.png";
+import jade from "../assets/about/jade.jpg";
+import anthony from "../assets/about/anthony.jpg";
+
 import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
 
 const Leaders = () => {
@@ -36,7 +39,7 @@ const Leaders = () => {
 
                 <div className='box'>
                     <div className='imgBx'>
-                        <img src={ekow} alt='leader' loading='lazy' />
+                        <img src={jade} alt='leader' loading='lazy' />
                     </div>
                     <div className='content'>
                         <h3 className="text-[16px] font-normal text-[#1E3161]">Jade Appiah-Lartey</h3>
@@ -60,7 +63,7 @@ const Leaders = () => {
 
                 <div className='box'>
                     <div className='imgBx'>
-                        <img src={ekow} alt='leader' loading='lazy' />
+                        <img src={anthony} alt='leader' loading='lazy' />
                     </div>
                     <div className='content'>
                         <h3 className="text-[16px] font-normal text-[#1E3161]">Anthony Getor</h3>
