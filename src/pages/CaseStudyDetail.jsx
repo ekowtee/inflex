@@ -156,7 +156,7 @@ export default function CaseStudyDetail() {
                 </ul>
             </section>
 
-            <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-12">
+            <section className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px] py-12">
                 {/* Heading */}
                 <h2 className="text-3xl font-semibold text-[#1B3764] mb-4">
                     {study.title}
@@ -177,7 +177,7 @@ export default function CaseStudyDetail() {
                     <img
                         src={study.image}
                         alt="Project overview"
-                        className="w-full h-[651px] object-cover"
+                        className="w-full lg:h-[651px] object-cover"
                     />
 
                     {/* Play button overlay */}
@@ -189,7 +189,7 @@ export default function CaseStudyDetail() {
                 </div>
             </section>
 
-            <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-12">
+            <section className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px] py-12">
                 <h2 className="text-2xl md:text-3xl font-semibold text-[#1B3764] mb-6">
                     Related Case
                 </h2>

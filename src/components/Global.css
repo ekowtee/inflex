@@ -16,7 +16,7 @@
 /* leaders section start */
 
 .contain {
-    width: 1000px;
+    width: 1160px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -95,7 +95,11 @@
 
 
 /* two cards per row on tablets */
-@media screen and (max-width: 1024px) {}
+@media screen and (max-width: 1912px) {
+    /* .contain {
+        width: 1373px;
+    } */
+}
 
 /* stack cards and make content auto-height on phones */
 @media screen and (max-width: 768px) {

@@ -8,32 +8,33 @@ const blog = [
     {
         id: 1,
         image: blog1,
-        title: 'Maecenas accumsan lacus vel facilisis volutpat est',
+        title: 'Responsive Redesign: Boosting User Engagement by 40%',
         description:
-            'Non consectetur a erat nam at. Sit amet risus nullam eget felis eget nunc lobortis.',
-        link: '/cases/1',
+            'How a mobile-first overhaul drove a 40% increase in session duration and 20% uplift in conversions.',
+        link: '#',
     },
     {
         id: 2,
         image: blog2,
-        title: 'Maecenas accumsan lacus vel facilisis volutpat est',
+        title: 'Personalized Content Engine: Driving ROI with Tailored Experiences',
         description:
-            'Non consectetur a erat nam at. Sit amet risus nullam eget felis eget nunc lobortis.',
-        link: '/cases/2',
+            'Leveraging edge-powered personalization to boost session duration by 25% and ad revenue by 12%.',
+        link: '#',
     },
     {
         id: 3,
         image: blog3,
-        title: 'Maecenas accumsan lacus vel facilisis volutpat est',
+        title: 'Strengthening Cybersecurity in Remote Work Environments',
         description:
-            'Non consectetur a erat nam at. Sit amet risus nullam eget felis eget nunc lobortis.',
-        link: '/cases/3',
+            'Explore essential strategies and tools to secure your remote workforce, protect sensitive data, and maintain compliance in today’s distributed workplace.',
+        link: '#',
     },
+
 ]
 
 export default function Blog() {
     return (
-        <section className="container mx-auto px-4 sm:px-6 lg:px-[200px] 4xl:px-[250px] py-16 bg-white">
+        <section className="container mx-auto px-4 sm:px-6 lg:pl-[200px]  lg:pr-[152px] py-16 bg-white">
             {/* Section Heading */}
             <h2 className="
           text-xl        /* mobile */

@@ -96,7 +96,7 @@ export default function Home() {
             <Partners />
 
             <section>
-                <div className='flex flex-col md:flex-col lg:flex-row 4xl:flex-row w-full lg:h-[554px] px-4 lg:px-[200px] 4xl:px-[250px]'>
+                <div className='flex flex-col md:flex-col lg:flex-row 4xl:flex-row w-full lg:h-[554px] px-4 lg:pl-[200px] 4xl:pl-[250px]'>
                     <div className='flex-1 md:px-8 lg:px-0 md:py-10 lg:py-14 '>
                         <h2 className={`${base} ${mounted ? "translate-y-0 opacity-100 delay-[800ms]" : "translate-y-[50px] opacity-0"} lg:w-[486px] lg:h-[144px] lg:text-[40px] md:text-[28px] text-[24px] lg:leading-[45px] mb-2 py-2`}>
                             Your Strategic Technology Partner, From Foundation to Future.
@@ -115,8 +115,8 @@ export default function Home() {
                     </div>
                     <div className='relative flex flex-1 items-center md:pl-[160px] lg:pl-[72px] 4xl:pl-[310px] mt-2 md:mt-0 lg:mt-0'>
                         <div className=''>
-                            <img src={svgbg} alt='svgbg' className='w-[419px] h-full object-contain' loading='lazy' />
-                            <div className='absolute top-20 md:top-32 lg:top-32 4xl:top-32 md:left-[17%] lg:left-[6%] 4xl:left-[36%]'>
+                            <img src={svgbg} alt='svgbg' className='w-[419px] lg:ml-5 4xl:ml-16 h-full object-contain' loading='lazy' />
+                            <div className='absolute top-20 md:top-32 lg:top-32 4xl:top-32 md:left-[17%] lg:left-[8%] 4xl:left-[35%]'>
                                 <img src={imagesvg} alt='svgbg' className='w-[490px] h-[353px] object-contain' loading='lazy' />
                             </div>
                             {/* 1) Robust Infrastructure */}
@@ -212,18 +212,18 @@ export default function Home() {
                     />
                 </div>
                 <div className="flex-1 py-4 md:py-10 lg:py-20 lg:pl-[200px] px-4 md:px-8 lg:px-0">
-                    <div className='flex flex-col gap-8 w-full lg:w-[500px] 4xl:w-[600px] lg:h-[700px]'>
+                    <div className='flex flex-col gap-8 w-full lg:w-[700px] 4xl:w-[600px] lg:h-[700px]'>
                         <h2 className="lg:w-[400px] lg:h-[93px] lg:text-[32px] md:text-[32px] text-[20px] lg:leading-[40px] text-[#265982]">
                             Comprehensive Solutions for Modern Challenges
                         </h2>
-                        <div className="lg:w-[400px] 4xl:w-full 4xl:space-y-8 lg:space-y-4 space-y-4">
+                        <div className="lg:w-[555px] 4xl:w-full 4xl:ml-[92px] lg:ml-0 md:ml-0 ml-0 4xl:space-y-8 lg:space-y-4 space-y-4">
                             <SwapGrid />
                         </div>
                     </div>
                 </div>
             </div>
 
-            <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-12">
+            <section className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px] py-12">
                 {/* Heading */}
                 <h2 className="text-3xl font-medium text-gray-900 mb-12">
                     Your The Inflexions
@@ -287,7 +287,7 @@ export default function Home() {
                     <div
                         className="
             absolute top-4 sm:top-8 md:top-20 lg:top-[20%]
-            left-4 sm:left-6 md:left-4 lg:left-[165px]
+            left-4 sm:left-6 md:left-4 lg:left-[165px] 4xl:left-[220px]
             w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:w-[400px] lg:w-[568px] bg-opacity-90
             p-4 sm:p-6 md:p-8
             flex flex-col gap-3 sm:gap-4

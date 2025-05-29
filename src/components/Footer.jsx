@@ -8,7 +8,7 @@ import logo from '../assets/logo.png'
 export default function Footer() {
     return (
         <footer className="bg-white">
-            <div className="container mx-auto px-4 lg:px-[200px] 4xl:px-[200px] py-12">
+            <div className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[200px] pr-[160px] py-12">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
 
                     {/* 1) Logo & Contact */}

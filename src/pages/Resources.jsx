@@ -2,8 +2,14 @@
 import React from 'react'
 import { Helmet } from 'react-helmet';
 import careerbg from "../assets/career/careerbg.png"
-import Placeholder from "../assets/blog/blog1.png"
+import Placeholder from "../assets/blog/blogger.png"
+import Placeholder2 from "../assets/blog/webinar1.png"
+import Placeholder3 from "../assets/blog/webinar2.png"
+import Placeholder4 from "../assets/blog/webinar3.png"
+
+
 import Blog from '../components/Blog';
+import Banner from '../components/Banner';
 
 
 const Resources = () => {
@@ -37,8 +43,8 @@ const Resources = () => {
         {
             id: 2,
             title: 'Maximizing ROI with IT Service Management',
-            description: 'Explore frameworks and metrics to measure and improve ROI on ITSM initiatives.',
-            coverUrl: Placeholder,
+            description: 'Explore frameworks and metrics to measure and improve ROI on ITSM initiatives. In-depth work around to clock to deliver.',
+            coverUrl: Placeholder4,
             downloadLink: '/resources/whitepapers/itsm-roi',
         },
     ];
@@ -49,7 +55,7 @@ const Resources = () => {
             title: 'The Future of Network Infrastructure - SD-WAN Explained',
             description: 'On-demand webinar diving into the capabilities and benefits of SD-WAN for modern networks.',
             date: 'April 28, 2025',
-            imageUrl: Placeholder,
+            imageUrl: Placeholder2,
             recordingLink: '/webinars/sd-wan-explained',
         },
         {
@@ -57,8 +63,8 @@ const Resources = () => {
             title: 'Cybersecurity in the Age of Remote Work',
             description: 'Live session on best practices to secure remote workforces in 2025 and beyond.',
             date: 'May 15, 2025',
-            imageUrl: Placeholder,
-            registerLink: '/webinars/cyber-remote-work',
+            imageUrl: Placeholder3,
+            registerLink: '/contact',
         },
     ];
     return (
@@ -93,7 +99,7 @@ const Resources = () => {
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px">
+            <div className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px]">
                 <Helmet>
                     <title>Insights & Resources | Inflexions I.T. Services</title>
                 </Helmet>
@@ -218,6 +224,8 @@ const Resources = () => {
             </div>
 
             <Blog />
+
+            <Banner />
         </div>
     )
 }

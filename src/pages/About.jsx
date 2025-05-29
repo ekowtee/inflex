@@ -1,35 +1,22 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import aboutbg from "../assets/about/Photo.png"
-import { Link } from 'react-router-dom'
 import { Mail, Phone, Play } from 'lucide-react'
 import about1 from "../assets/about/about1.png"
 import about2 from "../assets/about/about2.png"
 import aboutsect from "../assets/about/aboutsect.png"
-import exp from "../assets/about/exp.png"
+import exp from "../assets/about/vvvvv.png"
 import exp1 from "../assets/about/exp1.png"
 
 import Partners from '../components/Partners'
 import Banner from '../components/Banner'
 import Leaders from '../components/Leaders'
-import { MdEmail } from 'react-icons/md'
 
 
 
 
 const About = () => {
-    const [showVideo, setShowVideo] = useState(false)
-    const videoRef = useRef(null)
 
-    useEffect(() => {
-        if (showVideo && videoRef.current) {
-            videoRef.current.play()
-        }
-    }, [showVideo])
-
-    const handlePlayClick = () => {
-        setShowVideo(true)
-    }
     return (
         <>
             <div className="relative w-full h-[500px]">
@@ -46,7 +33,7 @@ const About = () => {
 
                 {/* Content */}
                 <div className="absolute inset-0 flex items-center">
-                    <div className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px]">
+                    <div className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px]">
                         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
 
                             {/* Left column */}
@@ -58,7 +45,7 @@ const About = () => {
                             </div>
 
                             {/* Right “Our Services” card */}
-                            <div className="w-[326px] h-[360px] hidden md:block lg:block bg-[#BD2E25] p-8 text-white space-y-6">
+                            <div className="w-[326px] h-[360px] hidden md:block lg:block bg-[#BD2E25] p-8 text-white space-y-6 mt-8">
                                 <h3 className="text-2xl font-semibold">Our Mission</h3>
                                 <ul className="space-y-4 text-sm">
                                     <li>
@@ -82,7 +69,7 @@ const About = () => {
             </div>
 
             <section>
-                <div className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-10">
+                <div className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px] py-10">
                     <div className="flex flex-col md:flex-row gap-8 items-center">
                         {/* Left content */}
                         <div className="w-full lg:w-1/2 space-y-10">
@@ -114,42 +101,24 @@ const About = () => {
                         {/* Right content – Images with video button */}
                         <div className="w-full md:w-1/2 relative">
                             <div className="relative flex bg-white p-4 4xl:ml-36 ml-0 md:ml-0 lg:ml-0 shadow-lg rounded-lg">
-                                {!showVideo ? (
-                                    <>
-                                        <div className="overflow-hidden rounded-lg border-white border-4">
-                                            <img
-                                                src={about1}
-                                                alt="Cloud technology interface"
-                                                className="w-full h-auto object-cover"
-                                            />
-                                        </div>
+                                <>
+                                    <div className="overflow-hidden rounded-lg border-white border-4">
+                                        <img
+                                            src={about1}
+                                            alt="Cloud technology interface"
+                                            className="w-full h-auto object-cover"
+                                        />
+                                    </div>
 
-                                        <div className="absolute top-0 right-4 overflow-hidden rounded-lg border-white border-4">
-                                            <img
-                                                src={about2}
-                                                alt="Cloud technology interface"
-                                                className="w-full h-auto object-cover"
-                                            />
-                                        </div>
+                                    <div className="absolute top-0 right-4 overflow-hidden rounded-lg border-white border-4">
+                                        <img
+                                            src={about2}
+                                            alt="Cloud technology interface"
+                                            className="w-full h-auto object-cover"
+                                        />
+                                    </div>
+                                </>
 
-                                        {/* Play button overlay */}
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <button
-                                                onClick={handlePlayClick}
-                                                className="bg-red-600 rounded-md p-3 shadow-lg hover:bg-red-700 transition-colors"
-                                            >
-                                                <Play className="w-8 h-8 text-white" />
-                                            </button>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <video
-                                        ref={videoRef}
-                                        src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4"
-                                        controls
-                                        className="w-full h-full object-cover"
-                                    />
-                                )}
                             </div>
                         </div>
                     </div>
@@ -195,7 +164,7 @@ const About = () => {
                 </div>
             </section>
 
-            <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-16 bg-[#F6F6F6] h-[1400px] md:h-full">
+            <section className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] py-16 bg-[#F6F6F6] h-[1400px] md:h-full">
                 <h2 className="text-3xl lg:text-[36px] font-normal text-[#1E3161] leading-[45px] text-center lg:mb-12">
                     Meet Our Strategic Leadership
                 </h2>
@@ -203,8 +172,8 @@ const About = () => {
                 <Leaders />
             </section>
 
-            <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-16 bg-[#F6F6F6]">
-                <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <section className="container mx-auto px-4 lg:pl-[40px] 4xl:pl-[10px] lg:pr-[22px] py-16 bg-[#F6F6F6]">
+                <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[193px] 4xl:gap-[390px] items-start">
                     {/* Left Column */}
                     <div className="w-full lg:w-[498px]">
                         <h2 className="text-[26px] md:text-[33px] font-normal text-[#1E3161] leading-[32px] md:leading-[42px]">
@@ -232,7 +201,7 @@ const About = () => {
                     </div>
 
                     {/* Right Column */}
-                    <div className="w-full lg:w-[495px]">
+                    <div className="w-full lg:w-[495px] 4xl:w-[606px]">
                         <img
                             src={exp1}
                             alt="Team meeting"

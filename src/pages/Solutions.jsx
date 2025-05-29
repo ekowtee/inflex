@@ -49,7 +49,7 @@ const Solutions = () => {
                 </div>
             </div>
 
-            <div className=" py-12 container mx-auto px-4 lg:px-[200px] 4xl:px-[250px]">
+            <div className=" py-12 container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px]">
                 <h1 className="text-4xl font-bold mb-8">Technology Solutions</h1>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -92,7 +92,7 @@ const Solutions = () => {
                 </div>
             </div>
 
-            <section className="py-12 container mx-auto px-4 sm:px-6 md:px-8 lg:px-[200px] 4xl:px-[250px]">
+            <section className="py-12 container mx-auto px-4 sm:px-6 md:px-8 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px]">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                     {/* LEFT COLUMN: Headline */}
@@ -161,7 +161,7 @@ const Solutions = () => {
                         className="w-full h-[504px] object-cover"
                         loading="lazy"
                     />
-                    <div className='absolute lg:bottom-10 md:bottom-10 lg:left-[200px] 4xl:left-[250px] w-full lg:w-[1110px] 4xl:w-[1400px] lg:h-[389px] flex gap-4 md:gap-2 lg:gap-0
+                    <div className='absolute lg:bottom-10 md:bottom-10 lg:left-[200px] 4xl:left-[250px] w-full lg:w-[1160px] 4xl:w-[1500px] lg:h-[389px] flex gap-4 md:gap-2 lg:gap-0
                     lg:flex-row md:flex-row flex-col items-center justify-between'>
                         <div className='relative shadow-md'>
                             <img src={sol6} alt='sect' loading='lazy' className='w-[260px] h-full object-cover' />

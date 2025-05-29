@@ -50,7 +50,7 @@ const CaseStudy = () => {
             </div>
 
 
-            <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-12">
+            <section className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px] py-12">
                 {/* Title */}
                 <h2 className="text-3xl font-semibold mb-8">
                     Delivering Tangible Value Through Technology
@@ -100,9 +100,7 @@ const CaseStudy = () => {
                 </div>
             </section>
 
-            <section className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px] py-12">
-
-
+            <section className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px] py-12">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {caseStudies.map(item => (
                         <Link

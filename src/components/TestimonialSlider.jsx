@@ -3,6 +3,9 @@ import React, { useState, useRef } from "react"
 import Slider from "react-slick"
 import { Quote } from "lucide-react"
 import Test1 from "../assets/Testimonials/test1.png"
+import Test2 from "../assets/Testimonials/test2.png"
+import Test3 from "../assets/Testimonials/test3.png"
+
 
 // remember to install:
 // npm install react-slick slick-carousel lucide-react
@@ -16,31 +19,31 @@ export default function TestimonialSlider() {
     const testimonials = [
         {
             id: 1,
-            name: "Katy Grey",
-            position: "CEO",
-            company: "Grey Industries",
+            name: "Ama Serwaa",
+            position: "Chief Marketing Officer",
+            company: "Zenith Retail",
             content:
-                "Suspendisse tortor enim, varius et porttitor sit amet, posuere vitae massa. Proin ac quam eu erat semper sagittis in vitae elit. Nam neque erat, semper vel ultrices in, finibus eu magna. Pellentesque habitant morbi tristique",
+                "Inflexions I.T. Services transformed our marketing operations with a streamlined CRM integration—reducing campaign launch times by 40%. Their team’s strategic understanding of both technology and business needs truly sets them apart.",
             image: Test1,
         },
         {
             id: 2,
-            name: "John Smith",
-            position: "CTO",
-            company: "Tech Solutions",
+            name: "John Kwame Boadu",
+            position: "Operations Manager",
+            company: "GreenLeaf Logistics",
             content:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl.",
+                "Thanks to Inflexions’ bespoke systems-integration approach, we now have real-time visibility across our supply chain. Inventory errors have dropped by 65%, and our on-time delivery rate is at an all-time high.",
             image:
-                Test1,
+                Test2,
         },
         {
             id: 3,
-            name: "Sarah Johnson",
-            position: "Marketing Director",
-            company: "Global Brands",
+            name: "Sarah Nana Adjoa",
+            position: "CEO",
+            company: "AquaPure Solutions",
             content:
-                "Maecenas consequat sagittis orci, in posuere nisi. Suspendisse potenti. Donec ut ex vel nisi consequat aliquam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed vitae magna eu eros tempor.",
-            image: Test1,
+                "From initial consultation to ongoing support, Inflexions delivered cost-effective IT solutions that scale with our business. Their agile responsiveness means we can confidently pursue growth without worrying about tech bottlenecks.",
+            image: Test3,
         },
     ]
 
@@ -57,7 +60,7 @@ export default function TestimonialSlider() {
     }
 
     return (
-        <div className="container mx-auto py-10 px-4 lg:px-[200px] 4xl:px-[250px]">
+        <div className="container mx-auto py-10 px-4 lg:pl-[200px] 4xl:pl-[250px]">
             <div className="max-w-7xl lg:h-[550px] h-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-20 gap-4 items-center">
                     {/* Image column */}
@@ -73,7 +76,7 @@ export default function TestimonialSlider() {
                     </div>
 
                     {/* Testimonial content */}
-                    <div className="col-span-12 md:col-span-7">
+                    <div className="col-span-12 md:col-span-7 lg:mr-[6px]">
                         <div className="mb-12 text-center lg:text-center">
                             <h3 className="text-red-600 font-medium tracking-wide uppercase mb-2">
                                 TESTIMONIALS
