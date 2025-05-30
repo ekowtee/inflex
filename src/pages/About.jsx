@@ -177,7 +177,7 @@ const About = () => {
                     {/* Left Column */}
                     <div className="w-full lg:w-[498px]">
                         <h2 className="text-[26px] md:text-[33px] font-normal text-[#1E3161] leading-[32px] md:leading-[42px]">
-                            Unlock Your Potential with INFLEXIONS IT Services – Free Your Youth for a Brighter, More Purposeful Future!
+                            Unlock Your Potential with INFLEXIONS IT Services – Your Strategic Technology Partner, From Foundation to Future.
                         </h2>
                         <p className="mt-2 text-base text-gray-600">
                             Inflexions is guided by a focused and experienced leadership team committed to driving innovation, client success, and strategic growth.
@@ -212,13 +212,13 @@ const About = () => {
                             <div className="flex-1">
                                 <h3 className="text-[24px] font-normal text-[#1E3161]">Certified Team</h3>
                                 <p className="mt-2 text-sm text-gray-600">
-                                    Non consectetur a erat nam at. Sit amet risus nullam.
+                                    Our certified professionals with years of experience and top industry credentials.
                                 </p>
                             </div>
                             <div className="flex-1 mt-6 sm:mt-0">
                                 <h3 className="text-[24px] font-normal text-[#1E3161]">Trusted Company</h3>
                                 <p className="mt-2 text-sm text-gray-600">
-                                    Non consectetur a erat nam at. Sit amet risus nullam.
+                                    With a proven track record, we deliver dependable, high-quality results every time.
                                 </p>
                             </div>
                         </div>

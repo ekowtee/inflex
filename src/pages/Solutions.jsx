@@ -55,7 +55,7 @@ const Solutions = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Red panel with text */}
                     <div className="bg-red-600 p-8 text-white flex items-center">
-                        <p className="text-lg leading-relaxed text-justify">
+                        <p className="text-lg leading-relaxed text-left">
                             Inflexions offers a comprehensive portfolio of technology solutions designed to address the core infrastructure, operational, and strategic needs of modern businesses. We don't just provide technology; we architect integrated solutions tailored to drive your specific business outcomes – from enhancing operational efficiency and security to enabling innovation and market expansion.
                         </p>
                     </div>
@@ -158,40 +158,61 @@ const Solutions = () => {
                     <img
                         src={sol4}
                         alt="About NFLEXIONS-IT"
-                        className="w-full h-[504px] object-cover"
+                        className="hidden md:flex w-full h-[504px] object-cover"
                         loading="lazy"
                     />
                     <div className='absolute lg:bottom-10 md:bottom-10 lg:left-[200px] 4xl:left-[250px] w-full lg:w-[1160px] 4xl:w-[1500px] lg:h-[389px] flex gap-4 md:gap-2 lg:gap-0
                     lg:flex-row md:flex-row flex-col items-center justify-between'>
-                        <div className='relative shadow-md'>
-                            <img src={sol6} alt='sect' loading='lazy' className='w-[260px] h-full object-cover' />
+                        <div className='relative shadow-md group'>
+                            <img
+                                src={sol6}
+                                alt='sect'
+                                loading='lazy'
+                                className='lg:w-[260px] h-full object-cover transform transition-transform duration-300 hover:scale-105'
+                            />
                             <div className='absolute bottom-0 left-2 lg:left-4 flex flex-col'>
                                 <span className='text-white text-[18px] leading-[21px]'>Data Science and AI</span>
                                 <span className='text-[#BD2E25] text-[14px] font-medium'>Premium Solutions</span>
                             </div>
                         </div>
-                        <div className='relative'>
-                            <img src={sol5} alt='sect' loading='lazy' className='w-[260px] h-full object-cover' />
+                        <div className='relative group'>
+                            <img
+                                src={sol5}
+                                alt='sect'
+                                loading='lazy'
+                                className='lg:w-[260px] h-full object-cover transform transition-transform duration-300 hover:scale-105'
+                            />
                             <div className='absolute bottom-0 left-2 lg:left-4 flex flex-col'>
                                 <span className='text-white text-[18px] leading-[21px]'>Network Infrastructure</span>
                                 <span className='text-[#BD2E25] text-[14px] font-medium'>Premium Solutions</span>
                             </div>
                         </div>
-                        <div className='relative'>
-                            <img src={sol7} alt='sect' loading='lazy' className='w-[260px] h-full object-cover' />
+                        <div className='relative group'>
+                            <img
+                                src={sol7}
+                                alt='sect'
+                                loading='lazy'
+                                className='lg:w-[260px] h-full object-cover transform transition-transform duration-300 hover:scale-105'
+                            />
                             <div className='absolute bottom-0 left-2 lg:left-4 flex flex-col'>
                                 <span className='text-white text-[18px] leading-[21px]'>Cloud Services</span>
                                 <span className='text-[#BD2E25] text-[14px] font-medium'>Premium Solutions</span>
                             </div>
                         </div>
-                        <div className='relative'>
-                            <img src={sol8} alt='sect' loading='lazy' className='w-[260px] h-full object-cover' />
+                        <div className='relative group'>
+                            <img
+                                src={sol8}
+                                alt='sect'
+                                loading='lazy'
+                                className='lg:w-[260px] h-full object-cover transform transition-transform duration-300 hover:scale-105'
+                            />
                             <div className='absolute bottom-0 left-2 lg:left-4 flex flex-col'>
                                 <span className='text-white text-[18px] leading-[21px]'>IT Hardware & Storage</span>
                                 <span className='text-[#BD2E25] text-[14px] font-medium'>Premium Solutions</span>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
             </section>

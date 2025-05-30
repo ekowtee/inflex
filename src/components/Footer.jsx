@@ -20,7 +20,7 @@ export default function Footer() {
                                 <div className="bg-[#BD2E25] rounded-full p-3 mr-4">
                                     <Mail className="h-5 w-5 text-white" />
                                 </div>
-                                <div>
+                                <div className=''>
                                     <p className="font-medium">Email</p>
                                     <p className="text-gray-600">
                                         <a href="mailto:info@inflexions.tech" className="underline hover:text-blue-600">
@@ -111,10 +111,10 @@ export default function Footer() {
                         <div className="space-y-4">
                             <input
                                 type="email"
-                                placeholder="Email here*"
-                                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-[#BD2E25]"
+                                placeholder="Enter Email here*"
+                                className="lg:w-full md:w-[250px] w-[300px] border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-[#BD2E25]"
                             />
-                            <div className="flex md:flex-col lg:flex-row items-center">
+                            <div className="flex md:flex-row lg:flex-row items-center lg:w-full md:w-[250px] w-[300px] gap-16">
                                 {/* Social icons first */}
                                 <div className="flex lg:mr-auto space-x-4 md:mb-4 lg:mb-0 text-gray-600">
                                     <Link to="https://linkedin.com" className="hover:text-[#BD2E25]">

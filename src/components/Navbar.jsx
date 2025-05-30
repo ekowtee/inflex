@@ -66,9 +66,9 @@ export default function Navbar() {
                     <NavLink to="/services" className={navLinkClasses}>
                         Services
                     </NavLink>
-                    <NavLink to="/case-studies" className={navLinkClasses}>
+                    {/* <NavLink to="/case-studies" className={navLinkClasses}>
                         Case study
-                    </NavLink>
+                    </NavLink> */}
                     <NavLink to="/resources" className={navLinkClasses}>
                         Resources
                     </NavLink>
@@ -134,7 +134,7 @@ export default function Navbar() {
                         >
                             Services
                         </NavLink>
-                        <NavLink
+                        {/* <NavLink
                             to="/case-studies"
                             onClick={() => setIsMenuOpen(false)}
                             className={({ isActive }) =>
@@ -142,7 +142,7 @@ export default function Navbar() {
                             }
                         >
                             Case study
-                        </NavLink>
+                        </NavLink> */}
                         <NavLink
                             to="/resources"
                             onClick={() => setIsMenuOpen(false)}
