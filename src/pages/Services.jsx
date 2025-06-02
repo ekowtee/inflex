@@ -34,7 +34,7 @@ const Services = () => {
                             {/* Left column */}
                             <div className="md:w-1/2 text-white space-y-4">
                                 <h2 className="text-4xl lg:text-5xl font-bold">
-                                    Flexible I.T Service <br className="hidden lg:block" />
+                                    Flexible I.T. Service <br className="hidden lg:block" />
                                     Models Tailored to  <br className="hidden lg:block" />your needs
                                 </h2>
                             </div>

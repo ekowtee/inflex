@@ -229,7 +229,7 @@ const About = () => {
                             </h3>
                             <p className="text-gray-500">Call us</p>
                             <button className="mt-4 px-6 py-3 bg-[#BD2E25] text-white rounded-lg hover:bg-red-700 transition">
-                                Book Appointment
+                                Call us
                             </button>
                         </div>
                     </div>
