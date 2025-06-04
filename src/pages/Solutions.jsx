@@ -40,8 +40,7 @@ const Solutions = () => {
                             {/* Left column */}
                             <div className="md:w-1/2 text-white space-y-4">
                                 <h2 className="text-4xl lg:text-5xl font-bold">
-                                    Integrated IT <br className="hidden lg:block" />
-                                    Solutions to Power <br className="hidden lg:block" />Your Business Engines
+                                    Technology Solutions <br className="hidden lg:block" />| Inflexions I.T. Services
                                 </h2>
                             </div>
                         </div>
