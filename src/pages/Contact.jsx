@@ -18,8 +18,8 @@ const Contact = () => {
         e.preventDefault()
         setSending(true)
         emailjs
-            .sendForm('service_id', 'template_id', formRef.current, {
-                publicKey: '**********',
+            .sendForm('service_indt3ef', 'template_y76uids', formRef.current, {
+                publicKey: 'qSj6aEZypD-snH-28',
                 from_name: 'Inflex',
             })
             .then(
