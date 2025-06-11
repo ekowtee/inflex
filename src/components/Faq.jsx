@@ -1,7 +1,11 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ChevronRight, Phone } from 'lucide-react'
 import faq from '../assets/career/faq.png'
+
+
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const FAQ_ITEMS = [
     {
@@ -28,6 +32,14 @@ const FAQ_ITEMS = [
 
 export default function Faq() {
     const [openIndex, setOpenIndex] = useState(0)
+
+
+    useEffect(() => {
+        AOS.init({
+            duration: 3000,
+        });
+        AOS.refresh();
+    }, []);
 
     return (
         <section className="bg-gray-50 py-12">
@@ -81,7 +93,7 @@ export default function Faq() {
           items-center
         "
                     >
-                        <div className="bg-[#BD2E25] text-white p-8 max-w-sm shadow-lg transform scale-50 md:scale-100">
+                        <div data-aos="fade-up" className="bg-[#BD2E25] text-white p-8 max-w-sm shadow-lg transform scale-50 md:scale-100">
                             <h3 className="text-xl font-semibold mb-4">
                                 You Need Any Help? Get Free Consultation
                             </h3>

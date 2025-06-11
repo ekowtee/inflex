@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import casebg from "../assets/case/casebg.png"
 import { FiMail, FiPhone, FiClock } from 'react-icons/fi'
 import emailjs from '@emailjs/browser';
@@ -8,6 +8,9 @@ import 'react-toastify/dist/ReactToastify.css'
 import Partners from "../components/Partners.jsx"
 import Faq from "../components/Faq.jsx"
 
+
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 
 const Contact = () => {
@@ -34,6 +37,13 @@ const Contact = () => {
                 }
             )
     }
+
+    useEffect(() => {
+        AOS.init({
+            duration: 3000,
+        });
+        AOS.refresh();
+    }, []);
     return (
         <div>
             <div className="relative w-full h-[300px] md:h-[500px]">
@@ -55,7 +65,7 @@ const Contact = () => {
 
                             {/* Left column */}
                             <div className="w-full md:w-2/2 text-white space-y-4">
-                                <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-snug md:leading-[76px]">
+                                <h2 data-aos="fade-right" className="text-2xl md:text-4xl lg:text-5xl font-bold leading-snug md:leading-[76px]">
                                     Proven Results: Client Success
                                     <br className="hidden lg:block" />
                                     Stories | Inflexions I.T. Services

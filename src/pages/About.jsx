@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import aboutbg from "../assets/about/Photo.png"
 import { Mail, Phone, Play } from 'lucide-react'
 import about1 from "../assets/about/about1.png"
@@ -12,10 +12,55 @@ import Partners from '../components/Partners'
 import Banner from '../components/Banner'
 import Leaders from '../components/Leaders'
 
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 
 
 
 const About = () => {
+
+    const [mounted, setMounted] = useState(false)
+
+    // custom hook for intersection‐based inView tracking
+    function useInView(threshold = 0.1) {
+        const ref = useRef(null)
+        const [inView, setInView] = useState(false)
+        useEffect(() => {
+            const obs = new IntersectionObserver(
+                ([entry]) => setInView(entry.isIntersecting),
+                { threshold }
+            )
+            if (ref.current) obs.observe(ref.current)
+            return () => obs.disconnect()
+        }, [threshold])
+        return [ref, inView]
+    }
+
+    // vision refs
+    const [aboutRef, aboutIn] = useInView()
+    const [aboutparaRef, aboutparaIn] = useInView()
+    const [aboutSpanRef, aboutSpanIn] = useInView()
+    const [aboutP1Ref, aboutP1In] = useInView()
+    const [aboutP2Ref, aboutP2In] = useInView()
+    const [aboutP3Ref, aboutP3In] = useInView()
+
+
+
+
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    useEffect(() => {
+        AOS.init({
+            duration: 3000,
+        });
+        AOS.refresh();
+    }, []);
+
+    const base = "transform transition-all duration-[600ms] ease-out"
 
     return (
         <>
@@ -38,14 +83,14 @@ const About = () => {
 
                             {/* Left column */}
                             <div className="md:w-1/2 text-white space-y-4 pt-[200px]">
-                                <h2 className="text-4xl lg:text-5xl font-bold">
+                                <h2 data-aos="fade-right" className="text-4xl lg:text-5xl font-bold">
                                     About <br className="hidden lg:block" />INFLEXIONS-IT
                                 </h2>
 
                             </div>
 
                             {/* Right “Our Services” card */}
-                            <div className="w-[326px] h-[360px] hidden md:block lg:block bg-[#BD2E25] p-8 text-white space-y-6 mt-8">
+                            <div data-aos="fade-left" className="w-[326px] h-[360px] hidden md:block lg:block bg-[#BD2E25] p-8 text-white space-y-6 mt-8">
                                 <h3 className="text-2xl font-semibold">Our Mission</h3>
                                 <ul className="space-y-4 text-sm">
                                     <li>
@@ -74,25 +119,37 @@ const About = () => {
                         {/* Left content */}
                         <div className="w-full lg:w-1/2 space-y-10">
                             <h1
-                                className="
+                                ref={aboutRef}
+                                className={`
+            ${base}
+            ${aboutIn
+                                        ? "translate-y-0 opacity-100 delay-[800ms]"
+                                        : "translate-y-[50px] opacity-0"
+                                    }
             w-full lg:w-[350px] md:w-[335px]
             h-auto 
             text-[24px] md:text-[33.35px]
             font-normal
             text-[#16213E]
             leading-[32px] md:leading-[40px]
-          "
+          `}
                             >
                                 Our Vision
                             </h1>
                             <p
-                                className="
+                                ref={aboutparaRef}
+                                className={`
+            ${base}
+            ${aboutparaIn
+                                        ? "translate-y-0 opacity-100 delay-[1000ms]"
+                                        : "translate-y-[50px] opacity-0"
+                                    }
             w-full
             text-[14px] md:text-[15.31px]
             leading-[22px] md:leading-[25px]
             text-[#41444B]
             font-normal
-          "
+          `}
                             >
                                 To empower businesses across Ghana—and ultimately throughout West Africa and beyond—to harness the full potential of technology as a catalyst for sustained innovation and competitive advantage. We envision a future in which every organization, regardless of size or sector, can seamlessly navigate digital transformation through agile, tailored IT solutions delivered with unwavering integrity and excellence.
                             </p>
@@ -100,7 +157,7 @@ const About = () => {
 
                         {/* Right content – Images with video button */}
                         <div className="w-full md:w-1/2 relative">
-                            <div className="relative flex bg-white p-4 4xl:ml-36 ml-0 md:ml-0 lg:ml-0 shadow-lg rounded-lg">
+                            <div data-aos="fade-left" className="relative flex bg-white p-4 4xl:ml-36 ml-0 md:ml-0 lg:ml-0 shadow-lg rounded-lg">
                                 <>
                                     <div className="overflow-hidden rounded-lg border-white border-4">
                                         <img
@@ -118,31 +175,76 @@ const About = () => {
                                         />
                                     </div>
                                 </>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
+
             <section>
                 <div className="flex flex-col lg:flex-row w-full">
                     {/* Left content */}
                     <div className="w-full lg:w-[589px] h-auto lg:h-[676px] 4xl:h-[905px] bg-[#2A2A2A] flex flex-col items-center justify-center px-6 lg:px-10 py-4 lg:py-0">
                         <div className="w-full lg:w-[490px] h-auto text-white space-y-4">
-                            <span className="text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]">
+                            <span
+                                ref={aboutSpanRef}
+                                className={`
+        ${base}
+        ${aboutSpanIn
+                                        ? "translate-y-0 opacity-100 delay-[800ms]"
+                                        : "translate-y-[50px] opacity-0"
+                                    }
+        text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]
+      `}
+                            >
                                 Founded in 2012 and headquartered in Accra, Ghana, Inflexions I.T. Services Limited is a dynamic technology solutions provider built on a foundation of deep industry expertise. With a core team possessing decades of collective experience in IT and systems integration, we were established to bridge the gap between complex technology and strategic business goals....
                             </span>
 
-                            <p className="text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]">
-                                Today, we sharpened our focus to delivering innovative, cost-effective IT solutions that give our clients a distinct competitive edge. Our vision is to be the thought-leading technology partner businesses trust to navigate transformation and achieve sustainable growth.                            </p>
-                            <p className="text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]">
-                                From our head office in Accra, we serve clients across Ghana with the ambition and capabilities to expand our reach throughout West Africa and beyond. We are privately owned, fostering an environment sculpted for speed, accountability, and accuracy in delivering results.                            </p>
-                            <p className="text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]">
+                            <p
+                                ref={aboutP1Ref}
+                                className={`
+        ${base}
+        ${aboutP1In
+                                        ? "translate-y-0 opacity-100 delay-[1000ms]"
+                                        : "translate-y-[50px] opacity-0"
+                                    }
+        text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]
+      `}
+                            >
+                                Today, we sharpened our focus to delivering innovative, cost-effective IT solutions that give our clients a distinct competitive edge. Our vision is to be the thought-leading technology partner businesses trust to navigate transformation and achieve sustainable growth.
+                            </p>
+
+                            <p
+                                ref={aboutP2Ref}
+                                className={`
+        ${base}
+        ${aboutP2In
+                                        ? "translate-y-0 opacity-100 delay-[1200ms]"
+                                        : "translate-y-[50px] opacity-0"
+                                    }
+        text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]
+      `}
+                            >
+                                From our head office in Accra, we serve clients across Ghana with the ambition and capabilities to expand our reach throughout West Africa and beyond. We are privately owned, fostering an environment sculpted for speed, accountability, and accuracy in delivering results.
+                            </p>
+
+                            <p
+                                ref={aboutP3Ref}
+                                className={`
+        ${base}
+        ${aboutP3In
+                                        ? "translate-y-0 opacity-100 delay-[1400ms]"
+                                        : "translate-y-[50px] opacity-0"
+                                    }
+        text-[14px] lg:text-[15.31px] leading-[22px] lg:leading-[25px]
+      `}
+                            >
                                 We believe that the right technology, expertly implemented and managed, is the critical inflexion point for business transformation and sustainable growth. Our journey is defined by helping our clients navigate their own technological turning points.
                             </p>
                         </div>
                     </div>
+
 
                     {/* Right content */}
                     <div className="w-full lg:w-auto flex flex-col items-start">
@@ -176,14 +278,14 @@ const About = () => {
                 <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[193px] 4xl:gap-[390px] items-start">
                     {/* Left Column */}
                     <div className="w-full lg:w-[498px]">
-                        <h2 className="text-[26px] md:text-[33px] font-normal text-[#1E3161] leading-[32px] md:leading-[42px]">
+                        <h2 data-aos="zoom-in-down" className="text-[26px] md:text-[33px] font-normal text-[#1E3161] leading-[32px] md:leading-[42px]">
                             Unlock Your Potential with INFLEXIONS IT Services – Your Strategic Technology Partner, From Foundation to Future.
                         </h2>
-                        <p className="mt-2 text-base text-gray-600">
+                        <p data-aos="zoom-in-down" className="mt-2 text-base text-gray-600">
                             Inflexions is guided by a focused and experienced leadership team committed to driving innovation, client success, and strategic growth.
                         </p>
 
-                        <div className="mt-2 relative">
+                        <div data-aos="zoom-in-up" className="mt-2 relative">
                             <img
                                 src={exp}
                                 alt="Virtual reality experience"
@@ -205,17 +307,18 @@ const About = () => {
                         <img
                             src={exp1}
                             alt="Team meeting"
+                            data-aos="fade-left"
                             className="w-full h-auto lg:h-[263px] rounded-[15px] object-cover"
                         />
 
                         <div className="mt-8 flex flex-col sm:flex-row sm:space-x-8">
-                            <div className="flex-1">
+                            <div data-aos="fade-right" className="flex-1">
                                 <h3 className="text-[24px] font-normal text-[#1E3161]">Certified Team</h3>
                                 <p className="mt-2 text-sm text-gray-600">
                                     Our certified professionals with years of experience and top industry credentials.
                                 </p>
                             </div>
-                            <div className="flex-1 mt-6 sm:mt-0">
+                            <div data-aos="fade-left" className="flex-1 mt-6 sm:mt-0">
                                 <h3 className="text-[24px] font-normal text-[#1E3161]">Trusted Company</h3>
                                 <p className="mt-2 text-sm text-gray-600">
                                     With a proven track record, we deliver dependable, high-quality results every time.
@@ -223,7 +326,7 @@ const About = () => {
                             </div>
                         </div>
 
-                        <div className="mt-8">
+                        <div data-aos="zoom-in-up" className="mt-8">
                             <h3 className="text-[28px] md:text-[36px] font-normal text-[#1E3161]">
                                 0 208 889 270
                             </h3>

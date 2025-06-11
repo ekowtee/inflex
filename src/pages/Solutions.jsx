@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Banner from '../components/Banner'
 import aboutbg from "../assets/about/aboutsect.png"
 import sol1 from "../assets/solutions/sol1.png"
@@ -14,10 +14,50 @@ import sol8 from "../assets/solutions/sol8.png"
 import MainPartners from '../components/MainPartners'
 import TestimonialSlider from '../components/TestimonialSlider'
 
-
+import AOS from 'aos';
+import 'aos/dist/aos.css'
 
 
 const Solutions = () => {
+
+    const [mounted, setMounted] = useState(false)
+
+    // custom hook for intersection‐based inView tracking
+    function useInView(threshold = 0.1) {
+        const ref = useRef(null)
+        const [inView, setInView] = useState(false)
+        useEffect(() => {
+            const obs = new IntersectionObserver(
+                ([entry]) => setInView(entry.isIntersecting),
+                { threshold }
+            )
+            if (ref.current) obs.observe(ref.current)
+            return () => obs.disconnect()
+        }, [threshold])
+        return [ref, inView]
+    }
+
+    // network refs
+    const [headlineRef, headlineIn] = useInView()
+    const [card1Ref, card1In] = useInView()
+    const [card2Ref, card2In] = useInView()
+    const [card3Ref, card3In] = useInView()
+    const [card4Ref, card4In] = useInView()
+
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    useEffect(() => {
+        AOS.init({
+            duration: 3000,
+        });
+        AOS.refresh();
+    }, []);
+
+    const base = "transform transition-all duration-[600ms] ease-out"
+
     return (
         <div>
             <div className="relative w-full h-[500px]">
@@ -38,7 +78,7 @@ const Solutions = () => {
                         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
 
                             {/* Left column */}
-                            <div className="md:w-1/2 text-white space-y-4">
+                            <div data-aos="fade-right" className="md:w-1/2 text-white space-y-4">
                                 <h2 className="text-4xl lg:text-5xl font-bold">
                                     Technology Solutions <br className="hidden lg:block" />| Inflexions I.T. Services
                                 </h2>
@@ -54,7 +94,7 @@ const Solutions = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Red panel with text */}
                     <div className="bg-red-600 p-8 text-white flex items-center">
-                        <p className="text-lg leading-relaxed text-left">
+                        <p data-aos="zoom-in-up" className="text-lg leading-relaxed text-left">
                             Inflexions offers a comprehensive portfolio of technology solutions designed to address the core infrastructure, operational, and strategic needs of modern businesses. We don't just provide technology; we architect integrated solutions tailored to drive your specific business outcomes – from enhancing operational efficiency and security to enabling innovation and market expansion.
                         </p>
                     </div>
@@ -62,7 +102,7 @@ const Solutions = () => {
                     {/* Images grid on the right */}
                     <div className="grid grid-cols-2 grid-rows-2 gap-4">
                         {/* Top left image */}
-                        <div className="rounded-lg overflow-hidden">
+                        <div className="rounded-lg overflow-hidden transform transition-transform duration-500 ease-out hover:scale-105">
                             <img
                                 src={sol2}
                                 alt="Team collaborating on technology solutions"
@@ -71,7 +111,7 @@ const Solutions = () => {
                         </div>
 
                         {/* Top right image */}
-                        <div className="rounded-lg overflow-hidden">
+                        <div className="rounded-lg overflow-hidden transform transition-transform duration-500 ease-out hover:scale-105">
                             <img
                                 src={sol1}
                                 alt="Professional working with technology"
@@ -80,7 +120,7 @@ const Solutions = () => {
                         </div>
 
                         {/* Bottom spanning image */}
-                        <div className="col-span-2 rounded-lg overflow-hidden">
+                        <div className="col-span-2 rounded-lg overflow-hidden transform transition-transform duration-500 ease-out hover:scale-105">
                             <img
                                 src={sol3}
                                 alt="Data visualization and analytics dashboard"
@@ -88,6 +128,7 @@ const Solutions = () => {
                             />
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -96,7 +137,17 @@ const Solutions = () => {
 
                     {/* LEFT COLUMN: Headline */}
                     <div className="flex items-center justify-center">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-snug text-center md:text-left">
+                        <h2
+                            ref={headlineRef}
+                            className={`
+          ${base}
+          ${headlineIn
+                                    ? "translate-y-0 opacity-100 delay-[800ms]"
+                                    : "translate-y-[50px] opacity-0"
+                                }
+          text-3xl md:text-4xl font-bold text-gray-900 leading-snug text-center md:text-left
+        `}
+                        >
                             Integrated Solutions<br />
                             to Power Your<br />
                             Business Engine
@@ -107,7 +158,17 @@ const Solutions = () => {
                     <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8">
 
                         {/* Card 1 */}
-                        <div className="border-l-2 border-gray-200 pl-6">
+                        <div
+                            ref={card1Ref}
+                            className={`
+          ${base}
+          ${card1In
+                                    ? "translate-y-0 opacity-100 delay-[1000ms]"
+                                    : "translate-y-[50px] opacity-0"
+                                }
+          border-l-2 border-gray-200 pl-6
+        `}
+                        >
                             <h3 className="text-xl font-semibold text-gray-900">Network Infrastructure</h3>
                             <p className="mt-1 text-lg font-medium text-gray-800">
                                 Building Your High-Performance Digital Backbone
@@ -118,27 +179,59 @@ const Solutions = () => {
                         </div>
 
                         {/* Card 2 */}
-                        <div className="border-l-2 border-gray-200 pl-6">
+                        <div
+                            ref={card2Ref}
+                            className={`
+          ${base}
+          ${card2In
+                                    ? "translate-y-0 opacity-100 delay-[1200ms]"
+                                    : "translate-y-[50px] opacity-0"
+                                }
+          border-l-2 border-gray-200 pl-6
+        `}
+                        >
                             <h3 className="text-xl font-semibold text-gray-900">IT Hardware & Storage</h3>
                             <p className="mt-1 text-lg font-medium text-gray-800">
                                 Powering Performance with Reliable Hardware & Storage
                             </p>
                             <p className="mt-2 text-sm text-gray-600 leading-relaxed">
-                                Leverage the right hardware foundation. We procure, configure, and support servers, storage solutions (SAN, NAS, Cloud), and end-user devices, ensuring optimal performance, data availability, and lifecycle management aligned with your budget and needs.                            </p>
+                                Leverage the right hardware foundation. We procure, configure, and support servers, storage solutions (SAN, NAS, Cloud), and end-user devices, ensuring optimal performance, data availability, and lifecycle management aligned with your budget and needs.
+                            </p>
                         </div>
 
                         {/* Card 3 */}
-                        <div className="border-l-2 border-gray-200 pl-6">
+                        <div
+                            ref={card3Ref}
+                            className={`
+          ${base}
+          ${card3In
+                                    ? "translate-y-0 opacity-100 delay-[1400ms]"
+                                    : "translate-y-[50px] opacity-0"
+                                }
+          border-l-2 border-gray-200 pl-6
+        `}
+                        >
                             <h3 className="text-xl font-semibold text-gray-900">Cloud Service</h3>
                             <p className="mt-1 text-lg font-medium text-gray-800">
                                 Harnessing the Power and Agility of the Cloud
                             </p>
                             <p className="mt-2 text-sm text-gray-600 leading-relaxed">
-                                Navigate your cloud journey with confidence. We offer cloud strategy consulting, migration services (AWS, Azure, Google Cloud), hybrid cloud integration, and cloud management, enabling scalability, cost-efficiency, and innovation.                            </p>
+                                Navigate your cloud journey with confidence. We offer cloud strategy consulting, migration services (AWS, Azure, Google Cloud), hybrid cloud integration, and cloud management, enabling scalability, cost-efficiency, and innovation.
+                            </p>
                         </div>
 
                         {/* Card 4 */}
-                        <div className="border-l-2 border-gray-200 pl-6">
+                        <div
+                            ref={card4Ref}
+                            className={`
+          ${base}
+          ${card4In
+                                    ? "translate-y-0 opacity-100 delay-[1600ms]"
+                                    : "translate-y-[50px] opacity-0"
+                                }
+          border-l-2 border-gray-200 pl-6
+        `}
+                        >
                             <h3 className="text-xl font-semibold text-gray-900">Data-centre Solutions</h3>
                             <p className="mt-1 text-lg font-medium text-gray-800">
                                 Secure, Efficient, and Resilient Datacentre Solutions
@@ -152,8 +245,9 @@ const Solutions = () => {
                 </div>
             </section>
 
+
             <section>
-                <div className='relative w-full h-[1900px] md:h-[700px] lg:h-[750px]'>
+                <div className='relative w-full h-[1600px] md:h-[700px] lg:h-[750px]'>
                     <img
                         src={sol4}
                         alt="About NFLEXIONS-IT"

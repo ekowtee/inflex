@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet';
 import careerbg from "../assets/career/careerbg.png"
 import Placeholder from "../assets/blog/blogger.png"
@@ -7,12 +7,50 @@ import Placeholder2 from "../assets/blog/webinar1.png"
 import Placeholder3 from "../assets/blog/webinar2.png"
 import Placeholder4 from "../assets/blog/webinar3.png"
 
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 import Blog from '../components/Blog';
 import Banner from '../components/Banner';
 
 
 const Resources = () => {
+
+    const [mounted, setMounted] = useState(false)
+
+    // custom hook for intersection‐based inView tracking
+    function useInView(threshold = 0.1) {
+        const ref = useRef(null)
+        const [inView, setInView] = useState(false)
+        useEffect(() => {
+            const obs = new IntersectionObserver(
+                ([entry]) => setInView(entry.isIntersecting),
+                { threshold }
+            )
+            if (ref.current) obs.observe(ref.current)
+            return () => obs.disconnect()
+        }, [threshold])
+        return [ref, inView]
+    }
+
+    // network refs
+    const [insightsTitleRef, insightsTitleIn] = useInView()
+    const [insightsParaRef, insightsParaIn] = useInView()
+
+
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    useEffect(() => {
+        AOS.init({
+            duration: 3000,
+        });
+        AOS.refresh();
+    }, []);
+
+    const base = "transform transition-all duration-[600ms] ease-out"
 
     // Sample data arrays (replace with real data or props)
     // const blogPosts = [
@@ -88,7 +126,7 @@ const Resources = () => {
 
                             {/* Left column */}
                             <div className="w-full md:w-2/2 text-white space-y-4">
-                                <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-snug md:leading-[76px]">
+                                <h2 data-aos="fade-right" className="text-2xl md:text-4xl lg:text-5xl font-bold leading-snug md:leading-[76px]">
                                     Resources at Inflexions <br className="hidden lg:block" />
                                     | Shape the Future of Technology
                                 </h2>
@@ -112,21 +150,43 @@ const Resources = () => {
                             <img
                                 src={Placeholder}
                                 alt="Insights & Resources"
+                                data-aos="fade-right"
                                 className="w-full h-full lg:w-[400px] md:h-[300px] rounded-lg object-cover"
                             />
                         </div>
 
                         {/* Right: text */}
                         <div className="md:ml-8 text-left">
-                            <h1 className="text-4xl font-bold mb-4 text-black">
+                            <h1
+                                ref={insightsTitleRef}
+                                className={`
+      ${base}
+      ${insightsTitleIn
+                                        ? "translate-y-0 opacity-100 delay-[800ms]"
+                                        : "translate-y-[50px] opacity-0"
+                                    }
+      text-4xl font-bold mb-4 text-black
+    `}
+                            >
                                 Stay Informed with Expert Insights and Analysis
                             </h1>
-                            <p className="text-lg text-gray-800 max-w-2xl">
+                            <p
+                                ref={insightsParaRef}
+                                className={`
+      ${base}
+      ${insightsParaIn
+                                        ? "translate-y-0 opacity-100 delay-[1000ms]"
+                                        : "translate-y-[50px] opacity-0"
+                                    }
+      text-lg text-gray-800 max-w-2xl
+    `}
+                            >
                                 Explore our collection of resources designed to help you navigate the evolving technology landscape.
                                 From industry trends and best practices to deep dives into specific solutions, gain valuable knowledge
                                 from the experts at Inflexions.
                             </p>
                         </div>
+
                     </div>
                 </header>
 
