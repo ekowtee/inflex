@@ -34,7 +34,7 @@ const blog = [
 
 export default function Blog() {
     return (
-        <section className="container mx-auto px-4 sm:px-6 lg:pl-[200px]  lg:pr-[152px] py-16 bg-white">
+        <section className="container mx-auto px-4 sm:px-6 lg:pl-[240px] lg:pr-[161px] py-16 bg-white">
             {/* Section Heading */}
             <h2 className="
           text-xl        /* mobile */
@@ -48,7 +48,7 @@ export default function Blog() {
             </h2>
 
             {/* Cards Grid */}
-            <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {blog.map(({ id, image, title, description, link }) => (
                     <div
                         key={id}

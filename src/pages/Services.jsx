@@ -78,7 +78,7 @@ const Services = () => {
 
                 {/* Content */}
                 <div className="absolute inset-0 flex items-center">
-                    <div className="container mx-auto px-4 lg:px-[200px] 4xl:px-[250px]">
+                    <div className="container mx-auto px-4 lg:px-[240px] 4xl:px-[240px]">
                         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
 
                             {/* Left column */}
@@ -93,7 +93,7 @@ const Services = () => {
                 </div>
             </div>
 
-            <section className="bg-white container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px] 4xl:pr-[184px] 4xl:ml-[50px] lg:ml-0 md:ml-0 ml-0">
+            <section className="bg-white container mx-auto px-4 lg:pl-[240px] 4xl:pl-[190px] lg:pr-[160px] 4xl:pr-[210px] 4xl:ml-[50px] lg:ml-0 md:ml-0 ml-0">
                 {/* Banner */}
                 <div className="container mx-auto px-4 md:px-8 lg:px-0 pt-8">
                     <img
@@ -195,7 +195,7 @@ const Services = () => {
                 </div>
             </section>
 
-            <section className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px] 4xl:pr-[184px] 4xl:ml-[50px] lg:ml-0 md:ml-0 ml-0 py-12">
+            <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[190px] lg:pr-[160px] 4xl:pr-[210px] 4xl:ml-[50px] lg:ml-0 md:ml-0 ml-0 py-12">
                 <div className="flex flex-col-reverse md:flex-row items-center gap-8">
 
                     {/* Left content */}
@@ -286,7 +286,7 @@ const Services = () => {
                 </div>
             </section>
 
-            <section className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[50px] 4xl:ml-[50px] lg:ml-0 md:ml-0 ml-0 py-12">
+            <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[190px] lg:pr-[90px] 4xl:ml-[50px] lg:ml-0 md:ml-0 ml-0 py-12">
                 <div className="flex flex-col md:flex-row items-center gap-8">
 
 
@@ -366,7 +366,7 @@ const Services = () => {
                 </div>
             </section>
 
-            <section className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px] 4xl:pr-[184px] 4xl:ml-[50px] lg:ml-0 md:ml-0 ml-0 py-12">
+            <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[190px] lg:pr-[160px] 4xl:pr-[210px] 4xl:ml-[50px] lg:ml-0 md:ml-0 ml-0 py-12">
                 <div className="flex flex-col-reverse md:flex-row items-center gap-8">
 
                     {/* Left content */}

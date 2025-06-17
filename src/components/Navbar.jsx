@@ -22,25 +22,67 @@ export default function Navbar() {
         } hover:text-red-600 hover:border-red-600`
 
     return (
-        <header className="w-full bg-white shadow-sm fixed z-50">
+        <header className="w-full bg-white shadow-sm fixed z-50 ">
             <div
-                className="
-          container mx-auto
-          px-4 sm:px-6 md:px-8
-          lg:px-12 xl:px-20 2xl:px-40
-          flex items-center justify-between
-          h-[70px]
+                className="container  flex items-center gap-10 h-[70px]
         "
             >
                 {/* Logo */}
-                <div className="flex-shrink-0">
+                <div className="flex-shrink-0 ml-2">
                     <Link to="/">
                         <img src={logo} alt="INFLEXIONS-IT" className="h-10 w-auto" />
                     </Link>
                 </div>
 
+
+                <div className='flex mr-4 lg:mr-[150px] lg:w-[1120px] 4xl:w-[1510px] items-center justify-between'>
+
+
+                    {/* Desktop nav */}
+                    <nav className="hidden lg:flex items-center lg:space-x-16 4xl:space-x-20">
+                        <NavLink to="/" className={navLinkClasses}>
+                            Home
+                        </NavLink>
+                        <NavLink to="/about" className={navLinkClasses}>
+                            About Us
+                        </NavLink>
+
+                        {/* Solutions with hover-dropdown */}
+                        <NavLink to="/solutions" className={navLinkClasses}>
+                            Solutions
+                        </NavLink>
+
+                        <NavLink to="/services" className={navLinkClasses}>
+                            Services
+                        </NavLink>
+                        {/* <NavLink to="/case-studies" className={navLinkClasses}>
+                        Case study
+                    </NavLink> */}
+                        <NavLink to="/resources" className={navLinkClasses}>
+                            Resources
+                        </NavLink>
+                        {/* 
+                    <NavLink
+                        to="/careers"
+                        className={navLinkClasses}
+                    >
+                        Careers
+                    </NavLink> */}
+                    </nav>
+
+                    {/* Desktop contact button */}
+                    <div className="hidden lg:flex items-center">
+                        <Link
+                            to="/contact"
+                            className="bg-red-600 hover:bg-red-700 w-[194px] h-[70px] text-white flex items-center justify-center font-medium transition-colors"
+                        >
+                            Contact us
+                        </Link>
+                    </div>
+
+                </div>
                 {/* Hamburger (below lg) */}
-                <div className="lg:hidden">
+                <div className="lg:hidden ml-10 md:ml-96">
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         className="text-[#5C5D5D] hover:text-red-600 focus:outline-none"
@@ -49,47 +91,6 @@ export default function Navbar() {
                     </button>
                 </div>
 
-                {/* Desktop nav */}
-                <nav className="hidden lg:flex items-center space-x-6">
-                    <NavLink to="/" className={navLinkClasses}>
-                        Home
-                    </NavLink>
-                    <NavLink to="/about" className={navLinkClasses}>
-                        About Us
-                    </NavLink>
-
-                    {/* Solutions with hover-dropdown */}
-                    <NavLink to="/solutions" className={navLinkClasses}>
-                        Solutions
-                    </NavLink>
-
-                    <NavLink to="/services" className={navLinkClasses}>
-                        Services
-                    </NavLink>
-                    {/* <NavLink to="/case-studies" className={navLinkClasses}>
-                        Case study
-                    </NavLink> */}
-                    <NavLink to="/resources" className={navLinkClasses}>
-                        Resources
-                    </NavLink>
-                    {/* 
-                    <NavLink
-                        to="/careers"
-                        className={navLinkClasses}
-                    >
-                        Careers
-                    </NavLink> */}
-                </nav>
-
-                {/* Desktop contact button */}
-                <div className="hidden lg:flex items-center">
-                    <Link
-                        to="/contact"
-                        className="bg-red-600 hover:bg-red-700 w-[194px] h-[70px] text-white flex items-center justify-center font-medium transition-colors"
-                    >
-                        Contact us
-                    </Link>
-                </div>
             </div>
 
             {/* Mobile menu */}

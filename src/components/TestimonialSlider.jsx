@@ -60,7 +60,7 @@ export default function TestimonialSlider() {
     }
 
     return (
-        <div className="container mx-auto py-10 px-4 lg:pl-[200px] 4xl:pl-[250px]">
+        <div className="container mx-auto py-10 px-4 lg:pl-[240px] 4xl:pl-[240px]">
             <div className="max-w-7xl lg:h-[550px] h-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-20 gap-4 items-center">
                     {/* Image column */}

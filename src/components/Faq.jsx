@@ -43,7 +43,7 @@ export default function Faq() {
 
     return (
         <section className="bg-gray-50 py-12">
-            <div className="container mx-auto px-4 lg:pl-[200px] grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div className="container mx-auto px-4 lg:px-0 lg:pl-[240px] grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
 
                 {/* Left: FAQ */}
                 <div className="w-full md:w-[500px]">
@@ -83,7 +83,7 @@ export default function Faq() {
                     <img
                         src={faq}
                         alt="Consultation"
-                        className="w-full h-auto object-cover rounded-lg"
+                        className="w-full h-auto object-cover"
                     />
                     <div
                         className="

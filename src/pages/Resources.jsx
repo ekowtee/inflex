@@ -121,7 +121,7 @@ const Resources = () => {
 
                 {/* Content */}
                 <div className="absolute inset-0 flex items-center">
-                    <div className="container mx-auto px-4 md:px-8 lg:px-[200px] 4xl:px-[250px]">
+                    <div className="container mx-auto px-4 md:px-8 lg:px-[238px] 4xl:px-[237px]">
                         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
 
                             {/* Left column */}
@@ -137,7 +137,7 @@ const Resources = () => {
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px]">
+            <div className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] lg:pr-[160px]">
                 <Helmet>
                     <title>Insights & Resources | Inflexions I.T. Services</title>
                 </Helmet>

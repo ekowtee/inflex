@@ -78,7 +78,7 @@ const About = () => {
 
                 {/* Content */}
                 <div className="absolute inset-0 flex items-center">
-                    <div className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px]">
+                    <div className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] lg:pr-[160px]">
                         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
 
                             {/* Left column */}
@@ -114,7 +114,7 @@ const About = () => {
             </div>
 
             <section>
-                <div className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px] py-10">
+                <div className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] lg:pr-[160px] py-10">
                     <div className="flex flex-col md:flex-row gap-8 items-center">
                         {/* Left content */}
                         <div className="w-full lg:w-1/2 space-y-10">
@@ -266,7 +266,7 @@ const About = () => {
                 </div>
             </section>
 
-            <section className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] py-16 bg-[#F6F6F6] h-[1400px] md:h-full">
+            <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] py-16 bg-[#F6F6F6] h-[1400px] md:h-full">
                 <h2 className="text-3xl lg:text-[36px] font-normal text-[#1E3161] leading-[45px] text-center lg:mb-12">
                     Meet Our Strategic Leadership
                 </h2>
@@ -274,8 +274,8 @@ const About = () => {
                 <Leaders />
             </section>
 
-            <section className="container mx-auto px-4 lg:pl-[40px] 4xl:pl-[10px] lg:pr-[22px] py-16 bg-[#F6F6F6]">
-                <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[193px] 4xl:gap-[390px] items-start">
+            <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] lg:pr-[227px] 4xl:pr-[255px] py-16 bg-[#F6F6F6]">
+                <div className="mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[193px] 4xl:gap-[390px] items-start">
                     {/* Left Column */}
                     <div className="w-full lg:w-[498px]">
                         <h2 data-aos="zoom-in-down" className="text-[26px] md:text-[33px] font-normal text-[#1E3161] leading-[32px] md:leading-[42px]">
@@ -393,7 +393,7 @@ const About = () => {
 
                     {/* absolute-card: centered & narrower on mobile, positioned with your offsets on md+ */}
                     <div
-                        className="md:hidden flex absolute bg-white border-t-4 border-[#2A2A2A] z-10 w-[90%] sm:w-[480px] h-auto sm:h-[285px] left-1/2 sm:left-[200px] 
+                        className="md:hidden flex absolute bg-white border-t-4 border-[#2A2A2A] z-10 w-[90%] sm:w-[480px] h-auto sm:h-[285px] left-1/2 sm:left-[240px] 
                         top-[400px] sm:top-[350px] -translate-x-1/2 sm:translate-x-0 lg:flex items-center justify-center"
                     >
                         <div className="w-full sm:w-[390px] h-auto sm:h-[139px] flex flex-col p-4">

@@ -55,7 +55,7 @@ const MainPartners = () => {
     const base = "transform transition-all duration-[600ms] ease-out";
 
     return (
-        <section className='container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px]'>
+        <section className='container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] lg:pr-[160px]'>
             <div className='flex flex-col md:flex-col lg:flex-row w-full lg:h-[500px]'>
                 <div className='flex-1 flex md:flex-col pt-0 lg:pt-20 md:pt-0'>
                     <div className='w-[403px] h-[353px] mb-4 md:mb-0 lg:mb-0'>

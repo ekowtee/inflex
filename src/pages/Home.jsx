@@ -87,7 +87,7 @@ export default function Home() {
                 <div className="absolute inset-0 bg-black/30" />
 
                 <div
-                    className=" absolute top-28 xxsm:top-28 md:top-28 lg:top-24 4xl:top-[170px] left-0 p-4 md:p-0 w-full md:w-[571px] h-auto md:left-10 lg:left-[200px] 4xl:left-[250px] flex flex-col justify-center items-start"
+                    className=" absolute top-28 xxsm:top-28 md:top-28 lg:top-24 4xl:top-[170px] left-0 p-4 md:p-0 w-full md:w-[571px] h-auto md:left-10 lg:left-[240px] 4xl:left-[242px] flex flex-col justify-center items-start"
                 >
                     <h1
                         ref={titleRef}
@@ -134,7 +134,7 @@ export default function Home() {
             <Partners />
 
             <section>
-                <div className='flex flex-col md:flex-col lg:flex-row 4xl:flex-row w-full lg:h-[554px] px-4 lg:pl-[200px] 4xl:pl-[250px]'>
+                <div className='flex flex-col md:flex-col lg:flex-row 4xl:flex-row w-full lg:h-[554px] px-4 lg:pl-[240px] 4xl:pl-[250px]'>
                     <div className='flex-1 md:px-8 lg:px-0 md:py-10 lg:py-14 '>
                         <h2
                             ref={secTitleRef}
@@ -175,8 +175,8 @@ export default function Home() {
 
                     <div className='relative flex flex-1 items-center md:pl-[160px] lg:pl-[72px] 4xl:pl-[310px] mt-2 md:mt-0 lg:mt-0'>
                         <div className=''>
-                            <img src={svgbg} alt='svgbg' className='w-[419px] lg:ml-5 4xl:ml-16 h-full object-contain' loading='lazy' />
-                            <div className='absolute top-20 md:top-32 lg:top-32 4xl:top-32 md:left-[17%] lg:left-[8%] 4xl:left-[35%]'>
+                            <img src={svgbg} alt='svgbg' className='w-[419px] lg:ml-1 4xl:ml-16 h-full object-contain' loading='lazy' />
+                            <div className='absolute top-20 md:top-32 lg:top-32 4xl:top-32 md:left-[17%] lg:left-[5%] 4xl:left-[35%]'>
                                 <img src={imagesvg} alt='svgbg' className='w-[490px] h-[353px] object-contain' loading='lazy' />
                             </div>
 
@@ -276,7 +276,7 @@ export default function Home() {
                 </div>
             </div>
 
-            <section className="container mx-auto px-4 lg:pl-[200px] 4xl:pl-[250px] lg:pr-[160px] py-12">
+            <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] lg:pr-[160px] py-12">
                 {/* Heading */}
                 <h2 className="text-3xl font-medium text-gray-900 mb-12">
                     Your The Inflexions
@@ -339,7 +339,7 @@ export default function Home() {
                     <div
                         className="
         absolute top-4 sm:top-8 md:top-20 lg:top-[20%]
-        left-4 sm:left-6 md:left-4 lg:left-[165px] 4xl:left-[220px]
+        left-4 sm:left-6 md:left-4 lg:left-[208px] 4xl:left-[205px]
         w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:w-[400px] lg:w-[568px]
         bg-opacity-90 p-4 sm:p-6 md:p-8
         flex flex-col gap-3 sm:gap-4

@@ -60,7 +60,7 @@ const Contact = () => {
 
                 {/* Content */}
                 <div className="absolute inset-0 flex items-center">
-                    <div className="container mx-auto px-4 md:px-8 lg:px-[200px] 4xl:px-[250px]">
+                    <div className="container mx-auto px-4 md:px-8 lg:px-[240px] 4xl:px-[240px]">
                         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
 
                             {/* Left column */}
