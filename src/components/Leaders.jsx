@@ -4,7 +4,7 @@
 import React from 'react';
 import "./Global.css";
 import ekow from "../assets/about/ekowmain1.jpg";
-import jade from "../assets/about/jade.jpg";
+import jade from "../assets/about/jademain.jpg";
 import anthony from "../assets/about/anthonymain.jpg";
 
 import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
