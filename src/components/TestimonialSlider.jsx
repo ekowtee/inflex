@@ -78,10 +78,10 @@ export default function TestimonialSlider() {
                     {/* Testimonial content */}
                     <div className="col-span-12 md:col-span-7 lg:mr-[6px]">
                         <div className="mb-12 text-center lg:text-left">
-                            <h3 className="text-red-600 font-medium tracking-wide uppercase mb-2">
+                            <h3 className="text-red-600 font-normal tracking-wide uppercase mb-2">
                                 TESTIMONIALS
                             </h3>
-                            <h2 className="text-[30px] font-bold text-[#16213E] leading-[64px]">
+                            <h2 className="text-[30px] font-normal text-[#16213E] leading-[64px]">
                                 Our Clients Say
                             </h2>
                         </div>
