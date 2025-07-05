@@ -260,44 +260,46 @@ const About = () => {
 </section>
 
               <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] py-16 bg-[#F6F6F6] h-[1400px] md:h-full">
-                <h2 className="text-3xl lg:text-[36px] font-normal text-[#1E3161] leading-[45px] text-left lg:mb-4">
+                <h2 className="text-3xl lg:text-[36px] font-normal text-[#1E3161] leading-[45px] text-left lg:mb-8">
                     Meet Our Strategic Leadership
                 </h2>
-                <p className='w-[1050px] text-left mb-8'> Inflexions is guided by a focused and experienced leadership team committed to driving innovation, client success, and strategic growth. Their diverse expertise across technology, business development, and operations shapes our vision and ensures we deliver exceptional value.</p>
+                <p className='w-[1050px] text-left mb-10'> Inflexions is guided by a focused and experienced leadership team committed to driving innovation, client success, and strategic growth. Their diverse expertise across technology, business development, and operations shapes our vision and ensures we deliver exceptional value.</p>
 
                 <Leaders />
             </section>
             
 <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] lg:pr-[227px] 4xl:pr-[255px] py-16 bg-[#F6F6F6]">
-    <div className="mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[193px] 4xl:gap-[390px] items-start">
+    <div className="mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-[193px] 4xl:gap-[390px] items-center">
         {/* Left Column */}
-        <div className="w-full lg:w-[498px]">
-            <h2 data-aos="zoom-in-down" className="text-[26px] md:text-[33px] font-normal text-[#1E3161] leading-[32px] md:leading-[42px]">
-                Unlock Your Potential with INFLEXIONS IT Services – Your Strategic Technology Partner, From Foundation to Future.
-            </h2>
-            <p data-aos="zoom-in-down" className="mt-2 text-base text-gray-600">
-                Inflexions is guided by a focused and experienced leadership team committed to driving innovation, client success, and strategic growth.
-            </p>
+        <div className="w-full lg:w-[498px] space-y-6">
+            <div>
+                <h2 data-aos="zoom-in-down" className="text-[26px] md:text-[33px] font-normal text-[#1E3161] leading-[32px] md:leading-[42px] mb-4">
+                    Unlock Your Potential with INFLEXIONS IT Services – Your Strategic Technology Partner, From Foundation to Future.
+                </h2>
+                <p data-aos="zoom-in-down" className="text-base text-gray-600">
+                    Inflexions is guided by a focused and experienced leadership team committed to driving innovation, client success, and strategic growth.
+                </p>
+            </div>
 
-            <div data-aos="zoom-in-up" className="mt-2 relative">
+            <div data-aos="zoom-in-up" className="relative">
                 <img
                     src={exp}
                     alt="Virtual reality experience"
                     className="w-full h-auto lg:h-[243px] rounded-[15px] object-cover"
                 />
-                {/* Badge overlay */}
-                <div className="absolute bottom-10 md:bottom-10 lg:bottom-0 right-20 md:right-[120px] lg:right-20 transform translate-x-1/2 translate-y-1/2">
-                    <div className="bg-[#BD2E25] text-white w-[200px] md:w-[250px] h-28 md:h-32 flex flex-col items-center justify-center rounded-2xl border-8 border-white">
-                        <span className="text-4xl font-normal">10</span>
-                        <span className="uppercase text-sm tracking-wider">Years Of</span>
-                        <span className="uppercase text-sm">Experience</span>
+                {/* Badge overlay - Better positioned */}
+                <div className="absolute -bottom-6 -right-6 lg:-bottom-8 lg:-right-8">
+                    <div className="bg-[#BD2E25] text-white w-[140px] h-[140px] lg:w-[160px] lg:h-[160px] flex flex-col items-center justify-center rounded-2xl border-4 border-white shadow-lg">
+                        <span className="text-3xl lg:text-4xl font-bold">10</span>
+                        <span className="uppercase text-xs lg:text-sm tracking-wider">Years Of</span>
+                        <span className="uppercase text-xs lg:text-sm">Experience</span>
                     </div>
                 </div>
             </div>
         </div>
 
         {/* Right Column */}
-        <div className="w-full lg:w-[495px] 4xl:w-[606px]">
+        <div className="w-full lg:w-[495px] 4xl:w-[606px] space-y-8">
             <img
                 src={exp1}
                 alt="Team meeting"
@@ -305,32 +307,38 @@ const About = () => {
                 className="w-full h-auto lg:h-[263px] rounded-[15px] object-cover"
             />
 
-            <div className="mt-8 flex flex-col sm:flex-row sm:space-x-8">
-                <div data-aos="fade-right" className="flex-1">
-                    <h3 className="text-[24px] font-normal text-[#1E3161]">Certified Team</h3>
-                    <p className="mt-2 text-sm text-gray-600">
+            {/* Features Grid - Improved layout */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+                <div data-aos="fade-right" className="space-y-2">
+                    <h3 className="text-[20px] lg:text-[24px] font-semibold text-[#1E3161]">Certified Team</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">
                         Our certified professionals with years of experience and top industry credentials.
                     </p>
                 </div>
-                <div data-aos="fade-left" className="flex-1 mt-6 sm:mt-0">
-                    <h3 className="text-[24px] font-normal text-[#1E3161]">Trusted Company</h3>
-                    <p className="mt-2 text-sm text-gray-600">
+                <div data-aos="fade-left" className="space-y-2">
+                    <h3 className="text-[20px] lg:text-[24px] font-semibold text-[#1E3161]">Trusted Company</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">
                         With a proven track record, we deliver dependable, high-quality results every time.
                     </p>
                 </div>
             </div>
 
-            <div data-aos="zoom-in-up" className="mt-8">
-                <h3 className="text-[28px] md:text-[36px] font-normal text-[#1E3161]">
-                    +233 208 889 270
-                </h3>
-                <p className="text-gray-500">Call us</p>
-                <a 
-                    href="tel:+233208889270"
-                    className="mt-4 inline-block px-6 py-3 bg-[#BD2E25] text-white rounded-lg hover:bg-red-700 transition"
-                >
-                    Call us
-                </a>
+            {/* Call to Action - Enhanced design */}
+            <div data-aos="zoom-in-up" className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                        <h3 className="text-[24px] lg:text-[28px] font-bold text-[#1E3161] mb-1">
+                            +233 208 889 270
+                        </h3>
+                        <p className="text-gray-500 text-sm">Ready to get started? Call us now</p>
+                    </div>
+                    <a 
+                        href="tel:+233208889270"
+                        className="bg-[#BD2E25] hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 whitespace-nowrap"
+                    >
+                        Call Now
+                    </a>
+                </div>
             </div>
         </div>
     </div>
