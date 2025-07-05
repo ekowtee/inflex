@@ -65,16 +65,7 @@ export default function Footer() {
                                     Services
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="/ccase-studies" className="hover:text-[#BD2E25]">
-                                    Case study
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/careers" className="hover:text-[#BD2E25]">
-                                    Careers
-                                </Link>
-                            </li>
+                           
                             <li>
                                 <Link to="/resources" className="hover:text-[#BD2E25]">
                                     Resources
