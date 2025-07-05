@@ -30,7 +30,7 @@ export default function Partners() {
     return (
         <div className="overflow-hidden w-full py-6 md:py-10 px-4">
             <div className="flex items-center justify-center mb-4">
-                <h1 className="text-[30px] font-bold leading-[38px]">Our Clients</h1>
+                <h1 className="text-[30px] font-normal leading-[38px]">Our Clients</h1>
             </div>
             <div className='py-5'>
                 <div className="wrapper">
