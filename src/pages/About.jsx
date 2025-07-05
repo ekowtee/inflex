@@ -402,7 +402,7 @@ const About = () => {
         >
             <div className="w-full sm:w-[390px] h-auto sm:h-[139px] flex flex-col p-4">
                 <span>Company Address</span>
-                <span className="text-[34px] leading-[38px] font-medium">
+                <span className="text-[34px] leading-[38px] font-normal">
                     #2 Dei Close
                     East Legon
                     Accra, Ghana
