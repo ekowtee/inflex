@@ -48,7 +48,7 @@ export default function Footer() {
 
                     {/* 2) Pages */}
                     <div>
-                        <h3 className="text-xl font-bold mb-6 lg:mb-10">Pages</h3>
+                        <h3 className="text-xl font-normal mb-6 lg:mb-10">Pages</h3>
                         <ul className="space-y-4 text-black">
                             <li>
                                 <Link to="/about" className="hover:text-[#BD2E25]">
@@ -85,7 +85,7 @@ export default function Footer() {
 
                     {/* 3) Access */}
                     <div>
-                        <h3 className="text-xl font-bold mb-6 lg:mb-10">Access</h3>
+                        <h3 className="text-xl font-normal mb-6 lg:mb-10">Access</h3>
                         <ul className="space-y-4 text-black">
                             <li>
                                 <Link to="/resouces" className="hover:text-[#BD2E25]">
@@ -107,7 +107,7 @@ export default function Footer() {
 
                     {/* 4) Subscribe */}
                     <div>
-                        <h3 className="text-xl font-bold mb-6 lg:mb-10">Subscribe</h3>
+                        <h3 className="text-xl font-normal mb-6 lg:mb-10">Subscribe</h3>
                         <div className="space-y-4">
                             <input
                                 type="email"
