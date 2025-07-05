@@ -97,7 +97,7 @@ export default function Home() {
               text-3xl md:text-5xl lg:text-4xl font-bold text-white leading-tight md:leading-[71px] mb-4
             `}
                     >
-                        Architecting Your Future: Resilient IT Solutions for Global Ambition
+                        Architecting Your Future: <br/>Resilient IT Solutions for Global Ambition
                     </h1>
 
                     <p
