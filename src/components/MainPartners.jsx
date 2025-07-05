@@ -60,7 +60,7 @@ const MainPartners = () => {
                 <div className='flex-1 flex md:flex-col pt-0 lg:pt-20 md:pt-0'>
                     <div className='w-[403px] h-[353px] mb-4 md:mb-0 lg:mb-0'>
                         <div className='lg:w-[403px] lg:h-[100px]'>
-                            <h3 data-aos="fade-right" className='font-bold text-[33px] leading-[50px] tracking-[1.04px] mb-10'>
+                            <h3 data-aos="fade-right" className='font-normal text-[33px] leading-[50px] tracking-[1.04px] mb-10'>
                                 Proven Expertise,<br />Tangible Results
                             </h3>
                             <div data-aos="fade-up" className='font-normal text-[17px] leading-[27.1px]'>
@@ -82,7 +82,7 @@ const MainPartners = () => {
                     >
                         {/* actual text wrapper, above the overlay */}
                         <div className="relative z-10 lg:p-8 p-0">
-                            <p className="text-black mt-2 font-bold text-[21px] leading-[25px]">
+                            <p className="text-black mt-2 font-normal text-[21px] leading-[25px]">
                                 Our Technology Partners
                             </p>
                             <div className="grid grid-cols-[repeat(2,1fr)] md:grid-cols-[repeat(3,1fr)] grid-rows-[repeat(4,1fr)] md:grid-rows-[repeat(3,1fr)] gap-y-[30px] gap-x-2 md:gap-x-[25px] mt-4">
