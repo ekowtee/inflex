@@ -41,7 +41,7 @@ const Leaders = () => {
                         <img src={jade} alt='leader' loading='lazy' />
                     </div>
                     <div className='content'>
-                        <h3 className="text-[16px] font-normal text-[#1E3161]">Jade Appiah-Lartey</h3>
+                        <h3 className="text-[16px] font-normal text-[#1E3161]">Dr.Jade Appiah-Lartey</h3>
                         <p className="text-[#464646] text-[14px]">Director – Marketing</p>
                         <div className="flex space-x-4 mt-4">
                             <a href="#" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition">
@@ -66,7 +66,7 @@ const Leaders = () => {
                     </div>
                     <div className='content'>
                         <h3 className="text-[16px] font-normal text-[#1E3161]">Anthony Getor</h3>
-                        <h4 className="text-[#464646] ">Executive Director, Business Solutions</h4>
+                        <h4 className="text-[#464646] text-[14px]">Director, Business Solutions</h4>
                         <div className="flex space-x-4 mt-4">
                             <a href="#" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition">
                                 <FaFacebookF size={16} />
