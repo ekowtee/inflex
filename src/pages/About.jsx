@@ -250,7 +250,7 @@ const About = () => {
             <div className="bg-red-600 text-white w-full lg:w-[400px] flex items-center justify-center p-6 lg:p-8 h-full">
                 <Link
                     to="/contact"
-                    className="bg-red-600 hover:bg-red-700 w-[194px] h-[70px] text-white flex items-center justify-center font-medium transition-colors rounded-lg border border-white/20"
+                    className="hover:bg-red-700 w-[194px] h-[70px] text-white flex items-center justify-center font-medium transition-colors rounded-lg"
                 >
                     Request Consultation
                 </Link>
