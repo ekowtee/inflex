@@ -109,7 +109,7 @@ export default function Home() {
             `}
                     >
                         Inflexions I.T. Services partners with businesses to design, implement,
-                        and manage robust technology infrastructures that drive efficiency,
+                        and manage robust technology infrastructure that drive efficiency,
                         innovation, and growth.
                     </p>
 
