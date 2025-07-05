@@ -258,6 +258,14 @@ const About = () => {
         </div>
     </div>
 </section>
+
+              <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] py-16 bg-[#F6F6F6] h-[1400px] md:h-full">
+                <h2 className="text-3xl lg:text-[36px] font-bold text-[#1E3161] leading-[45px] text-center lg:mb-12">
+                    Meet Our Strategic Leadership
+                </h2>
+
+                <Leaders />
+            </section>
             
 <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] lg:pr-[227px] 4xl:pr-[255px] py-16 bg-[#F6F6F6]">
     <div className="mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[193px] 4xl:gap-[390px] items-start">
