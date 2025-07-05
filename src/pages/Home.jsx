@@ -87,7 +87,7 @@ export default function Home() {
                 <div className="absolute inset-0 bg-black/30" />
 
                 <div
-                    className=" absolute top-28 xxsm:top-28 md:top-28 lg:top-24 4xl:top-[210px] left-0 p-4 md:p-0 w-full md:w-[571px] 4xl:w-[800px] h-auto md:left-10 lg:left-[240px] 4xl:left-[242px] flex flex-col justify-center items-start"
+                    className=" absolute bottom-10 md:bottom-28 lg:bottom-24 4xl:bottom-[50px] left-0 p-4 md:p-0 w-full md:w-[571px] 4xl:w-[800px] h-auto md:left-10 lg:left-[240px] 4xl:left-[242px] flex flex-col justify-center items-start"
                 >
                     <h1
                         ref={titleRef}
