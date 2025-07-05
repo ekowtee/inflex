@@ -165,7 +165,7 @@ const Resources = () => {
                                         ? "translate-y-0 opacity-100 delay-[800ms]"
                                         : "translate-y-[50px] opacity-0"
                                     }
-      text-4xl font-bold mb-4 text-black
+      text-4xl font-normal mb-4 text-black
     `}
                             >
                                 Stay Informed with Expert Insights and Analysis
@@ -222,7 +222,7 @@ const Resources = () => {
 
                 {/* Whitepapers/Ebooks Section */}
                 <section className="mb-16">
-                    <h2 className="text-3xl font-semibold mb-6">In-Depth Guides & Reports</h2>
+                    <h2 className="text-3xl font-normal mb-6">In-Depth Guides & Reports</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {whitepapers.map(item => (
                             <a
@@ -232,7 +232,7 @@ const Resources = () => {
                             >
                                 <img src={item.coverUrl} alt={item.title} className="w-full h-48 object-cover" />
                                 <div className="p-4">
-                                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                                    <h3 className="text-xl font-normal mb-2">{item.title}</h3>
                                     <p className="text-gray-600 mb-4">{item.description}</p>
                                     <span className="text-red-600 font-medium">Download →</span>
                                 </div>
@@ -243,7 +243,7 @@ const Resources = () => {
 
                 {/* Webinars Section */}
                 <section>
-                    <h2 className="text-3xl font-semibold mb-6">Learn from Our Experts</h2>
+                    <h2 className="text-3xl font-normal mb-6">Learn from Our Experts</h2>
                     <div className="space-y-6">
                         {webinars.map(event => (
                             <div
@@ -256,7 +256,7 @@ const Resources = () => {
                                     className="w-full md:w-48 h-32 object-cover rounded mb-4 md:mb-0 md:mr-6"
                                 />
                                 <div className="flex-1">
-                                    <h3 className="text-2xl font-semibold mb-2">{event.title}</h3>
+                                    <h3 className="text-2xl font-normal mb-2">{event.title}</h3>
                                     <p className="text-gray-600 mb-2">{event.description}</p>
                                     <p className="text-gray-500 text-sm">{event.date}</p>
                                 </div>
