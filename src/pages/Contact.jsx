@@ -65,7 +65,7 @@ const Contact = () => {
 
                             {/* Left column */}
                             <div className="w-full md:w-2/2 text-white space-y-4">
-                                <h2 data-aos="fade-right" className="text-2xl md:text-4xl lg:text-5xl font-bold leading-snug md:leading-[76px]">
+                                <h2 data-aos="fade-right" className="text-2xl md:text-4xl lg:text-5xl font-normal leading-snug md:leading-[76px]">
                                     Proven Results: Client Success
                                     <br className="hidden lg:block" />
                                     Stories | Inflexions I.T. Services
@@ -80,7 +80,7 @@ const Contact = () => {
             <section className="bg-[#F4F4F4] py-12">
                 <div className="bg-[#BD2E25] w-[854px] lg:h-[824px] container mx-auto px-4 lg:px-[150px] py-10">
                     {/* Heading */}
-                    <h2 className="text-3xl font-semibold text-white text-center mb-4">
+                    <h2 className="text-3xl font-normal text-white text-center mb-4">
                         Get in touch with us
                     </h2>
                     {/* Subheading */}
