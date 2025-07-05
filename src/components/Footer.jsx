@@ -14,6 +14,36 @@ export default function Footer() {
                     {/* 1) Logo & Contact */}
                     <div className="space-y-6">
                         <img src={logo} alt="Inflexions-IT" className="h-12" />
+
+                        <div className="space-y-4 mt-8">
+                            <div className="flex items-center">
+                                <div className="bg-[#BD2E25] rounded-full p-3 mr-4">
+                                    <Mail className="h-5 w-5 text-white" />
+                                </div>
+                                <div className=''>
+                                    <p className="font-medium">Email</p>
+                                    <p className="text-gray-600">
+                                        <a href="mailto:info@inflexions.tech" className="underline hover:text-blue-600">
+                                            info@inflexions.tech
+                                        </a> {' '}
+                                        <a href="mailto:sales@inflexions.tech" className="underline hover:text-blue-600">
+                                            sales@inflexions.tech
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-center">
+                                <div className="bg-[#BD2E25] rounded-full p-3 mr-4">
+                                    <Phone className="h-5 w-5 text-white" />
+                                </div>
+                                <div>
+                                    <p className="font-medium">Call Us</p>
+                                    <p className="text-gray-600">(0) 208 889 270</p>
+                                    <p className="text-gray-600">(0) 205 179 937</p>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     {/* 2) Pages */}
