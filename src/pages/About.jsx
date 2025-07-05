@@ -247,14 +247,14 @@ const About = () => {
             />
             
             {/* CTA Section */}
-            <div className="bg-red-600 text-white w-full lg:w-[400px] flex items-center justify-center p-6 lg:p-8 h-full">
-                <Link
+            <Link
                     to="/contact"
-                    className="hover:bg-red-700 w-[194px] h-[70px] text-white flex items-center justify-center font-medium transition-colors rounded-lg"
-                >
+            className="bg-red-600 text-white w-full lg:w-[400px] flex items-center justify-center p-6 lg:p-8 h-full">
+                
+                
                     Request Consultation
-                </Link>
-            </div>
+              
+              </Link>
         </div>
     </div>
 </section>
