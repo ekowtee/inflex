@@ -274,14 +274,12 @@ const About = () => {
     <div className="mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-[193px] 4xl:gap-[390px] items-center">
         {/* Left Column */}
         <div className="w-full lg:w-[498px] space-y-6">
-            <div>
-                <h2 data-aos="zoom-in-down" className="text-[26px] md:text-[33px] font-normal text-[#1E3161] leading-[32px] md:leading-[42px] mb-4">
-                    Unlock Your Potential with INFLEXIONS IT Services – Your Strategic Technology Partner, From Foundation to Future.
-                </h2>
-                <p data-aos="zoom-in-down" className="text-base text-gray-600">
-                    Inflexions is guided by a focused and experienced leadership team committed to driving innovation, client success, and strategic growth.
-                </p>
-            </div>
+             <div>
+                            <h2 data-aos="zoom-in-down" className="text-[26px] md:text-[33px] font-normal text-[#1E3161] leading-[32px] md:leading-[42px] mb-4">
+                                Powering Success Across Industries                            </h2>
+                            <p data-aos="zoom-in-down" className="text-base text-gray-600">
+                                From telecommunications giants to innovative startups, leading organizations choose Inflexions for our proven ability to deliver results. Our client partnerships span diverse industries, each benefiting from tailored technology solutions that drive real business impact.                            </p>
+                        </div>
 
             <div data-aos="zoom-in-up" className="relative">
                 <img
