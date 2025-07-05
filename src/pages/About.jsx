@@ -364,41 +364,13 @@ const About = () => {
         {/* contact info: column on mobile, row on md+ */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row mb-48 md:mb-0 lg:mb-0">
             <div className="flex-1" />
-            <div className="flex-1 flex flex-col md:flex-row lg:flex-row items-start lg:items-center gap-[125px] gap-y-4 lg:gap-y-0">
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center justify-center w-[45px] h-[45px] bg-[#030607] text-white">
-                        <Phone size={24} />
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-[#16213E] text-[18px] font-normal leading-[26px]">
-                            +233 208 889 270
-                        </span>
-                        <span className="text-[#16213E] text-[18px] font-normal leading-[26px]">
-                            +233 205 179 937
-                        </span>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center justify-center w-[45px] h-[45px] bg-[#BD2E25] text-white">
-                        <Mail size={24} />
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-[#16213E] text-[18px] font-normal leading-[26px]">
-                            info@inflexions.tech
-                        </span>
-                        <span className="text-[#16213E] text-[18px] font-normal leading-[26px]">
-                            sales@inflexions.tech
-                        </span>
-                    </div>
-                </div>
             </div>
         </div>
 
         {/* absolute-card: centered & narrower on mobile, positioned with your offsets on md+ */}
         <div
             className="md:hidden flex absolute bg-white border-t-4 border-[#2A2A2A] z-10 w-[90%] sm:w-[480px] h-auto sm:h-[285px] left-1/2 sm:left-[240px] 
-            top-[400px] sm:top-[350px] -translate-x-1/2 sm:translate-x-0 lg:flex items-center justify-center"
+            top-[350px] sm:top-[350px] -translate-x-1/2 sm:translate-x-0 lg:flex items-center justify-center"
         >
             <div className="w-full sm:w-[390px] h-auto sm:h-[139px] flex flex-col p-4">
                 <span>Company Address</span>
