@@ -83,11 +83,11 @@ export default function Home() {
     return (
         <>
             <div className="relative w-full">
-                <img src={herobg} alt="herobg" className="object-cover w-full lg:h-[85vh] 4xl:h-[60vh] md:h-[60vh] h-[70vh]" />
+                <img src={herobg} alt="herobg" className="object-cover w-full lg:h-[85vh] 4xl:h-[65vh] md:h-[60vh] h-[70vh]" />
                 <div className="absolute inset-0 bg-black/30" />
 
                 <div
-                    className=" absolute top-28 xxsm:top-28 md:top-28 lg:top-24 4xl:top-[140px] left-0 p-4 md:p-0 w-full md:w-[571px] 4xl:w-[800px] h-auto md:left-10 lg:left-[240px] 4xl:left-[242px] flex flex-col justify-center items-start"
+                    className=" absolute top-28 xxsm:top-28 md:top-28 lg:top-24 4xl:top-[210px] left-0 p-4 md:p-0 w-full md:w-[571px] 4xl:w-[800px] h-auto md:left-10 lg:left-[240px] 4xl:left-[242px] flex flex-col justify-center items-start"
                 >
                     <h1
                         ref={titleRef}
