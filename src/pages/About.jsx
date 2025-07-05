@@ -91,7 +91,7 @@ const About = () => {
 
                             {/* Right “Our Services” card */}
                             <div data-aos="fade-left" className="w-[326px] h-[360px] hidden md:block lg:block bg-[#BD2E25] p-8 text-white space-y-6 mt-8">
-                                <h3 className="text-2xl font-semibold">Our Mission</h3>
+                                <h3 className="text-2xl font-bold">Our Mission</h3>
                                 <ul className="space-y-4 text-sm">
                                     <li>
                                         <p className="font-semibold">Bridge Strategy & Technology</p>
@@ -129,7 +129,7 @@ const About = () => {
             w-full lg:w-[350px] md:w-[335px]
             h-auto 
             text-[24px] md:text-[33.35px]
-            font-normal
+            font-bold
             text-[#16213E]
             leading-[32px] md:leading-[40px]
           `}
@@ -267,7 +267,7 @@ const About = () => {
             </section>
 
             <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] py-16 bg-[#F6F6F6] h-[1400px] md:h-full">
-                <h2 className="text-3xl lg:text-[36px] font-normal text-[#1E3161] leading-[45px] text-center lg:mb-12">
+                <h2 className="text-3xl lg:text-[36px] font-bold text-[#1E3161] leading-[45px] text-center lg:mb-12">
                     Meet Our Strategic Leadership
                 </h2>
 
@@ -278,7 +278,7 @@ const About = () => {
                 <div className="mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[193px] 4xl:gap-[390px] items-start">
                     {/* Left Column */}
                     <div className="w-full lg:w-[498px]">
-                        <h2 data-aos="zoom-in-down" className="text-[26px] md:text-[33px] font-normal text-[#1E3161] leading-[32px] md:leading-[42px]">
+                        <h2 data-aos="zoom-in-down" className="text-[26px] md:text-[33px] font-bold text-[#1E3161] leading-[32px] md:leading-[42px]">
                             Unlock Your Potential with INFLEXIONS IT Services – Your Strategic Technology Partner, From Foundation to Future.
                         </h2>
                         <p data-aos="zoom-in-down" className="mt-2 text-base text-gray-600">

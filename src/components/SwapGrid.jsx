@@ -115,9 +115,9 @@ export default function SwapGrid() {
             <Box idx={0} className="w-full h-[200px] rounded-lg" />
 
             {/* Box 2 & 3 */}
-            <div className="grid grid-cols-2 gap-4">
-                <Box idx={1} className="h-[130px] rounded-lg" />
-                <Box idx={2} className="h-[130px] rounded-lg" />
+            <div className="flex gap-8">
+                <Box idx={1} className="h-[130px] w-[327px] rounded-lg" />
+                <Box idx={2} className="h-[130px] w-[173px] rounded-lg ml-auto" />
             </div>
 
             {/* Box 4 */}

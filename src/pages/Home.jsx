@@ -87,14 +87,14 @@ export default function Home() {
                 <div className="absolute inset-0 bg-black/30" />
 
                 <div
-                    className=" absolute top-28 xxsm:top-28 md:top-28 lg:top-24 4xl:top-[170px] left-0 p-4 md:p-0 w-full md:w-[571px] h-auto md:left-10 lg:left-[240px] 4xl:left-[242px] flex flex-col justify-center items-start"
+                    className=" absolute top-28 xxsm:top-28 md:top-28 lg:top-24 4xl:top-[170px] left-0 p-4 md:p-0 w-full md:w-[571px] 4xl:w-[800px] h-auto md:left-10 lg:left-[240px] 4xl:left-[242px] flex flex-col justify-center items-start"
                 >
                     <h1
                         ref={titleRef}
                         className={`
               ${base}
               ${titleIn ? "translate-y-0 opacity-100 delay-[800ms]" : "translate-y-[50px] opacity-0"}
-              text-3xl md:text-5xl lg:text-[60px] font-bold text-white leading-tight md:leading-[71px] mb-4
+              text-3xl md:text-5xl lg:text-[60px] 4xl:text-[66px] font-bold text-white leading-tight md:leading-[71px] mb-4
             `}
                     >
                         Architecting Your Future: Resilient IT Solutions for Global Ambition
@@ -141,7 +141,7 @@ export default function Home() {
                             className={`
                 ${base}
                 ${secTitleIn ? "translate-y-0 opacity-100 delay-[800ms]" : "translate-y-[50px] opacity-0"}
-                lg:w-[486px] lg:h-[144px] lg:text-[40px] md:text-[28px] text-[24px] lg:leading-[45px] mb-2 py-2
+                lg:w-[500px] lg:h-[144px] lg:text-[36px] md:text-[28px] text-[24px] lg:leading-[45px] font-bold mb-2 py-2
               `}
                         >
                             Your Strategic Technology Partner, From Foundation to Future.
@@ -266,7 +266,7 @@ export default function Home() {
                 </div>
                 <div className="flex-1 py-4 md:py-10 lg:py-20 lg:pl-[200px] px-4 md:px-8 lg:px-0">
                     <div className='flex flex-col gap-8 w-full lg:w-[700px] 4xl:w-[600px] lg:h-[700px]'>
-                        <h2 className="lg:w-[400px] lg:h-[93px] lg:text-[32px] md:text-[32px] text-[20px] lg:leading-[40px] text-[#265982]">
+                        <h2 className="lg:w-[500px] lg:h-[93px] lg:text-[32px] md:text-[32px] text-[20px] 4xl:ml-24 lg:leading-[40px] font-bold text-[#265982]">
                             Comprehensive Solutions for Modern Challenges
                         </h2>
                         <div className="lg:w-[555px] 4xl:w-full 4xl:ml-[92px] lg:ml-0 md:ml-0 ml-0 4xl:space-y-8 lg:space-y-4 space-y-4">
@@ -278,9 +278,8 @@ export default function Home() {
 
             <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] lg:pr-[160px] py-12">
                 {/* Heading */}
-                <h2 className="text-3xl font-medium text-gray-900 mb-12">
-                    Your The Inflexions
-                    <br />
+                <h2 className="md:text-3xl 4xl:text-5xl font-bold text-gray-900 mb-12">
+                    The Inflexions
                     Advantage
                 </h2>
 
@@ -356,7 +355,7 @@ export default function Home() {
                                 }
           text-lg sm:text-xl md:text-2xl lg:text-[43px]
           leading-snug md:leading-tight lg:leading-[43px]
-          font-normal text-white
+          font-bold text-white
         `}
                         >
                             Ready to Transform Your Technology Landscape?
