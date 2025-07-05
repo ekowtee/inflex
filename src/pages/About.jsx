@@ -260,9 +260,10 @@ const About = () => {
 </section>
 
               <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] py-16 bg-[#F6F6F6] h-[1400px] md:h-full">
-                <h2 className="text-3xl lg:text-[36px] font-bold text-[#1E3161] leading-[45px] text-center lg:mb-12">
+                <h2 className="text-3xl lg:text-[36px] font-normal text-[#1E3161] leading-[45px] text-left lg:mb-4">
                     Meet Our Strategic Leadership
                 </h2>
+                <p className='w-[1050px] text-left mb-8'> Inflexions is guided by a focused and experienced leadership team committed to driving innovation, client success, and strategic growth. Their diverse expertise across technology, business development, and operations shapes our vision and ensures we deliver exceptional value.</p>
 
                 <Leaders />
             </section>
