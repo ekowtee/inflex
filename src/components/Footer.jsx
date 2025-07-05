@@ -26,9 +26,7 @@ export default function Footer() {
                                         <a href="mailto:info@inflexions.tech" className="underline hover:text-blue-600">
                                             info@inflexions.tech
                                         </a> {' '}
-                                        <a href="mailto:sales@inflexions.tech" className="underline hover:text-blue-600">
-                                            sales@inflexions.tech
-                                        </a>
+                                       
                                     </p>
                                 </div>
                             </div>
@@ -39,7 +37,6 @@ export default function Footer() {
                                 <div>
                                     <p className="font-medium">Call Us</p>
                                     <p className="text-gray-600">(0) 208 889 270</p>
-                                    <p className="text-gray-600">(0) 205 179 937</p>
 
                                 </div>
                             </div>
