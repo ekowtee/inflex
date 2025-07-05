@@ -141,7 +141,7 @@ export default function Home() {
                             className={`
                 ${base}
                 ${secTitleIn ? "translate-y-0 opacity-100 delay-[800ms]" : "translate-y-[50px] opacity-0"}
-                lg:w-[500px] lg:h-[144px] lg:text-[36px] md:text-[28px] text-[24px] lg:leading-[45px] font-bold mb-2 py-2
+                lg:w-[500px] lg:h-[144px] lg:text-[36px] md:text-[28px] text-[24px] lg:leading-[45px] font-normal mb-2 py-2
               `}
                         >
                             Your Strategic Technology Partner, From Foundation to Future.
@@ -266,7 +266,7 @@ export default function Home() {
                 </div>
                 <div className="flex-1 py-4 md:py-10 lg:py-20 lg:pl-[200px] px-4 md:px-8 lg:px-0">
                     <div className='flex flex-col gap-8 w-full lg:w-[700px] 4xl:w-[600px] lg:h-[700px]'>
-                        <h2 className="lg:w-[500px] lg:h-[93px] lg:text-[32px] md:text-[32px] text-[20px] 4xl:ml-24 lg:leading-[40px] font-bold text-[#265982]">
+                        <h2 className="lg:w-[500px] lg:h-[93px] lg:text-[32px] md:text-[32px] text-[20px] 4xl:ml-24 lg:leading-[40px] font-normal text-[#265982]">
                             Comprehensive Solutions for Modern Challenges
                         </h2>
                         <div className="lg:w-[555px] 4xl:w-full 4xl:ml-[92px] lg:ml-0 md:ml-0 ml-0 4xl:space-y-8 lg:space-y-4 space-y-4">
@@ -278,7 +278,7 @@ export default function Home() {
 
             <section className="container mx-auto px-4 lg:pl-[240px] 4xl:pl-[240px] lg:pr-[160px] py-12">
                 {/* Heading */}
-                <h2 className="md:text-3xl 4xl:text-5xl font-bold text-gray-900 mb-12">
+                <h2 className="md:text-3xl 4xl:text-5xl font-normal text-gray-900 mb-12">
                     The Inflexions
                     Advantage
                 </h2>
@@ -355,7 +355,7 @@ export default function Home() {
                                 }
           text-lg sm:text-xl md:text-2xl lg:text-[43px]
           leading-snug md:leading-tight lg:leading-[43px]
-          font-bold text-white
+          font-normal text-white
         `}
                         >
                             Ready to Transform Your Technology Landscape?
