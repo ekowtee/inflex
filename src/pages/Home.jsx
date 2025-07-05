@@ -87,14 +87,14 @@ export default function Home() {
                 <div className="absolute inset-0 bg-black/30" />
 
                 <div
-                    className=" absolute top-28 xxsm:top-28 md:top-28 lg:top-24 4xl:top-[170px] left-0 p-4 md:p-0 w-full md:w-[571px] 4xl:w-[800px] h-auto md:left-10 lg:left-[240px] 4xl:left-[242px] flex flex-col justify-center items-start"
+                    className=" absolute top-28 xxsm:top-28 md:top-28 lg:top-24 4xl:top-[140px] left-0 p-4 md:p-0 w-full md:w-[571px] 4xl:w-[800px] h-auto md:left-10 lg:left-[240px] 4xl:left-[242px] flex flex-col justify-center items-start"
                 >
                     <h1
                         ref={titleRef}
                         className={`
               ${base}
               ${titleIn ? "translate-y-0 opacity-100 delay-[800ms]" : "translate-y-[50px] opacity-0"}
-              text-3xl md:text-5xl lg:text-[60px] 4xl:text-[66px] font-bold text-white leading-tight md:leading-[71px] mb-4
+              text-3xl md:text-5xl lg:text-4xl font-bold text-white leading-tight md:leading-[71px] mb-4
             `}
                     >
                         Architecting Your Future: Resilient IT Solutions for Global Ambition
