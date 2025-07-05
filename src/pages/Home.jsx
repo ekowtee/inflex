@@ -73,12 +73,12 @@ export default function Home() {
 
     useEffect(() => {
         AOS.init({
-            duration: 3000,
+            duration: 1000,
         });
         AOS.refresh();
     }, []);
 
-    const base = "transform transition-all duration-[600ms] ease-out"
+    const base = "transform transition-all duration-[450ms] ease-out"
 
     return (
         <>
