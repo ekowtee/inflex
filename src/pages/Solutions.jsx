@@ -145,7 +145,7 @@ const Solutions = () => {
                                     ? "translate-y-0 opacity-100 delay-[800ms]"
                                     : "translate-y-[50px] opacity-0"
                                 }
-          text-3xl md:text-4xl font-bold text-gray-900 leading-snug text-center md:text-left
+          text-3xl md:text-4xl font-normal text-gray-900 leading-snug text-center md:text-left
         `}
                         >
                             Integrated Solutions<br />
@@ -169,7 +169,7 @@ const Solutions = () => {
           border-l-2 border-gray-200 pl-6
         `}
                         >
-                            <h3 className="text-xl font-bold text-gray-900">Network Infrastructure</h3>
+                            <h3 className="text-xl font-normal text-gray-900">Network Infrastructure</h3>
                             <p className="mt-1 text-lg font-medium text-gray-800">
                                 Building Your High-Performance Digital Backbone
                             </p>
@@ -190,7 +190,7 @@ const Solutions = () => {
           border-l-2 border-gray-200 pl-6
         `}
                         >
-                            <h3 className="text-xl font-bold text-gray-900">IT Hardware & Storage</h3>
+                            <h3 className="text-xl font-normal text-gray-900">IT Hardware & Storage</h3>
                             <p className="mt-1 text-lg font-medium text-gray-800">
                                 Powering Performance with Reliable Hardware & Storage
                             </p>
@@ -211,7 +211,7 @@ const Solutions = () => {
           border-l-2 border-gray-200 pl-6
         `}
                         >
-                            <h3 className="text-xl font-bold text-gray-900">Cloud Service</h3>
+                            <h3 className="text-xl font-normal text-gray-900">Cloud Service</h3>
                             <p className="mt-1 text-lg font-medium text-gray-800">
                                 Harnessing the Power and Agility of the Cloud
                             </p>
@@ -232,7 +232,7 @@ const Solutions = () => {
           border-l-2 border-gray-200 pl-6
         `}
                         >
-                            <h3 className="text-xl font-bold text-gray-900">Data-centre Solutions</h3>
+                            <h3 className="text-xl font-normal text-gray-900">Data-centre Solutions</h3>
                             <p className="mt-1 text-lg font-medium text-gray-800">
                                 Secure, Efficient, and Resilient Datacentre Solutions
                             </p>
