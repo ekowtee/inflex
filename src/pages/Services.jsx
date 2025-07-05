@@ -152,7 +152,7 @@ const Services = () => {
                                     ? "translate-y-0 opacity-100 delay-[800ms]"
                                     : "translate-y-[50px] opacity-0"
                                 }
-      text-2xl md:text-[33px] font-bold text-[#1B3764] leading-[120%] tracking-[-2%] mb-4
+      text-2xl md:text-[33px] font-normal text-[#1B3764] leading-[120%] tracking-[-2%] mb-4
     `}
                         >
                             Our IT Service Delivery Models
@@ -219,7 +219,7 @@ const Services = () => {
                                         ? "translate-y-0 opacity-100 delay-[800ms]"
                                         : "translate-y-[50px] opacity-0"
                                     }
-      text-xl md:text-[25px] leading-[20px] font-bold tracking-[-1%] text-[#1B3764] my-4 flex flex-col
+      text-xl md:text-[25px] leading-[20px] font-normal tracking-[-1%] text-[#1B3764] my-4 flex flex-col
     `}
                             >
                                 Professional Services:
@@ -321,7 +321,7 @@ const Services = () => {
                                         ? "translate-y-0 opacity-100 delay-[800ms]"
                                         : "translate-y-[50px] opacity-0"
                                     }
-      text-xl md:text-[25px] leading-[20px] font-bold tracking-[-1%] text-[#1B3764] my-4 flex flex-col
+      text-xl md:text-[25px] leading-[20px] font-normal tracking-[-1%] text-[#1B3764] my-4 flex flex-col
     `}
                             >
                                 Managed Services:
@@ -390,7 +390,7 @@ const Services = () => {
                                         ? "translate-y-0 opacity-100 delay-[800ms]"
                                         : "translate-y-[50px] opacity-0"
                                     }
-      text-xl md:text-[25px] leading-[20px] font-bold tracking-[-1%] text-[#1B3764] my-4 flex flex-col
+      text-xl md:text-[25px] leading-[20px] font-normal tracking-[-1%] text-[#1B3764] my-4 flex flex-col
     `}
                             >
                                 Support Services:
