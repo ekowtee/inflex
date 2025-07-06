@@ -361,6 +361,10 @@ const About = () => {
             referrerPolicy="no-referrer-when-downgrade"
         />
 
+        {/* contact info: column on mobile, row on md+ */}
+        <div className="container mx-auto px-4 sm:px-6 h-[4px] lg:px-8 flex flex-col lg:flex-row mb-48 md:mb-0 lg:mb-0">
+            
+        </div>
         {/* absolute-card: centered & narrower on mobile, positioned with your offsets on md+ */}
         <div
             className="md:hidden flex absolute bg-white border-t-4 border-[#2A2A2A] z-10 w-[90%] sm:w-[480px] h-auto sm:h-[285px] left-1/2 sm:left-[240px] 
