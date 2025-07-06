@@ -361,20 +361,20 @@ const About = () => {
             referrerPolicy="no-referrer-when-downgrade"
         />
 
-        {/* contact info: column on mobile, row on md+ */}
-        <div className="container mx-auto px-4 sm:px-6 h-[4px] lg:px-8 flex flex-col lg:flex-row mb-48 md:mb-0 lg:mb-0">
-            
+        {/* map and footer image separator */}
+        <div className="container mx-auto px-4 sm:px-6 h-[2px] lg:px-8 flex flex-col lg:flex-row mb-48 md:mb-0 lg:mb-0">
         </div>
+        
         {/* absolute-card: centered & narrower on mobile, positioned with your offsets on md+ */}
         <div
             className="md:hidden flex absolute bg-white border-t-4 border-[#2A2A2A] z-10 w-[90%] sm:w-[480px] h-auto sm:h-[285px] left-1/2 sm:left-[240px] 
-            top-[400px] sm:top-[350px] -translate-x-1/2 sm:translate-x-0 lg:flex items-center justify-center"
+            top-[320px] sm:top-[280px] -translate-x-1/2 sm:translate-x-0 lg:flex items-center justify-center"
         >
             <div className="w-full sm:w-[390px] h-auto sm:h-[139px] flex flex-col p-4">
                 <span>Company Address</span>
-                <span className="text-[34px] leading-[38px] font-normal">
-                    #2 Dei Close
-                    East Legon
+                <span className="text-[34px] leading-[38px] font-medium">
+                    #2 Dei Close<br />
+                    East Legon<br />
                     Accra, Ghana
                 </span>
             </div>
