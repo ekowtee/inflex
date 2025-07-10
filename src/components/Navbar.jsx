@@ -23,16 +23,16 @@ export default function Navbar() {
 
     return (
         <header className="w-full bg-white shadow-sm fixed z-50">
-            <div className="w-full flex items-center h-[70px]">
-                {/* Logo - stays in original position */}
+            <div className="container mx-auto flex items-center h-[70px] pl-10 pr-10">
+                {/* Logo - stays in original position but within container */}
                 <div className="flex-shrink-0 ml-2">
                     <Link to="/">
                         <img src={logo} alt="INFLEXIONS-IT" className="h-10 w-auto" />
                     </Link>
                 </div>
 
-                {/* Content area that matches homepage margins */}
-                <div className="container mx-auto flex items-center justify-between gap-10 pl-10 pr-0">
+                {/* Content area */}
+                <div className="flex items-center justify-between gap-10 flex-1">
                     {/* Desktop nav */}
                     <nav className="hidden lg:flex items-center lg:space-x-16 4xl:space-x-20">
                         <NavLink to="/" className={navLinkClasses}>
@@ -64,16 +64,16 @@ export default function Navbar() {
                             {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
                         </button>
                     </div>
-                </div>
 
-                {/* Contact Us button - positioned outside content margin */}
-                <div className="hidden lg:flex items-center">
-                    <Link
-                        to="/contact"
-                        className="bg-red-600 hover:bg-red-700 w-[194px] h-[70px] text-white flex items-center justify-center font-medium transition-colors"
-                    >
-                        Contact us
-                    </Link>
+                    {/* Contact Us button - with same margin as left side */}
+                    <div className="hidden lg:flex items-center">
+                        <Link
+                            to="/contact"
+                            className="bg-red-600 hover:bg-red-700 w-[194px] h-[70px] text-white flex items-center justify-center font-medium transition-colors"
+                        >
+                            Contact us
+                        </Link>
+                    </div>
                 </div>
             </div>
 
