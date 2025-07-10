@@ -22,22 +22,17 @@ export default function Navbar() {
         } hover:text-red-600 hover:border-red-600`
 
     return (
-        <header className="w-full bg-white shadow-sm fixed z-50 ">
-            <div
-                className="container  flex items-center gap-10 h-[70px]
-        "
-            >
-                {/* Logo */}
+        <header className="w-full bg-white shadow-sm fixed z-50">
+            <div className="w-full flex items-center h-[70px]">
+                {/* Logo - stays in original position */}
                 <div className="flex-shrink-0 ml-2">
                     <Link to="/">
                         <img src={logo} alt="INFLEXIONS-IT" className="h-10 w-auto" />
                     </Link>
                 </div>
 
-
-                <div className='flex mr-4 lg:mr-[150px] lg:w-[1120px] 4xl:w-[1510px] items-center justify-between'>
-
-
+                {/* Content area that matches homepage margins */}
+                <div className="container mx-auto flex items-center justify-between gap-10 pl-10 pr-0">
                     {/* Desktop nav */}
                     <nav className="hidden lg:flex items-center lg:space-x-16 4xl:space-x-20">
                         <NavLink to="/" className={navLinkClasses}>
@@ -46,51 +41,40 @@ export default function Navbar() {
                         <NavLink to="/about" className={navLinkClasses}>
                             About Us
                         </NavLink>
-
-                        {/* Solutions with hover-dropdown */}
                         <NavLink to="/solutions" className={navLinkClasses}>
                             Solutions
                         </NavLink>
-
                         <NavLink to="/services" className={navLinkClasses}>
                             Services
                         </NavLink>
-                        {/* <NavLink to="/case-studies" className={navLinkClasses}>
-                        Case study
-                    </NavLink> */}
                         <NavLink to="/resources" className={navLinkClasses}>
                             Resources
                         </NavLink>
-                        {/* 
-                    <NavLink
-                        to="/careers"
-                        className={navLinkClasses}
-                    >
-                        Careers
-                    </NavLink> */}
                     </nav>
 
-                    {/* Desktop contact button */}
-                    <div className="hidden lg:flex items-center">
-                        <Link
-                            to="/contact"
-                            className="bg-red-600 hover:bg-red-700 w-[194px] h-[70px] text-white flex items-center justify-center font-medium transition-colors"
+                    {/* Spacer for mobile hamburger alignment */}
+                    <div className="lg:hidden flex-1"></div>
+
+                    {/* Hamburger (below lg) */}
+                    <div className="lg:hidden">
+                        <button
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            className="text-[#5C5D5D] hover:text-red-600 focus:outline-none"
                         >
-                            Contact us
-                        </Link>
+                            {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+                        </button>
                     </div>
-
                 </div>
-                {/* Hamburger (below lg) */}
-                <div className="lg:hidden ml-10 md:ml-96">
-                    <button
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="text-[#5C5D5D] hover:text-red-600 focus:outline-none"
+
+                {/* Contact Us button - positioned outside content margin */}
+                <div className="hidden lg:flex items-center">
+                    <Link
+                        to="/contact"
+                        className="bg-red-600 hover:bg-red-700 w-[194px] h-[70px] text-white flex items-center justify-center font-medium transition-colors"
                     >
-                        {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-                    </button>
+                        Contact us
+                    </Link>
                 </div>
-
             </div>
 
             {/* Mobile menu */}
@@ -115,7 +99,6 @@ export default function Navbar() {
                         >
                             About Us
                         </NavLink>
-
                         <NavLink
                             to="/solutions"
                             onClick={() => setIsMenuOpen(false)}
@@ -125,7 +108,6 @@ export default function Navbar() {
                         >
                             Solutions
                         </NavLink>
-
                         <NavLink
                             to="/services"
                             onClick={() => setIsMenuOpen(false)}
@@ -135,15 +117,6 @@ export default function Navbar() {
                         >
                             Services
                         </NavLink>
-                        {/* <NavLink
-                            to="/case-studies"
-                            onClick={() => setIsMenuOpen(false)}
-                            className={({ isActive }) =>
-                                `block ${navLinkClasses({ isActive })} py-2`
-                            }
-                        >
-                            Case study
-                        </NavLink> */}
                         <NavLink
                             to="/resources"
                             onClick={() => setIsMenuOpen(false)}
@@ -153,17 +126,6 @@ export default function Navbar() {
                         >
                             Resources
                         </NavLink>
-
-                        {/* <NavLink
-                            to="/careers"
-                            onClick={() => setIsMenuOpen(false)}
-                            className={({ isActive }) =>
-                                `block text-sm ${navLinkClasses({ isActive })} py-1`
-                            }
-                        >
-                            Careers
-                        </NavLink> */}
-
                         <Link
                             to="/contact"
                             onClick={() => setIsMenuOpen(false)}
