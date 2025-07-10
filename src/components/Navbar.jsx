@@ -22,17 +22,22 @@ export default function Navbar() {
         } hover:text-red-600 hover:border-red-600`
 
     return (
-        <header className="w-full bg-white shadow-sm fixed z-50">
-            <div className="container mx-auto flex items-center h-[70px] pl-10 pr-10">
-                {/* Logo - stays in original position but within container */}
+        <header className="w-full bg-white shadow-sm fixed z-50 ">
+            <div
+                className="container  flex items-center gap-10 h-[70px]
+        "
+            >
+                {/* Logo */}
                 <div className="flex-shrink-0 ml-2">
                     <Link to="/">
-                        <img src={logo} alt="INFLEXIONS-IT" className="h-10 w-auto" />
+                        <img src={logo} alt="INFLEXIONS-IT" className="h-8 w-auto" />
                     </Link>
                 </div>
 
-                {/* Content area */}
-                <div className="flex items-center justify-between gap-10 flex-1">
+
+                <div className='flex mr-4 lg:mr-[150px] lg:w-[1120px] 4xl:w-[1510px] items-center justify-between'>
+
+
                     {/* Desktop nav */}
                     <nav className="hidden lg:flex items-center lg:space-x-16 4xl:space-x-20">
                         <NavLink to="/" className={navLinkClasses}>
@@ -41,31 +46,31 @@ export default function Navbar() {
                         <NavLink to="/about" className={navLinkClasses}>
                             About Us
                         </NavLink>
+
+                        {/* Solutions with hover-dropdown */}
                         <NavLink to="/solutions" className={navLinkClasses}>
                             Solutions
                         </NavLink>
+
                         <NavLink to="/services" className={navLinkClasses}>
                             Services
                         </NavLink>
+                        {/* <NavLink to="/case-studies" className={navLinkClasses}>
+                        Case study
+                    </NavLink> */}
                         <NavLink to="/resources" className={navLinkClasses}>
                             Resources
                         </NavLink>
+                        {/* 
+                    <NavLink
+                        to="/careers"
+                        className={navLinkClasses}
+                    >
+                        Careers
+                    </NavLink> */}
                     </nav>
 
-                    {/* Spacer for mobile hamburger alignment */}
-                    <div className="lg:hidden flex-1"></div>
-
-                    {/* Hamburger (below lg) */}
-                    <div className="lg:hidden">
-                        <button
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className="text-[#5C5D5D] hover:text-red-600 focus:outline-none"
-                        >
-                            {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-                        </button>
-                    </div>
-
-                    {/* Contact Us button - with same margin as left side */}
+                    {/* Desktop contact button */}
                     <div className="hidden lg:flex items-center">
                         <Link
                             to="/contact"
@@ -74,7 +79,18 @@ export default function Navbar() {
                             Contact us
                         </Link>
                     </div>
+
                 </div>
+                {/* Hamburger (below lg) */}
+                <div className="lg:hidden ml-10 md:ml-96">
+                    <button
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        className="text-[#5C5D5D] hover:text-red-600 focus:outline-none"
+                    >
+                        {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+                    </button>
+                </div>
+
             </div>
 
             {/* Mobile menu */}
@@ -99,6 +115,7 @@ export default function Navbar() {
                         >
                             About Us
                         </NavLink>
+
                         <NavLink
                             to="/solutions"
                             onClick={() => setIsMenuOpen(false)}
@@ -108,6 +125,7 @@ export default function Navbar() {
                         >
                             Solutions
                         </NavLink>
+
                         <NavLink
                             to="/services"
                             onClick={() => setIsMenuOpen(false)}
@@ -117,6 +135,15 @@ export default function Navbar() {
                         >
                             Services
                         </NavLink>
+                        {/* <NavLink
+                            to="/case-studies"
+                            onClick={() => setIsMenuOpen(false)}
+                            className={({ isActive }) =>
+                                `block ${navLinkClasses({ isActive })} py-2`
+                            }
+                        >
+                            Case study
+                        </NavLink> */}
                         <NavLink
                             to="/resources"
                             onClick={() => setIsMenuOpen(false)}
@@ -126,6 +153,17 @@ export default function Navbar() {
                         >
                             Resources
                         </NavLink>
+
+                        {/* <NavLink
+                            to="/careers"
+                            onClick={() => setIsMenuOpen(false)}
+                            className={({ isActive }) =>
+                                `block text-sm ${navLinkClasses({ isActive })} py-1`
+                            }
+                        >
+                            Careers
+                        </NavLink> */}
+
                         <Link
                             to="/contact"
                             onClick={() => setIsMenuOpen(false)}
