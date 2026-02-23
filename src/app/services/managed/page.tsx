@@ -19,13 +19,21 @@ export default function ManagedServicesPage() {
         <div className="absolute inset-0 bg-black/60" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="md:w-2/3 text-white space-y-4">
-              <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
-                Managed Services
-              </h1>
-              <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-2xl">
-                Proactive management. Predictable costs. Peace of mind.
-              </p>
+            <div className="flex flex-col md:flex-row justify-between items-end gap-8">
+              <div className="md:w-1/2 text-white space-y-4">
+                <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
+                  Managed Services
+                </h1>
+                <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-2xl">
+                  Proactive management. Predictable costs. Peace of mind.
+                </p>
+              </div>
+              <div className="hidden md:block md:w-[300px] lg:w-[360px]">
+                <div className="rounded-[10px] overflow-hidden border-2 border-white/30 shadow-xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/assets/services/service2.jpg" alt="IT infrastructure management" className="w-full h-[240px] lg:h-[280px] object-cover" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
