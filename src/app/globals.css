@@ -1,26 +1,102 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ─── Primary (Brand Red: #BD2E25) ─── */
+  --color-primary-50:  #FDE8E7;
+  --color-primary-100: #F9C4C1;
+  --color-primary-200: #F4A8A4;
+  --color-primary-300: #E87A73;
+  --color-primary-400: #D5524A;
+  --color-primary-500: #BD2E25;
+  --color-primary-600: #A02923;
+  --color-primary-700: #8A2019;
+  --color-primary-800: #6E1812;
+  --color-primary-900: #52110D;
+
+  /* ─── Navy (Headings — consolidated to 3) ─── */
+  --color-navy-500: #265982;
+  --color-navy-700: #1B3764;
+  --color-navy-900: #16213E;
+
+  /* ─── Neutral ─── */
+  --color-neutral-50:  #F2F2F2;
+  --color-neutral-100: #E6E6E6;
+  --color-neutral-200: #D0D0D0;
+  --color-neutral-300: #A6A6A6;
+  --color-neutral-400: #8C8C8C;
+  --color-neutral-500: #5C6280;
+  --color-neutral-600: #41444B;
+  --color-neutral-700: #333333;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171A20;
+  --color-neutral-950: #000000;
+
+  /* ─── Surface ─── */
+  --color-surface-white: #FFFFFF;
+  --color-surface-light: #F4F4F4;
+  --color-surface-muted: #F6F6F6;
+  --color-surface-dark:  #2A2A2A;
+
+  /* ─── Semantic (Status) ─── */
+  --color-success-bg: #E8F5E9;
+  --color-success-text: #2E7D32;
+  --color-success-border: #4CAF50;
+  --color-warning-bg: #FFF3E0;
+  --color-warning-text: #E65100;
+  --color-warning-border: #FB8C00;
+  --color-error-bg: #FFEBEE;
+  --color-error-text: #C62828;
+  --color-error-border: #D0281F;
+  --color-info-bg: #E3F2FD;
+  --color-info-text: #1565C0;
+  --color-info-border: #42A5F5;
+
+  /* ─── Font Families ─── */
+  --font-sans: var(--font-rubik), system-ui, sans-serif;
+  --font-rubik: var(--font-rubik), system-ui, sans-serif;
+  --font-krub: var(--font-krub), system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html {
+  scroll-behavior: smooth;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+* {
+  box-sizing: border-box;
+}
+
+/* Accessible focus indicator */
+:focus-visible {
+  outline: 2px solid #BD2E25;
+  outline-offset: 2px;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
+:root {
+  --background: #ffffff;
+  --foreground: #171A20;
+}
+
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Rounded edges on all main page buttons/CTAs */
+main div:has(> a[href="/contact"]),
+main div:has(> a[href="/case-study"]),
+main button {
+  border-radius: 6px;
 }

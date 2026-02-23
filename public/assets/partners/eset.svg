@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 50">
+  <circle cx="25" cy="25" r="18" fill="none" stroke="#00AEEF" stroke-width="3"/>
+  <path d="M16 18 L34 18 M16 25 L30 25 M16 32 L34 32" stroke="#00AEEF" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="50" y="33" font-family="Arial, sans-serif" font-size="26" font-weight="bold" fill="#1A1A1A">ESET</text>
+</svg>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 50">
+  <text x="14" y="35" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#003366">sophos</text>
+  <circle cx="164" cy="24" r="8" fill="none" stroke="#0080FF" stroke-width="2.5"/>
+  <path d="M160 20 Q164 16 168 20" stroke="#0080FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>
