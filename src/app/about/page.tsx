@@ -41,7 +41,7 @@ export default function AboutPage() {
           loading="lazy"
         />
         <div className="absolute inset-0 bg-black/50" />
-        <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
+        <div className="absolute inset-0 flex items-end pb-6 md:pb-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="flex flex-col md:flex-row justify-between items-start gap-8">
               <div className="md:w-1/2 text-white space-y-4">
