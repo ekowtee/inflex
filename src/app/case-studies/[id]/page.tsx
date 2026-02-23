@@ -35,7 +35,7 @@ export default function CaseStudyDetailPage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={study.image} alt="Case study background" className="w-full h-full object-cover" loading="lazy" />
         <div className="absolute inset-0 bg-black/30" />
-        <div className="absolute inset-0 flex items-end pb-10 md:pb-16">
+        <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-snug">
               {study.title}

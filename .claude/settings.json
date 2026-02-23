@@ -6,7 +6,8 @@
       "Read(//c/Users/ekowt/.claude/projects/c--Users-ekowt-Projects-inflexionsweb/d0723db9-a374-4a4b-8ead-62822a2e5d44/tool-results/**)",
       "Bash(ls:*)",
       "Read(//c/Users/ekowt/Projects/inflexionsweb/public/assets/partners/**)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(git remote add:*)"
     ],
     "additionalDirectories": [
       "C:\\Users\\ekowt\\Projects\\inflexionsweb\\public\\assets\\partners"
