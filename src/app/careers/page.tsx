@@ -75,27 +75,25 @@ export default function CareersPage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/assets/about/vidmin.png" alt="Join Us Hero" className="w-full h-full object-cover" loading="lazy" />
         <div className="absolute inset-0 bg-[#1B3764]/80" />
-        <div className="absolute inset-0 flex items-center">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="max-w-2xl">
-              <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">Join Us</h2>
-              <p className="text-white/90 text-lg mb-8">
-                Shape the technology backbone of Africa&apos;s leading enterprises.
-              </p>
-              <div className="flex flex-col sm:flex-row items-start gap-4">
-                <Link
-                  href="/jobs"
-                  className="inline-block border-2 border-white text-white font-semibold px-8 py-3 rounded-[6px] hover:bg-white hover:text-[#1B3764] transition-colors duration-300"
-                >
-                  View Jobs
-                </Link>
-                <Link
-                  href="/internships"
-                  className="inline-block bg-[#BD2E25] hover:bg-[#A02923] text-white font-semibold px-8 py-3 rounded-[6px] transition-colors duration-300"
-                >
-                  View Internships
-                </Link>
-              </div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center px-4 max-w-2xl">
+            <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">Join Us</h2>
+            <p className="text-white/90 text-lg mb-8">
+              Shape the technology backbone of Africa&apos;s leading enterprises.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/jobs"
+                className="inline-block border-2 border-white text-white font-semibold px-8 py-3 rounded-[6px] hover:bg-white hover:text-[#1B3764] transition-colors duration-300"
+              >
+                View Jobs
+              </Link>
+              <Link
+                href="/internships"
+                className="inline-block bg-[#BD2E25] hover:bg-[#A02923] text-white font-semibold px-8 py-3 rounded-[6px] transition-colors duration-300"
+              >
+                View Internships
+              </Link>
             </div>
           </div>
         </div>

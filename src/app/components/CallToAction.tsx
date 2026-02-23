@@ -34,9 +34,8 @@ export default function CallToAction() {
         className="w-full h-full object-cover"
       />
       <div className="absolute inset-0 bg-[#1B3764]/80" />
-      <div className="absolute inset-0 flex items-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="max-w-2xl">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="text-center px-4 max-w-2xl">
           <h2
             ref={dtitleRef as React.RefObject<HTMLHeadingElement>}
             className={`${base} ${
@@ -74,7 +73,6 @@ export default function CallToAction() {
             >
               Book Your Session
             </Link>
-          </div>
           </div>
         </div>
       </div>
