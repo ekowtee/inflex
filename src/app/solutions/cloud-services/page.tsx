@@ -42,7 +42,7 @@ export default function CloudServicesPage() {
       <div className="relative w-full h-[500px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/assets/solutions/sol7.png"
+          src="/assets/solutions/sol4.jpeg"
           alt="Cloud Services"
           className="w-full h-full object-cover"
           loading="eager"
@@ -66,7 +66,7 @@ export default function CloudServicesPage() {
       {/* Overview */}
       <section className="py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-[#1B3764] mb-6">
                 Harnessing the Power and Agility of the Cloud
@@ -96,9 +96,9 @@ export default function CloudServicesPage() {
             <div className="rounded-lg overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/assets/solutions/sol4.png"
+                src="/assets/solutions/sol7.jpeg"
                 alt="Cloud services overview"
-                className="w-full h-[400px] object-cover rounded-lg"
+                className="w-full h-full object-cover rounded-lg"
                 loading="lazy"
               />
             </div>
