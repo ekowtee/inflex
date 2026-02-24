@@ -115,14 +115,14 @@ export default function AboutPage() {
               <div className="grid grid-cols-2 gap-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/assets/about/exp1.png"
-                  alt="Team collaborating on technology strategy"
+                  src="/assets/about/Strategy.png"
+                  alt="Strategic technology planning in modern conference room"
                   className="w-full h-[200px] md:h-[280px] object-cover rounded-lg shadow-lg"
                 />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/assets/mid/mid2.png"
-                  alt="Strategic IT planning session"
+                  src="/assets/about/Implementation.png"
+                  alt="IT professional in enterprise data centre"
                   className="w-full h-[200px] md:h-[280px] object-cover rounded-lg shadow-lg mt-8"
                 />
               </div>

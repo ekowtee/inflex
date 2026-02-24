@@ -42,7 +42,7 @@ export default function NetworkInfrastructurePage() {
       <div className="relative w-full h-[500px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/assets/solutions/sol5.png"
+          src="/assets/solutions/sol5.jpeg"
           alt="Network Infrastructure"
           className="w-full h-full object-cover"
           loading="eager"
