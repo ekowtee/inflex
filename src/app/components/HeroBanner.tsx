@@ -45,7 +45,7 @@ export default function HeroBanner() {
                   : "translate-y-[30px] opacity-0"
               } text-2xl md:text-[32px] lg:text-4xl font-bold text-white leading-[1.2] mb-4`}
             >
-              AI-Powered IT That Never Sleeps
+              Intelligent Infrastructure That Never Sleeps
             </h1>
 
             <p

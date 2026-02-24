@@ -206,7 +206,7 @@ export default function AboutPage() {
               } text-[14px] lg:text-[16px] leading-[22px] lg:leading-[25px]`}
             >
               Every engagement is a turning point. We help enterprises move
-              from reactive IT spending to AI-ready, data-driven technology
+              from reactive IT spending to strategic technology
               investment&mdash;and the results speak for themselves.
             </p>
             <Link
