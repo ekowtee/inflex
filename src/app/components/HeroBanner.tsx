@@ -45,7 +45,7 @@ export default function HeroBanner() {
                   : "translate-y-[30px] opacity-0"
               } text-2xl md:text-[32px] lg:text-4xl font-bold text-white leading-[1.2] mb-4`}
             >
-              IT Infrastructure That Never Sleeps
+              AI-Powered IT That Never Sleeps
             </h1>
 
             <p
@@ -56,8 +56,9 @@ export default function HeroBanner() {
                   : "translate-y-[30px] opacity-0"
               } text-sm md:text-base text-white/90 leading-relaxed mb-6`}
             >
-              We design, deploy, and manage enterprise-grade networks, cloud,
-              and security&mdash;so downtime never costs you another dollar.
+              We design, deploy, and manage AI-driven networks, cloud,
+              and security&mdash;with intelligent automation that keeps you
+              ahead, not just online.
             </p>
 
             <div

@@ -44,7 +44,7 @@ export default function CallToAction() {
                 : "translate-y-[30px] opacity-0"
             } text-2xl md:text-4xl font-bold text-white mb-4`}
           >
-            Stop Patching. Start Performing.
+            Stop Patching. Start Performing. Go Intelligent.
           </h2>
 
           <p
@@ -55,8 +55,8 @@ export default function CallToAction() {
                 : "translate-y-[30px] opacity-0"
             } text-white/90 text-lg mb-8`}
           >
-            Book a 30-minute strategy session with our Solutions
-            Architect. No pitch&mdash;just answers.
+            Book a 30-minute AI readiness session with our Solutions
+            Architect. No pitch&mdash;just a clear path to intelligent operations.
           </p>
 
           <div

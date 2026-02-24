@@ -97,11 +97,12 @@ export default function AboutPage() {
               </h1>
               <p className="text-[14px] md:text-[16px] leading-[22px] md:leading-[25px] text-[#41444B]">
                 At Inflexions I.T. Services, we don&apos;t just provide
-                technology&mdash;we architect integrated solutions that drive
-                your specific business outcomes. Whether enhancing operational
-                efficiency, strengthening security, or enabling innovation and
-                market expansion, we&apos;re your trusted guide through the
-                complex IT landscape.
+                technology&mdash;we architect AI-integrated solutions that drive
+                your specific business outcomes. Whether deploying machine
+                learning for predictive operations, strengthening security with
+                AI-driven threat detection, or enabling innovation through
+                intelligent automation, we&apos;re your trusted guide through
+                the complex IT landscape.
               </p>
               <p className="text-[14px] md:text-[16px] leading-[22px] md:leading-[25px] text-[#41444B]">
                 Our privately-owned structure ensures agility, accountability,
@@ -179,9 +180,9 @@ export default function AboutPage() {
               } text-[14px] lg:text-[16px] leading-[22px] lg:leading-[25px]`}
             >
               Today, we are the technology partner enterprises trust to
-              navigate transformation. We deliver innovative, cost-effective IT
-              solutions that create distinct competitive advantages&mdash;not
-              incremental improvements.
+              navigate the AI era. We embed machine learning, AIOps, and
+              intelligent automation into every solution we deliver&mdash;creating
+              distinct competitive advantages, not incremental improvements.
             </p>
             <p
               ref={aboutP2Ref as React.RefObject<HTMLParagraphElement>}
@@ -205,7 +206,7 @@ export default function AboutPage() {
               } text-[14px] lg:text-[16px] leading-[22px] lg:leading-[25px]`}
             >
               Every engagement is a turning point. We help enterprises move
-              from reactive IT spending to strategic technology
+              from reactive IT spending to AI-ready, data-driven technology
               investment&mdash;and the results speak for themselves.
             </p>
             <Link

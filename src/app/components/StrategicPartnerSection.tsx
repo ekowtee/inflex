@@ -54,9 +54,9 @@ export default function StrategicPartnerSection() {
               } text-[18px] w-[300px] leading-[30px]`}
             >
               Legacy infrastructure drains budget and blocks innovation.
-              Inflexions replaces complexity with clarity&mdash;robust networks,
-              secure cloud, and intelligent data platforms built to scale with
-              your ambition. No vendor lock-in. No surprise costs.
+              Inflexions replaces complexity with clarity&mdash;AI-driven networks,
+              secure cloud, and machine learning-powered data platforms built
+              to scale with your ambition. No vendor lock-in. No surprise costs.
             </span>
           </div>
 
