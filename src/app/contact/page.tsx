@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { Mail, Phone, Clock } from "lucide-react";
 import Partners from "../components/Partners";
 import Faq from "../components/Faq";
+import JsonLd from "../components/JsonLd";
 
 export default function ContactPage() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -30,6 +31,100 @@ export default function ContactPage() {
 
   return (
     <div>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: "Inflexions I.T. Services",
+          url: "https://inflexions.tech",
+          logo: "https://inflexions.tech/assets/logo.png",
+          email: "info@inflexions.tech",
+          telephone: "+233208889270",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Accra",
+            addressCountry: "GH",
+          },
+          openingHoursSpecification: {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+            ],
+            opens: "09:00",
+            closes: "18:00",
+          },
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "What is your typical engagement timeline?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Most projects begin with a 2-week discovery phase. Implementation timelines range from 4–12 weeks depending on scope.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Do you hold industry certifications?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes. Our team holds certifications across Cisco, Microsoft, AWS, and CompTIA.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "How do you handle data security and compliance?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Security is embedded in every solution. We follow industry frameworks including ISO 27001 principles and conduct regular vulnerability assessments.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "What does your Managed Services SLA look like?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Our Managed Services include guaranteed response times, 24/7 monitoring, monthly performance reports, and a dedicated account manager.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Can you work alongside our existing IT team?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Absolutely. Many clients engage us as an extension of their internal team.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "What industries do you serve?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "We serve clients across telecommunications, financial services, manufacturing, logistics, government, and professional services.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "How do you ensure minimal disruption during migrations?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Every migration follows our proven 5-phase methodology: Assess, Plan, Test, Migrate, Validate.",
+              },
+            },
+          ],
+        }}
+      />
+
       {/* Hero */}
       <div className="relative w-full h-[300px] md:h-[500px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}

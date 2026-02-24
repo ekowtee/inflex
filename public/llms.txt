@@ -1,0 +1,25 @@
+# Inflexions I.T. Services
+> Enterprise IT Solutions & Integration — Accra, Ghana
+
+Inflexions I.T. Services Ltd provides enterprise IT integration, cloud services, cybersecurity, managed services, and data-centric solutions for businesses across Africa.
+
+## Services
+- Professional Services: IT assessments, AI strategy workshops, cloud migration planning, digital transformation consulting, solution architecture
+- Managed Services: AIOps-driven 24/7 monitoring, automated remediation, patch management, security oversight, dedicated account management
+- Support Services: Multi-tier support (L1, L2, L3), AI-powered ticketing, automated diagnostics, on-site and remote break/fix
+
+## Solutions
+- Network Infrastructure: SD-WAN, enterprise switching, wireless networking, network security, performance optimisation
+- Data Security: Endpoint protection, SIEM & SOC, identity and access management, data loss prevention, compliance and audit
+- Cloud Services: Cloud strategy, migration (lift & shift, re-platform, re-architect), hybrid and multi-cloud, FinOps, cloud-native development
+- Data-centric Solutions: Data architecture, business intelligence, predictive analytics, AI-driven process automation, real-time data pipelines
+
+## Technology Partners
+Cisco, Microsoft, Dell, HP, Fortinet, Sophos, Veeam, VMware, AWS, Google Cloud, Palo Alto Networks, Ubiquiti, Yealink, APC
+
+## Contact
+- Website: https://inflexions.tech
+- Email: info@inflexions.tech
+- Sales: sales@inflexions.tech
+- Phone: (0) 208 889 270 / (0) 205 179 937
+- Location: Accra, Ghana

@@ -28,11 +28,29 @@ const krub = Krub({
 });
 
 export const metadata: Metadata = {
-  title: "Inflexions I.T. Services - IT Integration & Solutions",
+  metadataBase: new URL("https://inflexions.tech"),
+  title: {
+    default: "Inflexions I.T. — Enterprise IT Solutions & Integration",
+    template: "%s | Inflexions I.T.",
+  },
   description:
-    "Comprehensive IT integration, cloud, and cybersecurity services by Inflexions I.T. Services Ltd. Driving efficiency, innovation, and growth.",
+    "Comprehensive IT integration, cloud, and cybersecurity services by Inflexions I.T. Services Ltd. Driving efficiency, innovation, and growth across Africa.",
   keywords:
-    "IT services, IT integration, cloud services, cybersecurity, managed services",
+    "IT services Ghana, IT integration, cloud services, cybersecurity, managed services, Accra, enterprise IT",
+  openGraph: {
+    type: "website",
+    locale: "en_GH",
+    siteName: "Inflexions I.T. Services",
+    images: [{ url: "/og-image.jpeg", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-image.jpeg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

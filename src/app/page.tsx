@@ -6,10 +6,39 @@ import InflexionsAdvantage from "./components/InflexionsAdvantage";
 import MainPartners from "./components/MainPartners";
 import TestimonialSlider from "./components/TestimonialSlider";
 import CallToAction from "./components/CallToAction";
+import JsonLd from "./components/JsonLd";
 
 export default function Home() {
   return (
     <div className="w-full">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Inflexions I.T. Services",
+          url: "https://inflexions.tech",
+          logo: "https://inflexions.tech/assets/logo.png",
+          description:
+            "Enterprise IT integration, cloud services, cybersecurity, and managed services provider based in Accra, Ghana.",
+          email: "info@inflexions.tech",
+          telephone: "+233208889270",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Accra",
+            addressCountry: "GH",
+          },
+          sameAs: [],
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Inflexions I.T. Services",
+          url: "https://inflexions.tech",
+        }}
+      />
+
       {/* Hero Section */}
       <HeroBanner />
 
