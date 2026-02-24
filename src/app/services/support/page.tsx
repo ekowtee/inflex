@@ -11,7 +11,7 @@ export default function SupportServicesPage() {
       <div className="relative w-full h-[500px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/assets/services/service4.jpg"
+          src="/assets/services/Services4.jpeg"
           alt="Support Services"
           className="w-full h-full object-cover"
           loading="eager"
@@ -90,7 +90,7 @@ export default function SupportServicesPage() {
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/assets/services/service3.jpg"
+                src="/assets/services/Services3.jpeg"
                 alt="Technical support operations"
                 className="w-full h-[280px] lg:h-[320px] object-cover rounded-lg shadow-lg"
               />

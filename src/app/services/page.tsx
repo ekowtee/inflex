@@ -46,7 +46,7 @@ export default function ServicesPage() {
       {/* Hero */}
       <div className="relative w-full h-[500px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/services/servicebg.png" alt="Services" className="w-full h-full object-cover" loading="lazy" />
+        <img src="/assets/services/Servicesbg.jpeg" alt="Services" className="w-full h-full object-cover" loading="eager" />
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,7 +64,7 @@ export default function ServicesPage() {
         <div className="pt-8">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/assets/services/service1.jpg"
+            src="/assets/services/Services1.jpeg"
             alt="Service banner"
             className="w-full h-[200px] sm:h-[300px] md:h-[450px] object-cover border border-[#D0D0D0] shadow-lg"
           />
@@ -139,7 +139,7 @@ export default function ServicesPage() {
           </div>
           <div className="w-full md:w-1/2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/services/service2.jpg" alt="Professional Services" className="w-full h-auto lg:h-[559px] object-cover shadow-lg" />
+            <img src="/assets/services/Services2.jpeg" alt="Professional Services" className="w-full h-auto lg:h-[559px] object-cover shadow-lg" />
           </div>
         </div>
       </section>
@@ -149,7 +149,7 @@ export default function ServicesPage() {
         <div className="flex flex-col md:flex-row items-center gap-8">
           <div className="w-full md:w-1/2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/services/service3.jpg" alt="Managed Services" className="w-full h-auto lg:h-[559px] object-cover shadow-lg" />
+            <img src="/assets/services/Services3.jpeg" alt="Managed Services" className="w-full h-auto lg:h-[559px] object-cover shadow-lg" />
           </div>
           <div className="flex flex-col lg:flex-row md:flex-row items-start lg:pl-8 pl-0 md:pl-0 md:w-1/2">
             <div className="flex flex-col items-start flex-none mb-6 md:mb-0 md:mr-6">
@@ -215,7 +215,7 @@ export default function ServicesPage() {
           </div>
           <div className="w-full md:w-1/2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/services/service4.jpg" alt="Support Services" className="w-full h-auto lg:h-[559px] object-cover shadow-lg" />
+            <img src="/assets/services/Services4.jpeg" alt="Support Services" className="w-full h-auto lg:h-[559px] object-cover shadow-lg" />
           </div>
         </div>
       </section>
@@ -225,7 +225,7 @@ export default function ServicesPage() {
         <div className="flex flex-col md:flex-row items-center gap-8">
           <div className="w-full md:w-1/2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/services/service1.jpg" alt="Digital Transformation Advisory" className="w-full h-auto lg:h-[559px] object-cover shadow-lg" />
+            <img src="/assets/services/Services1.jpeg" alt="Digital Transformation Advisory" className="w-full h-auto lg:h-[559px] object-cover shadow-lg" />
           </div>
           <div className="flex flex-col lg:flex-row md:flex-row items-start lg:pl-8 pl-0 md:pl-0 md:w-1/2">
             <div className="flex flex-col items-start flex-none mb-6 md:mb-0 md:mr-6">

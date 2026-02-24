@@ -11,7 +11,7 @@ export default function ProfessionalServicesPage() {
       <div className="relative w-full h-[500px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/assets/services/service2.jpg"
+          src="/assets/services/Services2.jpeg"
           alt="Professional Services"
           className="w-full h-full object-cover"
           loading="eager"
@@ -90,7 +90,7 @@ export default function ProfessionalServicesPage() {
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/assets/services/service1.jpg"
+                src="/assets/services/Services1.jpeg"
                 alt="Strategic consulting and technology planning"
                 className="w-full h-[280px] lg:h-[320px] object-cover rounded-lg shadow-lg"
               />
