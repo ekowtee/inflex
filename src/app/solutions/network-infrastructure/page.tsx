@@ -66,7 +66,7 @@ export default function NetworkInfrastructurePage() {
       {/* Overview */}
       <section className="py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-[#1B3764] mb-6">
                 Building Your High-Performance Digital Backbone
@@ -98,7 +98,7 @@ export default function NetworkInfrastructurePage() {
               <img
                 src="/assets/solutions/sol2.png"
                 alt="Network infrastructure overview"
-                className="w-full h-[400px] object-cover rounded-lg"
+                className="w-full h-full object-cover rounded-lg"
                 loading="lazy"
               />
             </div>
