@@ -44,7 +44,7 @@ export default function CallToAction() {
                 : "translate-y-[30px] opacity-0"
             } text-2xl md:text-4xl font-bold text-white mb-4`}
           >
-            Stop Patching. Start Performing. Go Intelligent.
+            Stop Patching. Start Performing.
           </h2>
 
           <p
