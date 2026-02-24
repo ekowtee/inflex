@@ -1,7 +1,7 @@
 # Inflexions I.T. Services
 > Enterprise IT Solutions & Integration — Accra, Ghana
 
-Inflexions I.T. Services Ltd provides enterprise IT integration, cloud services, cybersecurity, managed services, and data-centric solutions for businesses across Africa.
+Inflexions I.T. Services Ltd is a privately-owned enterprise IT integration company founded in 2012 in Accra, Ghana. We design, deploy, and manage intelligent IT infrastructure — combining network engineering, cloud architecture, cybersecurity, and data-centric solutions with AI-driven automation to deliver measurable business outcomes.
 
 ## Services
 - Professional Services: IT assessments, AI strategy workshops, cloud migration planning, digital transformation consulting, solution architecture
@@ -17,9 +17,29 @@ Inflexions I.T. Services Ltd provides enterprise IT integration, cloud services,
 ## Technology Partners
 Cisco, Microsoft, Dell, HP, Fortinet, Sophos, Veeam, VMware, AWS, Google Cloud, Palo Alto Networks, Ubiquiti, Yealink, APC
 
+## Frontier AI Lab Partners
+Google, Anthropic, OpenAI, xAI
+
+## Pages
+- Home: https://inflexions.tech
+- About: https://inflexions.tech/about
+- Solutions: https://inflexions.tech/solutions
+- Network Infrastructure: https://inflexions.tech/solutions/network-infrastructure
+- Data Security: https://inflexions.tech/solutions/data-security
+- Cloud Services: https://inflexions.tech/solutions/cloud-services
+- Data-centric Solutions: https://inflexions.tech/solutions/data-centric-solutions
+- Services: https://inflexions.tech/services
+- Professional Services: https://inflexions.tech/services/professional
+- Managed Services: https://inflexions.tech/services/managed
+- Support Services: https://inflexions.tech/services/support
+- Case Studies: https://inflexions.tech/case-study
+- Careers: https://inflexions.tech/careers
+- Contact: https://inflexions.tech/contact
+- Resources: https://inflexions.tech/resources
+
 ## Contact
 - Website: https://inflexions.tech
 - Email: info@inflexions.tech
 - Sales: sales@inflexions.tech
-- Phone: (0) 208 889 270 / (0) 205 179 937
-- Location: Accra, Ghana
+- Phone: +233 208 889 270 / +233 205 179 937
+- Address: #2 Dei Close, East Legon, Accra, Ghana
