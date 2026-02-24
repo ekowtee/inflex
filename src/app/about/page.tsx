@@ -41,19 +41,25 @@ export default function AboutPage() {
           loading="lazy"
         />
         <div className="absolute inset-0 bg-black/50" />
+        {/* Hero text — standard positioning */}
+        <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="md:w-2/3 text-white space-y-4">
+              <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
+                80+ Years of Collective IT Mastery
+              </h1>
+              <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-2xl">
+                Precision engineering for the enterprises that can&apos;t
+                afford to guess.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/* Vision & Mission card — bottom right */}
         <div className="absolute inset-0 flex items-end pb-6 md:pb-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="flex flex-col md:flex-row justify-between items-start gap-8">
-              <div className="md:w-1/2 text-white space-y-4">
-                <h2 className="text-3xl lg:text-4xl font-bold">
-                  80+ Years of Collective IT Mastery
-                </h2>
-                <p className="text-lg lg:text-xl font-light opacity-90">
-                  Precision engineering for the enterprises that can&apos;t
-                  afford to guess.
-                </p>
-              </div>
-              <div className="w-full md:w-[326px] bg-[#BD2E25] py-12 px-8 text-white space-y-6 rounded-[10px]">
+            <div className="flex justify-end">
+              <div className="hidden md:block w-[326px] bg-[#BD2E25] py-12 px-8 text-white space-y-6 rounded-[10px]">
                 <h3 className="text-2xl font-semibold">
                   Vision &amp; Mission
                 </h3>
@@ -109,14 +115,14 @@ export default function AboutPage() {
               <div className="grid grid-cols-2 gap-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/assets/about/about1.png"
-                  alt="Technology innovation and collaboration"
+                  src="/assets/about/exp1.png"
+                  alt="Team collaborating on technology strategy"
                   className="w-full h-[200px] md:h-[280px] object-cover rounded-lg shadow-lg"
                 />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/assets/about/about2.png"
-                  alt="Modern IT infrastructure solutions"
+                  src="/assets/mid/mid2.png"
+                  alt="Strategic IT planning session"
                   className="w-full h-[200px] md:h-[280px] object-cover rounded-lg shadow-lg mt-8"
                 />
               </div>

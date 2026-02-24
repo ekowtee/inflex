@@ -18,33 +18,40 @@ const partners = [
   { src: "/assets/partners/amazon.svg", alt: "Amazon" },
   { src: "/assets/partners/digitalocean.svg", alt: "DigitalOcean" },
   { src: "/assets/partners/redhat.svg", alt: "Red Hat" },
+  { src: "/assets/partners/anthropic.svg", alt: "Anthropic" },
+  { src: "/assets/partners/avaya.svg", alt: "Avaya" },
+  { src: "/assets/partners/hikvision.svg", alt: "Hikvision" },
 ];
 
+const PAGE_SIZE = 9;
+const totalPages = Math.ceil(partners.length / PAGE_SIZE);
+
 export default function MainPartners() {
-  const refs = useRef<(HTMLDivElement | null)[]>([]);
-  const [inView, setInView] = useState(partners.map(() => false));
+  const [activePage, setActivePage] = useState(0);
+  const [fading, setFading] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const goToPage = (page: number) => {
+    setFading(true);
+    setTimeout(() => {
+      setActivePage(page);
+      setFading(false);
+    }, 300);
+  };
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const idx = refs.current.indexOf(entry.target as HTMLDivElement);
-          if (idx !== -1) {
-            setInView((prev) => {
-              const next = [...prev];
-              next[idx] = entry.isIntersecting;
-              return next;
-            });
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    refs.current.forEach((el) => el && observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+    timerRef.current = setInterval(() => {
+      goToPage((activePage + 1) % totalPages);
+    }, 5000);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [activePage]);
 
-  const base = "transform transition-all duration-[600ms] ease-out";
+  const currentBatch = partners.slice(
+    activePage * PAGE_SIZE,
+    activePage * PAGE_SIZE + PAGE_SIZE
+  );
 
   return (
     <section>
@@ -91,17 +98,16 @@ export default function MainPartners() {
               <span className="block text-black mt-2 font-normal text-[20px] leading-normal">
                 Our Technology Partners
               </span>
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                {partners.map((logo, i) => (
+              <div
+                className={`grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 transition-opacity duration-300 ${
+                  fading ? "opacity-0" : "opacity-100"
+                }`}
+              >
+                {currentBatch.map((logo, i) => (
                   <div
                     key={logo.alt}
-                    ref={(el) => { refs.current[i] = el; }}
-                    className={`${base} relative group bg-white h-[144px] flex items-center justify-center rounded-[10px] shadow-md cursor-pointer ${
-                      inView[i]
-                        ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-4"
-                    }`}
-                    style={{ transitionDelay: `${i * 150}ms` }}
+                    className="relative group bg-white h-[144px] flex items-center justify-center rounded-[10px] shadow-md cursor-pointer transition-all duration-500"
+                    style={{ animationDelay: `${i * 60}ms` }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -114,6 +120,21 @@ export default function MainPartners() {
                       {logo.alt}
                     </span>
                   </div>
+                ))}
+              </div>
+              {/* Page indicators */}
+              <div className="flex mt-4 space-x-2 justify-center">
+                {Array.from({ length: totalPages }).map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => goToPage(idx)}
+                    className={`rounded-full transition-all duration-300 ${
+                      activePage === idx
+                        ? "bg-[#BD2E25] w-5 h-5 relative -top-0.5"
+                        : "bg-[#F9C4C1] w-3 h-3"
+                    }`}
+                    aria-label={`Show partners page ${idx + 1}`}
+                  />
                 ))}
               </div>
             </div>

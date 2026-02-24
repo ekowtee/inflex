@@ -36,11 +36,14 @@ export default function ContactPage() {
         <img src="/assets/case/casebg.png" alt="Contact" className="w-full h-full object-cover" loading="lazy" />
         <div className="absolute inset-0 bg-black/30" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="w-full text-white space-y-4">
-              <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-snug md:leading-snug">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="md:w-2/3 text-white space-y-4">
+              <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
                 Let&apos;s Build Something That Lasts
-              </h2>
+              </h1>
+              <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-2xl">
+                Get in touch and let&apos;s start the conversation.
+              </p>
             </div>
           </div>
         </div>
