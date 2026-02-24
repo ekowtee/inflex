@@ -10,7 +10,7 @@ export default function CareersPage() {
       {/* Hero */}
       <div className="relative w-full h-[300px] md:h-[500px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/career/careerbg.png" alt="Careers" className="w-full h-full object-cover" loading="lazy" />
+        <img src="/assets/career/careersbg.jpeg" alt="Careers" className="w-full h-full object-cover" loading="eager" />
         <div className="absolute inset-0 bg-black/30" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -76,7 +76,7 @@ export default function CareersPage() {
       {/* Join Us */}
       <section className="relative w-full h-[300px] md:h-[400px] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/about/vidmin.png" alt="Join Us Hero" className="w-full h-full object-cover" loading="lazy" />
+        <img src="/assets/vidmiin.jpeg" alt="Join Us Hero" className="w-full h-full object-cover" loading="lazy" />
         <div className="absolute inset-0 bg-[#1B3764]/80" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center px-4 max-w-2xl">

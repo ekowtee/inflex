@@ -14,7 +14,7 @@ export default function CaseStudyPage() {
       {/* Hero */}
       <div className="relative w-full h-[300px] md:h-[500px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/case/casebg.png" alt="Case Studies" className="w-full h-full object-cover" loading="lazy" />
+        <img src="/assets/case/casebg.jpeg" alt="Case Studies" className="w-full h-full object-cover" loading="eager" />
         <div className="absolute inset-0 bg-black/30" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
