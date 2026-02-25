@@ -31,7 +31,7 @@ export default function CallToAction() {
         src="/assets/hero/ban1.png"
         alt=""
         loading="lazy"
-        className="w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover"
       />
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center px-4 max-w-2xl">
