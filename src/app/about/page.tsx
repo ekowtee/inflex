@@ -35,7 +35,7 @@ export default function AboutPage() {
       <div className="relative w-full h-[500px] md:h-[550px] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/assets/about/Photo.png"
+          src="/assets/about/aboutbg.jpeg"
           alt="About Inflexions IT"
           className="w-full h-full object-cover"
           loading="lazy"
