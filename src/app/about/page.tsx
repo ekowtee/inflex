@@ -116,7 +116,7 @@ export default function AboutPage() {
               <div className="grid grid-cols-2 gap-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/assets/about/Strategy.png"
+                  src="/assets/about/strategy.jpeg"
                   alt="Strategic technology planning in modern conference room"
                   className="w-full h-[200px] md:h-[280px] object-cover rounded-lg shadow-lg"
                 />
