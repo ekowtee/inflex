@@ -33,7 +33,6 @@ export default function CallToAction() {
         loading="lazy"
         className="w-full h-full object-cover"
       />
-      <div className="absolute inset-0 bg-[#1B3764]/80" />
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center px-4 max-w-2xl">
           <h2
