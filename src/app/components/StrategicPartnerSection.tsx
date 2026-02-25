@@ -74,7 +74,7 @@ export default function StrategicPartnerSection() {
           </div>
         </div>
 
-        <div className="relative flex flex-1 items-center justify-center mt-2 md:mt-0 lg:mt-0">
+        <div className="relative flex flex-col flex-1 items-center justify-center mt-2 md:mt-0 lg:mt-0">
           <div className="relative">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -149,6 +149,16 @@ export default function StrategicPartnerSection() {
                 Security &amp; Support
               </span>
             </div>
+          </div>
+
+          {/* Mobile pills — visible below image on small screens */}
+          <div className="flex flex-wrap gap-2 mt-4 md:hidden justify-center">
+            {["Data Intelligence", "Network Infrastructure", "Cloud Services", "Security & Support"].map((label) => (
+              <div key={label} className="flex gap-2 items-center px-4 py-2 border border-[#BD2E25] rounded-full bg-white">
+                <CheckCircle className="text-[#BD2E25] w-4 h-4" />
+                <span className="text-[14px] text-[#1B3764]">{label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

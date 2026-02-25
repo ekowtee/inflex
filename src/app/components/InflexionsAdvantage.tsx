@@ -15,7 +15,7 @@ const cards = [
     src: "/assets/mid/mid3.png",
     title: "Build a Rock-Solid Foundation:",
     text: "Uptime isn\u2019t aspirational\u2014it\u2019s guaranteed. We design resilient, redundant infrastructure that keeps critical operations running 24/7/365. From multi-path networking to failover-ready cloud environments, every layer is stress-tested so your teams stay productive and your customers stay connected.",
-    rowSpan: "md:row-span-2 lg:h-[530px] md:h-[540px] h-[214px]",
+    rowSpan: "md:row-span-2 lg:h-[530px] md:h-[540px] h-[260px]",
   },
   {
     src: "/assets/mid/mid4.png",

@@ -25,7 +25,7 @@ export default function HeroBanner() {
   const [heroBtnRef, heroBtnIn] = useInView();
 
   return (
-    <div className="relative w-full h-[300px] md:h-[500px] overflow-hidden">
+    <div className="relative w-full h-[400px] md:h-[500px] overflow-hidden">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/assets/hero/herobanner2.png"
@@ -34,9 +34,9 @@ export default function HeroBanner() {
       />
       <div className="absolute inset-0 bg-black/30" />
 
-      <div className="absolute inset-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-          <div className="absolute bottom-10 md:bottom-28 lg:bottom-24 w-full md:w-[800px] flex flex-col justify-center items-start">
+      <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="md:w-[800px] flex flex-col justify-center items-start">
             <h1
               ref={titleRef as React.RefObject<HTMLHeadingElement>}
               className={`${base} ${
