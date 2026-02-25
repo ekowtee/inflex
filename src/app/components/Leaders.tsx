@@ -10,7 +10,7 @@ const leaders = [
   {
     name: "Dr.Jade Appiah-Lartey",
     role: "Director \u2013 Marketing",
-    image: "/assets/about/jade.jpg",
+    image: "/assets/about/jade.jpeg",
     bio: "Dr. Jade Appiah-Lartey is a results-driven executive spearheading Inflexions\u2019 strategic growth initiatives, brand development, and digital transformation efforts. Leading the company\u2019s revitalization and strategic relaunch, she brings over 15 years of experience from the technology, telecommunications, and digital marketing sectors. Dr. Appiah-Lartey excels at identifying high-value market opportunities, crafting effective go-to-market strategies, and building strategic partnerships. Her background includes roles as Brand Strategy Consultant at Interactive Digital, Customer Experience Design Manager at Millicom, and Product Manager, providing her with multifaceted expertise to design customer-centric technology solutions and maximize revenue potential for Inflexions and its clients.",
   },
   {
