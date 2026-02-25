@@ -68,7 +68,7 @@ export default function CallToAction() {
           >
             <Link
               href="/contact"
-              className="inline-block bg-[#BD2E25] hover:bg-[#A02923] text-white font-semibold px-6 sm:px-8 py-3 rounded-[6px] transition-colors duration-300"
+              className="inline-block bg-white hover:bg-gray-100 text-[#BD2E25] font-semibold px-6 sm:px-8 py-3 rounded-[6px] transition-colors duration-300"
             >
               Book Your Session
             </Link>
