@@ -4,7 +4,7 @@ const leaders = [
   {
     name: "Ekow M. Thompson",
     role: "Director, Business Development",
-    image: "/assets/about/ekowmain1.jpg",
+    image: "/assets/about/ekowmain1.jpeg",
     bio: "Ekow Thompson is a visionary business leader with over 18 years of executive experience in technology, media, and telecommunications across Africa. As Managing Director of Inflexions, he brings a proven track record of driving digital transformation and substantial growth. His strategic leadership was instrumental in transforming Interactive Digital into one of Ghana\u2019s most respected digital agencies (achieving 750% revenue growth) and co-founding Blu Telecommunications, Ghana\u2019s innovative 4G network. Ekow excels at aligning technological capabilities with business objectives, ensuring clients receive solutions that create lasting competitive advantage. He holds a Bachelor\u2019s degree in Electrical / Electronic Engineering and is dedicated to continuous learning in leadership and digital innovation.",
   },
   {
