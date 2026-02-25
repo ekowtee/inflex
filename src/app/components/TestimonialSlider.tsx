@@ -75,7 +75,7 @@ export default function TestimonialSlider() {
               <h3 className="text-[#BD2E25] font-semibold tracking-wide uppercase mb-2">
                 CLIENT RESULTS
               </h3>
-              <h2 className="text-[32px] font-semibold text-[#16213E] leading-snug">
+              <h2 className="text-[24px] sm:text-[28px] md:text-[32px] font-semibold text-[#16213E] leading-snug">
                 Measurable Impact, Every Engagement
               </h2>
             </div>

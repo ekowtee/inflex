@@ -58,7 +58,7 @@ export default function MainPartners() {
       <div className="flex flex-col md:flex-col lg:flex-row w-full">
         <div className="flex-1 flex flex-col justify-center pt-0 lg:pt-20 md:pt-0">
           <div className="max-w-[440px] mb-4 md:mb-0 lg:mb-0">
-            <h3 className="font-semibold text-[32px] leading-tight tracking-[1.04px] mb-4">
+            <h3 className="font-semibold text-[24px] sm:text-[28px] md:text-[32px] leading-tight tracking-[1.04px] mb-4">
               Proven Expertise,
               <br />
               Tangible Results
@@ -67,22 +67,22 @@ export default function MainPartners() {
               We don&apos;t just recommend technology&mdash;we stand behind it. Our certified engineers hold advanced accreditations across the platforms that power modern enterprise, ensuring every solution we deliver meets the highest standards of performance, security, and reliability.
             </span>
 
-            <div className="flex gap-8 mb-8">
+            <div className="flex gap-4 sm:gap-6 md:gap-8 mb-8">
               <div>
-                <span className="block text-[#BD2E25] text-[28px] font-bold leading-tight">50+</span>
-                <span className="block text-[#41444B] text-[14px] mt-1">Enterprise Clients</span>
+                <span className="block text-[#BD2E25] text-[22px] sm:text-[28px] font-bold leading-tight">50+</span>
+                <span className="block text-[#41444B] text-[12px] sm:text-[14px] mt-1">Enterprise Clients</span>
               </div>
               <div>
-                <span className="block text-[#BD2E25] text-[28px] font-bold leading-tight">80+</span>
-                <span className="block text-[#41444B] text-[14px] mt-1">Years Combined Experience</span>
+                <span className="block text-[#BD2E25] text-[22px] sm:text-[28px] font-bold leading-tight">80+</span>
+                <span className="block text-[#41444B] text-[12px] sm:text-[14px] mt-1">Years Combined Experience</span>
               </div>
               <div>
-                <span className="block text-[#BD2E25] text-[28px] font-bold leading-tight">99.9%</span>
-                <span className="block text-[#41444B] text-[14px] mt-1">Uptime Delivered</span>
+                <span className="block text-[#BD2E25] text-[22px] sm:text-[28px] font-bold leading-tight">99.9%</span>
+                <span className="block text-[#41444B] text-[12px] sm:text-[14px] mt-1">Uptime Delivered</span>
               </div>
             </div>
 
-            <div className="w-[285px] h-[50px] bg-[#BD2E25] rounded-[6px] flex items-center justify-center">
+            <div className="w-full max-w-[285px] h-[50px] bg-[#BD2E25] rounded-[6px] flex items-center justify-center">
               <Link href="/case-study" className="text-white font-semibold">
                 View our Case studies
               </Link>
@@ -106,7 +106,7 @@ export default function MainPartners() {
                 {currentBatch.map((logo, i) => (
                   <div
                     key={logo.alt}
-                    className="relative group bg-white h-[144px] flex items-center justify-center rounded-[10px] shadow-md cursor-pointer transition-all duration-500"
+                    className="relative group bg-white h-[100px] sm:h-[120px] lg:h-[144px] flex items-center justify-center rounded-[10px] shadow-md cursor-pointer transition-all duration-500"
                     style={{ animationDelay: `${i * 60}ms` }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}

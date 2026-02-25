@@ -17,7 +17,7 @@ export default function Partners() {
   return (
     <div className="overflow-hidden w-full py-6 md:py-10 px-4">
       <div className="flex items-center justify-center mb-4">
-        <h1 className="text-[32px] font-semibold leading-[38px]">Our Clients</h1>
+        <h1 className="text-[24px] sm:text-[28px] md:text-[32px] font-semibold leading-[30px] sm:leading-[38px]">Our Clients</h1>
       </div>
       <div className="py-5">
         <div className="partners-wrapper">

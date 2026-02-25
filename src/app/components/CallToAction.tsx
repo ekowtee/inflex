@@ -25,7 +25,7 @@ export default function CallToAction() {
   const [dheroBtnRef, dheroBtnIn] = useInView();
 
   return (
-    <section className="relative w-full h-[300px] md:h-[400px] overflow-hidden">
+    <section className="relative w-full min-h-[300px] md:h-[400px] overflow-hidden">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/assets/hero/ban1.png"
@@ -53,7 +53,7 @@ export default function CallToAction() {
               dparaIn
                 ? "translate-y-0 opacity-100 delay-[100ms]"
                 : "translate-y-[30px] opacity-0"
-            } text-white/90 text-lg mb-8`}
+            } text-white/90 text-base sm:text-lg mb-6 sm:mb-8`}
           >
             Book a 30-minute AI readiness session with our Solutions
             Architect. No pitch&mdash;just a clear path to intelligent operations.
@@ -69,7 +69,7 @@ export default function CallToAction() {
           >
             <Link
               href="/contact"
-              className="inline-block bg-[#BD2E25] hover:bg-[#A02923] text-white font-semibold px-8 py-3 rounded-[6px] transition-colors duration-300"
+              className="inline-block bg-[#BD2E25] hover:bg-[#A02923] text-white font-semibold px-6 sm:px-8 py-3 rounded-[6px] transition-colors duration-300"
             >
               Book Your Session
             </Link>

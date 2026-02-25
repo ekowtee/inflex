@@ -51,7 +51,7 @@ export default function StrategicPartnerSection() {
                 secParaIn
                   ? "translate-y-0 opacity-100 delay-[200ms]"
                   : "translate-y-[30px] opacity-0"
-              } text-[18px] w-[300px] leading-[30px]`}
+              } text-[18px] w-full lg:w-[300px] leading-[30px]`}
             >
               Legacy infrastructure drains budget and blocks innovation.
               Inflexions replaces complexity with clarity&mdash;AI-driven networks,
@@ -80,7 +80,7 @@ export default function StrategicPartnerSection() {
             <img
               src="/assets/bgsvg/Background.png"
               alt=""
-              className="w-[419px] h-full object-contain"
+              className="w-full max-w-[419px] h-full object-contain"
               loading="lazy"
             />
             <div className="absolute top-[calc(12.5%-10px)] bottom-[calc(12.5%+15px+44px)] left-[calc(0.5%-1px)] right-[calc(0.5%-2px)] overflow-hidden">
@@ -100,7 +100,7 @@ export default function StrategicPartnerSection() {
                 item1In
                   ? "translate-x-0 opacity-100 delay-[400ms]"
                   : "translate-x-[50px] opacity-0"
-              } absolute top-[107px] left-[-60px] flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white`}
+              } absolute top-[107px] left-[-60px] hidden md:flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white`}
             >
               <CheckCircle className="text-[#BD2E25]" />
               <span className="text-[16px] leading-[30px] text-[#1B3764]">
@@ -114,7 +114,7 @@ export default function StrategicPartnerSection() {
                 item2In
                   ? "translate-x-0 opacity-100 delay-[500ms]"
                   : "translate-x-[50px] opacity-0"
-              } absolute top-[162px] md:top-[182px] lg:top-[182px] left-[-90px] flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white`}
+              } absolute top-[162px] md:top-[182px] lg:top-[182px] left-[-90px] hidden md:flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white`}
             >
               <CheckCircle className="text-[#BD2E25]" />
               <span className="text-[16px] leading-[30px] text-[#1B3764]">
@@ -128,7 +128,7 @@ export default function StrategicPartnerSection() {
                 item3In
                   ? "translate-x-0 opacity-100 delay-[600ms]"
                   : "translate-x-[50px] opacity-0"
-              } absolute top-[222px] md:top-[257px] lg:top-[257px] left-[-60px] flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white`}
+              } absolute top-[222px] md:top-[257px] lg:top-[257px] left-[-60px] hidden md:flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white`}
             >
               <CheckCircle className="text-[#BD2E25]" />
               <span className="text-[16px] leading-[30px] text-[#1B3764]">
@@ -142,7 +142,7 @@ export default function StrategicPartnerSection() {
                 item4In
                   ? "translate-x-0 opacity-100 delay-[700ms]"
                   : "translate-x-[50px] opacity-0"
-              } absolute top-[282px] md:top-[332px] lg:top-[332px] left-[-90px] flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white`}
+              } absolute top-[282px] md:top-[332px] lg:top-[332px] left-[-90px] hidden md:flex gap-2 items-center justify-center w-[262px] py-[4px] border border-[#BD2E25] rounded-[49px] bg-white`}
             >
               <CheckCircle className="text-[#BD2E25]" />
               <span className="text-[16px] leading-[30px] text-[#1B3764]">

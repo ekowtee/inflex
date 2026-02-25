@@ -59,11 +59,11 @@ function Box({
       {isTop ? (
         <>
           <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-[#52110D]/20 to-[#52110D]/90" />
-          <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
-            <span className="block text-white text-xl font-semibold">
+          <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 z-10">
+            <span className="block text-white text-base sm:text-xl font-semibold">
               {card.title}
             </span>
-            <span className="block text-white text-sm mt-2 leading-relaxed">
+            <span className="block text-white text-xs sm:text-sm mt-1 sm:mt-2 leading-relaxed">
               {card.subtext}
             </span>
           </div>
@@ -114,12 +114,12 @@ export default function SwapGrid() {
 
   return (
     <div className="w-full space-y-4">
-      <Box dataIdx={order[0]} isTop className="w-full h-[250px] rounded-lg" onEnter={() => scheduleSwap(0)} onLeave={cancelSwap} />
-      <div className="flex gap-4">
-        <Box dataIdx={order[1]} className="h-[130px] flex-[2] rounded-lg" onEnter={() => scheduleSwap(1)} onLeave={cancelSwap} />
-        <Box dataIdx={order[2]} className="h-[130px] flex-1 rounded-lg" onEnter={() => scheduleSwap(2)} onLeave={cancelSwap} />
+      <Box dataIdx={order[0]} isTop className="w-full h-[180px] sm:h-[220px] md:h-[250px] rounded-lg" onEnter={() => scheduleSwap(0)} onLeave={cancelSwap} />
+      <div className="flex gap-3 sm:gap-4">
+        <Box dataIdx={order[1]} className="h-[100px] sm:h-[120px] md:h-[130px] flex-[2] rounded-lg" onEnter={() => scheduleSwap(1)} onLeave={cancelSwap} />
+        <Box dataIdx={order[2]} className="h-[100px] sm:h-[120px] md:h-[130px] flex-1 rounded-lg" onEnter={() => scheduleSwap(2)} onLeave={cancelSwap} />
       </div>
-      <Box dataIdx={order[3]} className="w-full h-[200px] rounded-lg" onEnter={() => scheduleSwap(3)} onLeave={cancelSwap} />
+      <Box dataIdx={order[3]} className="w-full h-[150px] sm:h-[180px] md:h-[200px] rounded-lg" onEnter={() => scheduleSwap(3)} onLeave={cancelSwap} />
     </div>
   );
 }
