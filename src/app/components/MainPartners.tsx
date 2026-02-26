@@ -4,21 +4,23 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 
 const partners = [
+  // Slide 1 — mix of infra heavyweights + AI labs
   { src: "/assets/partners/microsoft.svg", alt: "Microsoft" },
   { src: "/assets/partners/cisco.svg", alt: "Cisco" },
+  { src: "/assets/partners/google.svg", alt: "Google" },
   { src: "/assets/partners/hp.svg", alt: "HP" },
   { src: "/assets/partners/dell.svg", alt: "Dell" },
-  { src: "/assets/partners/lenovo.svg", alt: "Lenovo" },
-  { src: "/assets/partners/huawei.svg", alt: "Huawei" },
+  { src: "/assets/partners/anthropic.svg", alt: "Anthropic" },
   { src: "/assets/partners/sophos.svg", alt: "Sophos" },
   { src: "/assets/partners/cloudflare.svg", alt: "Cloudflare" },
+  { src: "/assets/partners/amazon.svg", alt: "Amazon" },
+  // Slide 2
+  { src: "/assets/partners/lenovo.svg", alt: "Lenovo" },
+  { src: "/assets/partners/huawei.svg", alt: "Huawei" },
   { src: "/assets/partners/eset.svg", alt: "ESET" },
   { src: "/assets/partners/schneider.svg", alt: "APC / Schneider Electric" },
-  { src: "/assets/partners/google.svg", alt: "Google" },
-  { src: "/assets/partners/amazon.svg", alt: "Amazon" },
   { src: "/assets/partners/digitalocean.svg", alt: "DigitalOcean" },
   { src: "/assets/partners/redhat.svg", alt: "Red Hat" },
-  { src: "/assets/partners/anthropic.svg", alt: "Anthropic" },
   { src: "/assets/partners/avaya.svg", alt: "Avaya" },
   { src: "/assets/partners/hikvision.svg", alt: "Hikvision" },
 ];
