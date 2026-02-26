@@ -35,8 +35,8 @@ export default function IntelligentAutomation() {
     <section className="bg-[#F7F8FA] py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-10">
-          {/* Left — 2x2 image card grid */}
-          <div className="flex-1">
+          {/* Left — 2x2 image card grid (60%) */}
+          <div className="lg:w-[60%]">
             <div className="grid grid-cols-2 gap-3">
               {capabilities.map((item) => (
                 <div
@@ -66,8 +66,8 @@ export default function IntelligentAutomation() {
             </div>
           </div>
 
-          {/* Right — text, AI partner logos, CTA */}
-          <div className="flex-1 flex flex-col justify-center">
+          {/* Right — text, AI partner logos, CTA (40%) */}
+          <div className="lg:w-[40%] flex flex-col justify-center">
             <h2 className="text-2xl sm:text-3xl md:text-[32px] font-semibold text-[#171A20] leading-tight mb-4">
               Intelligence Built Into Every Layer
             </h2>
