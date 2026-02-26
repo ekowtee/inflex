@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   description:
     "Comprehensive IT integration, cloud, and cybersecurity services by Inflexions I.T. Services Ltd. Driving efficiency, innovation, and growth across Africa.",
   keywords:
-    "IT services Ghana, IT integration, cloud services, cybersecurity, managed services, Accra, enterprise IT",
+    "IT services Ghana, IT integration, cloud services, cybersecurity, managed services, Accra, enterprise IT, AI automation, predictive analytics, data-centric solutions, process automation",
   openGraph: {
     type: "website",
     locale: "en_GH",

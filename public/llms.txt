@@ -9,13 +9,19 @@ Inflexions I.T. Services Ltd is a privately-owned enterprise IT integration comp
 - Support Services: Multi-tier support (L1, L2, L3), AI-powered ticketing, automated diagnostics, on-site and remote break/fix
 
 ## Solutions
-- Network Infrastructure: SD-WAN, enterprise switching, wireless networking, network security, performance optimisation
-- Data Security: Endpoint protection, SIEM & SOC, identity and access management, data loss prevention, compliance and audit
+- Data-centric Solutions: Data architecture, business intelligence, predictive analytics, AI-driven process automation, real-time data pipelines, data warehousing, governance frameworks
 - Cloud Services: Cloud strategy, migration (lift & shift, re-platform, re-architect), hybrid and multi-cloud, FinOps, cloud-native development
-- Data-centric Solutions: Data architecture, business intelligence, predictive analytics, AI-driven process automation, real-time data pipelines
+- Data Security: Endpoint protection, SIEM & SOC, identity and access management, data loss prevention, compliance and audit
+- Network Infrastructure: SD-WAN, enterprise switching, wireless networking, network security, performance optimisation
+
+## AI & Intelligent Automation Capabilities
+- Predictive Analytics: Demand forecasting, anomaly detection, real-time operational dashboards
+- Process Automation: Workflow orchestration, intelligent document processing, robotic process automation (RPA)
+- Data Strategy & Architecture: Data warehousing, pipeline design, governance frameworks
+- AI Integration: Embedding machine-learning models into existing business systems, API-first, vendor-neutral deployment
 
 ## Technology Partners
-Cisco, Microsoft, Dell, HP, Fortinet, Sophos, Veeam, VMware, AWS, Google Cloud, Palo Alto Networks, Ubiquiti, Yealink, APC
+Microsoft, Cisco, Google, HP, Dell, Anthropic, Sophos, Cloudflare, Amazon, Lenovo, Huawei, ESET, APC / Schneider Electric, DigitalOcean, Red Hat, Avaya, Hikvision
 
 ## Frontier AI Lab Partners
 Google, Anthropic, OpenAI, xAI
