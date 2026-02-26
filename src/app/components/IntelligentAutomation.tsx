@@ -68,9 +68,6 @@ export default function IntelligentAutomation() {
 
           {/* Right — text, AI partner logos, CTA */}
           <div className="flex-1 flex flex-col justify-center">
-            <span className="inline-block w-fit border-l-4 border-[#BD2E25] bg-[#BD2E25]/10 px-3 py-1 text-sm font-medium text-[#BD2E25] mb-4">
-              FRONTIER AI
-            </span>
             <h2 className="text-2xl sm:text-3xl md:text-[32px] font-semibold text-[#171A20] leading-tight mb-4">
               Intelligence Built Into Every Layer
             </h2>
@@ -83,17 +80,17 @@ export default function IntelligentAutomation() {
             <p className="text-[#5C6280] text-sm font-medium mb-4">
               Powered by the world&apos;s leading AI labs
             </p>
-            <div className="grid grid-cols-2 gap-3 mb-8">
+            <div className="flex gap-3 mb-8">
               {aiPartners.map((logo) => (
                 <div
                   key={logo.alt}
-                  className="relative group bg-white h-[72px] sm:h-[80px] flex items-center justify-center rounded-[10px] shadow-md"
+                  className="relative group bg-white h-[56px] sm:h-[64px] flex-1 flex items-center justify-center rounded-[10px] shadow-md"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-[100px] h-[40px] object-contain"
+                    className="w-[60px] sm:w-[80px] h-[28px] sm:h-[36px] object-contain"
                     loading="lazy"
                   />
                   <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#BD2E25] text-white text-xs font-medium px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-[#BD2E25]">
