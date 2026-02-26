@@ -6,7 +6,7 @@ import { caseStudies } from "../data";
 import Banner from "../components/Banner";
 
 export default function CaseStudyPage() {
-  const topImages = ["/assets/solutions/sol2.png", "/assets/solutions/sol1.png", "/assets/solutions/sol1.png"];
+  const topImages = ["/assets/solutions/sol2.png", "/assets/solutions/sol1.jpeg", "/assets/solutions/sol1.jpeg"];
   const bottomImages = ["/assets/case/case3.png", "/assets/case/case3.png"];
 
   return (

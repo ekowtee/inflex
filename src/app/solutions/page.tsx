@@ -70,7 +70,7 @@ export default function SolutionsPage() {
             </div>
             <div className="rounded-lg overflow-hidden transform transition-transform duration-500 ease-out hover:scale-105">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/solutions/sol1.png" alt="Professional working" className="w-full h-full object-cover" />
+              <img src="/assets/solutions/sol1.jpeg" alt="Professional working" className="w-full h-full object-cover" />
             </div>
             <div className="col-span-2 rounded-lg overflow-hidden transform transition-transform duration-500 ease-out hover:scale-105">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -251,13 +251,13 @@ export default function SolutionsPage() {
       <section>
         <div className="relative w-full h-[1600px] md:h-[700px] lg:h-[750px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/solutions/sol4.png" alt="Solutions background" className="hidden md:flex w-full h-[504px] object-cover" loading="lazy" />
+          <img src="/assets/solutions/sol4.jpeg" alt="Solutions background" className="hidden md:flex w-full h-[504px] object-cover" loading="lazy" />
           <div className="absolute lg:bottom-10 md:bottom-10 left-0 right-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-4 md:gap-2 lg:gap-0 lg:flex-row md:flex-row flex-col items-center justify-between">
             {[
-              { img: "/assets/solutions/sol6.png", title: "Data-centric Solutions" },
-              { img: "/assets/solutions/sol5.png", title: "Network Infrastructure" },
-              { img: "/assets/solutions/sol7.png", title: "Cloud Services" },
-              { img: "/assets/solutions/sol8.png", title: "Data Security" },
+              { img: "/assets/solutions/sol6.jpeg", title: "Data-centric Solutions" },
+              { img: "/assets/solutions/sol5.jpeg", title: "Network Infrastructure" },
+              { img: "/assets/solutions/sol7.jpeg", title: "Cloud Services" },
+              { img: "/assets/solutions/sol8.jpeg", title: "Data Security" },
             ].map((item) => (
               <div key={item.title} className="relative shadow-md group">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
