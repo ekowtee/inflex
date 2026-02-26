@@ -1,29 +1,34 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Link from "next/link";
 
 const cards = [
   {
     title: "Network Infrastructure",
     photo: "/assets/hero/swap1.jpg",
+    href: "/solutions/network-infrastructure",
     subtext:
       "Secure, high-performance LAN, WAN, SD-WAN, and wireless solutions engineered for reliability at enterprise scale.",
   },
   {
     title: "Data Security",
     photo: "/assets/hero/swap2.webp",
+    href: "/solutions/data-security",
     subtext:
       "End-to-end threat protection, compliance frameworks, and 24/7 monitoring that safeguard your most critical assets.",
   },
   {
     title: "Cloud Services",
     photo: "/assets/hero/swap3.jpg",
+    href: "/solutions/cloud-services",
     subtext:
       "Strategic cloud migration, hybrid integration, and managed services across AWS, Azure, and Google Cloud.",
   },
   {
     title: "Data-centric Solutions",
     photo: "/assets/hero/swap4.jpg",
+    href: "/solutions/data-centric-solutions",
     subtext:
       "Advanced analytics, AI-driven insights, and data governance that turn raw information into strategic advantage.",
   },
@@ -45,8 +50,9 @@ function Box({
   const card = cards[dataIdx];
 
   return (
-    <div
-      className={`relative overflow-hidden group cursor-pointer ${className}`}
+    <Link
+      href={card.href}
+      className={`relative overflow-hidden group cursor-pointer block ${className}`}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
     >
@@ -76,7 +82,7 @@ function Box({
           </div>
         </>
       )}
-    </div>
+    </Link>
   );
 }
 
