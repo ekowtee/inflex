@@ -1,24 +1,23 @@
 import Link from "next/link";
-import { BarChart3, Workflow, Database, BrainCircuit } from "lucide-react";
 
 const capabilities = [
   {
-    icon: BarChart3,
+    src: "/assets/ai/ai1.jpeg",
     title: "Predictive Analytics",
     text: "Demand forecasting, anomaly detection, and real-time operational dashboards that turn historical data into forward-looking intelligence.",
   },
   {
-    icon: Workflow,
+    src: "/assets/ai/ai2.jpeg",
     title: "Process Automation",
     text: "Workflow orchestration, intelligent document processing, and robotic process automation that eliminate manual bottlenecks.",
   },
   {
-    icon: Database,
+    src: "/assets/ai/ai3.jpeg",
     title: "Data Strategy & Architecture",
     text: "Data warehousing, pipeline design, and governance frameworks that give your organisation a single source of truth.",
   },
   {
-    icon: BrainCircuit,
+    src: "/assets/ai/ai4.jpeg",
     title: "AI Integration",
     text: "Embedding machine-learning models into existing business systems\u2014API-first, vendor-neutral, and built to scale.",
   },
@@ -49,26 +48,32 @@ export default function IntelligentAutomation() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-          {capabilities.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={item.title}
-                className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow duration-300"
-              >
-                <div className="w-12 h-12 rounded-lg bg-[#BD2E25]/10 flex items-center justify-center mb-4">
-                  <Icon className="w-6 h-6 text-[#BD2E25]" />
-                </div>
-                <h3 className="text-lg font-semibold text-[#171A20] mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-[#41444B] leading-relaxed">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
+          {capabilities.map((item) => (
+            <div
+              key={item.title}
+              className="relative w-full h-[260px] rounded-lg overflow-hidden group transition-transform duration-500"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={item.src}
+                alt={item.title}
+                loading="lazy"
+                className="object-cover w-full h-full transform transition-transform duration-500 group-hover:scale-110"
+              />
+
+              {/* Gradient — always visible on mobile, hover on desktop */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
+
+              {/* Text overlay — always visible on mobile, hover on desktop */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-500">
+                <h3 className="text-xl font-semibold">{item.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed line-clamp-3 md:line-clamp-none">
                   {item.text}
                 </p>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
 
         <div className="mb-10">
