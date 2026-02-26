@@ -31,14 +31,14 @@ export default function Header() {
       dropdown: true,
       submenu: [
         {
-          name: "Network Infrastructure",
-          href: "/solutions/network-infrastructure",
-        },
-        { name: "Data Security", href: "/solutions/data-security" },
-        { name: "Cloud Services", href: "/solutions/cloud-services" },
-        {
           name: "Data-centric Solutions",
           href: "/solutions/data-centric-solutions",
+        },
+        { name: "Cloud Services", href: "/solutions/cloud-services" },
+        { name: "Data Security", href: "/solutions/data-security" },
+        {
+          name: "Network Infrastructure",
+          href: "/solutions/network-infrastructure",
         },
       ],
     },
