@@ -3,6 +3,7 @@ import Partners from "./components/Partners";
 import StrategicPartnerSection from "./components/StrategicPartnerSection";
 import ComprehensiveSolutions from "./components/ComprehensiveSolutions";
 import InflexionsAdvantage from "./components/InflexionsAdvantage";
+import IntelligentAutomation from "./components/IntelligentAutomation";
 import MainPartners from "./components/MainPartners";
 import TestimonialSlider from "./components/TestimonialSlider";
 import CallToAction from "./components/CallToAction";
@@ -55,6 +56,9 @@ export default function Home() {
 
       {/* Inflexions Advantage Section */}
       <InflexionsAdvantage />
+
+      {/* AI & Intelligent Automation Section */}
+      <IntelligentAutomation />
 
       {/* Main Partners Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
