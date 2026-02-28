@@ -6,9 +6,6 @@ import { caseStudies } from "../data";
 import Banner from "../components/Banner";
 
 export default function CaseStudyPage() {
-  const topImages = ["/assets/solutions/sol2.png", "/assets/solutions/sol1.jpeg", "/assets/solutions/sol1.jpeg"];
-  const bottomImages = ["/assets/case/case3.png", "/assets/case/case3.png"];
-
   return (
     <div>
       {/* Hero */}
@@ -36,27 +33,21 @@ export default function CaseStudyPage() {
           Delivering Tangible Value Through Technology
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-auto md:h-[412px]">
-          <div className="bg-[#BD2E25] text-white p-8 flex flex-col text-justify items-center justify-center h-auto md:h-full">
+          <div className="bg-[#BD2E25] text-white p-8 flex flex-col text-justify items-center justify-center h-auto md:h-full rounded-lg">
             <p className="mb-2">
               Don&apos;t just take our word for it. Explore how Inflexions has
-              partnered with organizations like yours to solve complex
+              partnered with organisations like yours to solve complex
               challenges, implement transformative solutions, and achieve
               significant business results.
             </p>
           </div>
-          <div className="space-y-1 h-auto md:h-full">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 h-auto md:h-1/2">
-              {topImages.map((src, i) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={i} src={src} alt={`Case study ${i + 1}`} className="w-full h-auto md:h-full object-cover rounded-lg shadow-lg" />
-              ))}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 h-auto md:h-1/2">
-              {bottomImages.map((src, i) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={i} src={src} alt={`Case study ${i + 4}`} className="w-full h-auto md:h-full object-cover rounded-lg shadow-lg" />
-              ))}
-            </div>
+          <div className="h-auto md:h-full">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/case/casestudy7.jpeg"
+              alt="MTN Project UBIA — Data centre construction"
+              className="w-full h-full object-cover rounded-lg shadow-lg"
+            />
           </div>
         </div>
       </section>
@@ -68,7 +59,7 @@ export default function CaseStudyPage() {
             <Link
               key={item.id}
               href={`/case-studies/${item.id}`}
-              className="relative group block overflow-hidden shadow-lg"
+              className="relative group block overflow-hidden shadow-lg rounded-lg"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -76,9 +67,17 @@ export default function CaseStudyPage() {
                 alt={item.title}
                 className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
               />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-64 h-[220px] bg-[#BD2E25]/0 group-hover:bg-[#BD2E25]/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
-                  <ArrowUpRight size={48} className="text-white" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+                <span className="text-xs font-medium uppercase tracking-wide text-white/80">
+                  {item.category}
+                </span>
+                <h3 className="text-lg font-semibold mt-1">{item.title}</h3>
+                <p className="text-sm text-white/80 mt-1 line-clamp-2">{item.summary}</p>
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="bg-[#BD2E25]/80 rounded-full p-4">
+                  <ArrowUpRight size={28} className="text-white" />
                 </div>
               </div>
             </Link>

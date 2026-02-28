@@ -1,80 +1,24 @@
 export const caseStudies = [
   {
     id: "1",
-    title: "Meridian Financial Group",
-    image: "/assets/case/casestudy1.png",
-    innerImage1: "/assets/case/inner1.png",
-    date: "15/01/25",
-    category: "Network Infrastructure",
-    status: "completed",
+    title: "MTN Project UBIA",
+    image: "/assets/case/casestudy7.jpeg",
+    innerImage1: "/assets/case/inner7.jpeg",
+    date: "01/01/26",
+    category: "Data Centre & Industry 5.0 Advisory",
+    status: "In progress",
+    client: "MTN Ghana (Project Sponsor)",
+    location: "Accra Digital Centre, Accra",
     summary:
-      "How we redesigned Meridian\u2019s entire network backbone across 12 branches, cutting downtime by 97% and delivering 99.9% uptime within the first quarter.",
+      "Designing a Tier III data centre and Industry 5.0 innovation hub for Ghana\u2019s flagship technology ecosystem \u2014 from power architecture to AI labs, robotics centres, and immersive technology studios.",
     details:
-      "Meridian Financial Group needed a resilient, high-performance network to support real-time trading and interbank operations across Ghana. We deployed a fully redundant SD-WAN architecture with failover paths, upgraded all branch switches to managed PoE infrastructure, and implemented network segmentation for compliance. The result: sub-5ms latency between branches and zero unplanned outages in the first six months.",
-  },
-  {
-    id: "2",
-    title: "Goldcoast Pharmaceuticals",
-    image: "/assets/case/casestudy2.png",
-    innerImage1: "/assets/case/inner1.png",
-    date: "03/02/25",
-    category: "Cloud Services",
-    status: "completed",
-    summary:
-      "A full-scale cloud migration that moved 40+ legacy workloads to Azure in 90 days\u2014with zero downtime and a 38% reduction in infrastructure spend.",
-    details:
-      "Goldcoast Pharmaceuticals was running critical ERP and supply chain systems on ageing on-premises hardware. We architected a phased Azure migration strategy, re-platformed their ERP to cloud-native services, and implemented FinOps tooling for ongoing cost governance. The migration was completed ahead of schedule with no business disruption.",
-  },
-  {
-    id: "3",
-    title: "Volta Energy Group",
-    image: "/assets/case/casestudy3.png",
-    innerImage1: "/assets/case/inner1.png",
-    date: "18/03/25",
-    category: "Data Security",
-    status: "completed",
-    summary:
-      "Building a 24/7 Security Operations Centre that reduced Volta\u2019s mean time to detect threats from 72 hours to under 15 minutes.",
-    details:
-      "As a critical infrastructure operator, Volta Energy Group faced escalating cyber threats. We deployed an AI-driven SIEM platform, established a fully managed SOC with 24/7 monitoring, and implemented Zero Trust access controls across their OT and IT environments. Compliance with ISO 27001 was achieved within four months.",
-  },
-  {
-    id: "4",
-    title: "Starline Logistics",
-    image: "/assets/case/casestudy4.png",
-    innerImage1: "/assets/case/inner1.png",
-    date: "22/04/25",
-    category: "Data Intelligence",
-    status: "completed",
-    summary:
-      "Deploying a real-time analytics platform that surfaced supply chain bottlenecks 48 hours before they impacted operations.",
-    details:
-      "Starline\u2019s leadership was making decisions on stale, siloed data. We built a unified data lake on Google BigQuery, integrated live feeds from their TMS, WMS, and IoT fleet sensors, and delivered predictive dashboards that gave operations managers early warnings on delays, capacity constraints, and cost overruns.",
-  },
-  {
-    id: "5",
-    title: "Atlas Mining Corporation",
-    image: "/assets/case/casestudy5.png",
-    innerImage1: "/assets/case/inner1.png",
-    date: "10/05/25",
-    category: "Cloud Services",
-    status: "completed",
-    summary:
-      "Architecting a hybrid cloud deployment that connected remote mine sites to HQ with enterprise-grade reliability and security.",
-    details:
-      "Atlas Mining needed to connect remote operational sites across Ghana to their Accra headquarters with real-time data access and failover-ready infrastructure. We designed a hybrid AWS and on-premises architecture with SD-WAN connectivity, edge computing nodes at each site, and centralised monitoring through our managed NOC.",
-  },
-  {
-    id: "6",
-    title: "Beacon Insurance",
-    image: "/assets/case/casestudy6.png",
-    innerImage1: "/assets/case/inner1.png",
-    date: "28/05/25",
-    category: "Digital Transformation",
-    status: "completed",
-    summary:
-      "A digital workplace transformation that unified 600+ employees on a modern collaboration platform, boosting productivity by 35%.",
-    details:
-      "Beacon Insurance was running disconnected email, file sharing, and communication tools across multiple offices. We migrated them to Microsoft 365 with Teams, implemented secure SSO with MFA, deployed Intune for device management, and trained their workforce through a structured adoption programme. Employee satisfaction with IT tools rose from 42% to 89%.",
+      "When MTN Ghana set out to build a next-generation technology innovation hub for the Ministry of Communication, Digital Technology and Innovation, they needed more than a contractor \u2014 they needed an independent architect who could see the whole system.\n\nInflexions\u2019 Director of Business Solutions was appointed lead independent IT consultant on Project UBIA, taking end-to-end ownership of infrastructure architecture, data centre design, and delivery oversight. His mandate: ensure every design decision serves both today\u2019s operational demands and tomorrow\u2019s innovation ambitions.\n\nPhase 1 \u2014 Tier III Data Centre (In Progress)\n\nThe centrepiece is a Tier III-compliant data centre engineered for high availability, maintainability, and continuous operations \u2014 even during maintenance activities. The architecture, designed and supervised by our team, encompasses dual-path power systems with UPS and generator redundancy, cooling strategies optimised for high-density AI workloads, physical security with layered access control and monitoring, scalable network and cabling infrastructure, and space planning for future compute, storage, and AI acceleration capacity.\n\nPhase 2 \u2014 Industry 5.0 Facilities (Advisory & Planning)\n\nBeyond the data centre, our Director leads strategic advisory for the hub\u2019s advanced technology facilities \u2014 AI and machine learning laboratories, robotics and smart manufacturing centres, VR/AR and immersive technology studios, research and innovation test labs, and e-learning and digital skills platforms. The advisory framework ensures that technology, people, and processes are designed together \u2014 reflecting Industry 5.0 principles where human creativity and intelligent systems coexist.\n\nThe hub is designed to catalyse digital innovation, applied research, and industrial collaboration, positioning Ghana as a regional leader in advanced digital infrastructure. Our contribution ensures the technology foundation is resilient, scalable, and aligned with long-term innovation goals \u2014 enabling MTN and its partners to sustainably grow the ecosystem.",
+    highlights: [
+      "Lead independent IT consultant appointed for end-to-end architecture ownership",
+      "Tier III-compliant data centre design with dual-path power and AI-optimised cooling",
+      "Industry 5.0 advisory spanning AI labs, robotics, VR/AR, and smart manufacturing",
+      "Phased delivery strategy preserving long-term architectural integrity",
+      "Strategic alignment between infrastructure, innovation, and skills development",
+    ],
   },
 ];
