@@ -83,7 +83,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/case-studies"
+                  href="/case-study"
                   className="hover:text-[#BD2E25] transition-colors"
                 >
                   Case Studies
