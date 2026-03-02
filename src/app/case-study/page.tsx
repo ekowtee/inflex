@@ -44,8 +44,8 @@ export default function CaseStudyPage() {
           <div className="h-auto md:h-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/assets/case/casestudy7.jpeg"
-              alt="MTN Project UBIA — Data centre construction"
+              src="/assets/case/ImageC.jpeg"
+              alt="ICT consultants reviewing network architecture and data centre floor plans"
               className="w-full h-full object-cover rounded-lg shadow-lg"
             />
           </div>
