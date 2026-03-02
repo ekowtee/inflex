@@ -8,16 +8,16 @@ const leaders = [
     bio: "Ekow Thompson is a visionary business leader with over 18 years of executive experience in technology, media, and telecommunications across Africa. As Managing Director of Inflexions, he brings a proven track record of driving digital transformation and substantial growth. His strategic leadership was instrumental in transforming Interactive Digital into one of Ghana\u2019s most respected digital agencies (achieving 750% revenue growth) and co-founding Blu Telecommunications, Ghana\u2019s innovative 4G network. Ekow excels at aligning technological capabilities with business objectives, ensuring clients receive solutions that create lasting competitive advantage. He holds a Bachelor\u2019s degree in Electrical / Electronic Engineering and is dedicated to continuous learning in leadership and digital innovation.",
   },
   {
-    name: "Dr.Jade Appiah-Lartey",
-    role: "Director \u2013 Marketing",
-    image: "/assets/about/jade.jpeg",
-    bio: "Dr. Jade Appiah-Lartey is a results-driven executive spearheading Inflexions\u2019 strategic growth initiatives, brand development, and digital transformation efforts. Leading the company\u2019s revitalization and strategic relaunch, she brings over 15 years of experience from the technology, telecommunications, and digital marketing sectors. Dr. Appiah-Lartey excels at identifying high-value market opportunities, crafting effective go-to-market strategies, and building strategic partnerships. Her background includes roles as Brand Strategy Consultant at Interactive Digital, Customer Experience Design Manager at Millicom, and Product Manager, providing her with multifaceted expertise to design customer-centric technology solutions and maximize revenue potential for Inflexions and its clients.",
-  },
-  {
     name: "Anthony Getor",
     role: "Director, Business Solutions",
     image: "/assets/about/anthonymain.jpg",
     bio: "Anthony Getor is a technology leader delivering innovative solutions that fuel business growth, leveraging over 15 years of experience in digital transformation across Africa. His expertise spans information security, enterprise architecture, cloud infrastructure (design, migration, optimization), and telecommunications. He is pursuing an MSc. in Cybersecurity and Digital Forensics (KNUST), an M.Sc. in Information Technology (Nottingham), and industry certifications including CHFI and CEH.",
+  },
+  {
+    name: "Dr.Jade Appiah-Lartey",
+    role: "Director \u2013 Marketing",
+    image: "/assets/about/jade.jpeg",
+    bio: "Dr. Jade Appiah-Lartey is a results-driven executive spearheading Inflexions\u2019 strategic growth initiatives, brand development, and digital transformation efforts. Leading the company\u2019s revitalization and strategic relaunch, she brings over 15 years of experience from the technology, telecommunications, and digital marketing sectors. Dr. Appiah-Lartey excels at identifying high-value market opportunities, crafting effective go-to-market strategies, and building strategic partnerships. Her background includes roles as Brand Strategy Consultant at Interactive Digital, Customer Experience Design Manager at Millicom, and Product Manager, providing her with multifaceted expertise to design customer-centric technology solutions and maximize revenue potential for Inflexions and its clients.",
   },
 ];
 
