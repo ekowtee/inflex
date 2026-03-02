@@ -125,12 +125,37 @@ export default function CaseStudyDetailPage() {
         <h2 className="text-3xl font-semibold text-[#171A20] mb-6">The Full Story</h2>
         <div className="space-y-6">
           {paragraphs.map((p, i) => {
-            const isSubheading = /^Phase \d|^[A-Z][a-z]+ \d/.test(p) && p.length < 80;
+            const isSubheading =
+              (/^Phase \d/.test(p) ||
+                /^(Executive Summary|The (Challenge|Solution|Results)[:\s])/.test(p)) &&
+              p.length < 120;
+            const isBullet = p.startsWith("\u2022 ");
             if (isSubheading) {
               return (
                 <h3 key={i} className="text-xl font-semibold text-[#171A20] mt-4">
                   {p}
                 </h3>
+              );
+            }
+            if (isBullet) {
+              const text = p.slice(2);
+              const colonIdx = text.indexOf(":");
+              if (colonIdx > 0 && colonIdx < 40) {
+                return (
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="flex-shrink-0 mt-1.5 w-2 h-2 rounded-full bg-[#BD2E25]" />
+                    <p className="text-[#41444B] leading-relaxed">
+                      <strong className="text-[#171A20]">{text.slice(0, colonIdx)}:</strong>
+                      {text.slice(colonIdx + 1)}
+                    </p>
+                  </div>
+                );
+              }
+              return (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="flex-shrink-0 mt-1.5 w-2 h-2 rounded-full bg-[#BD2E25]" />
+                  <p className="text-[#41444B] leading-relaxed">{text}</p>
+                </div>
               );
             }
             return (
