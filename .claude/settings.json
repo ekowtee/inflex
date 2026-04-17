@@ -7,7 +7,12 @@
       "Bash(ls:*)",
       "Read(//c/Users/ekowt/Projects/inflexionsweb/public/assets/partners/**)",
       "Bash(echo:*)",
-      "Bash(git remote add:*)"
+      "Bash(git remote add:*)",
+      "Bash(git -C:*)",
+      "WebFetch(domain:logotyp.us)",
+      "WebFetch(domain:brandfetch.com)",
+      "WebFetch(domain:cdn.worldvectorlogo.com)",
+      "WebFetch(domain:simpleicons.org)"
     ],
     "additionalDirectories": [
       "C:\\Users\\ekowt\\Projects\\inflexionsweb\\public\\assets\\partners"
