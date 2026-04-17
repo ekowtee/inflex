@@ -251,6 +251,21 @@ Development of a comprehensive, modern website for Inflexions I.T. Services Ltd.
   - Each service with numbered icon, description and supporting image
   - "Read More" CTAs for each service category
 
+- **Academy** (third top-level offering category — peer to Solutions and Services)
+  - Positioned as the company's structured training arm ("Inflexions Academy")
+  - Serves two audiences: individuals (open enrolment) and organisations (corporate/enterprise training)
+  - `/academy` landing page: hero, audience switcher (Individuals vs. Organisations), domain grid, featured programmes, "Why Inflexions Academy" differentiators, CTA banner
+  - Four competency domains (person-independent — not tied to specific directors):
+    - AI & Intelligent Systems (`/academy/ai-intelligent-systems`)
+    - Infrastructure & Cloud (`/academy/infrastructure-cloud`)
+    - Cybersecurity & Compliance (`/academy/cybersecurity-compliance`)
+    - Digital Strategy & Transformation (`/academy/digital-strategy`)
+  - Each domain page: hero, overview, programme catalogue (cards), benefits, cross-links to related Solution pages, CTA banner
+  - Programme detail pages (`/academy/[domain]/[programme]`): learning objectives, target audience, prerequisites, curriculum accordion, sticky sidebar with dual CTAs (Register as Individual / Request Corporate Training), Course schema.org JSON-LD
+  - Corporate page (`/academy/for-organizations`): value props, 4-step engagement process (Assess → Design → Deliver → Measure), domain overview, enterprise enquiry form
+  - Homepage integration: "Develop Your Edge" promo section between IntelligentAutomation and MainPartners
+  - Cross-links: each Solution detail page renders a RelatedTraining callout surfacing programmes from the matching Academy domain
+
 - **Contact**
   - Hero section with "How can we help you?" headline
   - Red contact form section with:
@@ -317,8 +332,9 @@ Development of a comprehensive, modern website for Inflexions I.T. Services Ltd.
 - Logo (links to home)
 - Home
 - About
-- Solutions
-- Services
+- Solutions (dropdown)
+- Services (dropdown)
+- Academy (dropdown — AI & Intelligent Systems, Infrastructure & Cloud, Cybersecurity & Compliance, Digital Strategy, For Organizations)
 - Case Study
 - Careers
 - Social media icons (Instagram, Facebook, Twitter, LinkedIn)
@@ -335,6 +351,10 @@ Development of a comprehensive, modern website for Inflexions I.T. Services Ltd.
   - (All solution pages)
 - **Services**
   - (All service pages)
+- **Academy**
+  - Academy landing page
+  - Domain pages (AI, Infrastructure & Cloud, Cybersecurity, Digital Strategy)
+  - For Organizations
 - **Resources**
   - Blog
   - Case Studies

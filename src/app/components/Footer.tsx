@@ -83,6 +83,14 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/academy"
+                  className="hover:text-[#BD2E25] transition-colors"
+                >
+                  Academy
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/case-study"
                   className="hover:text-[#BD2E25] transition-colors"
                 >

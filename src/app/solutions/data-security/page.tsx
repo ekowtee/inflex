@@ -2,6 +2,7 @@
 
 import Banner from "../../components/Banner";
 import SolutionPartners from "../../components/SolutionPartners";
+import RelatedTraining from "../../components/RelatedTraining";
 import Link from "next/link";
 import { CheckCircle, Shield, Lock, Zap } from "lucide-react";
 
@@ -141,6 +142,9 @@ export default function DataSecurityPage() {
 
       {/* Technology Partners */}
       <SolutionPartners solution="data-security" />
+
+      {/* Related Training */}
+      <RelatedTraining solutionSlug="data-security" />
 
       {/* CTA Banner */}
       <Banner />

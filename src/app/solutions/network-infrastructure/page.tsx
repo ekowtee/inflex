@@ -2,6 +2,7 @@
 
 import Banner from "../../components/Banner";
 import SolutionPartners from "../../components/SolutionPartners";
+import RelatedTraining from "../../components/RelatedTraining";
 import Link from "next/link";
 import { CheckCircle, Network, Server, Shield } from "lucide-react";
 
@@ -144,6 +145,9 @@ export default function NetworkInfrastructurePage() {
 
       {/* Technology Partners */}
       <SolutionPartners solution="network-infrastructure" />
+
+      {/* Related Training */}
+      <RelatedTraining solutionSlug="network-infrastructure" />
 
       {/* CTA Banner */}
       <Banner />

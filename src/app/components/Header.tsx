@@ -7,15 +7,16 @@ import { HiMenu, HiX } from "react-icons/hi";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [solutionsDropdownOpen, setSolutionsDropdownOpen] = useState(false);
-  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  const closeAllDropdowns = () => {
-    setSolutionsDropdownOpen(false);
-    setServicesDropdownOpen(false);
-  };
+  const closeAllDropdowns = () => setOpenDropdown(null);
+
+  const toggleDropdown = (name: string) =>
+    setOpenDropdown((current) => (current === name ? null : name));
+
+  const isDropdownOpen = (name: string) => openDropdown === name;
 
   const closeMobileNavigation = () => {
     closeAllDropdowns();
@@ -52,6 +53,30 @@ export default function Header() {
         { name: "Support Services", href: "/services/support" },
       ],
     },
+    {
+      name: "Academy",
+      href: "/academy",
+      dropdown: true,
+      submenu: [
+        {
+          name: "AI & Intelligent Systems",
+          href: "/academy/ai-intelligent-systems",
+        },
+        {
+          name: "Infrastructure & Cloud",
+          href: "/academy/infrastructure-cloud",
+        },
+        {
+          name: "Cybersecurity & Compliance",
+          href: "/academy/cybersecurity-compliance",
+        },
+        { name: "Digital Strategy", href: "/academy/digital-strategy" },
+        {
+          name: "For Organizations",
+          href: "/academy/for-organizations",
+        },
+      ],
+    },
     { name: "Case study", href: "/case-study" },
     { name: "Careers", href: "/careers" },
   ];
@@ -79,16 +104,6 @@ export default function Header() {
     },
   ];
 
-  const handleSolutionsToggle = () => {
-    setSolutionsDropdownOpen(!solutionsDropdownOpen);
-    setServicesDropdownOpen(false);
-  };
-
-  const handleServicesToggle = () => {
-    setServicesDropdownOpen(!servicesDropdownOpen);
-    setSolutionsDropdownOpen(false);
-  };
-
   return (
     <header className="fixed top-0 left-0 right-0 z-50 shadow-md bg-white">
       {/* Logo in the left margin */}
@@ -108,94 +123,73 @@ export default function Header() {
           {/* Desktop Navigation - Left aligned */}
           <nav className="hidden lg:flex lg:items-center">
             <div className="flex space-x-6 lg:space-x-8">
-              {navLinks.map((link) => (
-                <div key={link.name} className="relative">
-                  {link.dropdown ? (
-                    <>
-                      <button
-                        type="button"
-                        onClick={
-                          link.name === "Solutions"
-                            ? handleSolutionsToggle
-                            : handleServicesToggle
-                        }
-                        className={`group inline-flex items-center text-sm font-medium transition duration-150 ease-in-out hover:text-red-600 focus:outline-none focus:text-red-600
-                          ${
-                            (link.name === "Solutions" &&
-                              solutionsDropdownOpen) ||
-                            (link.name === "Services" && servicesDropdownOpen)
-                              ? "text-red-600"
-                              : "text-gray-700"
-                          }
-                        `}
-                        aria-expanded={
-                          (link.name === "Solutions" &&
-                            solutionsDropdownOpen) ||
-                          (link.name === "Services" && servicesDropdownOpen)
-                        }
-                      >
-                        <span>{link.name}</span>
-                        <svg
-                          className={`ml-1 h-5 w-5 group-hover:text-gray-500 transition ease-in-out duration-150
-                          ${
-                            (link.name === "Solutions" &&
-                              solutionsDropdownOpen) ||
-                            (link.name === "Services" && servicesDropdownOpen)
-                              ? "transform rotate-180"
-                              : ""
-                          }
-                        `}
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
+              {navLinks.map((link) => {
+                const isOpen = isDropdownOpen(link.name);
+                return (
+                  <div key={link.name} className="relative">
+                    {link.dropdown ? (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => toggleDropdown(link.name)}
+                          className={`group inline-flex items-center text-sm font-medium transition duration-150 ease-in-out hover:text-red-600 focus:outline-none focus:text-red-600 ${
+                            isOpen ? "text-red-600" : "text-gray-700"
+                          }`}
+                          aria-expanded={isOpen}
                         >
-                          <path
-                            fillRule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </button>
-                      <div
-                        className={`absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none transition ease-out duration-100 transform origin-top-left
-                          ${
-                            (link.name === "Solutions" &&
-                              solutionsDropdownOpen) ||
-                            (link.name === "Services" && servicesDropdownOpen)
+                          <span>{link.name}</span>
+                          <svg
+                            className={`ml-1 h-5 w-5 group-hover:text-gray-500 transition ease-in-out duration-150 ${
+                              isOpen ? "transform rotate-180" : ""
+                            }`}
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                        <div
+                          className={`absolute left-0 mt-2 w-60 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none transition ease-out duration-100 transform origin-top-left ${
+                            isOpen
                               ? "opacity-100 scale-100"
                               : "opacity-0 scale-95 invisible"
-                          }
-                        `}
-                        role="menu"
-                        aria-orientation="vertical"
-                      >
-                        <div className="py-1" role="none">
-                          {link.submenu?.map((subitem) => (
-                            <Link
-                              key={subitem.name}
-                              href={subitem.href}
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-600"
-                              role="menuitem"
-                              onClick={closeAllDropdowns}
-                            >
-                              {subitem.name}
-                            </Link>
-                          ))}
+                          }`}
+                          role="menu"
+                          aria-orientation="vertical"
+                        >
+                          <div className="py-1" role="none">
+                            {link.submenu?.map((subitem) => (
+                              <Link
+                                key={subitem.name}
+                                href={subitem.href}
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-600"
+                                role="menuitem"
+                                onClick={closeAllDropdowns}
+                              >
+                                {subitem.name}
+                              </Link>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  ) : (
-                    <Link
-                      href={link.href}
-                      className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-red-600 transition duration-150 ease-in-out"
-                      onClick={closeAllDropdowns}
-                    >
-                      {link.name}
-                    </Link>
-                  )}
-                </div>
-              ))}
+                      </>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-red-600 transition duration-150 ease-in-out"
+                        onClick={closeAllDropdowns}
+                      >
+                        {link.name}
+                      </Link>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </nav>
 
@@ -262,73 +256,59 @@ export default function Header() {
         id="mobile-menu"
       >
         <div className="pt-2 pb-3 space-y-1 px-2 sm:px-3 border-t border-gray-200 bg-white">
-          {navLinks.map((link) => (
-            <div key={link.name}>
-              {link.dropdown ? (
-                <>
-                  <button
-                    onClick={
-                      link.name === "Solutions"
-                        ? handleSolutionsToggle
-                        : handleServicesToggle
-                    }
-                    className="w-full flex items-center justify-between py-2 pl-3 pr-3.5 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 hover:text-red-600"
-                    aria-expanded={
-                      (link.name === "Solutions" && solutionsDropdownOpen) ||
-                      (link.name === "Services" && servicesDropdownOpen)
-                    }
-                  >
-                    <span>{link.name}</span>
-                    <svg
-                      className={`${
-                        (link.name === "Solutions" && solutionsDropdownOpen) ||
-                        (link.name === "Services" && servicesDropdownOpen)
-                          ? "transform rotate-180"
-                          : ""
-                      } ml-1 h-5 w-5 transition ease-in-out duration-150`}
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
+          {navLinks.map((link) => {
+            const isOpen = isDropdownOpen(link.name);
+            return (
+              <div key={link.name}>
+                {link.dropdown ? (
+                  <>
+                    <button
+                      onClick={() => toggleDropdown(link.name)}
+                      className="w-full flex items-center justify-between py-2 pl-3 pr-3.5 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 hover:text-red-600"
+                      aria-expanded={isOpen}
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                  <div
-                    className={`pl-4 space-y-1 ${
-                      (link.name === "Solutions" && solutionsDropdownOpen) ||
-                      (link.name === "Services" && servicesDropdownOpen)
-                        ? "block"
-                        : "hidden"
-                    }`}
-                  >
-                    {link.submenu?.map((subitem) => (
-                      <Link
-                        key={subitem.name}
-                        href={subitem.href}
-                        className="block py-2 pl-7 pr-4 text-base font-medium text-gray-500 rounded-md hover:bg-gray-50 hover:text-red-600"
-                        onClick={closeMobileNavigation}
+                      <span>{link.name}</span>
+                      <svg
+                        className={`${
+                          isOpen ? "transform rotate-180" : ""
+                        } ml-1 h-5 w-5 transition ease-in-out duration-150`}
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
                       >
-                        {subitem.name}
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <Link
-                  href={link.href}
-                  className="block py-2 pl-3 pr-4 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 hover:text-red-600"
-                  onClick={closeMobileNavigation}
-                >
-                  {link.name}
-                </Link>
-              )}
-            </div>
-          ))}
+                        <path
+                          fillRule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                    <div className={`pl-4 space-y-1 ${isOpen ? "block" : "hidden"}`}>
+                      {link.submenu?.map((subitem) => (
+                        <Link
+                          key={subitem.name}
+                          href={subitem.href}
+                          className="block py-2 pl-7 pr-4 text-base font-medium text-gray-500 rounded-md hover:bg-gray-50 hover:text-red-600"
+                          onClick={closeMobileNavigation}
+                        >
+                          {subitem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <Link
+                    href={link.href}
+                    className="block py-2 pl-3 pr-4 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 hover:text-red-600"
+                    onClick={closeMobileNavigation}
+                  >
+                    {link.name}
+                  </Link>
+                )}
+              </div>
+            );
+          })}
         </div>
         {/* Mobile Social Icons */}
         <div className="pt-4 pb-3 border-t border-gray-200 px-2 sm:px-3 bg-white">

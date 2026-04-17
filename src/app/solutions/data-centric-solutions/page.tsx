@@ -2,6 +2,7 @@
 
 import Banner from "../../components/Banner";
 import SolutionPartners from "../../components/SolutionPartners";
+import RelatedTraining from "../../components/RelatedTraining";
 import Link from "next/link";
 import { CheckCircle, Brain, Database, Cpu } from "lucide-react";
 
@@ -142,6 +143,9 @@ export default function DataCentricSolutionsPage() {
 
       {/* Technology Partners */}
       <SolutionPartners solution="data-centric-solutions" />
+
+      {/* Related Training */}
+      <RelatedTraining solutionSlug="data-centric-solutions" />
 
       {/* CTA Banner */}
       <Banner />

@@ -2,6 +2,7 @@
 
 import Banner from "../../components/Banner";
 import SolutionPartners from "../../components/SolutionPartners";
+import RelatedTraining from "../../components/RelatedTraining";
 import Link from "next/link";
 import { CheckCircle, Cloud, BarChart3, Globe } from "lucide-react";
 
@@ -144,6 +145,9 @@ export default function CloudServicesPage() {
 
       {/* Technology Partners */}
       <SolutionPartners solution="cloud-services" />
+
+      {/* Related Training */}
+      <RelatedTraining solutionSlug="cloud-services" />
 
       {/* CTA Banner */}
       <Banner />
