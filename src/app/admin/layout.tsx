@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -20,24 +21,46 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="min-h-screen bg-[#0f1621] text-white">
       <header className="sticky top-0 z-40 bg-[#0f1621]/95 backdrop-blur border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4">
-          <Link href="/admin" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md bg-[#BD2E25] flex items-center justify-center text-xs font-bold">
-              I
-            </div>
-            <span className="text-sm font-semibold whitespace-nowrap">
-              Inflexions Admin
-            </span>
-          </Link>
-          <div className="flex-1 min-w-0 overflow-hidden">
-            <AdminNav role={role} />
-          </div>
-          <SignOutButton
-            username={session?.user?.name ?? null}
-            role={role ?? null}
+        {/* Logo in the left margin — mirrors the marketing site Header. */}
+        <Link
+          href="/admin"
+          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 hidden lg:block"
+          style={{ left: "calc((100vw - 80rem) / 4 + 1rem)" }}
+        >
+          <Image
+            src="/inflexlogo.png"
+            alt="Inflexions IT Admin"
+            width={144}
+            height={36}
+            priority
+            className="brightness-0 invert"
           />
+        </Link>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="h-14 flex items-center justify-between gap-4">
+            {/* On mobile, surface a compact brand mark so the header is not empty. */}
+            <Link href="/admin" className="flex items-center gap-2 lg:hidden">
+              <div className="w-7 h-7 rounded-md bg-[#BD2E25] flex items-center justify-center text-xs font-bold">
+                I
+              </div>
+              <span className="text-sm font-semibold whitespace-nowrap">
+                Admin
+              </span>
+            </Link>
+
+            <div className="flex-1 min-w-0 overflow-hidden">
+              <AdminNav role={role} />
+            </div>
+
+            <SignOutButton
+              username={session?.user?.name ?? null}
+              role={role ?? null}
+            />
+          </div>
         </div>
       </header>
+
       <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {children}
       </main>
