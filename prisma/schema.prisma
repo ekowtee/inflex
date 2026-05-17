@@ -1,0 +1,238 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- Customers ----------
+
+enum LeadStatus {
+  LEAD
+  QUALIFIED
+  ACTIVE
+  DORMANT
+  CHURNED
+}
+
+enum LeadSource {
+  REFERRAL
+  WEBSITE
+  EVENT
+  OUTBOUND
+  PARTNER
+  OTHER
+}
+
+model Customer {
+  id          String      @id @default(cuid())
+  name        String
+  company     String?
+  email       String?
+  phone       String?
+  leadStatus  LeadStatus  @default(LEAD)
+  leadSource  LeadSource  @default(WEBSITE)
+  tags        String[]    @default([])
+  notes       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  quotes      Quote[]
+  invoices    Invoice[]
+  payments    Payment[]
+
+  @@index([leadStatus])
+  @@index([leadSource])
+  @@index([createdAt])
+}
+
+// ---------- Quotes ----------
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  DECLINED
+  EXPIRED
+}
+
+model Quote {
+  id          String      @id @default(cuid())
+  number      String      @unique
+  customerId  String
+  customer    Customer    @relation(fields: [customerId], references: [id])
+  status      QuoteStatus @default(DRAFT)
+  scopeOfWork String?
+  notes       String?
+  subtotal    Decimal     @default(0) @db.Decimal(12, 2)
+  taxRate     Decimal     @default(0) @db.Decimal(5, 2)
+  taxAmount   Decimal     @default(0) @db.Decimal(12, 2)
+  discount    Decimal     @default(0) @db.Decimal(12, 2)
+  total       Decimal     @default(0) @db.Decimal(12, 2)
+  currency    String      @default("GHS")
+  validUntil  DateTime?
+  sentAt      DateTime?
+  acceptedAt  DateTime?
+  declinedAt  DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  items       LineItem[]
+  invoice     Invoice?
+
+  @@index([status])
+  @@index([customerId])
+  @@index([createdAt])
+}
+
+// ---------- Invoices ----------
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+model Invoice {
+  id          String        @id @default(cuid())
+  number      String        @unique
+  customerId  String
+  customer    Customer      @relation(fields: [customerId], references: [id])
+  quoteId     String?       @unique
+  quote       Quote?        @relation(fields: [quoteId], references: [id])
+  status      InvoiceStatus @default(DRAFT)
+  notes       String?
+  subtotal    Decimal       @default(0) @db.Decimal(12, 2)
+  taxRate     Decimal       @default(0) @db.Decimal(5, 2)
+  taxAmount   Decimal       @default(0) @db.Decimal(12, 2)
+  discount    Decimal       @default(0) @db.Decimal(12, 2)
+  total       Decimal       @default(0) @db.Decimal(12, 2)
+  amountPaid  Decimal       @default(0) @db.Decimal(12, 2)
+  currency    String        @default("GHS")
+  issueDate   DateTime      @default(now())
+  dueDate     DateTime?
+  sentAt      DateTime?
+  paidAt      DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  items       LineItem[]
+  payments    Payment[]
+
+  @@index([status])
+  @@index([customerId])
+  @@index([dueDate])
+  @@index([createdAt])
+}
+
+// ---------- Line Items (shared by Quote + Invoice) ----------
+
+enum LineItemCategory {
+  CONSULTING
+  MANAGED_SERVICES
+  HARDWARE
+  SOFTWARE_LICENSING
+  TRAINING
+  OTHER
+}
+
+enum RecurringInterval {
+  NONE
+  MONTHLY
+  QUARTERLY
+  ANNUALLY
+}
+
+model LineItem {
+  id          String             @id @default(cuid())
+  description String
+  category    LineItemCategory   @default(CONSULTING)
+  quantity    Decimal            @default(1) @db.Decimal(12, 2)
+  unitPrice   Decimal            @default(0) @db.Decimal(12, 2)
+  recurring   RecurringInterval  @default(NONE)
+  sortOrder   Int                @default(0)
+
+  quoteId     String?
+  quote       Quote?             @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  invoiceId   String?
+  invoice     Invoice?           @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([quoteId])
+  @@index([invoiceId])
+}
+
+// ---------- Payments ----------
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  MOBILE_MONEY
+  CHEQUE
+  CARD
+  CASH
+  OTHER
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model Payment {
+  id          String        @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice       @relation(fields: [invoiceId], references: [id])
+  customerId  String
+  customer    Customer      @relation(fields: [customerId], references: [id])
+  amount      Decimal       @db.Decimal(12, 2)
+  currency    String        @default("GHS")
+  method      PaymentMethod
+  status      PaymentStatus @default(COMPLETED)
+  reference   String?
+  notes       String?
+  paidAt      DateTime      @default(now())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([invoiceId])
+  @@index([customerId])
+  @@index([status])
+  @@index([paidAt])
+}
+
+// ---------- Company Settings ----------
+
+model CompanySettings {
+  id              String   @id @default("singleton")
+  companyName     String   @default("Inflexions I.T. Services Ltd.")
+  addressLine1    String?
+  addressLine2    String?
+  city            String?
+  country         String?  @default("Ghana")
+  email           String?  @default("sales@inflexions.tech")
+  phone           String?
+  website         String?  @default("https://inflexions.tech")
+  taxId           String?
+  defaultTaxRate  Decimal  @default(0) @db.Decimal(5, 2)
+  paymentTerms    String?  @default("Payment due within 30 days of invoice date.")
+  bankName        String?
+  bankAccountName String?
+  bankAccountNo   String?
+  bankBranch      String?
+  bankSwift       String?
+  momoProvider    String?
+  momoNumber      String?
+  momoAccountName String?
+  currency        String   @default("GHS")
+  quotePrefix     String   @default("Q")
+  invoicePrefix   String   @default("INV")
+  nextQuoteNumber   Int    @default(1)
+  nextInvoiceNumber Int    @default(1)
+  updatedAt       DateTime @updatedAt
+}
