@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/guard";
 import { quoteSchema } from "@/lib/validators";
 import { calculateTotals, toDecimal } from "@/lib/billing";
 
@@ -9,6 +10,8 @@ export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const { id } = await params;
   const quote = await prisma.quote.findUnique({
     where: { id },
@@ -28,6 +31,8 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const { id } = await params;
   const existing = await prisma.quote.findUnique({ where: { id } });
   if (!existing) {
@@ -95,6 +100,8 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const { id } = await params;
   const quote = await prisma.quote.findUnique({
     where: { id },

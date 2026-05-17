@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/guard";
 import { nextInvoiceNumber } from "@/lib/billing";
 
 export const dynamic = "force-dynamic";
@@ -8,6 +9,8 @@ export async function POST(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const { id } = await params;
   const quote = await prisma.quote.findUnique({
     where: { id },

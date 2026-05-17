@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/guard";
 import { customerSchema } from "@/lib/validators";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const { searchParams } = new URL(req.url);
   const query = searchParams.get("q")?.trim();
   const status = searchParams.get("status");
@@ -29,6 +32,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const body = await req.json();
   const parsed = customerSchema.safeParse(body);
   if (!parsed.success) {

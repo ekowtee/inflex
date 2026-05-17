@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/guard";
 import { paymentSchema } from "@/lib/validators";
 import { toDecimal } from "@/lib/billing";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const payments = await prisma.payment.findMany({
     include: {
       customer: { select: { id: true, name: true } },
@@ -17,6 +20,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const body = await req.json();
   const parsed = paymentSchema.safeParse(body);
   if (!parsed.success) {

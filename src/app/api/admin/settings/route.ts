@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/guard";
 import { settingsSchema } from "@/lib/validators";
 import { toDecimal } from "@/lib/billing";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const settings = await prisma.companySettings.upsert({
     where: { id: "singleton" },
     create: {},
@@ -15,6 +18,8 @@ export async function GET() {
 }
 
 export async function PUT(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const body = await req.json();
   const parsed = settingsSchema.safeParse(body);
   if (!parsed.success) {
