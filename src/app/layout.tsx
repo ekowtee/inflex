@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Rubik, Krub } from "next/font/google";
 import "./globals.css";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import MarketingChrome from "./MarketingChrome";
 import React from "react";
 
 // Configure Rubik font with improved options
@@ -67,9 +66,7 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <Header />
-        <main id="main-content" className="flex-grow">{children}</main>
-        <Footer />
+        <MarketingChrome>{children}</MarketingChrome>
       </body>
     </html>
   );
