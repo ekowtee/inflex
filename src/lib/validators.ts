@@ -1,5 +1,29 @@
 import { z } from "zod";
 
+export const userCreateSchema = z.object({
+  name: z.string().min(1, "Name is required").max(200),
+  email: z.string().email("Valid email required").max(200),
+  role: z.enum(["DIRECTOR", "FINANCE"]),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .max(200),
+  isActive: z.boolean().default(true),
+});
+
+export const userUpdateSchema = z.object({
+  name: z.string().min(1).max(200),
+  email: z.string().email().max(200),
+  role: z.enum(["DIRECTOR", "FINANCE"]),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .max(200)
+    .optional()
+    .or(z.literal("")),
+  isActive: z.boolean(),
+});
+
 export const customerSchema = z.object({
   name: z.string().min(1, "Name is required").max(200),
   company: z.string().max(200).optional().nullable(),

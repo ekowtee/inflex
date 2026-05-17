@@ -9,6 +9,7 @@ import {
   Receipt,
   CreditCard,
   Settings,
+  UserCog,
 } from "lucide-react";
 
 const navItems = [
@@ -18,14 +19,18 @@ const navItems = [
   { name: "Invoices", href: "/admin/invoices", icon: Receipt },
   { name: "Payments", href: "/admin/payments", icon: CreditCard },
   { name: "Settings", href: "/admin/settings", icon: Settings },
+  { name: "Users", href: "/admin/users", icon: UserCog, directorOnly: true },
 ];
 
-export default function AdminNav() {
+export default function AdminNav({ role }: { role?: string | null }) {
   const pathname = usePathname();
+  const items = navItems.filter(
+    (item) => !item.directorOnly || role === "DIRECTOR"
+  );
 
   return (
     <nav className="flex items-center gap-1 overflow-x-auto">
-      {navItems.map((item) => {
+      {items.map((item) => {
         const Icon = item.icon;
         const active = item.exact
           ? pathname === item.href

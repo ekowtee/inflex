@@ -30,7 +30,13 @@ export interface SettingsValues {
   invoicePrefix?: string;
 }
 
-export default function SettingsForm({ initial }: { initial: SettingsValues }) {
+export default function SettingsForm({
+  initial,
+  readOnly = false,
+}: {
+  initial: SettingsValues;
+  readOnly?: boolean;
+}) {
   const router = useRouter();
   const [form, setForm] = useState<SettingsValues>({
     ...initial,
@@ -64,6 +70,7 @@ export default function SettingsForm({ initial }: { initial: SettingsValues }) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-8">
+      <fieldset disabled={readOnly} className="space-y-8 disabled:opacity-70">
       <Section title="Company">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Field label="Company name" required>
@@ -239,11 +246,14 @@ export default function SettingsForm({ initial }: { initial: SettingsValues }) {
         </div>
       )}
 
-      <div className="flex justify-end">
-        <Button type="submit" disabled={submitting}>
-          {submitting ? "Saving…" : "Save settings"}
-        </Button>
-      </div>
+      {!readOnly && (
+        <div className="flex justify-end">
+          <Button type="submit" disabled={submitting}>
+            {submitting ? "Saving…" : "Save settings"}
+          </Button>
+        </div>
+      )}
+      </fieldset>
     </form>
   );
 }

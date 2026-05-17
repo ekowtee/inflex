@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
-  if (session?.user?.role !== "admin") {
+  const role = session?.user?.role;
+  if (role !== "DIRECTOR" && role !== "FINANCE") {
     redirect("/login?callbackUrl=/admin");
   }
   return (
@@ -29,9 +30,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </span>
           </Link>
           <div className="flex-1 min-w-0 overflow-hidden">
-            <AdminNav />
+            <AdminNav role={role} />
           </div>
-          <SignOutButton username={session.user?.name ?? null} />
+          <SignOutButton
+            username={session?.user?.name ?? null}
+            role={role ?? null}
+          />
         </div>
       </header>
       <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

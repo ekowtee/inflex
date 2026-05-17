@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireAdmin } from "@/lib/guard";
+import { requireAdmin, requireRole } from "@/lib/guard";
 import { settingsSchema } from "@/lib/validators";
 import { toDecimal } from "@/lib/billing";
 
@@ -18,7 +18,7 @@ export async function GET() {
 }
 
 export async function PUT(req: NextRequest) {
-  const denied = await requireAdmin();
+  const denied = await requireRole(["DIRECTOR"]);
   if (denied) return denied;
   const body = await req.json();
   const parsed = settingsSchema.safeParse(body);
