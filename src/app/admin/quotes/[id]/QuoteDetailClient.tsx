@@ -185,6 +185,8 @@ function quoteToPayload(q: QuoteBuilderInitial): Record<string, unknown> {
       discountPct: Number(i.discountPct),
       recurring: i.recurring,
       sortOrder: idx,
+      labourEntries: i.kind === "LABOUR" ? i.labourEntries ?? [] : [],
+      outstationEntries: i.kind === "OUTSTATION" ? i.outstationEntries ?? [] : [],
     })),
   };
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Briefcase, Plane } from "lucide-react";
 import { Field, Select, TextArea, TextInput } from "../_components/Field";
 import { Button } from "../_components/Button";
 import { formatMoney } from "@/lib/serialize";
@@ -12,6 +12,12 @@ import {
   type LineKind,
   type PriceLineContext,
 } from "@/lib/pricing";
+import {
+  defaultIndirectDays,
+  priceLabour,
+  priceOutstation,
+  type LabourRoleRef,
+} from "@/lib/calculators";
 
 interface CustomerOpt {
   id: string;
@@ -51,7 +57,21 @@ interface QuoteReference {
   markupTiers: TierOpt[];
   whtCategories: WhtOpt[];
   architects: UserOpt[];
+  labourRoles: LabourRoleRef[];
   settings: ReferenceSettings;
+}
+
+interface LabourEntryDraft {
+  roleId: string;
+  days: number;
+  indirectDays: number;
+}
+
+interface OutstationEntryDraft {
+  roleId: string;
+  staffCount: number;
+  days: number;
+  trips: number;
 }
 
 interface LineDraft {
@@ -68,6 +88,8 @@ interface LineDraft {
   surchargePct: number;
   discountPct: number;
   recurring: string;
+  labourEntries: LabourEntryDraft[];
+  outstationEntries: OutstationEntryDraft[];
 }
 
 export interface QuoteBuilderInitial {
@@ -137,8 +159,32 @@ function newLine(defaults?: Partial<LineDraft>): LineDraft {
     surchargePct: 0,
     discountPct: 0,
     recurring: "NONE",
+    labourEntries: [],
+    outstationEntries: [],
     ...defaults,
   };
+}
+
+function newLabourLine(opts: { description: string; markupTierId: string; markupPct: number }) {
+  return newLine({
+    kind: "LABOUR",
+    category: "CONSULTING",
+    description: opts.description,
+    markupTierId: opts.markupTierId,
+    markupPct: opts.markupPct,
+    labourEntries: [],
+  });
+}
+
+function newOutstationLine(opts: { description: string; markupTierId: string; markupPct: number }) {
+  return newLine({
+    kind: "OUTSTATION",
+    category: "CONSULTING",
+    description: opts.description,
+    markupTierId: opts.markupTierId,
+    markupPct: opts.markupPct,
+    outstationEntries: [],
+  });
 }
 
 export default function QuoteBuilder({
@@ -226,15 +272,70 @@ export default function QuoteBuilder({
   }
 
   function updateItem(idx: number, patch: Partial<LineDraft>) {
-    setItems((arr) => arr.map((it, i) => (i === idx ? { ...it, ...patch } : it)));
+    setItems((arr) =>
+      arr.map((it, i) => (i === idx ? recomputeIfCalculated({ ...it, ...patch }) : it))
+    );
   }
 
   function addItem(kind: LineKind = "PRODUCT") {
     setItems((arr) => [...arr, newLine({ kind })]);
   }
 
+  function addLabourLine() {
+    if (!reference) return;
+    const tier = reference.markupTiers.find((t) => t.name === "Labour");
+    setItems((arr) => [
+      ...arr,
+      newLabourLine({
+        description: "Professional Services",
+        markupTierId: tier?.id ?? "",
+        markupPct: tier ? Number(tier.pct) : 100,
+      }),
+    ]);
+  }
+
+  function addOutstationLine() {
+    if (!reference) return;
+    const tier = reference.markupTiers.find((t) => t.name === "Outstation");
+    setItems((arr) => [
+      ...arr,
+      newOutstationLine({
+        description: "Outstation expenses",
+        markupTierId: tier?.id ?? "",
+        markupPct: tier ? Number(tier.pct) : 25,
+      }),
+    ]);
+  }
+
   function removeItem(idx: number) {
     setItems((arr) => arr.filter((_, i) => i !== idx));
+  }
+
+  /**
+   * For LABOUR / OUTSTATION lines that have entries, recompute landedCost +
+   * specs from the entries so the line stays in sync with the calculator.
+   */
+  function recomputeIfCalculated(line: LineDraft): LineDraft {
+    if (!reference) return line;
+    if (line.kind === "LABOUR" && line.labourEntries.length > 0) {
+      const r = priceLabour(line.labourEntries, reference.labourRoles);
+      return {
+        ...line,
+        landedCost: r.landedCost,
+        landedCostCurrency: header.currency,
+        specs: r.specsMarkdown,
+      };
+    }
+    if (line.kind === "OUTSTATION" && line.outstationEntries.length > 0) {
+      const r = priceOutstation(line.outstationEntries, reference.labourRoles);
+      return {
+        ...line,
+        landedCost: r.landedCost,
+        landedCostCurrency: header.currency,
+        specs: r.specsMarkdown,
+      };
+    }
+    return line;
   }
 
   // Live preview totals
@@ -359,6 +460,8 @@ export default function QuoteBuilder({
           discountPct: Number(i.discountPct) || 0,
           recurring: i.recurring,
           sortOrder: idx,
+          labourEntries: i.kind === "LABOUR" ? i.labourEntries : [],
+          outstationEntries: i.kind === "OUTSTATION" ? i.outstationEntries : [],
         })),
     };
     const url = isEdit ? `/api/admin/quotes/${initial!.id}` : "/api/admin/quotes";
@@ -580,6 +683,7 @@ export default function QuoteBuilder({
                 item={item}
                 preview={preview}
                 tiers={reference.markupTiers}
+                labourRoles={reference.labourRoles}
                 currency={header.currency}
                 onChange={(patch) => updateItem(idx, patch)}
                 onRemove={() => removeItem(idx)}
@@ -591,11 +695,11 @@ export default function QuoteBuilder({
           <Button type="button" variant="secondary" size="sm" onClick={() => addItem("PRODUCT")}>
             <Plus className="w-3.5 h-3.5" /> Product line
           </Button>
-          <Button type="button" variant="secondary" size="sm" onClick={() => addItem("LABOUR")}>
-            <Plus className="w-3.5 h-3.5" /> Labour line
+          <Button type="button" variant="secondary" size="sm" onClick={addLabourLine}>
+            <Briefcase className="w-3.5 h-3.5" /> Labour calculator
           </Button>
-          <Button type="button" variant="secondary" size="sm" onClick={() => addItem("OUTSTATION")}>
-            <Plus className="w-3.5 h-3.5" /> Outstation line
+          <Button type="button" variant="secondary" size="sm" onClick={addOutstationLine}>
+            <Plane className="w-3.5 h-3.5" /> Outstation calculator
           </Button>
           <Button type="button" variant="ghost" size="sm" onClick={() => addItem("OTHER")}>
             <Plus className="w-3.5 h-3.5" /> Other
@@ -728,6 +832,7 @@ function LineRow({
   item,
   preview,
   tiers,
+  labourRoles,
   currency,
   onChange,
   onRemove,
@@ -736,11 +841,18 @@ function LineRow({
   item: LineDraft;
   preview: ReturnType<typeof priceLine> | null;
   tiers: TierOpt[];
+  labourRoles: LabourRoleRef[];
   currency: string;
   onChange: (patch: Partial<LineDraft>) => void;
   onRemove: () => void;
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const isCalculated =
+    (item.kind === "LABOUR" && item.labourEntries.length > 0) ||
+    (item.kind === "OUTSTATION" && item.outstationEntries.length > 0);
+  const isCalcKind = item.kind === "LABOUR" || item.kind === "OUTSTATION";
+  // Open by default when the line is a calculator with no entries yet — pushes
+  // the rep to fill them in.
+  const [expanded, setExpanded] = useState(isCalcKind && !isCalculated);
 
   return (
     <div className="rounded-lg border border-white/10 bg-white/[0.02] p-3 space-y-3">
@@ -775,6 +887,8 @@ function LineRow({
           value={String(item.landedCost)}
           onChange={(e) => onChange({ landedCost: Number(e.target.value) || 0 })}
           className="md:col-span-2 text-right"
+          disabled={isCalculated}
+          title={isCalculated ? "Computed from calculator entries below" : undefined}
         />
         <div className="md:col-span-2 flex items-center justify-end gap-2">
           {preview && (
@@ -798,7 +912,11 @@ function LineRow({
         onClick={() => setExpanded((v) => !v)}
         className="text-xs text-white/50 hover:text-white"
       >
-        {expanded ? "▾ Hide details" : "▸ Details, markup, specs"}
+        {expanded
+          ? "▾ Hide details"
+          : isCalcKind
+          ? `▸ ${item.kind === "LABOUR" ? "Labour" : "Outstation"} calculator, markup, specs`
+          : "▸ Details, markup, specs"}
       </button>
 
       {expanded && (
@@ -881,14 +999,42 @@ function LineRow({
               />
             </Field>
           </div>
-          <Field label="Specs (markdown)" hint="Indented spec block under the line on the PDF">
-            <TextArea
-              rows={3}
-              value={item.specs}
-              onChange={(e) => onChange({ specs: e.target.value })}
-              placeholder="• Intel i7-14700, 32GB DDR5, 1TB NVMe&#10;• 27&quot; QHD monitor"
+          {item.kind === "LABOUR" && (
+            <LabourCalcEditor
+              entries={item.labourEntries}
+              roles={labourRoles}
+              currency={currency}
+              onChange={(labourEntries) => onChange({ labourEntries })}
             />
-          </Field>
+          )}
+          {item.kind === "OUTSTATION" && (
+            <OutstationCalcEditor
+              entries={item.outstationEntries}
+              roles={labourRoles}
+              currency={currency}
+              onChange={(outstationEntries) => onChange({ outstationEntries })}
+            />
+          )}
+          {!isCalcKind && (
+            <Field label="Specs (markdown)" hint="Indented spec block under the line on the PDF">
+              <TextArea
+                rows={3}
+                value={item.specs}
+                onChange={(e) => onChange({ specs: e.target.value })}
+                placeholder="• Intel i7-14700, 32GB DDR5, 1TB NVMe&#10;• 27&quot; QHD monitor"
+              />
+            </Field>
+          )}
+          {isCalcKind && item.specs && (
+            <details className="text-xs text-white/50">
+              <summary className="cursor-pointer hover:text-white/80">
+                ▸ Generated breakdown (auto from entries above)
+              </summary>
+              <pre className="mt-2 whitespace-pre-wrap text-white/60 bg-[#0f1621] border border-white/10 p-3 rounded text-[11px]">
+                {item.specs}
+              </pre>
+            </details>
+          )}
           {preview && (
             <div className="rounded-md bg-[#0f1621] border border-white/10 p-3 text-xs text-white/70 grid grid-cols-2 md:grid-cols-6 gap-3">
               <Metric label="Landed/unit" value={formatMoney(preview.unitLanded, currency)} />
@@ -916,6 +1062,321 @@ function Metric({ label, value, tone }: { label: string; value: string; tone?: "
       <p className={`mt-0.5 ${tone === "margin" ? "text-emerald-200 font-semibold" : "text-white/90"}`}>
         {value}
       </p>
+    </div>
+  );
+}
+
+// ============================================================================
+// Calculator editors — spec §8.1 (Labour) and §8.2 (Outstation).
+// ============================================================================
+
+function LabourCalcEditor({
+  entries,
+  roles,
+  currency,
+  onChange,
+}: {
+  entries: LabourEntryDraft[];
+  roles: LabourRoleRef[];
+  currency: string;
+  onChange: (entries: LabourEntryDraft[]) => void;
+}) {
+  const roleMap = useMemo(() => new Map(roles.map((r) => [r.id, r])), [roles]);
+  const totals = useMemo(() => priceLabour(entries, roles), [entries, roles]);
+
+  function update(idx: number, patch: Partial<LabourEntryDraft>) {
+    onChange(entries.map((e, i) => (i === idx ? { ...e, ...patch } : e)));
+  }
+  function remove(idx: number) {
+    onChange(entries.filter((_, i) => i !== idx));
+  }
+  function addRow() {
+    const defaultRole = roles[0];
+    if (!defaultRole) return;
+    onChange([...entries, { roleId: defaultRole.id, days: 1, indirectDays: 0 }]);
+  }
+
+  if (roles.length === 0) {
+    return (
+      <div className="rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs px-3 py-2">
+        No labour roles configured. Seed the database or add roles via Prisma Studio.
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <p className="text-xs uppercase tracking-wide text-white/60">
+          Labour entries
+        </p>
+        <p className="text-xs text-white/50">
+          Landed cost (computed):{" "}
+          <span className="text-white font-medium">
+            {formatMoney(totals.landedCost, currency)}
+          </span>
+        </p>
+      </div>
+      <div className="rounded-md bg-[#0f1621] border border-white/10 overflow-hidden">
+        <table className="w-full text-xs">
+          <thead className="bg-white/5 text-white/50">
+            <tr>
+              <th className="text-left px-2 py-1.5 font-medium">Role</th>
+              <th className="text-right px-2 py-1.5 font-medium w-20">Days</th>
+              <th className="text-right px-2 py-1.5 font-medium w-24">Indirect</th>
+              <th className="text-right px-2 py-1.5 font-medium hidden md:table-cell">Daily rate</th>
+              <th className="text-right px-2 py-1.5 font-medium">Row total</th>
+              <th className="w-8" />
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/5">
+            {entries.map((entry, idx) => {
+              const role = roleMap.get(entry.roleId);
+              const rowTotal = role
+                ? (entry.days + entry.indirectDays) * role.dailyRate
+                : 0;
+              return (
+                <tr key={idx}>
+                  <td className="px-2 py-1.5">
+                    <Select
+                      value={entry.roleId}
+                      onChange={(e) => {
+                        const newRole = roleMap.get(e.target.value);
+                        update(idx, {
+                          roleId: e.target.value,
+                          indirectDays: newRole
+                            ? defaultIndirectDays(newRole.name, entry.days)
+                            : entry.indirectDays,
+                        });
+                      }}
+                    >
+                      {roles.map((r) => (
+                        <option key={r.id} value={r.id}>
+                          {r.name}
+                        </option>
+                      ))}
+                    </Select>
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <TextInput
+                      type="number" min={0} step="0.25"
+                      className="text-right"
+                      value={String(entry.days)}
+                      onChange={(e) => {
+                        const days = Number(e.target.value) || 0;
+                        update(idx, {
+                          days,
+                          // Re-apply the indirect default whenever days changes
+                          // unless the rep has typed a non-default value.
+                          indirectDays: role
+                            ? defaultIndirectDays(role.name, days)
+                            : entry.indirectDays,
+                        });
+                      }}
+                    />
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <TextInput
+                      type="number" min={0} step="0.25"
+                      className="text-right"
+                      value={String(entry.indirectDays)}
+                      onChange={(e) =>
+                        update(idx, { indirectDays: Number(e.target.value) || 0 })
+                      }
+                    />
+                  </td>
+                  <td className="px-2 py-1.5 text-right text-white/70 hidden md:table-cell">
+                    {role ? formatMoney(role.dailyRate, currency) : "—"}
+                  </td>
+                  <td className="px-2 py-1.5 text-right text-white/90">
+                    {formatMoney(rowTotal, currency)}
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <button
+                      type="button"
+                      onClick={() => remove(idx)}
+                      className="text-white/40 hover:text-rose-400"
+                      aria-label="Remove"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <button
+        type="button"
+        onClick={addRow}
+        className="inline-flex items-center gap-1.5 text-xs text-[#BD2E25] hover:text-[#E85C53]"
+      >
+        <Plus className="w-3.5 h-3.5" /> Add role
+      </button>
+    </div>
+  );
+}
+
+function OutstationCalcEditor({
+  entries,
+  roles,
+  currency,
+  onChange,
+}: {
+  entries: OutstationEntryDraft[];
+  roles: LabourRoleRef[];
+  currency: string;
+  onChange: (entries: OutstationEntryDraft[]) => void;
+}) {
+  const rolesWithRates = useMemo(
+    () => roles.filter((r) => r.outstationRate),
+    [roles]
+  );
+  const roleMap = useMemo(
+    () => new Map(rolesWithRates.map((r) => [r.id, r])),
+    [rolesWithRates]
+  );
+  const totals = useMemo(
+    () => priceOutstation(entries, rolesWithRates),
+    [entries, rolesWithRates]
+  );
+
+  function update(idx: number, patch: Partial<OutstationEntryDraft>) {
+    onChange(entries.map((e, i) => (i === idx ? { ...e, ...patch } : e)));
+  }
+  function remove(idx: number) {
+    onChange(entries.filter((_, i) => i !== idx));
+  }
+  function addRow() {
+    const defaultRole = rolesWithRates[0];
+    if (!defaultRole) return;
+    onChange([
+      ...entries,
+      { roleId: defaultRole.id, staffCount: 1, days: 1, trips: 1 },
+    ]);
+  }
+
+  if (rolesWithRates.length === 0) {
+    return (
+      <div className="rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs px-3 py-2">
+        No labour roles have outstation per-diems configured. Add them via Prisma Studio first.
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <p className="text-xs uppercase tracking-wide text-white/60">
+          Outstation entries
+        </p>
+        <p className="text-xs text-white/50">
+          Landed cost (computed):{" "}
+          <span className="text-white font-medium">
+            {formatMoney(totals.landedCost, currency)}
+          </span>
+        </p>
+      </div>
+      <div className="rounded-md bg-[#0f1621] border border-white/10 overflow-hidden">
+        <table className="w-full text-xs">
+          <thead className="bg-white/5 text-white/50">
+            <tr>
+              <th className="text-left px-2 py-1.5 font-medium">Role</th>
+              <th className="text-right px-2 py-1.5 font-medium w-16">Staff</th>
+              <th className="text-right px-2 py-1.5 font-medium w-20">Days</th>
+              <th className="text-right px-2 py-1.5 font-medium w-16">Trips</th>
+              <th className="text-right px-2 py-1.5 font-medium hidden md:table-cell">Per-diem/day</th>
+              <th className="text-right px-2 py-1.5 font-medium">Row total</th>
+              <th className="w-8" />
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/5">
+            {entries.map((entry, idx) => {
+              const role = roleMap.get(entry.roleId);
+              const perDiem = role?.outstationRate
+                ? role.outstationRate.feeding +
+                  role.outstationRate.localTransport +
+                  role.outstationRate.outstationCharge +
+                  role.outstationRate.misc
+                : 0;
+              const transportPerTrip = role?.outstationRate?.transportPerTrip ?? 0;
+              const rowTotal =
+                entry.staffCount * entry.days * perDiem +
+                entry.trips * transportPerTrip;
+              return (
+                <tr key={idx}>
+                  <td className="px-2 py-1.5">
+                    <Select
+                      value={entry.roleId}
+                      onChange={(e) => update(idx, { roleId: e.target.value })}
+                    >
+                      {rolesWithRates.map((r) => (
+                        <option key={r.id} value={r.id}>
+                          {r.name}
+                        </option>
+                      ))}
+                    </Select>
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <TextInput
+                      type="number" min={1} step="1"
+                      className="text-right"
+                      value={String(entry.staffCount)}
+                      onChange={(e) =>
+                        update(idx, { staffCount: Number(e.target.value) || 1 })
+                      }
+                    />
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <TextInput
+                      type="number" min={0} step="0.5"
+                      className="text-right"
+                      value={String(entry.days)}
+                      onChange={(e) =>
+                        update(idx, { days: Number(e.target.value) || 0 })
+                      }
+                    />
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <TextInput
+                      type="number" min={0} step="1"
+                      className="text-right"
+                      value={String(entry.trips)}
+                      onChange={(e) =>
+                        update(idx, { trips: Number(e.target.value) || 0 })
+                      }
+                    />
+                  </td>
+                  <td className="px-2 py-1.5 text-right text-white/70 hidden md:table-cell">
+                    {formatMoney(perDiem, currency)}
+                  </td>
+                  <td className="px-2 py-1.5 text-right text-white/90">
+                    {formatMoney(rowTotal, currency)}
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <button
+                      type="button"
+                      onClick={() => remove(idx)}
+                      className="text-white/40 hover:text-rose-400"
+                      aria-label="Remove"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <button
+        type="button"
+        onClick={addRow}
+        className="inline-flex items-center gap-1.5 text-xs text-[#BD2E25] hover:text-[#E85C53]"
+      >
+        <Plus className="w-3.5 h-3.5" /> Add role
+      </button>
     </div>
   );
 }

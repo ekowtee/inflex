@@ -26,7 +26,11 @@ export async function GET(
       whtCategory: true,
       items: {
         orderBy: { sortOrder: "asc" },
-        include: { markupTier: { select: { id: true, name: true } } },
+        include: {
+          markupTier: { select: { id: true, name: true } },
+          labourEntries: { orderBy: { sortOrder: "asc" } },
+          outstationEntries: { orderBy: { sortOrder: "asc" } },
+        },
       },
       invoice: { select: { id: true, number: true } },
       revisions: { orderBy: { changedAt: "desc" }, include: { editor: { select: { name: true } } } },

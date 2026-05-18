@@ -25,7 +25,11 @@ export default async function QuoteDetailPage({
       whtCategory: true,
       items: {
         orderBy: { sortOrder: "asc" },
-        include: { markupTier: { select: { id: true, name: true } } },
+        include: {
+          markupTier: { select: { id: true, name: true } },
+          labourEntries: { orderBy: { sortOrder: "asc" } },
+          outstationEntries: { orderBy: { sortOrder: "asc" } },
+        },
       },
       invoice: { select: { id: true, number: true } },
       revisions: {
@@ -141,6 +145,17 @@ export default async function QuoteDetailPage({
             surchargePct: i.surchargePct,
             discountPct: i.discountPct,
             recurring: i.recurring,
+            labourEntries: i.labourEntries.map((e) => ({
+              roleId: e.roleId,
+              days: e.days,
+              indirectDays: e.indirectDays,
+            })),
+            outstationEntries: i.outstationEntries.map((e) => ({
+              roleId: e.roleId,
+              staffCount: e.staffCount,
+              days: e.days,
+              trips: e.trips,
+            })),
           })),
           hasInvoice: Boolean(quote.invoice),
           invoiceId: quote.invoice?.id,

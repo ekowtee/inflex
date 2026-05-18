@@ -34,6 +34,23 @@ export const customerSchema = z.object({
 
 // ---------- Quote builder v2 ----------
 
+export const labourEntrySchema = z.object({
+  roleId: z.string().min(1, "Role is required"),
+  days: z.coerce.number().min(0).default(0),
+  indirectDays: z.coerce.number().min(0).default(0),
+  description: z.string().optional().nullable(),
+  sortOrder: z.coerce.number().int().default(0),
+});
+
+export const outstationEntrySchema = z.object({
+  roleId: z.string().min(1, "Role is required"),
+  staffCount: z.coerce.number().int().min(1).default(1),
+  days: z.coerce.number().min(0).default(0),
+  trips: z.coerce.number().int().min(0).default(1),
+  description: z.string().optional().nullable(),
+  sortOrder: z.coerce.number().int().default(0),
+});
+
 export const lineItemSchema = z.object({
   description: z.string().min(1, "Description is required").max(500),
   kind: z
@@ -55,6 +72,11 @@ export const lineItemSchema = z.object({
     .enum(["NONE", "MONTHLY", "QUARTERLY", "ANNUALLY"])
     .default("NONE"),
   sortOrder: z.coerce.number().int().default(0),
+  // Calculator entries — only meaningful for LABOUR / OUTSTATION kinds.
+  // When present, the server uses them as the source of truth for landedCost
+  // and the entries are persisted (LabourEntry / OutstationEntry rows).
+  labourEntries: z.array(labourEntrySchema).default([]),
+  outstationEntries: z.array(outstationEntrySchema).default([]),
 });
 
 export const quoteSchema = z.object({

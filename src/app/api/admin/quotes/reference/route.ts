@@ -13,7 +13,7 @@ export async function GET() {
   const denied = await requireAdmin();
   if (denied) return denied;
 
-  const [tiers, whtCategories, architects, settings] = await Promise.all([
+  const [tiers, whtCategories, architects, labourRoles, settings] = await Promise.all([
     prisma.markupTier.findMany({
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
@@ -27,6 +27,11 @@ export async function GET() {
       select: { id: true, name: true, role: true },
       orderBy: { name: "asc" },
     }),
+    prisma.labourRole.findMany({
+      where: { isActive: true },
+      include: { outstationRate: true },
+      orderBy: { sortOrder: "asc" },
+    }),
     prisma.companySettings.upsert({
       where: { id: "singleton" },
       create: {},
@@ -38,6 +43,7 @@ export async function GET() {
     markupTiers: tiers,
     whtCategories,
     architects,
+    labourRoles,
     settings: {
       currency: settings.currency,
       vatRegistered: settings.vatRegistered,

@@ -11,6 +11,13 @@ import {
   type PriceLineInput,
   type LineKind,
 } from "./pricing";
+import {
+  priceLabour,
+  priceOutstation,
+  type LabourRoleRef,
+  type LabourEntryInput,
+  type OutstationEntryInput,
+} from "./calculators";
 
 export interface QuoteInputLine {
   description: string;
@@ -27,6 +34,11 @@ export interface QuoteInputLine {
   discountPct: number;
   recurring: string;
   sortOrder: number;
+  // Calculator entries — server uses these to recompute landedCost + specs
+  // for LABOUR / OUTSTATION lines, ignoring whatever the client passed for
+  // those two fields. PRODUCT / OTHER lines ignore these.
+  labourEntries?: LabourEntryInput[];
+  outstationEntries?: OutstationEntryInput[];
 }
 
 export interface QuoteInput {
@@ -92,6 +104,65 @@ export async function priceQuote(input: QuoteInput): Promise<PricedQuote> {
     : [];
   const tierMap = new Map(tiers.map((t) => [t.id, t]));
 
+  // Resolve labour roles when any line carries calculator entries. We need
+  // the daily rates and outstation per-diems to recompute landed costs.
+  const roleIds = new Set<string>();
+  for (const item of input.items) {
+    for (const e of item.labourEntries ?? []) roleIds.add(e.roleId);
+    for (const e of item.outstationEntries ?? []) roleIds.add(e.roleId);
+  }
+  const roles = roleIds.size
+    ? await prisma.labourRole.findMany({
+        where: { id: { in: Array.from(roleIds) } },
+        include: { outstationRate: true },
+      })
+    : [];
+  const roleRefs: LabourRoleRef[] = roles.map((r) => ({
+    id: r.id,
+    name: r.name,
+    dailyRate: Number(r.dailyRate),
+    kind: r.kind,
+    outstationRate: r.outstationRate
+      ? {
+          feeding: Number(r.outstationRate.feeding),
+          localTransport: Number(r.outstationRate.localTransport),
+          outstationCharge: Number(r.outstationRate.outstationCharge),
+          misc: Number(r.outstationRate.misc),
+          transportPerTrip: Number(r.outstationRate.transportPerTrip),
+          currency: r.outstationRate.currency,
+        }
+      : null,
+  }));
+
+  // Server-side recompute of LABOUR / OUTSTATION landed cost + specs from entries.
+  // Entries are the source of truth — whatever the client typed in landedCost
+  // for these line kinds is overridden.
+  const normalisedItems: QuoteInputLine[] = input.items.map((item) => {
+    if (item.kind === "LABOUR" && item.labourEntries && item.labourEntries.length > 0) {
+      const r = priceLabour(item.labourEntries, roleRefs);
+      return {
+        ...item,
+        landedCost: r.landedCost,
+        landedCostCurrency: input.currency,
+        specs: r.specsMarkdown,
+      };
+    }
+    if (
+      item.kind === "OUTSTATION" &&
+      item.outstationEntries &&
+      item.outstationEntries.length > 0
+    ) {
+      const r = priceOutstation(item.outstationEntries, roleRefs);
+      return {
+        ...item,
+        landedCost: r.landedCost,
+        landedCostCurrency: input.currency,
+        specs: r.specsMarkdown,
+      };
+    }
+    return item;
+  });
+
   const ctx: PriceLineContext = {
     quoteCurrency: input.currency,
     fxRate: input.fxRate ?? null,
@@ -106,7 +177,7 @@ export async function priceQuote(input: QuoteInput): Promise<PricedQuote> {
     },
   };
 
-  const pricedItems = input.items.map((item) => {
+  const pricedItems = normalisedItems.map((item) => {
     const tier = item.markupTierId ? tierMap.get(item.markupTierId) : undefined;
     // PRODUCT lines always carry finance charge; other kinds follow tier setting
     // (default true if no tier). FINANCE_CHARGE lines themselves never recurse.
@@ -188,6 +259,13 @@ export function quoteToPrismaData(priced: PricedQuote) {
 }
 
 export function lineToPrismaData(item: PricedQuote["items"][number]) {
+  const labourEntries = (item.labourEntries ?? []).filter(
+    (e) => item.kind === "LABOUR" && e.roleId
+  );
+  const outstationEntries = (item.outstationEntries ?? []).filter(
+    (e) => item.kind === "OUTSTATION" && e.roleId
+  );
+
   return {
     description: item.description,
     kind: item.kind,
@@ -218,5 +296,28 @@ export function lineToPrismaData(item: PricedQuote["items"][number]) {
     unitPrice: toDecimal(item.finalUnitPriceExclTax),
     recurring: item.recurring as "NONE" | "MONTHLY" | "QUARTERLY" | "ANNUALLY",
     sortOrder: item.sortOrder,
+    ...(labourEntries.length > 0 && {
+      labourEntries: {
+        create: labourEntries.map((e, idx) => ({
+          roleId: e.roleId,
+          days: toDecimal(e.days ?? 0),
+          indirectDays: toDecimal(e.indirectDays ?? 0),
+          description: e.description ?? null,
+          sortOrder: idx,
+        })),
+      },
+    }),
+    ...(outstationEntries.length > 0 && {
+      outstationEntries: {
+        create: outstationEntries.map((e, idx) => ({
+          roleId: e.roleId,
+          staffCount: e.staffCount ?? 1,
+          days: toDecimal(e.days ?? 0),
+          trips: e.trips ?? 1,
+          description: e.description ?? null,
+          sortOrder: idx,
+        })),
+      },
+    }),
   };
 }
