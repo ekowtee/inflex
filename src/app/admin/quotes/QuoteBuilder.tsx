@@ -29,6 +29,7 @@ interface TierOpt {
   name: string;
   pct: number;
   carriesFinanceCharge: boolean;
+  isDefault: boolean;
 }
 interface WhtOpt {
   id: string;
@@ -278,7 +279,20 @@ export default function QuoteBuilder({
   }
 
   function addItem(kind: LineKind = "PRODUCT") {
-    setItems((arr) => [...arr, newLine({ kind })]);
+    // Default markup tier: the one flagged isDefault in settings (seeded as
+    // "Standard"). Otherwise the first active tier. Without this, the line
+    // has 0% markup and the customer-facing price equals landed cost — looks
+    // broken, easy to miss.
+    const defaultTier =
+      reference?.markupTiers.find((t) => t.isDefault) ?? reference?.markupTiers[0];
+    setItems((arr) => [
+      ...arr,
+      newLine({
+        kind,
+        markupTierId: defaultTier?.id ?? "",
+        markupPct: defaultTier ? Number(defaultTier.pct) : 0,
+      }),
+    ]);
   }
 
   function addLabourLine() {
