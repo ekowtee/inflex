@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { publicContactSchema } from "@/lib/validators";
+import { publicContactSchema, CONTACT_SUBJECTS } from "@/lib/validators";
 import {
   escapeHtml,
   salesNotificationAddress,
@@ -12,9 +12,15 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 /**
- * Public lead capture. Anyone can POST. Creates a Customer with leadStatus
- * LEAD and leadSource WEBSITE, or updates an existing customer (matched by
- * email) by appending the new message to their notes.
+ * Public lead capture. Anyone can POST. Writes to the Lead table — not
+ * Customer (which is the qualified-account model). The rep promotes leads to
+ * customers from the admin once qualified.
+ *
+ * Dedup-at-capture:
+ *   - If there's already an OPEN lead (NEW/IN_PROGRESS) for this email,
+ *     append the new message to that lead instead of creating a duplicate.
+ *   - If the email matches an existing Customer or Contact, still create a
+ *     fresh Lead but link it to that Customer so the rep sees the match.
  */
 export async function POST(req: NextRequest) {
   let body: unknown;
@@ -33,14 +39,12 @@ export async function POST(req: NextRequest) {
   }
   const d = parsed.data;
 
-  // Honeypot — bots fill `hp`, real humans don't see it. Pretend success so
-  // we don't tip them off, but write nothing.
+  // Honeypot — bots fill `hp`, real humans don't see it. Pretend success.
   if (d.hp && d.hp.length > 0) {
     return NextResponse.json({ ok: true });
   }
 
-  // Cloudflare Turnstile verification. Only enforced when the secret is set
-  // (so local dev without env vars still works).
+  // Cloudflare Turnstile (only enforced when the secret is configured).
   const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
   if (turnstileSecret) {
     if (!d.turnstileToken) {
@@ -59,68 +63,102 @@ export async function POST(req: NextRequest) {
   }
 
   const email = d.email.trim().toLowerCase();
-  const noteEntry = formatNoteEntry({
-    subject: d.subject,
-    message: d.message ?? null,
-    phone: d.phone ?? null,
-  });
+  const stamp = new Date().toISOString().slice(0, 16).replace("T", " ") + " UTC";
 
   try {
-    const existing = await prisma.customer.findFirst({
-      where: { email: { equals: email, mode: "insensitive" } },
-    });
+    // Look for an existing open lead and/or a matched customer.
+    const [existingLead, matchedCustomer, matchedContact] = await Promise.all([
+      prisma.lead.findFirst({
+        where: {
+          email: { equals: email, mode: "insensitive" },
+          status: { in: ["NEW", "IN_PROGRESS"] },
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.customer.findFirst({
+        where: { email: { equals: email, mode: "insensitive" } },
+      }),
+      prisma.contact.findFirst({
+        where: { email: { equals: email, mode: "insensitive" } },
+        include: { customer: true },
+      }),
+    ]);
 
-    let customerId: string;
-    if (existing) {
-      const mergedNotes = existing.notes
-        ? `${existing.notes}\n\n${noteEntry}`
-        : noteEntry;
-      const mergedTags = Array.from(
-        new Set([...(existing.tags ?? []), d.subject])
-      );
-      const updated = await prisma.customer.update({
-        where: { id: existing.id },
+    const linkedCustomer = matchedCustomer ?? matchedContact?.customer ?? null;
+    const linkedContactId = matchedContact?.id ?? null;
+
+    let leadId: string;
+    let isExisting = false;
+    if (existingLead) {
+      // Append to the open lead; don't create a duplicate.
+      const appendix = formatNoteEntry({
+        stamp,
+        subject: d.subject,
+        message: d.message ?? null,
+        phone: d.phone ?? null,
+        repeat: true,
+      });
+      const updated = await prisma.lead.update({
+        where: { id: existingLead.id },
         data: {
-          // Don't overwrite a higher status (e.g. ACTIVE) with LEAD.
-          ...(existing.leadStatus === "LEAD" && { leadStatus: "LEAD" }),
-          notes: mergedNotes,
-          tags: mergedTags,
-          // Fill in any missing contact fields the new submission supplies.
-          ...(d.name && !existing.name ? { name: d.name } : {}),
-          ...(d.phone && !existing.phone ? { phone: d.phone.trim() } : {}),
-          ...(d.company && !existing.company ? { company: d.company.trim() } : {}),
+          notes: existingLead.notes ? `${existingLead.notes}\n\n${appendix}` : appendix,
+          tags: Array.from(new Set([...(existingLead.tags ?? []), d.subject])),
+          // Fill in fields the original was missing.
+          ...(d.name && !existingLead.name ? { name: d.name.trim() } : {}),
+          ...(d.phone && !existingLead.phone ? { phone: d.phone.trim() } : {}),
+          ...(d.company && !existingLead.companyName
+            ? { companyName: d.company.trim() }
+            : {}),
         },
       });
-      customerId = updated.id;
+      leadId = updated.id;
+      isExisting = true;
     } else {
-      const created = await prisma.customer.create({
+      const noteEntry = formatNoteEntry({
+        stamp,
+        subject: d.subject,
+        message: d.message ?? null,
+        phone: d.phone ?? null,
+      });
+      const matchNote = linkedCustomer
+        ? `\n\n[match] This email already belongs to customer "${linkedCustomer.name}" (${linkedCustomer.type})${matchedContact ? ` — contact "${matchedContact.name}"` : ""}.`
+        : "";
+      const created = await prisma.lead.create({
         data: {
           name: d.name.trim(),
           email,
           phone: d.phone?.trim() || null,
-          company: d.company?.trim() || null,
-          leadStatus: "LEAD",
-          leadSource: "WEBSITE",
+          companyName: d.company?.trim() || null,
+          subject: d.subject,
+          message: d.message?.trim() || null,
+          source: "WEBSITE",
+          status: linkedCustomer ? "IN_PROGRESS" : "NEW",
           tags: [d.subject],
-          notes: noteEntry,
+          notes: noteEntry + matchNote,
+          ...(linkedCustomer
+            ? {
+                convertedCustomerId: linkedCustomer.id,
+                convertedContactId: linkedContactId,
+                convertedAt: new Date(),
+              }
+            : {}),
         },
       });
-      customerId = created.id;
+      leadId = created.id;
     }
 
-    // Fire notification + acknowledgement. Promise.allSettled so one failed
-    // email doesn't block the other, and neither failure fails the request —
-    // the lead is already saved.
+    // Notification + acknowledgement
     await Promise.allSettled([
       sendSalesNotification({
-        customerId,
+        leadId,
         name: d.name.trim(),
         email,
         phone: d.phone?.trim() ?? null,
         company: d.company?.trim() ?? null,
         subject: d.subject,
         message: d.message?.trim() ?? null,
-        isExisting: Boolean(existing),
+        isExisting,
+        linkedCustomerName: linkedCustomer?.name ?? null,
       }),
       sendCustomerConfirmation({
         name: d.name.trim(),
@@ -140,8 +178,51 @@ export async function POST(req: NextRequest) {
   }
 }
 
+async function verifyTurnstile(
+  token: string,
+  secret: string,
+  req: NextRequest
+): Promise<boolean> {
+  try {
+    const body = new URLSearchParams();
+    body.set("secret", secret);
+    body.set("response", token);
+    const remoteIp =
+      req.headers.get("cf-connecting-ip") ||
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      "";
+    if (remoteIp) body.set("remoteip", remoteIp);
+    const res = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      { method: "POST", body }
+    );
+    if (!res.ok) return false;
+    const data = (await res.json()) as { success?: boolean };
+    return Boolean(data.success);
+  } catch (e) {
+    console.error("Turnstile verification error:", e);
+    return false;
+  }
+}
+
+function formatNoteEntry(opts: {
+  stamp: string;
+  subject: string;
+  message: string | null;
+  phone: string | null;
+  repeat?: boolean;
+}): string {
+  const header = `[${opts.stamp}] ${opts.repeat ? "Repeat website contact" : "Website contact"} — ${opts.subject}`;
+  const lines = [
+    header,
+    opts.phone ? `Phone: ${opts.phone}` : null,
+    opts.message?.trim() ? opts.message.trim() : "(no message)",
+  ].filter(Boolean);
+  return lines.join("\n");
+}
+
 async function sendSalesNotification(lead: {
-  customerId: string;
+  leadId: string;
   name: string;
   email: string;
   phone: string | null;
@@ -149,11 +230,16 @@ async function sendSalesNotification(lead: {
   subject: string;
   message: string | null;
   isExisting: boolean;
+  linkedCustomerName: string | null;
 }) {
   const siteUrl =
     process.env.NEXTAUTH_URL?.replace(/\/$/, "") ?? "https://inflexions.tech";
-  const adminLink = `${siteUrl}/admin/customers/${lead.customerId}`;
-  const label = lead.isExisting ? "Returning lead" : "New lead";
+  const adminLink = `${siteUrl}/admin/leads/${lead.leadId}`;
+  const label = lead.isExisting
+    ? "Repeat lead"
+    : lead.linkedCustomerName
+    ? "New lead (matches existing customer)"
+    : "New lead";
 
   const lines = [
     `${label} via the website contact form.`,
@@ -163,6 +249,9 @@ async function sendSalesNotification(lead: {
     lead.phone ? `Phone:    ${lead.phone}` : null,
     lead.company ? `Company:  ${lead.company}` : null,
     `Subject:  ${lead.subject}`,
+    lead.linkedCustomerName
+      ? `Matched:  ${lead.linkedCustomerName} (existing customer)`
+      : null,
     "",
     "Message:",
     lead.message || "(no message)",
@@ -174,15 +263,22 @@ async function sendSalesNotification(lead: {
   const html = wrapHtml({
     title: `${label} — ${lead.subject}`,
     bodyHtml: `
-      <h2 style="margin:0 0 16px;font-size:18px;color:#1B3764;">${escapeHtml(
-        label
-      )} — ${escapeHtml(lead.subject)}</h2>
+      <h2 style="margin:0 0 16px;font-size:18px;color:#1B3764;">${escapeHtml(label)} — ${escapeHtml(lead.subject)}</h2>
       <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:16px;">
         ${row("Name", lead.name)}
         ${row("Email", `<a href="mailto:${escapeHtml(lead.email)}" style="color:#BD2E25;text-decoration:none;">${escapeHtml(lead.email)}</a>`, true)}
         ${lead.phone ? row("Phone", escapeHtml(lead.phone), true) : ""}
         ${lead.company ? row("Company", escapeHtml(lead.company)) : ""}
         ${row("Subject", escapeHtml(lead.subject))}
+        ${
+          lead.linkedCustomerName
+            ? row(
+                "Matched",
+                `${escapeHtml(lead.linkedCustomerName)} (existing customer)`,
+                true
+              )
+            : ""
+        }
       </table>
       <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;color:#5c6280;">Message</p>
       <div style="background:#f7f8fa;border-left:3px solid #BD2E25;padding:12px 14px;white-space:pre-wrap;border-radius:4px;">
@@ -201,7 +297,6 @@ async function sendSalesNotification(lead: {
     subject: `[Inflexions] ${label}: ${lead.subject} — ${lead.name}`,
     text: lines.join("\n"),
     html,
-    // Replying to the notification = replying to the customer.
     replyTo: lead.email,
   });
 }
@@ -252,9 +347,7 @@ async function sendCustomerConfirmation(opts: {
       `
           : ""
       }
-      <p style="margin:22px 0 0;color:#5c6280;">
-        — The Inflexions team
-      </p>
+      <p style="margin:22px 0 0;color:#5c6280;">— The Inflexions team</p>
     `,
   });
 
@@ -269,57 +362,10 @@ async function sendCustomerConfirmation(opts: {
 
 function row(label: string, value: string, isHtml = false): string {
   return `<tr>
-    <td style="padding:6px 8px;color:#5c6280;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;width:90px;vertical-align:top;">${escapeHtml(
-      label
-    )}</td>
+    <td style="padding:6px 8px;color:#5c6280;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;width:90px;vertical-align:top;">${escapeHtml(label)}</td>
     <td style="padding:6px 8px;color:#171a20;">${isHtml ? value : escapeHtml(value)}</td>
   </tr>`;
 }
 
-async function verifyTurnstile(
-  token: string,
-  secret: string,
-  req: NextRequest
-): Promise<boolean> {
-  try {
-    const body = new URLSearchParams();
-    body.set("secret", secret);
-    body.set("response", token);
-    const remoteIp =
-      req.headers.get("cf-connecting-ip") ||
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      "";
-    if (remoteIp) body.set("remoteip", remoteIp);
-
-    const res = await fetch(
-      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-      { method: "POST", body }
-    );
-    if (!res.ok) {
-      console.error("Turnstile siteverify HTTP error", res.status);
-      return false;
-    }
-    const data = (await res.json()) as { success?: boolean; "error-codes"?: string[] };
-    if (!data.success) {
-      console.warn("Turnstile rejection", data["error-codes"]);
-    }
-    return Boolean(data.success);
-  } catch (e) {
-    console.error("Turnstile verification error:", e);
-    return false;
-  }
-}
-
-function formatNoteEntry(opts: {
-  subject: string;
-  message: string | null;
-  phone: string | null;
-}): string {
-  const stamp = new Date().toISOString().slice(0, 16).replace("T", " ") + " UTC";
-  const lines = [
-    `[${stamp}] Website contact — ${opts.subject}`,
-    opts.phone ? `Phone: ${opts.phone}` : null,
-    opts.message?.trim() ? opts.message.trim() : "(no message)",
-  ].filter(Boolean);
-  return lines.join("\n");
-}
+// Re-exported so other modules can stay in sync with the subject options.
+export { CONTACT_SUBJECTS };

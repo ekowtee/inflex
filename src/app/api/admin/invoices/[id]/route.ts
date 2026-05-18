@@ -74,6 +74,7 @@ export async function PUT(
       where: { id },
       data: {
         customerId: data.customerId,
+        contactId: data.contactId || null,
         status: data.status,
         notes: data.notes || null,
         taxRate: toDecimal(data.taxRate),

@@ -46,7 +46,17 @@ export default async function QuoteDetailPage({
     session?.user?.role === "DIRECTOR" || session?.user?.role === "FINANCE";
 
   const customersRows = await prisma.customer.findMany({
-    select: { id: true, name: true, company: true },
+    where: { mergedIntoCustomerId: null },
+    select: {
+      id: true,
+      name: true,
+      legalName: true,
+      type: true,
+      contacts: {
+        select: { id: true, name: true, role: true, isPrimary: true },
+        orderBy: [{ isPrimary: "desc" }, { name: "asc" }],
+      },
+    },
     orderBy: { name: "asc" },
   });
   const customers = decimalToNumber(customersRows);
@@ -78,7 +88,7 @@ export default async function QuoteDetailPage({
         description={
           quote.projectTitle
             ? `${quote.projectTitle} · for ${quote.customer.name}`
-            : `For ${quote.customer.name}${quote.customer.company ? ` · ${quote.customer.company}` : ""}`
+            : `For ${quote.customer.name}${quote.customer.legalName && quote.customer.legalName !== quote.customer.name ? ` · ${quote.customer.legalName}` : ""}`
         }
       />
 
@@ -112,6 +122,7 @@ export default async function QuoteDetailPage({
         quote={{
           id: quote.id,
           customerId: quote.customerId,
+          contactId: quote.contactId,
           status: quote.status,
           projectTitle: quote.projectTitle,
           attentionTo: quote.attentionTo,

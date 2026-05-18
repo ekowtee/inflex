@@ -17,7 +17,7 @@ export async function GET() {
   if (denied) return denied;
   const quotes = await prisma.quote.findMany({
     include: {
-      customer: { select: { id: true, name: true, company: true } },
+      customer: { select: { id: true, name: true, legalName: true } },
       solutionArchitect: { select: { id: true, name: true } },
     },
     orderBy: { createdAt: "desc" },
@@ -65,6 +65,7 @@ export async function POST(req: NextRequest) {
     data: {
       number,
       customerId: d.customerId,
+      contactId: d.contactId || null,
       status: d.status,
       projectTitle: d.projectTitle || null,
       attentionTo: d.attentionTo || null,

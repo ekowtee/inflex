@@ -25,7 +25,7 @@ export async function GET() {
   if (denied) return denied;
   const invoices = await prisma.invoice.findMany({
     include: {
-      customer: { select: { id: true, name: true, company: true } },
+      customer: { select: { id: true, name: true, legalName: true } },
       payments: { select: { amount: true } },
     },
     orderBy: { createdAt: "desc" },
@@ -51,6 +51,7 @@ export async function POST(req: NextRequest) {
     data: {
       number,
       customerId: data.customerId,
+      contactId: data.contactId || null,
       quoteId: data.quoteId || null,
       status: data.status,
       notes: data.notes || null,

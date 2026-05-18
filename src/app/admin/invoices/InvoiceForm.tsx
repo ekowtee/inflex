@@ -28,7 +28,9 @@ function round2(n: number) {
 interface CustomerOption {
   id: string;
   name: string;
-  company: string | null;
+  legalName: string | null;
+  type: "COMPANY" | "INDIVIDUAL";
+  contacts: { id: string; name: string; role: string; isPrimary: boolean }[];
 }
 
 interface InvoiceFormItem extends LineItemDraft {
@@ -38,6 +40,7 @@ interface InvoiceFormItem extends LineItemDraft {
 export interface InvoiceFormValues {
   id?: string;
   customerId?: string;
+  contactId?: string | null;
   status?: string;
   notes?: string | null;
   taxRate?: number;
@@ -72,6 +75,7 @@ export default function InvoiceForm({
   const isEdit = Boolean(initial?.id);
   const [form, setForm] = useState({
     customerId: initial?.customerId ?? customers[0]?.id ?? "",
+    contactId: initial?.contactId ?? "",
     status: initial?.status ?? "DRAFT",
     notes: initial?.notes ?? "",
     taxRate: initial?.taxRate ?? 0,
@@ -130,6 +134,7 @@ export default function InvoiceForm({
     setSubmitting(true);
     const payload = {
       customerId: form.customerId,
+      contactId: form.contactId || null,
       status: form.status,
       notes: form.notes || null,
       taxRate: Number(form.taxRate) || 0,
@@ -164,18 +169,47 @@ export default function InvoiceForm({
         <Field label="Customer" required>
           <Select
             value={form.customerId}
-            onChange={(e) => setForm({ ...form, customerId: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, customerId: e.target.value, contactId: "" })
+            }
             required
           >
             <option value="">— Select customer —</option>
             {customers.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
-                {c.company ? ` · ${c.company}` : ""}
+                {c.legalName && c.legalName !== c.name ? ` · ${c.legalName}` : ""}
               </option>
             ))}
           </Select>
         </Field>
+        {(() => {
+          const selected = customers.find((c) => c.id === form.customerId);
+          if (!selected || selected.type !== "COMPANY") return null;
+          return (
+            <Field
+              label="Contact"
+              hint={
+                selected.contacts.length === 0
+                  ? "No contacts on file — add one from the customer page."
+                  : "Named addressee on the PDF (optional)."
+              }
+            >
+              <Select
+                value={form.contactId}
+                onChange={(e) => setForm({ ...form, contactId: e.target.value })}
+                disabled={selected.contacts.length === 0}
+              >
+                <option value="">— None —</option>
+                {selected.contacts.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name} ({c.role}){c.isPrimary ? " · primary" : ""}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+          );
+        })()}
         <Field label="Status">
           <Select
             value={form.status}

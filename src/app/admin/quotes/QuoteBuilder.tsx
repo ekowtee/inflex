@@ -22,7 +22,9 @@ import {
 interface CustomerOpt {
   id: string;
   name: string;
-  company: string | null;
+  legalName: string | null;
+  type: "COMPANY" | "INDIVIDUAL";
+  contacts: { id: string; name: string; role: string; isPrimary: boolean }[];
 }
 interface TierOpt {
   id: string;
@@ -96,6 +98,7 @@ interface LineDraft {
 export interface QuoteBuilderInitial {
   id?: string;
   customerId?: string;
+  contactId?: string | null;
   status?: string;
   projectTitle?: string | null;
   attentionTo?: string | null;
@@ -213,6 +216,7 @@ export default function QuoteBuilder({
   const defaultWht = reference?.whtCategories.find((c) => c.isDefault);
   const [header, setHeader] = useState({
     customerId: initial?.customerId ?? "",
+    contactId: initial?.contactId ?? "",
     status: initial?.status ?? "DRAFT",
     projectTitle: initial?.projectTitle ?? "",
     attentionTo: initial?.attentionTo ?? "",
@@ -438,6 +442,7 @@ export default function QuoteBuilder({
     setSubmitting(true);
     const payload = {
       customerId: header.customerId,
+      contactId: header.contactId || null,
       status: header.status,
       projectTitle: header.projectTitle || null,
       attentionTo: header.attentionTo || null,
@@ -514,18 +519,48 @@ export default function QuoteBuilder({
           <Field label="Customer" required>
             <Select
               value={header.customerId}
-              onChange={(e) => updateHeader("customerId", e.target.value)}
+              onChange={(e) => {
+                updateHeader("customerId", e.target.value);
+                updateHeader("contactId", "");
+              }}
               required
             >
               <option value="">— Select customer —</option>
               {customers.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
-                  {c.company ? ` · ${c.company}` : ""}
+                  {c.legalName && c.legalName !== c.name ? ` · ${c.legalName}` : ""}
                 </option>
               ))}
             </Select>
           </Field>
+          {(() => {
+            const selected = customers.find((c) => c.id === header.customerId);
+            if (!selected || selected.type !== "COMPANY") return null;
+            return (
+              <Field
+                label="Contact"
+                hint={
+                  selected.contacts.length === 0
+                    ? "No contacts on file yet — add one from the customer page."
+                    : "Named addressee on the PDF (optional)."
+                }
+              >
+                <Select
+                  value={header.contactId}
+                  onChange={(e) => updateHeader("contactId", e.target.value)}
+                  disabled={selected.contacts.length === 0}
+                >
+                  <option value="">— None —</option>
+                  {selected.contacts.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} ({c.role}){c.isPrimary ? " · primary" : ""}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+            );
+          })()}
           <Field label="Status">
             <Select value={header.status} onChange={(e) => updateHeader("status", e.target.value)}>
               {STATUS_OPTIONS.map((s) => (

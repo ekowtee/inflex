@@ -20,10 +20,16 @@ type Quote = {
   currency: string;
   createdAt: string;
   validUntil: string | null;
-  customer: { id: string; name: string; company: string | null };
+  customer: { id: string; name: string; legalName: string | null };
 };
 
-type Customer = { id: string; name: string; company: string | null };
+type Customer = {
+  id: string;
+  name: string;
+  legalName: string | null;
+  type: "COMPANY" | "INDIVIDUAL";
+  contacts: { id: string; name: string; role: string; isPrimary: boolean }[];
+};
 
 const STATUSES = ["ALL", "DRAFT", "PENDING_APPROVAL", "SENT", "ACCEPTED", "DECLINED", "EXPIRED"];
 
@@ -121,8 +127,8 @@ export default function QuotesClient({
                     >
                       {q.customer.name}
                     </Link>
-                    {q.customer.company && (
-                      <p className="text-xs text-white/40">{q.customer.company}</p>
+                    {q.customer.legalName && q.customer.legalName !== q.customer.name && (
+                      <p className="text-xs text-white/40">{q.customer.legalName}</p>
                     )}
                   </td>
                   <td className="px-4 py-3">

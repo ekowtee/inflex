@@ -8,7 +8,11 @@ export const metadata = { title: "Customers" };
 
 export default async function CustomersPage() {
   const rows = await prisma.customer.findMany({
+    where: { mergedIntoCustomerId: null },
     orderBy: { createdAt: "desc" },
+    include: {
+      _count: { select: { contacts: true, quotes: true, invoices: true } },
+    },
   });
   const customers = decimalToNumber(rows);
 
@@ -17,7 +21,7 @@ export default async function CustomersPage() {
       <PageHeader
         eyebrow="CRM"
         title="Customers"
-        description="Track leads, qualify prospects, and manage every account in one place."
+        description="Companies and individuals you serve. Each can hold multiple contacts and a full billing address."
       />
       <CustomersClient customers={customers} />
     </>

@@ -129,6 +129,7 @@ export async function PUT(
       where: { id },
       data: {
         customerId: d.customerId,
+        contactId: d.contactId || null,
         status: d.status,
         projectTitle: d.projectTitle || null,
         attentionTo: d.attentionTo || null,

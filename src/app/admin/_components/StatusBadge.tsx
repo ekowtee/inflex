@@ -15,12 +15,17 @@ const STATUS_STYLES: Record<string, string> = {
   COMPLETED: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
   FAILED: "bg-rose-500/15 text-rose-300 border-rose-500/30",
   REFUNDED: "bg-white/10 text-white/70 border-white/20",
-  // Lead status
-  LEAD: "bg-white/10 text-white/70 border-white/20",
-  QUALIFIED: "bg-sky-500/15 text-sky-300 border-sky-500/30",
+  // Customer status
+  PROSPECT: "bg-white/10 text-white/70 border-white/20",
   ACTIVE: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
   DORMANT: "bg-amber-500/15 text-amber-300 border-amber-500/30",
   CHURNED: "bg-rose-500/15 text-rose-300 border-rose-500/30",
+  // Lead status
+  NEW: "bg-sky-500/15 text-sky-300 border-sky-500/30",
+  IN_PROGRESS: "bg-amber-500/15 text-amber-300 border-amber-500/30",
+  QUALIFIED: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
+  DISQUALIFIED: "bg-white/5 text-white/40 border-white/10",
+  DUPLICATE: "bg-white/5 text-white/40 border-white/10",
 };
 
 export default function StatusBadge({ status }: { status: string }) {

@@ -189,10 +189,25 @@ export interface BillingLine {
 }
 
 export interface BillingCustomer {
+  // The display name on the PDF (company commercial name or individual's name).
   name: string;
-  company: string | null;
+  // For COMPANY customers, the registered legal name (when different from `name`).
+  legalName?: string | null;
+  // Tax identification number, surfaced as "TIN: …" beneath the company block.
+  taxId?: string | null;
+  // Multiline billing address (line 1, line 2, "city, region, postal", country).
+  addressLines?: string[];
+  // Customer-level email / phone (fallback when no specific contact is set).
   email: string | null;
   phone: string | null;
+  // Named contact attached to this document — when present, rendered as the
+  // primary addressee (overrides attentionTo if not set).
+  contact?: {
+    name: string;
+    role: string | null;
+    email: string | null;
+    phone: string | null;
+  } | null;
 }
 
 export interface BillingCompany {
@@ -333,30 +348,46 @@ export function BillingDocument(props: BillingDocumentProps) {
         <View style={styles.twoCol}>
           <View style={styles.block}>
             <Text style={styles.blockLabel}>
-              {props.attentionTo ? "Attention" : "Bill to"}
+              {props.attentionTo || props.customer.contact ? "Attention" : "Bill to"}
             </Text>
             {props.attentionTo && (
               <Text style={[styles.blockText, { fontFamily: "Helvetica-Bold" }]}>
                 {props.attentionTo}
               </Text>
             )}
+            {!props.attentionTo && props.customer.contact && (
+              <Text style={[styles.blockText, { fontFamily: "Helvetica-Bold" }]}>
+                {props.customer.contact.name}
+                {props.customer.contact.role ? ` — ${props.customer.contact.role}` : ""}
+              </Text>
+            )}
             <Text
               style={
-                props.attentionTo
+                props.attentionTo || props.customer.contact
                   ? styles.blockText
                   : [styles.blockText, { fontFamily: "Helvetica-Bold" }]
               }
             >
               {props.customer.name}
             </Text>
-            {props.customer.company && (
-              <Text style={styles.blockText}>{props.customer.company}</Text>
+            {props.customer.legalName && props.customer.legalName !== props.customer.name && (
+              <Text style={styles.blockText}>{props.customer.legalName}</Text>
             )}
-            {props.customer.email && (
-              <Text style={styles.blockText}>{props.customer.email}</Text>
+            {props.customer.addressLines?.map((line, i) => (
+              <Text key={`addr-${i}`} style={styles.blockText}>{line}</Text>
+            ))}
+            {props.customer.taxId && (
+              <Text style={styles.blockText}>TIN: {props.customer.taxId}</Text>
             )}
-            {props.customer.phone && (
-              <Text style={styles.blockText}>{props.customer.phone}</Text>
+            {(props.customer.contact?.email || props.customer.email) && (
+              <Text style={styles.blockText}>
+                {props.customer.contact?.email ?? props.customer.email}
+              </Text>
+            )}
+            {(props.customer.contact?.phone || props.customer.phone) && (
+              <Text style={styles.blockText}>
+                {props.customer.contact?.phone ?? props.customer.phone}
+              </Text>
             )}
           </View>
           {props.solutionArchitectName && (

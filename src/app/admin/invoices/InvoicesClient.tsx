@@ -21,10 +21,16 @@ type Invoice = {
   currency: string;
   createdAt: string;
   dueDate: string | null;
-  customer: { id: string; name: string; company: string | null };
+  customer: { id: string; name: string; legalName: string | null };
 };
 
-type Customer = { id: string; name: string; company: string | null };
+type Customer = {
+  id: string;
+  name: string;
+  legalName: string | null;
+  type: "COMPANY" | "INDIVIDUAL";
+  contacts: { id: string; name: string; role: string; isPrimary: boolean }[];
+};
 
 const STATUSES = [
   "ALL",
@@ -134,8 +140,8 @@ export default function InvoicesClient({
                     >
                       {inv.customer.name}
                     </Link>
-                    {inv.customer.company && (
-                      <p className="text-xs text-white/40">{inv.customer.company}</p>
+                    {inv.customer.legalName && inv.customer.legalName !== inv.customer.name && (
+                      <p className="text-xs text-white/40">{inv.customer.legalName}</p>
                     )}
                   </td>
                   <td className="px-4 py-3">

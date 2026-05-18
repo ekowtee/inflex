@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
+  Inbox,
   Users,
   FileText,
   Receipt,
@@ -14,6 +15,7 @@ import {
 
 const navItems = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard, exact: true },
+  { name: "Leads", href: "/admin/leads", icon: Inbox },
   { name: "Customers", href: "/admin/customers", icon: Users },
   { name: "Quotes", href: "/admin/quotes", icon: FileText },
   { name: "Invoices", href: "/admin/invoices", icon: Receipt },

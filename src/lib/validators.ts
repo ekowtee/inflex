@@ -49,15 +49,111 @@ export const userUpdateSchema = z.object({
   isActive: z.boolean(),
 });
 
-export const customerSchema = z.object({
+// ---------- Leads ----------
+
+export const LEAD_STATUSES = [
+  "NEW",
+  "IN_PROGRESS",
+  "QUALIFIED",
+  "DISQUALIFIED",
+  "DUPLICATE",
+] as const;
+
+export const LEAD_SOURCES = [
+  "WEBSITE",
+  "REFERRAL",
+  "EVENT",
+  "OUTBOUND",
+  "PARTNER",
+  "OTHER",
+] as const;
+
+export const leadSchema = z.object({
   name: z.string().min(1, "Name is required").max(200),
-  company: z.string().max(200).optional().nullable(),
-  email: z.string().email("Invalid email").optional().nullable().or(z.literal("")),
+  email: z.string().email().max(200).optional().nullable().or(z.literal("")),
   phone: z.string().max(50).optional().nullable(),
-  leadStatus: z.enum(["LEAD", "QUALIFIED", "ACTIVE", "DORMANT", "CHURNED"]),
-  leadSource: z.enum(["REFERRAL", "WEBSITE", "EVENT", "OUTBOUND", "PARTNER", "OTHER"]),
+  companyName: z.string().max(200).optional().nullable(),
+  subject: z.string().max(200).optional().nullable(),
+  message: z.string().max(5000).optional().nullable(),
+  source: z.enum(LEAD_SOURCES).default("WEBSITE"),
+  status: z.enum(LEAD_STATUSES).default("NEW"),
   tags: z.array(z.string()).default([]),
   notes: z.string().optional().nullable(),
+});
+
+// ---------- Customers ----------
+
+export const CUSTOMER_TYPES = ["COMPANY", "INDIVIDUAL"] as const;
+export const CUSTOMER_STATUSES = ["PROSPECT", "ACTIVE", "DORMANT", "CHURNED"] as const;
+
+const customerShape = z.object({
+  type: z.enum(CUSTOMER_TYPES).default("COMPANY"),
+  name: z.string().min(1, "Name is required").max(200),
+  email: z.string().email("Invalid email").optional().nullable().or(z.literal("")),
+  phone: z.string().max(50).optional().nullable(),
+  status: z.enum(CUSTOMER_STATUSES).default("PROSPECT"),
+  tags: z.array(z.string()).default([]),
+  notes: z.string().optional().nullable(),
+
+  // Company-only fields (ignored for INDIVIDUAL but accepted to keep the
+  // form simple).
+  legalName: z.string().max(200).optional().nullable(),
+  industry: z.string().max(100).optional().nullable(),
+  website: z.string().max(300).optional().nullable(),
+  taxId: z.string().max(50).optional().nullable(),
+  addressLine1: z.string().max(200).optional().nullable(),
+  addressLine2: z.string().max(200).optional().nullable(),
+  city: z.string().max(100).optional().nullable(),
+  region: z.string().max(100).optional().nullable(),
+  postalCode: z.string().max(30).optional().nullable(),
+  country: z.string().max(100).optional().nullable(),
+});
+
+export const customerSchema = customerShape.refine(
+  (d) => d.type === "INDIVIDUAL" || (d.name && d.name.length > 0),
+  { message: "Company name is required", path: ["name"] }
+);
+
+// ---------- Contacts ----------
+
+export const CONTACT_ROLES = [
+  "CEO",
+  "FINANCE",
+  "PROCUREMENT",
+  "BUSINESS_LEAD",
+  "TECHNICAL",
+  "OTHER",
+] as const;
+
+export const contactSchema = z.object({
+  customerId: z.string().min(1, "Customer is required"),
+  name: z.string().min(1, "Name is required").max(200),
+  role: z.enum(CONTACT_ROLES).default("OTHER"),
+  roleLabel: z.string().max(100).optional().nullable(),
+  email: z.string().email().optional().nullable().or(z.literal("")),
+  phone: z.string().max(50).optional().nullable(),
+  isPrimary: z.boolean().default(false),
+  notes: z.string().optional().nullable(),
+});
+
+// ---------- Merge actions ----------
+
+export const mergeLeadIntoLeadSchema = z.object({
+  targetLeadId: z.string().min(1, "Target lead is required"),
+});
+
+export const promoteLeadToCustomerSchema = z.object({
+  // Either create a new customer from the lead, or link to an existing one.
+  mode: z.enum(["CREATE", "LINK"]),
+  // CREATE mode: optional override of the customer that gets created
+  customer: customerShape.partial().optional(),
+  // LINK mode: target customer to link to (and optional contact)
+  targetCustomerId: z.string().optional().nullable(),
+  targetContactId: z.string().optional().nullable(),
+});
+
+export const mergeCustomerIntoCustomerSchema = z.object({
+  targetCustomerId: z.string().min(1, "Target customer is required"),
 });
 
 // ---------- Quote builder v2 ----------
@@ -109,6 +205,7 @@ export const lineItemSchema = z.object({
 
 export const quoteSchema = z.object({
   customerId: z.string().min(1, "Customer is required"),
+  contactId: z.string().optional().nullable(),
   status: z
     .enum(["DRAFT", "PENDING_APPROVAL", "SENT", "ACCEPTED", "DECLINED", "EXPIRED"])
     .default("DRAFT"),
@@ -159,6 +256,7 @@ export const invoiceLineItemSchema = z.object({
 
 export const invoiceSchema = z.object({
   customerId: z.string().min(1, "Customer is required"),
+  contactId: z.string().optional().nullable(),
   quoteId: z.string().optional().nullable(),
   status: z
     .enum(["DRAFT", "SENT", "PARTIALLY_PAID", "PAID", "OVERDUE", "CANCELLED"])

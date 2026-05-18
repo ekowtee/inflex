@@ -28,7 +28,13 @@ export default function QuoteDetailClient({
   customers,
 }: {
   quote: QuoteBuilderInitial & QuoteAction;
-  customers: { id: string; name: string; company: string | null }[];
+  customers: {
+    id: string;
+    name: string;
+    legalName: string | null;
+    type: "COMPANY" | "INDIVIDUAL";
+    contacts: { id: string; name: string; role: string; isPrimary: boolean }[];
+  }[];
 }) {
   const router = useRouter();
   const [editing, setEditing] = useState(false);

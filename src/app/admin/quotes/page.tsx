@@ -9,11 +9,21 @@ export const metadata = { title: "Quotes" };
 export default async function QuotesPage() {
   const [quotesRows, customersRows] = await Promise.all([
     prisma.quote.findMany({
-      include: { customer: { select: { id: true, name: true, company: true } } },
+      include: { customer: { select: { id: true, name: true, legalName: true } } },
       orderBy: { createdAt: "desc" },
     }),
     prisma.customer.findMany({
-      select: { id: true, name: true, company: true },
+      where: { mergedIntoCustomerId: null },
+      select: {
+        id: true,
+        name: true,
+        legalName: true,
+        type: true,
+        contacts: {
+          select: { id: true, name: true, role: true, isPrimary: true },
+          orderBy: [{ isPrimary: "desc" }, { name: "asc" }],
+        },
+      },
       orderBy: { name: "asc" },
     }),
   ]);

@@ -31,7 +31,17 @@ export default async function InvoiceDetailPage({
 
   const [customersRows, settings] = await Promise.all([
     prisma.customer.findMany({
-      select: { id: true, name: true, company: true },
+      where: { mergedIntoCustomerId: null },
+      select: {
+        id: true,
+        name: true,
+        legalName: true,
+        type: true,
+        contacts: {
+          select: { id: true, name: true, role: true, isPrimary: true },
+          orderBy: [{ isPrimary: "desc" }, { name: "asc" }],
+        },
+      },
       orderBy: { name: "asc" },
     }),
     prisma.companySettings.findUnique({ where: { id: "singleton" } }),
@@ -55,7 +65,7 @@ export default async function InvoiceDetailPage({
       <PageHeader
         eyebrow={`Invoice · issued ${formatDate(invoice.issueDate)}`}
         title={invoice.number}
-        description={`For ${invoice.customer.name}${invoice.customer.company ? ` · ${invoice.customer.company}` : ""}`}
+        description={`For ${invoice.customer.name}${invoice.customer.legalName && invoice.customer.legalName !== invoice.customer.name ? ` · ${invoice.customer.legalName}` : ""}`}
       />
 
       <div className="flex items-center gap-3 mb-6">
@@ -77,6 +87,7 @@ export default async function InvoiceDetailPage({
         invoice={{
           id: invoice.id,
           customerId: invoice.customerId,
+          contactId: invoice.contactId,
           status: invoice.status,
           notes: invoice.notes,
           taxRate: invoice.taxRate,

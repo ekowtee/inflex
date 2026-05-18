@@ -10,13 +10,23 @@ export default async function InvoicesPage() {
   const [invoicesRows, customersRows, settings] = await Promise.all([
     prisma.invoice.findMany({
       include: {
-        customer: { select: { id: true, name: true, company: true } },
+        customer: { select: { id: true, name: true, legalName: true } },
         payments: { select: { amount: true } },
       },
       orderBy: { createdAt: "desc" },
     }),
     prisma.customer.findMany({
-      select: { id: true, name: true, company: true },
+      where: { mergedIntoCustomerId: null },
+      select: {
+        id: true,
+        name: true,
+        legalName: true,
+        type: true,
+        contacts: {
+          select: { id: true, name: true, role: true, isPrimary: true },
+          orderBy: [{ isPrimary: "desc" }, { name: "asc" }],
+        },
+      },
       orderBy: { name: "asc" },
     }),
     prisma.companySettings.findUnique({ where: { id: "singleton" } }),

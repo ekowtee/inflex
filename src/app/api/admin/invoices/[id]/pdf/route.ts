@@ -3,6 +3,7 @@ import { renderToBuffer } from "@react-pdf/renderer";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/guard";
 import { BillingDocument } from "@/lib/pdf/BillingDocument";
+import { buildBillingCustomer } from "@/lib/pdf/billingCustomer";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -19,6 +20,7 @@ export async function GET(
       where: { id },
       include: {
         customer: true,
+        contact: true,
         items: { orderBy: { sortOrder: "asc" } },
       },
     }),
@@ -47,12 +49,7 @@ export async function GET(
       total: invoice.total.toNumber(),
       amountPaid: invoice.amountPaid.toNumber(),
       notes: invoice.notes,
-      customer: {
-        name: invoice.customer.name,
-        company: invoice.customer.company,
-        email: invoice.customer.email,
-        phone: invoice.customer.phone,
-      },
+      customer: buildBillingCustomer(invoice.customer, invoice.contact),
       company: { ...settings, vatRegistered: settings.vatRegistered },
       items: invoice.items.map((i) => ({
         description: i.description,

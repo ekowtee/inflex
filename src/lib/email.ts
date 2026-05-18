@@ -85,6 +85,9 @@ export function salesNotificationAddress(): string {
  * email-client-safe shell. No external CSS, inline styles only.
  */
 export function wrapHtml(opts: { title?: string; bodyHtml: string }): string {
+  const siteUrl =
+    process.env.NEXTAUTH_URL?.replace(/\/$/, "") ?? "https://inflexions.tech";
+  const logoUrl = `${siteUrl}/inflexlogo.png`;
   return `<!doctype html>
 <html>
   <head>
@@ -96,19 +99,19 @@ export function wrapHtml(opts: { title?: string; bodyHtml: string }): string {
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f4f4f4;">
       <tr>
         <td align="center" style="padding:24px 16px;">
-          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:560px;background:#ffffff;border:1px solid #e6e6e6;border-radius:8px;overflow:hidden;">
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:720px;background:#ffffff;border:1px solid #e6e6e6;border-radius:8px;overflow:hidden;">
             <tr>
-              <td style="background:#BD2E25;padding:18px 24px;color:#ffffff;font-weight:600;font-size:14px;letter-spacing:0.5px;">
-                INFLEXIONS I.T. SERVICES
+              <td style="background:#ffffff;padding:20px 28px;border-bottom:3px solid #BD2E25;">
+                <img src="${logoUrl}" alt="Inflexions I.T. Services" width="200" style="display:block;height:auto;max-width:200px;border:0;outline:none;text-decoration:none;" />
               </td>
             </tr>
             <tr>
-              <td style="padding:24px;font-size:14px;line-height:1.6;color:#171a20;">
+              <td style="padding:28px;font-size:14px;line-height:1.6;color:#171a20;">
                 ${opts.bodyHtml}
               </td>
             </tr>
             <tr>
-              <td style="padding:14px 24px;background:#f7f8fa;color:#5c6280;font-size:12px;border-top:1px solid #e6e6e6;">
+              <td style="padding:14px 28px;background:#f7f8fa;color:#5c6280;font-size:12px;border-top:1px solid #e6e6e6;">
                 Inflexions I.T. Services Ltd. &middot; Accra, Ghana &middot;
                 <a href="https://inflexions.tech" style="color:#BD2E25;text-decoration:none;">inflexions.tech</a>
               </td>

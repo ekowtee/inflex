@@ -28,50 +28,169 @@ model User {
 
   architectQuotes Quote[]          @relation("SolutionArchitect")
   quoteRevisions  QuoteRevision[]
+  leadConversions Lead[]           @relation("LeadConverter")
 
   @@index([role])
   @@index([isActive])
 }
 
-// ---------- Customers ----------
+// ---------- Leads ----------
+// Raw inbound inquiries (mostly /contact form). Sparse data. When a rep
+// qualifies one they either promote it to a new Customer or link it to an
+// existing Customer (and optionally a specific Contact).
 
 enum LeadStatus {
-  LEAD
-  QUALIFIED
-  ACTIVE
-  DORMANT
-  CHURNED
+  NEW              // just arrived
+  IN_PROGRESS      // someone is working it
+  QUALIFIED        // promoted/linked to a Customer
+  DISQUALIFIED     // closed, no business
+  DUPLICATE        // merged into another lead
 }
 
 enum LeadSource {
-  REFERRAL
   WEBSITE
+  REFERRAL
   EVENT
   OUTBOUND
   PARTNER
   OTHER
 }
 
+model Lead {
+  id              String      @id @default(cuid())
+  name            String
+  email           String?
+  phone           String?
+  // What they typed in the "company" field of the contact form — free text,
+  // not yet matched to a Customer record.
+  companyName     String?
+  subject         String?
+  message         String?
+  source          LeadSource  @default(WEBSITE)
+  status          LeadStatus  @default(NEW)
+  tags            String[]    @default([])
+  notes           String?
+
+  // Promotion / linkage. Set when the rep moves the lead to a Customer (and
+  // optionally pins it to a specific Contact). Also used by the merge tool
+  // when a Lead is linked to an existing Customer record.
+  convertedCustomerId String?
+  convertedCustomer   Customer?  @relation("LeadConversion", fields: [convertedCustomerId], references: [id], onDelete: SetNull)
+  convertedContactId  String?
+  convertedContact    Contact?   @relation("LeadConversion", fields: [convertedContactId], references: [id], onDelete: SetNull)
+  convertedAt         DateTime?
+  convertedById       String?
+  convertedBy         User?      @relation("LeadConverter", fields: [convertedById], references: [id], onDelete: SetNull)
+
+  // Merge tracking: when one lead is merged into another, the loser keeps a
+  // back-link so the trail is auditable.
+  mergedIntoLeadId    String?
+  mergedIntoLead      Lead?       @relation("LeadMerge", fields: [mergedIntoLeadId], references: [id], onDelete: SetNull)
+  mergeChildren       Lead[]      @relation("LeadMerge")
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([status])
+  @@index([source])
+  @@index([email])
+  @@index([convertedCustomerId])
+  @@index([createdAt])
+}
+
+// ---------- Customers (qualified accounts: Company or Individual) ----------
+
+enum CustomerType {
+  COMPANY
+  INDIVIDUAL
+}
+
+enum CustomerStatus {
+  PROSPECT       // qualified but no business yet
+  ACTIVE         // has done business
+  DORMANT        // inactive
+  CHURNED        // lost
+}
+
 model Customer {
-  id          String      @id @default(cuid())
+  id          String          @id @default(cuid())
+  type        CustomerType    @default(COMPANY)
+  // For COMPANY: trading name. For INDIVIDUAL: full personal name.
   name        String
-  company     String?
+
+  // Shared
   email       String?
   phone       String?
-  leadStatus  LeadStatus  @default(LEAD)
-  leadSource  LeadSource  @default(WEBSITE)
-  tags        String[]    @default([])
+  status      CustomerStatus  @default(PROSPECT)
+  tags        String[]        @default([])
   notes       String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+
+  // Company-only (nullable for INDIVIDUAL)
+  legalName    String?
+  industry     String?
+  website      String?
+  taxId        String?
+  addressLine1 String?
+  addressLine2 String?
+  city         String?
+  region       String?
+  postalCode   String?
+  country      String?       @default("Ghana")
+
+  contacts        Contact[]
+  quotes          Quote[]
+  invoices        Invoice[]
+  payments        Payment[]
+  convertedLeads  Lead[]       @relation("LeadConversion")
+
+  // Merge tracking — if this customer was merged into another, this points
+  // at the surviving record.
+  mergedIntoCustomerId String?
+  mergedIntoCustomer   Customer?  @relation("CustomerMerge", fields: [mergedIntoCustomerId], references: [id], onDelete: SetNull)
+  mergeChildren        Customer[] @relation("CustomerMerge")
+
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([type])
+  @@index([status])
+  @@index([email])
+  @@index([createdAt])
+}
+
+// ---------- Contacts (people at a Company customer) ----------
+
+enum ContactRole {
+  CEO
+  FINANCE
+  PROCUREMENT
+  BUSINESS_LEAD
+  TECHNICAL
+  OTHER
+}
+
+model Contact {
+  id          String         @id @default(cuid())
+  customerId  String
+  customer    Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  name        String
+  role        ContactRole    @default(OTHER)
+  // Free-form override when the enum doesn't fit (e.g. "VP Sales").
+  roleLabel   String?
+  email       String?
+  phone       String?
+  isPrimary   Boolean        @default(false)
+  notes       String?
 
   quotes      Quote[]
   invoices    Invoice[]
-  payments    Payment[]
+  convertedLeads Lead[]      @relation("LeadConversion")
 
-  @@index([leadStatus])
-  @@index([leadSource])
-  @@index([createdAt])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([customerId])
+  @@index([email])
 }
 
 // ---------- Quotes ----------
@@ -90,10 +209,16 @@ model Quote {
   number      String      @unique
   customerId  String
   customer    Customer    @relation(fields: [customerId], references: [id])
+  // For COMPANY customers, optionally pin the quote to a specific Contact
+  // (their name + role flow through to the PDF's Attention block).
+  contactId   String?
+  contact     Contact?    @relation(fields: [contactId], references: [id], onDelete: SetNull)
   status      QuoteStatus @default(DRAFT)
 
   // Customer-facing meta (spec §4.1)
   projectTitle           String?
+  // Free-text override for the PDF's Attention line. Most quotes will leave
+  // this empty and let the linked Contact provide the name/role.
   attentionTo            String?
   solutionArchitectId    String?
   solutionArchitect      User?    @relation("SolutionArchitect", fields: [solutionArchitectId], references: [id])
@@ -152,6 +277,7 @@ model Quote {
 
   @@index([status])
   @@index([customerId])
+  @@index([contactId])
   @@index([createdAt])
   @@index([solutionArchitectId])
 }
@@ -172,6 +298,10 @@ model Invoice {
   number      String        @unique
   customerId  String
   customer    Customer      @relation(fields: [customerId], references: [id])
+  // For COMPANY customers, optionally pin to a specific Contact (typically
+  // Finance for invoices vs Procurement for quotes).
+  contactId   String?
+  contact     Contact?      @relation(fields: [contactId], references: [id], onDelete: SetNull)
   quoteId     String?       @unique
   quote       Quote?        @relation(fields: [quoteId], references: [id])
   status      InvoiceStatus @default(DRAFT)
@@ -195,6 +325,7 @@ model Invoice {
 
   @@index([status])
   @@index([customerId])
+  @@index([contactId])
   @@index([dueDate])
   @@index([createdAt])
 }
