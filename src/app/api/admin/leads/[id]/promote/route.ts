@@ -52,6 +52,36 @@ export async function POST(
         customerId = target.id;
         contactId = targetContactId ?? null;
 
+        // If the rep didn't pick a contact and the customer is a COMPANY,
+        // the lead's person is a new face inside that company — register
+        // them as a non-primary contact (don't steal primary status from
+        // whoever already holds it).
+        if (!contactId && target.type === "COMPANY") {
+          const existing = lead.email
+            ? await tx.contact.findFirst({
+                where: {
+                  customerId: target.id,
+                  email: { equals: lead.email, mode: "insensitive" },
+                },
+              })
+            : null;
+          if (existing) {
+            contactId = existing.id;
+          } else {
+            const created = await tx.contact.create({
+              data: {
+                customerId: target.id,
+                name: lead.name,
+                role: "OTHER",
+                email: lead.email ?? null,
+                phone: lead.phone ?? null,
+                isPrimary: false,
+              },
+            });
+            contactId = created.id;
+          }
+        }
+
         // Append the lead's message to the customer's notes for context.
         const stamp = new Date().toISOString().slice(0, 16).replace("T", " ") + " UTC";
         const block = [
@@ -70,9 +100,10 @@ export async function POST(
       } else {
         // CREATE — build a new Customer from the lead, optionally with rep overrides.
         const data = customerOverride ?? {};
+        const customerType = data.type ?? "COMPANY";
         const created = await tx.customer.create({
           data: {
-            type: data.type ?? "COMPANY",
+            type: customerType,
             name: data.name ?? (lead.companyName?.trim() || lead.name),
             email: (data.email || lead.email) ?? null,
             phone: (data.phone || lead.phone) ?? null,
@@ -92,6 +123,24 @@ export async function POST(
           },
         });
         customerId = created.id;
+
+        // For a brand-new COMPANY account, the person who sent the lead is
+        // the first known contact — register them as primary so quotes /
+        // invoices have a default addressee from day one. (For INDIVIDUAL
+        // customers, the customer record itself represents the person.)
+        if (customerType === "COMPANY") {
+          const contact = await tx.contact.create({
+            data: {
+              customerId,
+              name: lead.name,
+              role: "OTHER",
+              email: lead.email ?? null,
+              phone: lead.phone ?? null,
+              isPrimary: true,
+            },
+          });
+          contactId = contact.id;
+        }
       }
 
       const updatedLead = await tx.lead.update({
