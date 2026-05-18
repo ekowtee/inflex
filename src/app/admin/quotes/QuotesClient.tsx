@@ -148,7 +148,7 @@ export default function QuotesClient({
         open={creating}
         onClose={() => setCreating(false)}
         title="New quote"
-        size="xl"
+        size="2xl"
       >
         <QuoteBuilder
           customers={customers}

@@ -984,7 +984,7 @@ function LineRow({
                 onChange={(e) => onChange({ markupPct: Number(e.target.value) || 0 })}
               />
             </Field>
-            <Field label="Surcharge (%)">
+            <Field label="Surcharge (%)" hint="Finder's fee on landed (cost)">
               <TextInput
                 type="number" min={0} step="0.01"
                 value={String(item.surchargePct)}
@@ -1036,8 +1036,9 @@ function LineRow({
             </details>
           )}
           {preview && (
-            <div className="rounded-md bg-[#0f1621] border border-white/10 p-3 text-xs text-white/70 grid grid-cols-2 md:grid-cols-6 gap-3">
+            <div className="rounded-md bg-[#0f1621] border border-white/10 p-3 text-xs text-white/70 grid grid-cols-2 md:grid-cols-7 gap-3">
               <Metric label="Landed/unit" value={formatMoney(preview.unitLanded, currency)} />
+              <Metric label="Surcharge/unit" value={formatMoney(preview.unitSurcharge, currency)} />
               <Metric label="Finance/unit" value={formatMoney(preview.unitFinanceCharge, currency)} />
               <Metric label="WHT g/up" value={formatMoney(preview.unitWhtGrossUp, currency)} />
               <Metric label="Final/unit" value={formatMoney(preview.finalUnitPriceExclTax, currency)} />

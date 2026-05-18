@@ -274,11 +274,12 @@ export default async function QuoteDetailPage({
                 <tr>
                   <th className="text-left px-2 py-2 font-medium">Description</th>
                   <th className="text-right px-2 py-2 font-medium">Landed</th>
+                  <th className="text-right px-2 py-2 font-medium" title="Finder's fee as a cost">Surcharge %</th>
                   <th className="text-right px-2 py-2 font-medium">Finance %</th>
                   <th className="text-right px-2 py-2 font-medium">Markup %</th>
                   <th className="text-right px-2 py-2 font-medium">Discount %</th>
                   <th className="text-right px-2 py-2 font-medium">Final/unit</th>
-                  <th className="text-right px-2 py-2 font-medium">Cost total</th>
+                  <th className="text-right px-2 py-2 font-medium" title="Landed + surcharge × qty">Cost total</th>
                   <th className="text-right px-2 py-2 font-medium">GP</th>
                   <th className="text-right px-2 py-2 font-medium">GP%</th>
                 </tr>
@@ -290,6 +291,7 @@ export default async function QuoteDetailPage({
                     <td className="px-2 py-1.5 text-right">
                       {formatMoney(item.landedCost, quote.currency)}
                     </td>
+                    <td className="px-2 py-1.5 text-right">{Number(item.surchargePct).toFixed(2)}%</td>
                     <td className="px-2 py-1.5 text-right">{Number(item.financeChargePct).toFixed(2)}%</td>
                     <td className="px-2 py-1.5 text-right">{Number(item.markupPct).toFixed(2)}%</td>
                     <td className="px-2 py-1.5 text-right">{Number(item.discountPct).toFixed(2)}%</td>

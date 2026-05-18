@@ -208,7 +208,7 @@ describe("priceLine — WHT gross-up by category", () => {
 });
 
 describe("priceLine — discount + surcharge interaction", () => {
-  it("applies surcharge before discount", () => {
+  it("surcharge is added to cost base before markup; discount cascades on top", () => {
     const r = priceLine(
       {
         ...baseLine,
@@ -220,8 +220,47 @@ describe("priceLine — discount + surcharge interaction", () => {
       },
       { ...defaultCtx, annualInterestRatePct: 0 }
     );
-    // 1000 × 1.10 × 0.95 = 1045
+    // cost base = 1000 + 100 (surcharge) = 1100; markup 0 → 1100; × 0.95 = 1045
     near(r.finalUnitPriceExclTax, 1045);
+  });
+});
+
+describe("priceLine — surcharge is a cost (finder's fee), not a price uplift", () => {
+  it("surcharge reduces GP by the surcharge amount (not the markup-amplified amount)", () => {
+    // 10% markup on landed 1000, 5% surcharge (finder's fee = 50)
+    const r = priceLine(
+      {
+        ...baseLine,
+        landedCost: 1000,
+        markupPct: 10,
+        surchargePct: 5,
+        carriesFinanceCharge: false,
+      },
+      { ...defaultCtx, annualInterestRatePct: 0 }
+    );
+    // cost base = 1000 + 50 = 1050; with markup = 1050 × 1.10 = 1155
+    near(r.finalUnitPriceExclTax, 1155);
+    // cost = landed + surcharge = 1050; finance = 0; GP = 1155 - 1050 = 105
+    near(r.costLineTotal, 1050);
+    near(r.lineGpAmount, 105);
+    // unitSurcharge exposed for the internal panel
+    near(r.unitSurcharge, 50);
+  });
+
+  it("same markup with zero surcharge keeps cost at landed and GP higher", () => {
+    const r = priceLine(
+      {
+        ...baseLine,
+        landedCost: 1000,
+        markupPct: 10,
+        surchargePct: 0,
+        carriesFinanceCharge: false,
+      },
+      { ...defaultCtx, annualInterestRatePct: 0 }
+    );
+    near(r.finalUnitPriceExclTax, 1100);
+    near(r.costLineTotal, 1000);
+    near(r.lineGpAmount, 100);  // exactly the 10% markup on landed
   });
 });
 

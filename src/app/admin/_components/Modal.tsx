@@ -14,7 +14,7 @@ export default function Modal({
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  size?: "md" | "lg" | "xl";
+  size?: "md" | "lg" | "xl" | "2xl";
 }) {
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -33,7 +33,13 @@ export default function Modal({
   if (!open) return null;
 
   const widthClass =
-    size === "xl" ? "max-w-3xl" : size === "lg" ? "max-w-2xl" : "max-w-lg";
+    size === "2xl"
+      ? "max-w-5xl"
+      : size === "xl"
+      ? "max-w-3xl"
+      : size === "lg"
+      ? "max-w-2xl"
+      : "max-w-lg";
 
   return (
     <div

@@ -129,7 +129,7 @@ export default function QuoteDetailClient({
         </div>
       )}
 
-      <Modal open={editing} onClose={() => setEditing(false)} title="Edit quote" size="xl">
+      <Modal open={editing} onClose={() => setEditing(false)} title="Edit quote" size="2xl">
         <QuoteBuilder initial={quote} customers={customers} onClose={() => setEditing(false)} />
       </Modal>
     </>

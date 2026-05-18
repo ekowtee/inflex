@@ -42,14 +42,17 @@ export interface PriceLineResult {
   unitLanded: number;            // in quote currency
   unitFinanceCharge: number;
   financeChargePct: number;      // for storage (decimal pct, e.g. 3.3846)
-  unitWithFinance: number;
-  unitWithMarkup: number;
-  unitWithSurcharge: number;
+  /** Finder's fee / sales commission, treated as a cost: landed × surcharge%. */
+  unitSurcharge: number;
+  /** Cost base markup is applied to: landed + finance + surcharge. */
+  unitTotalCost: number;
+  unitWithMarkup: number;        // = unitTotalCost × (1 + markup)
   unitAfterDiscount: number;
   unitWhtGrossUp: number;
   unitBeforeRounding: number;
   finalUnitPriceExclTax: number;
   finalLineTotalExclTax: number;
+  /** Cost of goods (including surcharge), excluding finance charge. */
   costLineTotal: number;
   lineGpAmount: number;
   lineGpMarginPct: number;
@@ -77,31 +80,37 @@ export function priceLine(
     : 0;
   const unitFinanceCharge = unitLanded * (financeChargePct / 100);
 
-  // 3. Pipeline (spec §5)
-  const unitWithFinance = unitLanded + unitFinanceCharge;
-  const unitWithMarkup = unitWithFinance * (1 + safePct(input.markupPct) / 100);
-  const unitWithSurcharge = unitWithMarkup * (1 + safePct(input.surchargePct) / 100);
-  const unitAfterDiscount = unitWithSurcharge * (1 - clamp(input.discountPct, 0, 100) / 100);
+  // 3. Surcharge — finder's fee / sales commission negotiated per deal.
+  // Treated as a cost on the landed value (NOT as a price uplift). It goes
+  // into the cost base that markup is applied to (so the finder's fee is
+  // recouped via the markup), and into costLineTotal (so it correctly
+  // reduces GP — Inflexions actually pays this out).
+  const unitSurcharge = unitLanded * (safePct(input.surchargePct) / 100);
 
-  // 4. WHT gross-up
+  // 4. Pipeline. Markup applies to the full cost stack (landed + finance +
+  // surcharge); discount and WHT-gross-up cascade from there.
+  const unitTotalCost = unitLanded + unitFinanceCharge + unitSurcharge;
+  const unitWithMarkup = unitTotalCost * (1 + safePct(input.markupPct) / 100);
+  const unitAfterDiscount = unitWithMarkup * (1 - clamp(input.discountPct, 0, 100) / 100);
+
+  // 5. WHT gross-up
   const wht = clamp(ctx.whtPct, 0, 99.99);
   const unitWhtGrossUp = wht > 0
     ? unitAfterDiscount * (wht / 100) / (1 - wht / 100)
     : 0;
   const unitBeforeRounding = unitAfterDiscount + unitWhtGrossUp;
 
-  // 5. Threshold-aware rounding (always round up — favour the seller)
+  // 6. Threshold-aware rounding (always round up — favour the seller)
   const increment = unitBeforeRounding > ctx.rounding.threshold
     ? ctx.rounding.incrementAbove
     : ctx.rounding.incrementBelow;
   const finalUnitPriceExclTax = ceilToIncrement(unitBeforeRounding, increment);
 
-  // 6. Line aggregates
+  // 7. Line aggregates. Cost includes surcharge (a real cash cost) but
+  // excludes finance (which is a separate carry cost line in GP).
   const quantity = input.quantity;
   const finalLineTotalExclTax = round2(finalUnitPriceExclTax * quantity);
-  const costLineTotal = round2(unitLanded * quantity);
-
-  // Spec §5: GP includes finance charge in cost (open question #3 — default per spec).
+  const costLineTotal = round2((unitLanded + unitSurcharge) * quantity);
   const lineFinanceCharge = unitFinanceCharge * quantity;
   const lineGpAmount = round2(finalLineTotalExclTax - costLineTotal - lineFinanceCharge);
   const lineGpMarginPct = finalLineTotalExclTax > 0
@@ -112,9 +121,9 @@ export function priceLine(
     unitLanded: round2(unitLanded),
     unitFinanceCharge: round2(unitFinanceCharge),
     financeChargePct: round4(financeChargePct),
-    unitWithFinance: round2(unitWithFinance),
+    unitSurcharge: round2(unitSurcharge),
+    unitTotalCost: round2(unitTotalCost),
     unitWithMarkup: round2(unitWithMarkup),
-    unitWithSurcharge: round2(unitWithSurcharge),
     unitAfterDiscount: round2(unitAfterDiscount),
     unitWhtGrossUp: round2(unitWhtGrossUp),
     unitBeforeRounding: round2(unitBeforeRounding),

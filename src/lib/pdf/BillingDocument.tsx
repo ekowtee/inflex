@@ -503,6 +503,7 @@ export function BillingDocument(props: BillingDocumentProps) {
             <View style={styles.tableHeader}>
               <Text style={[styles.th, { flex: 3 }]}>Description</Text>
               <Text style={[styles.th, { flex: 1.5, textAlign: "right" }]}>Landed</Text>
+              <Text style={[styles.th, { flex: 1, textAlign: "right" }]}>Surch %</Text>
               <Text style={[styles.th, { flex: 1, textAlign: "right" }]}>Fin %</Text>
               <Text style={[styles.th, { flex: 1, textAlign: "right" }]}>Markup %</Text>
               <Text style={[styles.th, { flex: 1.5, textAlign: "right" }]}>Cost total</Text>
@@ -514,6 +515,9 @@ export function BillingDocument(props: BillingDocumentProps) {
                 <Text style={[styles.td, { flex: 3 }]}>{item.description}</Text>
                 <Text style={[styles.td, { flex: 1.5, textAlign: "right" }]}>
                   {formatMoney(item.landedCost ?? 0, props.currency)}
+                </Text>
+                <Text style={[styles.td, { flex: 1, textAlign: "right" }]}>
+                  {(item.surchargePct ?? 0).toFixed(2)}%
                 </Text>
                 <Text style={[styles.td, { flex: 1, textAlign: "right" }]}>
                   {(item.financeChargePct ?? 0).toFixed(2)}%
