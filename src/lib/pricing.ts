@@ -42,17 +42,18 @@ export interface PriceLineResult {
   unitLanded: number;            // in quote currency
   unitFinanceCharge: number;
   financeChargePct: number;      // for storage (decimal pct, e.g. 3.3846)
-  /** Finder's fee / sales commission, treated as a cost: landed × surcharge%. */
+  /** Finder's fee / sales commission — a pure pass-through cost: landed × surcharge%. */
   unitSurcharge: number;
-  /** Cost base markup is applied to: landed + finance + surcharge. */
-  unitTotalCost: number;
-  unitWithMarkup: number;        // = unitTotalCost × (1 + markup)
-  unitAfterDiscount: number;
+  unitWithFinance: number;       // = landed + finance
+  unitWithMarkup: number;        // = unitWithFinance × (1 + markup) — markup applies to product only
+  unitAfterDiscount: number;     // = unitWithMarkup × (1 - discount) — discount applies to product only
+  /** Discounted product price + surcharge added at cost. The customer pays this. */
+  unitAfterSurcharge: number;
   unitWhtGrossUp: number;
   unitBeforeRounding: number;
   finalUnitPriceExclTax: number;
   finalLineTotalExclTax: number;
-  /** Cost of goods (including surcharge), excluding finance charge. */
+  /** Cost of goods (landed + surcharge), excluding finance charge. */
   costLineTotal: number;
   lineGpAmount: number;
   lineGpMarginPct: number;
@@ -81,24 +82,26 @@ export function priceLine(
   const unitFinanceCharge = unitLanded * (financeChargePct / 100);
 
   // 3. Surcharge — finder's fee / sales commission negotiated per deal.
-  // Treated as a cost on the landed value (NOT as a price uplift). It goes
-  // into the cost base that markup is applied to (so the finder's fee is
-  // recouped via the markup), and into costLineTotal (so it correctly
-  // reduces GP — Inflexions actually pays this out).
+  // Pure pass-through: Inflexions doesn't mark it up and doesn't discount
+  // it. The customer pays exactly what was paid out to the finder, and
+  // Inflexions only profits from the product markup itself.
   const unitSurcharge = unitLanded * (safePct(input.surchargePct) / 100);
 
-  // 4. Pipeline. Markup applies to the full cost stack (landed + finance +
-  // surcharge); discount and WHT-gross-up cascade from there.
-  const unitTotalCost = unitLanded + unitFinanceCharge + unitSurcharge;
-  const unitWithMarkup = unitTotalCost * (1 + safePct(input.markupPct) / 100);
+  // 4. Pipeline. Markup applies only to product (landed + finance), discount
+  // applies only to that product price, and the surcharge is then added at
+  // cost on top — NOT marked up, NOT discounted.
+  const unitWithFinance = unitLanded + unitFinanceCharge;
+  const unitWithMarkup = unitWithFinance * (1 + safePct(input.markupPct) / 100);
   const unitAfterDiscount = unitWithMarkup * (1 - clamp(input.discountPct, 0, 100) / 100);
+  const unitAfterSurcharge = unitAfterDiscount + unitSurcharge;
 
-  // 5. WHT gross-up
+  // 5. WHT gross-up applies to the full invoiced amount (the customer
+  // withholds tax on the line total, surcharge included).
   const wht = clamp(ctx.whtPct, 0, 99.99);
   const unitWhtGrossUp = wht > 0
-    ? unitAfterDiscount * (wht / 100) / (1 - wht / 100)
+    ? unitAfterSurcharge * (wht / 100) / (1 - wht / 100)
     : 0;
-  const unitBeforeRounding = unitAfterDiscount + unitWhtGrossUp;
+  const unitBeforeRounding = unitAfterSurcharge + unitWhtGrossUp;
 
   // 6. Threshold-aware rounding (always round up — favour the seller)
   const increment = unitBeforeRounding > ctx.rounding.threshold
@@ -122,9 +125,10 @@ export function priceLine(
     unitFinanceCharge: round2(unitFinanceCharge),
     financeChargePct: round4(financeChargePct),
     unitSurcharge: round2(unitSurcharge),
-    unitTotalCost: round2(unitTotalCost),
+    unitWithFinance: round2(unitWithFinance),
     unitWithMarkup: round2(unitWithMarkup),
     unitAfterDiscount: round2(unitAfterDiscount),
+    unitAfterSurcharge: round2(unitAfterSurcharge),
     unitWhtGrossUp: round2(unitWhtGrossUp),
     unitBeforeRounding: round2(unitBeforeRounding),
     finalUnitPriceExclTax: round2(finalUnitPriceExclTax),

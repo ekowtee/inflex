@@ -207,26 +207,8 @@ describe("priceLine — WHT gross-up by category", () => {
   }
 });
 
-describe("priceLine — discount + surcharge interaction", () => {
-  it("surcharge is added to cost base before markup; discount cascades on top", () => {
-    const r = priceLine(
-      {
-        ...baseLine,
-        landedCost: 1000,
-        markupPct: 0,
-        surchargePct: 10,
-        discountPct: 5,
-        carriesFinanceCharge: false,
-      },
-      { ...defaultCtx, annualInterestRatePct: 0 }
-    );
-    // cost base = 1000 + 100 (surcharge) = 1100; markup 0 → 1100; × 0.95 = 1045
-    near(r.finalUnitPriceExclTax, 1045);
-  });
-});
-
-describe("priceLine — surcharge is a cost (finder's fee), not a price uplift", () => {
-  it("surcharge reduces GP by the surcharge amount (not the markup-amplified amount)", () => {
+describe("priceLine — surcharge is a pure pass-through cost (finder's fee)", () => {
+  it("surcharge passes through at cost; markup applies only to landed; GP = product markup", () => {
     // 10% markup on landed 1000, 5% surcharge (finder's fee = 50)
     const r = priceLine(
       {
@@ -238,16 +220,34 @@ describe("priceLine — surcharge is a cost (finder's fee), not a price uplift",
       },
       { ...defaultCtx, annualInterestRatePct: 0 }
     );
-    // cost base = 1000 + 50 = 1050; with markup = 1050 × 1.10 = 1155
-    near(r.finalUnitPriceExclTax, 1155);
-    // cost = landed + surcharge = 1050; finance = 0; GP = 1155 - 1050 = 105
-    near(r.costLineTotal, 1050);
-    near(r.lineGpAmount, 105);
-    // unitSurcharge exposed for the internal panel
+    // unitWithMarkup = 1000 × 1.10 = 1100 (markup only on product)
+    // unitAfterSurcharge = 1100 + 50 = 1150 (surcharge added at cost)
+    near(r.finalUnitPriceExclTax, 1150);
+    near(r.costLineTotal, 1050);    // landed + surcharge
+    near(r.lineGpAmount, 100);      // exactly the markup on landed, surcharge is pass-through
     near(r.unitSurcharge, 50);
   });
 
-  it("same markup with zero surcharge keeps cost at landed and GP higher", () => {
+  it("discount applies to product price only, not to surcharge", () => {
+    // 10% surcharge (50), 5% discount, no markup
+    const r = priceLine(
+      {
+        ...baseLine,
+        landedCost: 1000,
+        markupPct: 0,
+        surchargePct: 10,
+        discountPct: 5,
+        carriesFinanceCharge: false,
+      },
+      { ...defaultCtx, annualInterestRatePct: 0 }
+    );
+    // unitWithMarkup = 1000; unitAfterDiscount = 950; unitAfterSurcharge = 950 + 100 = 1050
+    near(r.finalUnitPriceExclTax, 1050);
+    near(r.costLineTotal, 1100);    // 1000 landed + 100 surcharge
+    near(r.lineGpAmount, -50);      // discount eats into margin: 1050 - 1100 = -50 (loss flagged)
+  });
+
+  it("zero surcharge: cost stays at landed, GP = full markup", () => {
     const r = priceLine(
       {
         ...baseLine,
@@ -260,7 +260,7 @@ describe("priceLine — surcharge is a cost (finder's fee), not a price uplift",
     );
     near(r.finalUnitPriceExclTax, 1100);
     near(r.costLineTotal, 1000);
-    near(r.lineGpAmount, 100);  // exactly the 10% markup on landed
+    near(r.lineGpAmount, 100);
   });
 });
 
