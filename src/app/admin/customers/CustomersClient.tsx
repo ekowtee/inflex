@@ -20,8 +20,34 @@ type Customer = {
   leadStatus: string;
   leadSource: string;
   tags: string[];
+  notes: string | null;
   createdAt: string;
 };
+
+/**
+ * Pulls the most recent message text out of the notes field. Our website
+ * lead-capture writes each submission as a block headed by
+ * "[YYYY-MM-DD HH:MM UTC] Website contact — <subject>" and ends with the
+ * message; we grab the last such block and strip the meta lines.
+ */
+function latestNoteSnippet(notes: string | null): string | null {
+  if (!notes) return null;
+  // Most recent block is at the end. Split on the double-newline separator
+  // we use between entries; if none, treat the whole thing as one block.
+  const blocks = notes.split(/\n\n+/);
+  const lastBlock = blocks[blocks.length - 1]?.trim();
+  if (!lastBlock) return null;
+  const lines = lastBlock.split("\n");
+  // Drop the header (first line, e.g. "[…] Website contact — Quote request")
+  // and any "Phone: …" line. Whatever remains is the message body.
+  const body = lines
+    .slice(1)
+    .filter((l) => !/^Phone:\s/i.test(l.trim()))
+    .join(" ")
+    .trim();
+  if (!body || body === "(no message)") return null;
+  return body.length > 140 ? body.slice(0, 137) + "…" : body;
+}
 
 const LEAD_STATUSES = ["ALL", "LEAD", "QUALIFIED", "ACTIVE", "DORMANT", "CHURNED"];
 
@@ -102,7 +128,9 @@ export default function CustomersClient({ customers }: { customers: Customer[] }
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {filtered.map((c) => (
+              {filtered.map((c) => {
+                const snippet = latestNoteSnippet(c.notes);
+                return (
                 <tr key={c.id} className="hover:bg-white/[0.03] transition-colors">
                   <td className="px-4 py-3">
                     <Link
@@ -111,6 +139,14 @@ export default function CustomersClient({ customers }: { customers: Customer[] }
                     >
                       {c.name}
                     </Link>
+                    {snippet && (
+                      <p
+                        className="text-xs text-white/50 mt-1 truncate max-w-[40ch]"
+                        title={snippet}
+                      >
+                        &ldquo;{snippet}&rdquo;
+                      </p>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-white/70 hidden md:table-cell">
                     {c.company ?? "—"}
@@ -147,7 +183,8 @@ export default function CustomersClient({ customers }: { customers: Customer[] }
                     </button>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
