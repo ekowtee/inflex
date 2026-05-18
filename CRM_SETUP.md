@@ -33,6 +33,21 @@ Then set:
 | `ADMIN_USERNAME` | Username for the admin login |
 | `ADMIN_PASSWORD` | Plain text for local dev, **bcrypt hash** for production |
 | `ADMIN_EMAIL` | Optional — shown in the session |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Public site key for the contact-form CAPTCHA (see below). Optional in dev. |
+| `TURNSTILE_SECRET_KEY` | Server-side secret for verifying the CAPTCHA token. Pair with the site key. |
+
+### Setting up Cloudflare Turnstile (public contact form CAPTCHA)
+
+The `/contact` form registers leads into the Customer table. To stop bots
+filling it, the route verifies a Cloudflare Turnstile token before writing.
+
+1. Sign in at <https://dash.cloudflare.com> (free tier is fine; no Cloudflare-hosted domain required).
+2. Go to Turnstile → Add site. Use your production hostname (e.g. `inflexions.tech`); add `localhost` as a second hostname if you want to test locally.
+3. Widget mode: **Managed** (invisible most of the time).
+4. Copy the **Site key** into `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and the **Secret key** into `TURNSTILE_SECRET_KEY` — both for local `.env.local` and for Vercel.
+
+Leave both blank in dev to disable the CAPTCHA temporarily — the form still
+works, only the honeypot guards against bots.
 
 ### Generating a bcrypt password hash (production)
 ```bash

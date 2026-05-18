@@ -1,10 +1,24 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Script from "next/script";
 import { Mail, Phone, Clock } from "lucide-react";
 import Partners from "../components/Partners";
 import Faq from "../components/Faq";
 import JsonLd from "../components/JsonLd";
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+
+const SUBJECT_OPTIONS = [
+  "General enquiry",
+  "Quote request",
+  "Solutions",
+  "Services",
+  "Academy / training",
+  "Partnership",
+  "Careers",
+  "Other",
+];
 
 export default function ContactPage() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -16,14 +30,52 @@ export default function ContactPage() {
     setSending(true);
     setMessage(null);
 
-    // Placeholder for emailjs or server action
+    const form = e.currentTarget as HTMLFormElement;
+    const data = new FormData(form);
+    // Turnstile injects a hidden input named `cf-turnstile-response`.
+    const turnstileToken = String(data.get("cf-turnstile-response") ?? "");
+
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setSending(false);
+      setMessage({
+        type: "error",
+        text: "Please complete the verification check above before sending.",
+      });
+      return;
+    }
+
+    const payload = {
+      name: String(data.get("user_name") ?? "").trim(),
+      email: String(data.get("user_email") ?? "").trim(),
+      phone: String(data.get("user_phone") ?? "").trim() || null,
+      company: String(data.get("user_company") ?? "").trim() || null,
+      subject: String(data.get("subject") ?? "General enquiry"),
+      message: String(data.get("message") ?? "").trim() || null,
+      hp: String(data.get("hp") ?? ""),
+      turnstileToken: turnstileToken || null,
+    };
+
     try {
-      // Simulate send
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setMessage({ type: "success", text: "Message sent successfully!" });
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => null);
+        throw new Error(err?.error ?? `Failed (${res.status})`);
+      }
+      setMessage({
+        type: "success",
+        text: "Thanks — we've received your message and will be in touch within two working days.",
+      });
       formRef.current?.reset();
-    } catch {
-      setMessage({ type: "error", text: "Failed to send, please try again." });
+      // Reset the Turnstile widget so a second submission gets a fresh token.
+      const turnstile = (window as unknown as { turnstile?: { reset: () => void } }).turnstile;
+      turnstile?.reset();
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Failed to send.";
+      setMessage({ type: "error", text: msg });
     } finally {
       setSending(false);
     }
@@ -31,6 +83,14 @@ export default function ContactPage() {
 
   return (
     <div>
+      {TURNSTILE_SITE_KEY && (
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+          strategy="afterInteractive"
+          async
+          defer
+        />
+      )}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -186,38 +246,80 @@ export default function ContactPage() {
           )}
 
           <form ref={formRef} onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-6">
+            {/* Honeypot — visually hidden, no aria, no autofill hint. */}
             <input
               type="text"
-              name="user_name"
-              placeholder="Your name*"
-              required
-              aria-label="Your name"
-              className="w-full border border-white bg-transparent text-white placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-white"
+              name="hp"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute -left-[9999px] w-px h-px opacity-0"
             />
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
-                type="tel"
-                name="user_phone"
-                placeholder="Phone Number*"
+                type="text"
+                name="user_name"
+                placeholder="Your name*"
                 required
-                aria-label="Phone number"
+                aria-label="Your name"
                 className="w-full border border-white bg-transparent text-white placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-white"
               />
               <input
+                type="text"
+                name="user_company"
+                placeholder="Company / organisation"
+                aria-label="Company or organisation"
+                className="w-full border border-white bg-transparent text-white placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-white"
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
                 type="email"
                 name="user_email"
-                placeholder="Email*"
+                placeholder="Work email*"
                 required
                 aria-label="Email address"
                 className="w-full border border-white bg-transparent text-white placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-white"
               />
+              <input
+                type="tel"
+                name="user_phone"
+                placeholder="Phone number"
+                aria-label="Phone number"
+                className="w-full border border-white bg-transparent text-white placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-white"
+              />
             </div>
+            <select
+              name="subject"
+              defaultValue="General enquiry"
+              aria-label="What can we help with?"
+              className="w-full border border-white bg-[#BD2E25] text-white p-3 focus:outline-none focus:ring-2 focus:ring-white appearance-none"
+            >
+              {SUBJECT_OPTIONS.map((s) => (
+                <option key={s} value={s} className="bg-white text-[#BD2E25]">
+                  {s}
+                </option>
+              ))}
+            </select>
             <textarea
               name="message"
-              placeholder="Your Message"
+              placeholder="Tell us a bit about what you need — scope, timeline, budget if you have one."
               aria-label="Your message"
               className="w-full h-40 border border-white bg-transparent text-white placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-white"
             />
+
+            {/* Cloudflare Turnstile — invisible challenge most of the time. */}
+            {TURNSTILE_SITE_KEY && (
+              <div className="flex justify-center">
+                <div
+                  className="cf-turnstile"
+                  data-sitekey={TURNSTILE_SITE_KEY}
+                  data-theme="dark"
+                />
+              </div>
+            )}
+
             <div className="text-center">
               <button
                 type="submit"

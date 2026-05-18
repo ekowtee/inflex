@@ -1,5 +1,33 @@
 import { z } from "zod";
 
+export const CONTACT_SUBJECTS = [
+  "General enquiry",
+  "Quote request",
+  "Solutions",
+  "Services",
+  "Academy / training",
+  "Partnership",
+  "Careers",
+  "Other",
+] as const;
+
+// Public contact form (NOT gated by auth). Used by /contact and the academy
+// for-organizations enquiry form to register inbound leads.
+export const publicContactSchema = z.object({
+  name: z.string().min(1, "Name is required").max(200),
+  email: z.string().email("Valid email required").max(200),
+  phone: z.string().max(50).optional().nullable(),
+  company: z.string().max(200).optional().nullable(),
+  subject: z.enum(CONTACT_SUBJECTS).default("General enquiry"),
+  message: z.string().max(5000).optional().nullable(),
+  // Honeypot — bots fill it; humans never see it. Must be empty.
+  hp: z.string().max(0).optional(),
+  // Cloudflare Turnstile token; verified server-side. Optional at the schema
+  // level so the form keeps working in dev when Turnstile env vars aren't
+  // configured. The route enforces it whenever TURNSTILE_SECRET_KEY is set.
+  turnstileToken: z.string().max(2000).optional().nullable(),
+});
+
 export const userCreateSchema = z.object({
   name: z.string().min(1, "Name is required").max(200),
   email: z.string().email("Valid email required").max(200),
