@@ -25,11 +25,13 @@
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "@react-pdf/renderer": "^4.5.1",
+    "@types/nodemailer": "^8.0.0",
     "aos": "^2.3.4",
     "bcryptjs": "^3.0.3",
     "lucide-react": "^0.575.0",
     "next": "^16.1.6",
     "next-auth": "^4.24.14",
+    "nodemailer": "^7.0.13",
     "prisma": "^6.19.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

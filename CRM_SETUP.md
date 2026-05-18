@@ -49,6 +49,51 @@ filling it, the route verifies a Cloudflare Turnstile token before writing.
 Leave both blank in dev to disable the CAPTCHA temporarily — the form still
 works, only the honeypot guards against bots.
 
+### Setting up email notifications (Google Workspace SMTP)
+
+When `/contact` is submitted, the system sends two emails: a notification to
+`sales@inflexions.tech` and an acknowledgement to the customer. Both go out
+via Nodemailer using your Google Workspace mailbox over SMTP with an App
+Password.
+
+1. **Enable 2-Step Verification** on the mailbox you'll be sending from
+   (e.g. `sales@inflexions.tech`). Go to
+   <https://myaccount.google.com/security> → 2-Step Verification → Turn on.
+   This is required before Google will let you create App Passwords.
+2. **Generate an App Password** at
+   <https://myaccount.google.com/apppasswords>:
+   - App: select **Mail**
+   - Device: type **Inflexions Website**
+   - Copy the 16-character password Google shows you (no spaces). You won't
+     see it again.
+3. **Set the env vars** in `.env.local` (dev) and Vercel (production):
+
+   | Variable | Value |
+   |---|---|
+   | `SMTP_HOST` | `smtp.gmail.com` |
+   | `SMTP_PORT` | `465` |
+   | `SMTP_SECURE` | `true` |
+   | `SMTP_USER` | The mailbox you generated the App Password from, e.g. `sales@inflexions.tech` |
+   | `SMTP_PASS` | The 16-char App Password (no spaces) |
+   | `MAIL_FROM` | Display From header, e.g. `"Inflexions I.T. Services" <sales@inflexions.tech>` — must use the same address as `SMTP_USER` or Gmail will rewrite it |
+   | `MAIL_TO_SALES` | Where lead notifications go (often the same as `SMTP_USER`) |
+
+4. **Test it.** Submit the contact form and watch for:
+   - A new lead row in `/admin/customers`
+   - A notification email in the sales inbox
+   - A confirmation email in the address you submitted the form with
+
+Leave `SMTP_USER` / `SMTP_PASS` blank to disable email in dev — the form
+still works, leads still save, just no email goes out (with a `[email] SMTP
+not configured — skipping` log line for visibility).
+
+**Gotchas:**
+- App Passwords don't work on accounts without 2-Step Verification enabled.
+- App Passwords are tied to the account that generated them — `SMTP_USER`
+  must match that account.
+- Gmail enforces ~500 outbound emails/day per account on a free Workspace
+  plan, ~2000/day on paid plans. Plenty for inbound lead notifications.
+
 ### Generating a bcrypt password hash (production)
 ```bash
 node -e "console.log(require('bcryptjs').hashSync('your-strong-password', 10))"

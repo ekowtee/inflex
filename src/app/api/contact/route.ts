@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { publicContactSchema } from "@/lib/validators";
+import {
+  escapeHtml,
+  salesNotificationAddress,
+  sendMail,
+  wrapHtml,
+} from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -64,6 +70,7 @@ export async function POST(req: NextRequest) {
       where: { email: { equals: email, mode: "insensitive" } },
     });
 
+    let customerId: string;
     if (existing) {
       const mergedNotes = existing.notes
         ? `${existing.notes}\n\n${noteEntry}`
@@ -71,7 +78,7 @@ export async function POST(req: NextRequest) {
       const mergedTags = Array.from(
         new Set([...(existing.tags ?? []), d.subject])
       );
-      await prisma.customer.update({
+      const updated = await prisma.customer.update({
         where: { id: existing.id },
         data: {
           // Don't overwrite a higher status (e.g. ACTIVE) with LEAD.
@@ -84,8 +91,9 @@ export async function POST(req: NextRequest) {
           ...(d.company && !existing.company ? { company: d.company.trim() } : {}),
         },
       });
+      customerId = updated.id;
     } else {
-      await prisma.customer.create({
+      const created = await prisma.customer.create({
         data: {
           name: d.name.trim(),
           email,
@@ -97,7 +105,30 @@ export async function POST(req: NextRequest) {
           notes: noteEntry,
         },
       });
+      customerId = created.id;
     }
+
+    // Fire notification + acknowledgement. Promise.allSettled so one failed
+    // email doesn't block the other, and neither failure fails the request —
+    // the lead is already saved.
+    await Promise.allSettled([
+      sendSalesNotification({
+        customerId,
+        name: d.name.trim(),
+        email,
+        phone: d.phone?.trim() ?? null,
+        company: d.company?.trim() ?? null,
+        subject: d.subject,
+        message: d.message?.trim() ?? null,
+        isExisting: Boolean(existing),
+      }),
+      sendCustomerConfirmation({
+        name: d.name.trim(),
+        email,
+        subject: d.subject,
+        message: d.message?.trim() ?? null,
+      }),
+    ]);
 
     return NextResponse.json({ ok: true });
   } catch (e) {
@@ -107,6 +138,142 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+async function sendSalesNotification(lead: {
+  customerId: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  company: string | null;
+  subject: string;
+  message: string | null;
+  isExisting: boolean;
+}) {
+  const siteUrl =
+    process.env.NEXTAUTH_URL?.replace(/\/$/, "") ?? "https://inflexions.tech";
+  const adminLink = `${siteUrl}/admin/customers/${lead.customerId}`;
+  const label = lead.isExisting ? "Returning lead" : "New lead";
+
+  const lines = [
+    `${label} via the website contact form.`,
+    "",
+    `Name:     ${lead.name}`,
+    `Email:    ${lead.email}`,
+    lead.phone ? `Phone:    ${lead.phone}` : null,
+    lead.company ? `Company:  ${lead.company}` : null,
+    `Subject:  ${lead.subject}`,
+    "",
+    "Message:",
+    lead.message || "(no message)",
+    "",
+    "View / follow up:",
+    adminLink,
+  ].filter((l): l is string => l !== null);
+
+  const html = wrapHtml({
+    title: `${label} — ${lead.subject}`,
+    bodyHtml: `
+      <h2 style="margin:0 0 16px;font-size:18px;color:#1B3764;">${escapeHtml(
+        label
+      )} — ${escapeHtml(lead.subject)}</h2>
+      <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:16px;">
+        ${row("Name", lead.name)}
+        ${row("Email", `<a href="mailto:${escapeHtml(lead.email)}" style="color:#BD2E25;text-decoration:none;">${escapeHtml(lead.email)}</a>`, true)}
+        ${lead.phone ? row("Phone", escapeHtml(lead.phone), true) : ""}
+        ${lead.company ? row("Company", escapeHtml(lead.company)) : ""}
+        ${row("Subject", escapeHtml(lead.subject))}
+      </table>
+      <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;color:#5c6280;">Message</p>
+      <div style="background:#f7f8fa;border-left:3px solid #BD2E25;padding:12px 14px;white-space:pre-wrap;border-radius:4px;">
+        ${escapeHtml(lead.message ?? "(no message)")}
+      </div>
+      <p style="margin:20px 0 0;">
+        <a href="${escapeHtml(adminLink)}" style="display:inline-block;background:#BD2E25;color:#ffffff;padding:10px 16px;text-decoration:none;border-radius:6px;font-weight:600;">
+          Open in admin →
+        </a>
+      </p>
+    `,
+  });
+
+  return sendMail({
+    to: salesNotificationAddress(),
+    subject: `[Inflexions] ${label}: ${lead.subject} — ${lead.name}`,
+    text: lines.join("\n"),
+    html,
+    // Replying to the notification = replying to the customer.
+    replyTo: lead.email,
+  });
+}
+
+async function sendCustomerConfirmation(opts: {
+  name: string;
+  email: string;
+  subject: string;
+  message: string | null;
+}) {
+  const text = [
+    `Hi ${opts.name.split(/\s+/)[0]},`,
+    "",
+    `Thanks for reaching out to Inflexions. We've received your enquiry (${opts.subject}) and a member of our team will be in touch within two working days.`,
+    "",
+    "If your question is urgent, you can reach us at sales@inflexions.tech or +233 20 888 9270.",
+    "",
+    "For your records, here's what you sent:",
+    "",
+    opts.message ? opts.message : "(no message)",
+    "",
+    "— The Inflexions team",
+    "Inflexions I.T. Services Ltd.",
+    "Accra, Ghana",
+  ].join("\n");
+
+  const html = wrapHtml({
+    title: "We've received your message",
+    bodyHtml: `
+      <p style="margin:0 0 14px;">Hi ${escapeHtml(opts.name.split(/\s+/)[0])},</p>
+      <p style="margin:0 0 14px;">
+        Thanks for reaching out to Inflexions. We've received your enquiry
+        (<strong>${escapeHtml(opts.subject)}</strong>) and a member of our team
+        will be in touch within two working days.
+      </p>
+      <p style="margin:0 0 14px;">
+        If your question is urgent, reach us at
+        <a href="mailto:sales@inflexions.tech" style="color:#BD2E25;text-decoration:none;">sales@inflexions.tech</a>
+        or <a href="tel:+233208889270" style="color:#BD2E25;text-decoration:none;">+233 20 888 9270</a>.
+      </p>
+      ${
+        opts.message
+          ? `
+        <p style="margin:18px 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;color:#5c6280;">For your records</p>
+        <div style="background:#f7f8fa;border-left:3px solid #BD2E25;padding:12px 14px;white-space:pre-wrap;border-radius:4px;color:#41444b;">
+          ${escapeHtml(opts.message)}
+        </div>
+      `
+          : ""
+      }
+      <p style="margin:22px 0 0;color:#5c6280;">
+        — The Inflexions team
+      </p>
+    `,
+  });
+
+  return sendMail({
+    to: opts.email,
+    subject: "We've received your message — Inflexions IT Services",
+    text,
+    html,
+    replyTo: salesNotificationAddress(),
+  });
+}
+
+function row(label: string, value: string, isHtml = false): string {
+  return `<tr>
+    <td style="padding:6px 8px;color:#5c6280;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;width:90px;vertical-align:top;">${escapeHtml(
+      label
+    )}</td>
+    <td style="padding:6px 8px;color:#171a20;">${isHtml ? value : escapeHtml(value)}</td>
+  </tr>`;
 }
 
 async function verifyTurnstile(
