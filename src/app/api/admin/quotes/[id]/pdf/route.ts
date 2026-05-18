@@ -49,7 +49,14 @@ export async function GET(
   }
 
   const vatBreakdown = quote.vatBreakdown as
-    | { step1LeviesAmount: number; step2VatOnLeviedAmount: number; vatAmount: number; effectivePct: number; rates?: { standardPct: number; nhilPct: number; getfundPct: number; covidLevyPct: number } }
+    | {
+        nhilAmount: number;
+        getfundAmount: number;
+        vatStandardAmount: number;
+        vatAmount: number;
+        effectivePct: number;
+        rates?: { standardPct: number; nhilPct: number; getfundPct: number };
+      }
     | null;
 
   const whtPct =

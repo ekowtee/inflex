@@ -12,10 +12,14 @@
       "WebFetch(domain:logotyp.us)",
       "WebFetch(domain:brandfetch.com)",
       "WebFetch(domain:cdn.worldvectorlogo.com)",
-      "WebFetch(domain:simpleicons.org)"
+      "WebFetch(domain:simpleicons.org)",
+      "Bash(cd /cygdrive/c/Users/ekowt/Projects/inflexionsweb && npm run db:migrate -- --name drop_covid_levy 2>&1 | tail -12)",
+      "Read(//cygdrive/c/Users/ekowt/Projects/**)",
+      "Bash(mkdir -p /cygdrive/c/Users/ekowt/Projects/inflexionsweb/prisma/migrations/20260518100000_drop_covid_levy 2>&1)"
     ],
     "additionalDirectories": [
-      "C:\\Users\\ekowt\\Projects\\inflexionsweb\\public\\assets\\partners"
+      "C:\\Users\\ekowt\\Projects\\inflexionsweb\\public\\assets\\partners",
+      "\\cygdrive\\c\\Users\\ekowt\\Projects\\inflexionsweb\\prisma\\migrations"
     ]
   }
 }

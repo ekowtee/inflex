@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Field, TextArea, TextInput } from "../_components/Field";
 import { Button } from "../_components/Button";
-import { computeVatCascade } from "@/lib/pricing";
+import { computeVatBreakdown } from "@/lib/pricing";
 
 export interface SettingsValues {
   companyName?: string;
@@ -34,7 +34,6 @@ export interface SettingsValues {
   vatStandardPct?: number;
   nhilPct?: number;
   getfundPct?: number;
-  covidLevyPct?: number;
 
   // Non-VAT sales tax
   nonVatTaxApplied?: boolean;
@@ -78,13 +77,12 @@ export default function SettingsForm({
   }
 
   const vatPreview = useMemo(() => {
-    return computeVatCascade(1000, {
+    return computeVatBreakdown(1000, {
       standardPct: Number(form.vatStandardPct ?? 0),
       nhilPct: Number(form.nhilPct ?? 0),
       getfundPct: Number(form.getfundPct ?? 0),
-      covidLevyPct: Number(form.covidLevyPct ?? 0),
     });
-  }, [form.vatStandardPct, form.nhilPct, form.getfundPct, form.covidLevyPct]);
+  }, [form.vatStandardPct, form.nhilPct, form.getfundPct]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -190,8 +188,8 @@ export default function SettingsForm({
             Threshold: GHS 750k turnover (goods). When unchecked, new quotes
             default to the non-VAT sales tax below.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Field label="Standard VAT (%)" hint="Act 1151 base">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Field label="Standard VAT (%)">
               <TextInput
                 type="number" min={0} max={100} step="0.01"
                 value={String(form.vatStandardPct ?? 15)}
@@ -212,23 +210,17 @@ export default function SettingsForm({
                 onChange={(e) => update("getfundPct", Number(e.target.value) || 0)}
               />
             </Field>
-            <Field label="COVID levy (%)" hint="Abolished 1 Jan 2026">
-              <TextInput
-                type="number" min={0} max={100} step="0.01"
-                value={String(form.covidLevyPct ?? 0)}
-                onChange={(e) => update("covidLevyPct", Number(e.target.value) || 0)}
-              />
-            </Field>
           </div>
           <div className="rounded-lg bg-white/[0.04] border border-white/10 p-4 text-xs text-white/70">
-            Cascade preview on GHS 1,000 subtotal:
+            Breakdown on a GHS 1,000 subtotal:
             <ul className="mt-1 space-y-0.5">
-              <li>Step 1 — levies on base: <span className="text-white">GHS {vatPreview.step1LeviesAmount.toFixed(2)}</span></li>
-              <li>Step 2 — VAT on (base + levies): <span className="text-white">GHS {vatPreview.step2VatOnLeviedAmount.toFixed(2)}</span></li>
-              <li>Total tax: <span className="text-white font-semibold">GHS {vatPreview.vatAmount.toFixed(2)} ({vatPreview.effectivePct.toFixed(2)}% effective)</span></li>
+              <li>NHIL: <span className="text-white">GHS {vatPreview.nhilAmount.toFixed(2)}</span></li>
+              <li>GETFund: <span className="text-white">GHS {vatPreview.getfundAmount.toFixed(2)}</span></li>
+              <li>VAT: <span className="text-white">GHS {vatPreview.vatStandardAmount.toFixed(2)}</span></li>
+              <li>Total tax: <span className="text-white font-semibold">GHS {vatPreview.vatAmount.toFixed(2)} ({vatPreview.effectivePct.toFixed(2)}%)</span></li>
             </ul>
             <p className="mt-2 text-white/40">
-              Verify against the GRA Practice Note. If GRA computes a flat 20% (no cascade), set Standard VAT to 20 and zero the levies.
+              Each rate is computed against the subtotal independently and summed. No cascading.
             </p>
           </div>
         </Section>

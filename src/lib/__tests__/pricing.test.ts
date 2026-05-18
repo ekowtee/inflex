@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import {
   ceilToIncrement,
   computeFinanceChargePct,
-  computeVatCascade,
+  computeVatBreakdown,
   convertCurrency,
   priceLine,
   calculateQuoteTotals,
@@ -77,32 +77,33 @@ describe("computeFinanceChargePct", () => {
   });
 });
 
-describe("computeVatCascade", () => {
-  it("default 15/2.5/2.5/0 splits = ~20.75% effective (spec §7.1)", () => {
-    const r = computeVatCascade(1000, {
+describe("computeVatBreakdown", () => {
+  it("default 15/2.5/2.5 → 20% flat on subtotal (no cascade)", () => {
+    const r = computeVatBreakdown(1000, {
       standardPct: 15,
       nhilPct: 2.5,
       getfundPct: 2.5,
-      covidLevyPct: 0,
     });
-    near(r.step1LeviesAmount, 50, 0.01);     // 1000 × 5%
-    near(r.step2VatOnLeviedAmount, 157.50, 0.01); // 1050 × 15%
-    near(r.vatAmount, 207.50, 0.01);
-    near(r.effectivePct, 20.75, 0.01);
+    near(r.nhilAmount, 25);              // 1000 × 2.5%
+    near(r.getfundAmount, 25);           // 1000 × 2.5%
+    near(r.vatStandardAmount, 150);      // 1000 × 15%
+    near(r.vatAmount, 200);              // sum
+    near(r.effectivePct, 20);
   });
-  it("with covid 1%, levies stack to 6%, VAT on 1060 base", () => {
-    const r = computeVatCascade(1000, {
+  it("each rate hits the same base independently", () => {
+    const r = computeVatBreakdown(2000, {
       standardPct: 15,
-      nhilPct: 2.5,
+      nhilPct: 3,
       getfundPct: 2.5,
-      covidLevyPct: 1,
     });
-    near(r.step1LeviesAmount, 60);
-    near(r.step2VatOnLeviedAmount, 159);
-    near(r.vatAmount, 219);
+    near(r.nhilAmount, 60);     // 2000 × 3%
+    near(r.getfundAmount, 50);  // 2000 × 2.5%
+    near(r.vatStandardAmount, 300); // 2000 × 15%
+    near(r.vatAmount, 410);
+    near(r.effectivePct, 20.5);
   });
-  it("zero base = zero vat", () => {
-    const r = computeVatCascade(0, { standardPct: 15, nhilPct: 2.5, getfundPct: 2.5, covidLevyPct: 0 });
+  it("zero base → zero vat", () => {
+    const r = computeVatBreakdown(0, { standardPct: 15, nhilPct: 2.5, getfundPct: 2.5 });
     assert.strictEqual(r.vatAmount, 0);
     assert.strictEqual(r.effectivePct, 0);
   });
@@ -266,21 +267,21 @@ describe("priceLine — quantity > 1 line totals", () => {
 // ---------- calculateQuoteTotals ----------
 
 describe("calculateQuoteTotals — VAT applied", () => {
-  it("subtotal + VAT cascade = total when VAT registered", () => {
+  it("subtotal + flat-sum VAT = total when VAT registered (defaults sum to 20%)", () => {
     const r = calculateQuoteTotals({
       lines: [
         { kind: "PRODUCT", finalLineTotalExclTax: 1000, lineGpAmount: 200 },
       ],
       vatApplied: true,
-      vatRates: { standardPct: 15, nhilPct: 2.5, getfundPct: 2.5, covidLevyPct: 0 },
+      vatRates: { standardPct: 15, nhilPct: 2.5, getfundPct: 2.5 },
       nonVatTaxApplied: false,
       nonVatTaxOnGoodsPct: 0,
       nonVatTaxOnServicesPct: 0,
     });
     near(r.subtotal, 1000);
     assert.ok(r.vatBreakdown);
-    near(r.vatAmount, 207.50, 0.05);
-    near(r.total, 1207.50, 0.05);
+    near(r.vatAmount, 200);   // 25 + 25 + 150 = 200
+    near(r.total, 1200);
     near(r.totalGpMarginPct, 20);
     assert.strictEqual(r.nonVatTaxAmount, 0);
   });
@@ -294,7 +295,7 @@ describe("calculateQuoteTotals — non-VAT sales tax (below threshold)", () => {
         { kind: "LABOUR", finalLineTotalExclTax: 500, lineGpAmount: 250 },
       ],
       vatApplied: false,
-      vatRates: { standardPct: 15, nhilPct: 2.5, getfundPct: 2.5, covidLevyPct: 0 },
+      vatRates: { standardPct: 15, nhilPct: 2.5, getfundPct: 2.5 },
       nonVatTaxApplied: true,
       nonVatTaxOnGoodsPct: 3,
       nonVatTaxOnServicesPct: 0,
@@ -314,7 +315,7 @@ describe("calculateQuoteTotals — VAT trumps non-VAT", () => {
     const r = calculateQuoteTotals({
       lines: [{ kind: "PRODUCT", finalLineTotalExclTax: 1000, lineGpAmount: 0 }],
       vatApplied: true,
-      vatRates: { standardPct: 15, nhilPct: 2.5, getfundPct: 2.5, covidLevyPct: 0 },
+      vatRates: { standardPct: 15, nhilPct: 2.5, getfundPct: 2.5 },
       nonVatTaxApplied: true,
       nonVatTaxOnGoodsPct: 3,
       nonVatTaxOnServicesPct: 0,
@@ -329,7 +330,7 @@ describe("calculateQuoteTotals — empty quote", () => {
     const r = calculateQuoteTotals({
       lines: [],
       vatApplied: true,
-      vatRates: { standardPct: 15, nhilPct: 2.5, getfundPct: 2.5, covidLevyPct: 0 },
+      vatRates: { standardPct: 15, nhilPct: 2.5, getfundPct: 2.5 },
       nonVatTaxApplied: false,
       nonVatTaxOnGoodsPct: 0,
       nonVatTaxOnServicesPct: 0,

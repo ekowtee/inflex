@@ -213,7 +213,6 @@ export async function priceQuote(input: QuoteInput): Promise<PricedQuote> {
       standardPct: Number(settings.vatStandardPct),
       nhilPct: Number(settings.nhilPct),
       getfundPct: Number(settings.getfundPct),
-      covidLevyPct: Number(settings.covidLevyPct),
     },
     nonVatTaxApplied: input.nonVatTaxApplied,
     nonVatTaxOnGoodsPct: Number(settings.nonVatTaxOnGoodsPct),

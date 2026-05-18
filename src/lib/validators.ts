@@ -178,12 +178,12 @@ export const settingsSchema = z.object({
   quotePrefix: z.string().min(1).max(10).default("Q"),
   invoicePrefix: z.string().min(1).max(10).default("INV"),
 
-  // VAT (Ghana 2026, Act 1151)
+  // VAT (Ghana 2026). NHIL/GETFund/VAT each apply to subtotal independently
+  // and sum to 20% with defaults — no cascading.
   vatRegistered: z.boolean(),
   vatStandardPct: z.coerce.number().min(0).max(100).default(15),
   nhilPct: z.coerce.number().min(0).max(100).default(2.5),
   getfundPct: z.coerce.number().min(0).max(100).default(2.5),
-  covidLevyPct: z.coerce.number().min(0).max(100).default(0),
 
   // Non-VAT sales tax
   nonVatTaxApplied: z.boolean(),

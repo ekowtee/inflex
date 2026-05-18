@@ -336,13 +336,14 @@ model CompanySettings {
   nextQuoteNumber   Int    @default(1)
   nextInvoiceNumber Int    @default(1)
 
-  // Spec §4.4 — VAT (Ghana 2026, Act 1151)
+  // Ghana 2026 (Act 1151). VAT and the two levies each apply to the same
+  // base (subtotal) and the amounts simply add up — no cascading. Defaults
+  // sum to 20% (15 + 2.5 + 2.5).
   vatRegistered        Boolean   @default(false)
   vatRegisteredSince   DateTime?
   vatStandardPct       Decimal   @default(15.00) @db.Decimal(5, 2)
   nhilPct              Decimal   @default(2.50)  @db.Decimal(5, 2)
   getfundPct           Decimal   @default(2.50)  @db.Decimal(5, 2)
-  covidLevyPct         Decimal   @default(0.00)  @db.Decimal(5, 2)
 
   // Spec §4.4 — non-VAT sales tax (presumptive / turnover tax for SMEs below threshold)
   nonVatTaxApplied        Boolean @default(true)

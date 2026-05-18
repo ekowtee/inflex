@@ -218,11 +218,12 @@ export interface BillingCompany {
 }
 
 export interface VatBreakdownPdf {
-  step1LeviesAmount: number;
-  step2VatOnLeviedAmount: number;
+  nhilAmount: number;
+  getfundAmount: number;
+  vatStandardAmount: number;
   vatAmount: number;
   effectivePct: number;
-  rates?: { standardPct: number; nhilPct: number; getfundPct: number; covidLevyPct: number };
+  rates?: { standardPct: number; nhilPct: number; getfundPct: number };
 }
 
 export interface BillingDocumentProps {
@@ -423,22 +424,32 @@ export function BillingDocument(props: BillingDocumentProps) {
           {props.vatBreakdown && (
             <>
               <View style={styles.totalsRow}>
-                <Text style={styles.totalsLabel}>Levies (NHIL+GETFund+Covid)</Text>
+                <Text style={styles.totalsLabel}>
+                  NHIL ({(props.vatBreakdown.rates?.nhilPct ?? 2.5).toFixed(2)}%)
+                </Text>
                 <Text style={styles.totalsValue}>
-                  {formatMoney(props.vatBreakdown.step1LeviesAmount, props.currency)}
+                  {formatMoney(props.vatBreakdown.nhilAmount, props.currency)}
                 </Text>
               </View>
               <View style={styles.totalsRow}>
                 <Text style={styles.totalsLabel}>
-                  VAT ({props.vatBreakdown.rates?.standardPct ?? 15}% on base+levies)
+                  GETFund ({(props.vatBreakdown.rates?.getfundPct ?? 2.5).toFixed(2)}%)
                 </Text>
                 <Text style={styles.totalsValue}>
-                  {formatMoney(props.vatBreakdown.step2VatOnLeviedAmount, props.currency)}
+                  {formatMoney(props.vatBreakdown.getfundAmount, props.currency)}
+                </Text>
+              </View>
+              <View style={styles.totalsRow}>
+                <Text style={styles.totalsLabel}>
+                  VAT ({(props.vatBreakdown.rates?.standardPct ?? 15).toFixed(2)}%)
+                </Text>
+                <Text style={styles.totalsValue}>
+                  {formatMoney(props.vatBreakdown.vatStandardAmount, props.currency)}
                 </Text>
               </View>
               <View style={styles.totalsRow}>
                 <Text style={[styles.totalsLabel, { fontFamily: "Helvetica-Bold" }]}>
-                  Total tax ({props.vatBreakdown.effectivePct.toFixed(2)}% effective)
+                  Total tax ({props.vatBreakdown.effectivePct.toFixed(2)}%)
                 </Text>
                 <Text style={[styles.totalsValue, { fontFamily: "Helvetica-Bold" }]}>
                   {formatMoney(props.vatBreakdown.vatAmount, props.currency)}

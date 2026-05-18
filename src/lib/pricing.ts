@@ -138,16 +138,18 @@ export interface VatRates {
   standardPct: number;
   nhilPct: number;
   getfundPct: number;
-  covidLevyPct: number;
 }
 
 export interface VatBreakdown {
   baseAmount: number;
   rates: VatRates;
-  step1LeviesAmount: number;       // levies first, on base
-  step2VatOnLeviedAmount: number;  // VAT on base + levies
-  vatAmount: number;               // step1 + step2
-  effectivePct: number;            // vatAmount / base × 100
+  // Ghana 2026: each of NHIL, GETFund, and VAT is computed against the
+  // subtotal and summed. No cascading.
+  nhilAmount: number;        // base × NHIL / 100
+  getfundAmount: number;     // base × GETFund / 100
+  vatStandardAmount: number; // base × VATstandard / 100
+  vatAmount: number;         // nhil + getfund + vat
+  effectivePct: number;      // vatAmount / base × 100 (defaults: 20.00)
 }
 
 export interface QuoteTotalsInput {
@@ -186,7 +188,7 @@ export function calculateQuoteTotals(input: QuoteTotalsInput): QuoteTotalsResult
   let vatBreakdown: VatBreakdown | null = null;
   let vatAmount = 0;
   if (input.vatApplied) {
-    vatBreakdown = computeVatCascade(subtotal, input.vatRates);
+    vatBreakdown = computeVatBreakdown(subtotal, input.vatRates);
     vatAmount = vatBreakdown.vatAmount;
   }
 
@@ -234,21 +236,24 @@ export function computeFinanceChargePct(
 }
 
 /**
- * VAT cascade per spec §7.1:
- *   step1 = base × (NHIL + GETFund + Covid) / 100
- *   step2 = (base + step1) × VATstd / 100
- *   vat   = step1 + step2
+ * Ghana 2026 VAT + levies. Each is computed against the same subtotal,
+ * with no cascading. Defaults (15 + 2.5 + 2.5) sum to 20%.
+ *   nhil    = base × NHIL / 100
+ *   getfund = base × GETFund / 100
+ *   vat     = base × VATstd / 100
+ *   total   = nhil + getfund + vat
  */
-export function computeVatCascade(base: number, rates: VatRates): VatBreakdown {
-  const leviesPct = (rates.nhilPct + rates.getfundPct + rates.covidLevyPct);
-  const step1 = round2(base * leviesPct / 100);
-  const step2 = round2((base + step1) * rates.standardPct / 100);
-  const vatAmount = round2(step1 + step2);
+export function computeVatBreakdown(base: number, rates: VatRates): VatBreakdown {
+  const nhilAmount = round2(base * rates.nhilPct / 100);
+  const getfundAmount = round2(base * rates.getfundPct / 100);
+  const vatStandardAmount = round2(base * rates.standardPct / 100);
+  const vatAmount = round2(nhilAmount + getfundAmount + vatStandardAmount);
   return {
     baseAmount: round2(base),
     rates,
-    step1LeviesAmount: step1,
-    step2VatOnLeviedAmount: step2,
+    nhilAmount,
+    getfundAmount,
+    vatStandardAmount,
     vatAmount,
     effectivePct: base > 0 ? round3(vatAmount / base * 100) : 0,
   };

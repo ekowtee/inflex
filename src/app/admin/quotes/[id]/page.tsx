@@ -54,11 +54,12 @@ export default async function QuoteDetailPage({
   const vatBreakdown = quote.vatBreakdown as
     | {
         baseAmount: number;
-        step1LeviesAmount: number;
-        step2VatOnLeviedAmount: number;
+        nhilAmount: number;
+        getfundAmount: number;
+        vatStandardAmount: number;
         vatAmount: number;
         effectivePct: number;
-        rates?: { standardPct: number; nhilPct: number; getfundPct: number; covidLevyPct: number };
+        rates?: { standardPct: number; nhilPct: number; getfundPct: number };
       }
     | null;
 
@@ -222,15 +223,19 @@ export default async function QuoteDetailPage({
           {vatBreakdown && (
             <>
               <Row
-                label={`Levies (NHIL+GETFund+Covid)`}
-                value={formatMoney(vatBreakdown.step1LeviesAmount, quote.currency)}
+                label={`NHIL (${(vatBreakdown.rates?.nhilPct ?? 2.5).toFixed(2)}%)`}
+                value={formatMoney(vatBreakdown.nhilAmount, quote.currency)}
               />
               <Row
-                label={`VAT (${vatBreakdown.rates?.standardPct ?? 15}% on base+levies)`}
-                value={formatMoney(vatBreakdown.step2VatOnLeviedAmount, quote.currency)}
+                label={`GETFund (${(vatBreakdown.rates?.getfundPct ?? 2.5).toFixed(2)}%)`}
+                value={formatMoney(vatBreakdown.getfundAmount, quote.currency)}
               />
               <Row
-                label={`Total tax (${vatBreakdown.effectivePct.toFixed(2)}% effective)`}
+                label={`VAT (${(vatBreakdown.rates?.standardPct ?? 15).toFixed(2)}%)`}
+                value={formatMoney(vatBreakdown.vatStandardAmount, quote.currency)}
+              />
+              <Row
+                label={`Total tax (${vatBreakdown.effectivePct.toFixed(2)}%)`}
                 value={formatMoney(vatBreakdown.vatAmount, quote.currency)}
               />
             </>

@@ -391,7 +391,7 @@ export default function QuoteBuilder({
           lineGpAmount: p.lineGpAmount,
         })),
         vatApplied: header.vatApplied,
-        vatRates: { standardPct: 15, nhilPct: 2.5, getfundPct: 2.5, covidLevyPct: 0 },
+        vatRates: { standardPct: 15, nhilPct: 2.5, getfundPct: 2.5 },
         nonVatTaxApplied: header.nonVatTaxApplied,
         nonVatTaxOnGoodsPct: 3,
         nonVatTaxOnServicesPct: 0,
