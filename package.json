@@ -14,7 +14,13 @@
     "db:reset": "dotenv -e .env.local -- prisma migrate reset",
     "db:deploy:prod": "node scripts/prisma-prod.mjs migrate deploy",
     "db:studio:prod": "node scripts/prisma-prod.mjs studio",
-    "db:status:prod": "node scripts/prisma-prod.mjs migrate status"
+    "db:status:prod": "node scripts/prisma-prod.mjs migrate status",
+    "db:seed": "dotenv -e .env.local -- tsx prisma/seed.ts",
+    "db:seed:prod": "node scripts/prisma-prod.mjs db seed",
+    "test": "tsx --test src/lib/__tests__/*.test.ts"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
@@ -46,6 +52,7 @@
     "eslint": "^9",
     "eslint-config-next": "^16.1.6",
     "tailwindcss": "^4",
+    "tsx": "^4.22.1",
     "typescript": "^5"
   }
 }

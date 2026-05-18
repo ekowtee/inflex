@@ -12,6 +12,7 @@ datasource db {
 enum UserRole {
   DIRECTOR
   FINANCE
+  SALES
 }
 
 model User {
@@ -24,6 +25,9 @@ model User {
   lastLoginAt  DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  architectQuotes Quote[]          @relation("SolutionArchitect")
+  quoteRevisions  QuoteRevision[]
 
   @@index([role])
   @@index([isActive])
@@ -74,6 +78,7 @@ model Customer {
 
 enum QuoteStatus {
   DRAFT
+  PENDING_APPROVAL
   SENT
   ACCEPTED
   DECLINED
@@ -86,27 +91,69 @@ model Quote {
   customerId  String
   customer    Customer    @relation(fields: [customerId], references: [id])
   status      QuoteStatus @default(DRAFT)
+
+  // Customer-facing meta (spec §4.1)
+  projectTitle           String?
+  attentionTo            String?
+  solutionArchitectId    String?
+  solutionArchitect      User?    @relation("SolutionArchitect", fields: [solutionArchitectId], references: [id])
+
   scopeOfWork String?
   notes       String?
+
+  // Totals (subtotal/total are derived; vatBreakdown holds the cascade)
   subtotal    Decimal     @default(0) @db.Decimal(12, 2)
   taxRate     Decimal     @default(0) @db.Decimal(5, 2)
   taxAmount   Decimal     @default(0) @db.Decimal(12, 2)
   discount    Decimal     @default(0) @db.Decimal(12, 2)
   total       Decimal     @default(0) @db.Decimal(12, 2)
+  totalGp           Decimal @default(0) @db.Decimal(12, 2)
+  totalGpMarginPct  Decimal @default(0) @db.Decimal(6, 3)
   currency    String      @default("GHS")
   validUntil  DateTime?
   sentAt      DateTime?
   acceptedAt  DateTime?
   declinedAt  DateTime?
+
+  // FX (spec §4.1)
+  fxRate         Decimal?  @db.Decimal(12, 6)
+  fxRateSource   String?   @default("cedirates.com")
+  fxRateDate     DateTime?
+
+  // Finance charge inputs (spec §4.1)
+  annualInterestRatePct Decimal @default(0) @db.Decimal(5, 2)
+  projectCycleWeeks     Int     @default(8)
+  advancePaymentPct     Decimal @default(0) @db.Decimal(5, 2)
+
+  // WHT (spec §4.1 + §7.3)
+  whtCategoryId  String?
+  whtCategory    WhtCategory? @relation(fields: [whtCategoryId], references: [id])
+  whtCustomPct   Decimal?     @db.Decimal(5, 2)
+
+  // VAT capture (spec §4.1 + §7.1)
+  vatApplied     Boolean  @default(false)
+  vatBreakdown   Json?
+
+  // Non-VAT sales tax (spec §4.1 + §7.2)
+  nonVatTaxApplied Boolean  @default(false)
+  nonVatTaxPct     Decimal? @db.Decimal(5, 2)
+  nonVatTaxAmount  Decimal? @db.Decimal(12, 2)
+
+  // Revisions (spec §4.1 + §11)
+  revision   Int       @default(1)
+  lockedAt   DateTime?
+
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   items       LineItem[]
   invoice     Invoice?
+  revisions   QuoteRevision[]
 
   @@index([status])
   @@index([customerId])
   @@index([createdAt])
+  @@index([solutionArchitectId])
 }
 
 // ---------- Invoices ----------
@@ -170,6 +217,15 @@ enum RecurringInterval {
   ANNUALLY
 }
 
+// Spec §4.2 — controls how a line is rendered and which calculator owns it
+enum LineKind {
+  PRODUCT
+  LABOUR
+  OUTSTATION
+  FINANCE_CHARGE
+  OTHER
+}
+
 model LineItem {
   id          String             @id @default(cuid())
   description String
@@ -179,13 +235,36 @@ model LineItem {
   recurring   RecurringInterval  @default(NONE)
   sortOrder   Int                @default(0)
 
+  // Spec §4.2 — v2 quote builder fields
+  kind                   LineKind  @default(PRODUCT)
+  partNumber             String?
+  specs                  String?
+  landedCost             Decimal   @default(0) @db.Decimal(12, 2)
+  landedCostCurrency     String    @default("GHS")
+  markupTierId           String?
+  markupTier             MarkupTier? @relation(fields: [markupTierId], references: [id])
+  markupPct              Decimal   @default(0) @db.Decimal(5, 2)
+  surchargePct           Decimal   @default(0) @db.Decimal(5, 2)
+  discountPct            Decimal   @default(0) @db.Decimal(5, 2)
+  financeChargePct       Decimal   @default(0) @db.Decimal(8, 4)
+  whtGrossUpAmount       Decimal   @default(0) @db.Decimal(12, 2)
+  finalUnitPriceExclTax  Decimal   @default(0) @db.Decimal(12, 2)
+  finalLineTotalExclTax  Decimal   @default(0) @db.Decimal(12, 2)
+  costLineTotal          Decimal   @default(0) @db.Decimal(12, 2)
+  lineGpAmount           Decimal   @default(0) @db.Decimal(12, 2)
+  lineGpMarginPct        Decimal   @default(0) @db.Decimal(6, 3)
+
   quoteId     String?
   quote       Quote?             @relation(fields: [quoteId], references: [id], onDelete: Cascade)
   invoiceId   String?
   invoice     Invoice?           @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 
+  labourEntries     LabourEntry[]
+  outstationEntries OutstationEntry[]
+
   @@index([quoteId])
   @@index([invoiceId])
+  @@index([kind])
 }
 
 // ---------- Payments ----------
@@ -256,5 +335,144 @@ model CompanySettings {
   invoicePrefix   String   @default("INV")
   nextQuoteNumber   Int    @default(1)
   nextInvoiceNumber Int    @default(1)
+
+  // Spec §4.4 — VAT (Ghana 2026, Act 1151)
+  vatRegistered        Boolean   @default(false)
+  vatRegisteredSince   DateTime?
+  vatStandardPct       Decimal   @default(15.00) @db.Decimal(5, 2)
+  nhilPct              Decimal   @default(2.50)  @db.Decimal(5, 2)
+  getfundPct           Decimal   @default(2.50)  @db.Decimal(5, 2)
+  covidLevyPct         Decimal   @default(0.00)  @db.Decimal(5, 2)
+
+  // Spec §4.4 — non-VAT sales tax (presumptive / turnover tax for SMEs below threshold)
+  nonVatTaxApplied        Boolean @default(true)
+  nonVatTaxLabel          String  @default("Sales Tax")
+  nonVatTaxOnGoodsPct     Decimal @default(3.00) @db.Decimal(5, 2)
+  nonVatTaxOnServicesPct  Decimal @default(0.00) @db.Decimal(5, 2)
+
+  // Spec §4.4 — finance charge defaults
+  defaultAnnualInterestRatePct Decimal @default(22.00) @db.Decimal(5, 2)
+  defaultProjectCycleWeeks     Int     @default(8)
+  defaultAdvancePaymentPct     Decimal @default(0.00)  @db.Decimal(5, 2)
+
+  // Spec §4.4 — FX defaults
+  defaultFxUsdGhsRate  Decimal? @db.Decimal(12, 6)
+  defaultFxRateSource  String   @default("cedirates.com")
+
+  // Spec §4.4 — rounding thresholds
+  roundingThreshold        Decimal @default(70.00)  @db.Decimal(12, 2)
+  roundingIncrementBelow   Decimal @default(0.01)   @db.Decimal(12, 4)
+  roundingIncrementAbove   Decimal @default(1.00)   @db.Decimal(12, 4)
+
   updatedAt       DateTime @updatedAt
+}
+
+// ---------- Quote Builder v2 supporting models (spec §4.3) ----------
+
+model MarkupTier {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  pct         Decimal    @db.Decimal(5, 2)
+  isDefault   Boolean    @default(false)
+  // Whether this tier's lines should carry a finance charge by default.
+  // Spec §8.3: PRODUCT always does; LABOUR/OUTSTATION are per-tier opt-in.
+  carriesFinanceCharge Boolean @default(true)
+  sortOrder   Int        @default(0)
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  lineItems   LineItem[]
+}
+
+enum LabourKind {
+  DIRECT
+  INDIRECT
+}
+
+model LabourRole {
+  id             String          @id @default(cuid())
+  name           String          @unique
+  dailyRate      Decimal         @db.Decimal(12, 2)
+  currency       String          @default("GHS")
+  kind           LabourKind      @default(DIRECT)
+  isActive       Boolean         @default(true)
+  sortOrder      Int             @default(0)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  outstationRate    OutstationRate?
+  labourEntries     LabourEntry[]
+  outstationEntries OutstationEntry[]
+}
+
+model OutstationRate {
+  id                String     @id @default(cuid())
+  roleId            String     @unique
+  role              LabourRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  feeding           Decimal    @default(0) @db.Decimal(12, 2)
+  localTransport    Decimal    @default(0) @db.Decimal(12, 2)
+  outstationCharge  Decimal    @default(0) @db.Decimal(12, 2)
+  misc              Decimal    @default(0) @db.Decimal(12, 2)
+  transportPerTrip  Decimal    @default(0) @db.Decimal(12, 2)
+  currency          String     @default("GHS")
+  updatedAt         DateTime   @updatedAt
+}
+
+model LabourEntry {
+  id            String     @id @default(cuid())
+  lineItemId    String
+  lineItem      LineItem   @relation(fields: [lineItemId], references: [id], onDelete: Cascade)
+  roleId        String
+  role          LabourRole @relation(fields: [roleId], references: [id])
+  days          Decimal    @db.Decimal(8, 2)
+  indirectDays  Decimal    @default(0) @db.Decimal(8, 2)
+  description   String?
+  sortOrder     Int        @default(0)
+
+  @@index([lineItemId])
+}
+
+model OutstationEntry {
+  id            String     @id @default(cuid())
+  lineItemId    String
+  lineItem      LineItem   @relation(fields: [lineItemId], references: [id], onDelete: Cascade)
+  roleId        String
+  role          LabourRole @relation(fields: [roleId], references: [id])
+  staffCount    Int        @default(1)
+  days          Decimal    @db.Decimal(8, 2)
+  trips         Int        @default(1)
+  description   String?
+  sortOrder     Int        @default(0)
+
+  @@index([lineItemId])
+}
+
+model QuoteRevision {
+  id          String   @id @default(cuid())
+  quoteId     String
+  quote       Quote    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  revision    Int
+  editorId    String
+  editor      User     @relation(fields: [editorId], references: [id])
+  changedAt   DateTime @default(now())
+  reason      String?
+  snapshot    Json
+
+  @@index([quoteId])
+  @@index([changedAt])
+}
+
+model WhtCategory {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  label       String
+  rate        Decimal  @db.Decimal(5, 2)
+  description String?
+  isActive    Boolean  @default(true)
+  isDefault   Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  quotes      Quote[]
 }

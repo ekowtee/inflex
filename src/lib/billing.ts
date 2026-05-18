@@ -1,53 +1,9 @@
+/**
+ * DB-bound billing helpers. Pure pricing math lives in src/lib/pricing.ts.
+ * Anything here that touches Prisma stays here.
+ */
 import { Prisma } from "@prisma/client";
 import { prisma } from "./prisma";
-
-export const LINE_ITEM_CATEGORIES = [
-  { value: "CONSULTING", label: "Consulting & Professional Services" },
-  { value: "MANAGED_SERVICES", label: "Managed Services" },
-  { value: "HARDWARE", label: "Hardware" },
-  { value: "SOFTWARE_LICENSING", label: "Software & Licensing" },
-  { value: "TRAINING", label: "Training" },
-  { value: "OTHER", label: "Other" },
-] as const;
-
-export const RECURRING_INTERVALS = [
-  { value: "NONE", label: "One-off" },
-  { value: "MONTHLY", label: "Monthly" },
-  { value: "QUARTERLY", label: "Quarterly" },
-  { value: "ANNUALLY", label: "Annually" },
-] as const;
-
-export interface BillingItemInput {
-  description: string;
-  category: string;
-  quantity: number;
-  unitPrice: number;
-  recurring: string;
-  sortOrder?: number;
-}
-
-export function calculateTotals(opts: {
-  items: BillingItemInput[];
-  taxRate: number;
-  discount: number;
-}) {
-  const subtotal = opts.items.reduce(
-    (sum, item) => sum + Number(item.quantity) * Number(item.unitPrice),
-    0
-  );
-  const discounted = Math.max(0, subtotal - opts.discount);
-  const taxAmount = (discounted * opts.taxRate) / 100;
-  const total = discounted + taxAmount;
-  return {
-    subtotal: round2(subtotal),
-    taxAmount: round2(taxAmount),
-    total: round2(total),
-  };
-}
-
-function round2(n: number): number {
-  return Math.round(n * 100) / 100;
-}
 
 export async function nextQuoteNumber(): Promise<string> {
   return prisma.$transaction(async (tx) => {
@@ -89,3 +45,28 @@ function formatNumber(prefix: string, seq: number): string {
 export function toDecimal(n: number): Prisma.Decimal {
   return new Prisma.Decimal(n);
 }
+
+// Labels surfaced in dropdowns / PDF rendering. Keys mirror the Prisma enums.
+export const LINE_KIND_LABELS: Record<string, string> = {
+  PRODUCT: "Product",
+  LABOUR: "Labour",
+  OUTSTATION: "Outstation",
+  FINANCE_CHARGE: "Finance charge",
+  OTHER: "Other",
+};
+
+export const RECURRING_LABELS: Record<string, string> = {
+  NONE: "One-off",
+  MONTHLY: "Monthly",
+  QUARTERLY: "Quarterly",
+  ANNUALLY: "Annually",
+};
+
+export const LINE_ITEM_CATEGORY_LABELS: Record<string, string> = {
+  CONSULTING: "Consulting & Professional Services",
+  MANAGED_SERVICES: "Managed Services",
+  HARDWARE: "Hardware",
+  SOFTWARE_LICENSING: "Software & Licensing",
+  TRAINING: "Training",
+  OTHER: "Other",
+};
