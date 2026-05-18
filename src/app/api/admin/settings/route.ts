@@ -28,18 +28,53 @@ export async function PUT(req: NextRequest) {
       { status: 400 }
     );
   }
-  const data = parsed.data;
+  const d = parsed.data;
+
+  // Track VAT-registration flip date.
+  const existing = await prisma.companySettings.findUnique({
+    where: { id: "singleton" },
+  });
+  const vatRegisteredSince = d.vatRegistered
+    ? existing?.vatRegisteredSince ?? new Date()
+    : null;
+
   const updated = await prisma.companySettings.upsert({
     where: { id: "singleton" },
     create: {
-      ...data,
-      defaultTaxRate: toDecimal(data.defaultTaxRate),
-      email: data.email || null,
+      ...d,
+      email: d.email || null,
+      vatRegisteredSince,
+      vatStandardPct: toDecimal(d.vatStandardPct),
+      nhilPct: toDecimal(d.nhilPct),
+      getfundPct: toDecimal(d.getfundPct),
+      covidLevyPct: toDecimal(d.covidLevyPct),
+      nonVatTaxOnGoodsPct: toDecimal(d.nonVatTaxOnGoodsPct),
+      nonVatTaxOnServicesPct: toDecimal(d.nonVatTaxOnServicesPct),
+      defaultAnnualInterestRatePct: toDecimal(d.defaultAnnualInterestRatePct),
+      defaultAdvancePaymentPct: toDecimal(d.defaultAdvancePaymentPct),
+      defaultFxUsdGhsRate:
+        d.defaultFxUsdGhsRate != null ? toDecimal(d.defaultFxUsdGhsRate) : null,
+      roundingThreshold: toDecimal(d.roundingThreshold),
+      roundingIncrementBelow: toDecimal(d.roundingIncrementBelow),
+      roundingIncrementAbove: toDecimal(d.roundingIncrementAbove),
     },
     update: {
-      ...data,
-      defaultTaxRate: toDecimal(data.defaultTaxRate),
-      email: data.email || null,
+      ...d,
+      email: d.email || null,
+      vatRegisteredSince,
+      vatStandardPct: toDecimal(d.vatStandardPct),
+      nhilPct: toDecimal(d.nhilPct),
+      getfundPct: toDecimal(d.getfundPct),
+      covidLevyPct: toDecimal(d.covidLevyPct),
+      nonVatTaxOnGoodsPct: toDecimal(d.nonVatTaxOnGoodsPct),
+      nonVatTaxOnServicesPct: toDecimal(d.nonVatTaxOnServicesPct),
+      defaultAnnualInterestRatePct: toDecimal(d.defaultAnnualInterestRatePct),
+      defaultAdvancePaymentPct: toDecimal(d.defaultAdvancePaymentPct),
+      defaultFxUsdGhsRate:
+        d.defaultFxUsdGhsRate != null ? toDecimal(d.defaultFxUsdGhsRate) : null,
+      roundingThreshold: toDecimal(d.roundingThreshold),
+      roundingIncrementBelow: toDecimal(d.roundingIncrementBelow),
+      roundingIncrementAbove: toDecimal(d.roundingIncrementAbove),
     },
   });
   return NextResponse.json(updated);

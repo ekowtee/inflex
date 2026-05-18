@@ -2,9 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/guard";
 import { invoiceSchema } from "@/lib/validators";
-import { calculateTotals, nextInvoiceNumber, toDecimal } from "@/lib/billing";
+import { nextInvoiceNumber, toDecimal } from "@/lib/billing";
 
 export const dynamic = "force-dynamic";
+
+function simpleInvoiceTotals(items: { quantity: number; unitPrice: number }[], taxRate: number, discount: number) {
+  const subtotal = items.reduce((s, i) => s + i.quantity * i.unitPrice, 0);
+  const discounted = Math.max(0, subtotal - discount);
+  const taxAmount = (discounted * taxRate) / 100;
+  return {
+    subtotal: round2(subtotal),
+    taxAmount: round2(taxAmount),
+    total: round2(discounted + taxAmount),
+  };
+}
+function round2(n: number) {
+  return Math.round(n * 100) / 100;
+}
 
 export async function GET() {
   const denied = await requireAdmin();
@@ -31,11 +45,7 @@ export async function POST(req: NextRequest) {
     );
   }
   const data = parsed.data;
-  const totals = calculateTotals({
-    items: data.items,
-    taxRate: data.taxRate,
-    discount: data.discount,
-  });
+  const totals = simpleInvoiceTotals(data.items, data.taxRate, data.discount);
   const number = await nextInvoiceNumber();
   const created = await prisma.invoice.create({
     data: {
@@ -56,9 +66,13 @@ export async function POST(req: NextRequest) {
       items: {
         create: data.items.map((item, idx) => ({
           description: item.description,
+          kind: "PRODUCT",
           category: item.category,
           quantity: toDecimal(item.quantity),
           unitPrice: toDecimal(item.unitPrice),
+          landedCostCurrency: data.currency,
+          finalUnitPriceExclTax: toDecimal(item.unitPrice),
+          finalLineTotalExclTax: toDecimal(item.quantity * item.unitPrice),
           recurring: item.recurring,
           sortOrder: idx,
         })),

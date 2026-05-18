@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Quotes" };
 
 export default async function QuotesPage() {
-  const [quotesRows, customersRows, settings] = await Promise.all([
+  const [quotesRows, customersRows] = await Promise.all([
     prisma.quote.findMany({
       include: { customer: { select: { id: true, name: true, company: true } } },
       orderBy: { createdAt: "desc" },
@@ -16,11 +16,9 @@ export default async function QuotesPage() {
       select: { id: true, name: true, company: true },
       orderBy: { name: "asc" },
     }),
-    prisma.companySettings.findUnique({ where: { id: "singleton" } }),
   ]);
   const quotes = decimalToNumber(quotesRows);
   const customers = decimalToNumber(customersRows);
-  const defaultCurrency = settings?.currency ?? "GHS";
 
   return (
     <>
@@ -29,11 +27,7 @@ export default async function QuotesPage() {
         title="Quotes"
         description="Draft, send, and track proposals from first touch to signature."
       />
-      <QuotesClient
-        quotes={quotes}
-        customers={customers}
-        defaultCurrency={defaultCurrency}
-      />
+      <QuotesClient quotes={quotes} customers={customers} />
     </>
   );
 }

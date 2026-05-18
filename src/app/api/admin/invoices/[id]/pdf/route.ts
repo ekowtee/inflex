@@ -35,6 +35,7 @@ export async function GET(
 
   const buffer = await renderToBuffer(
     BillingDocument({
+      mode: "customer",
       kind: "INVOICE",
       number: invoice.number,
       status: invoice.status,
@@ -42,9 +43,7 @@ export async function GET(
       dueDate: invoice.dueDate,
       currency: invoice.currency,
       subtotal: invoice.subtotal.toNumber(),
-      taxRate: invoice.taxRate.toNumber(),
-      taxAmount: invoice.taxAmount.toNumber(),
-      discount: invoice.discount.toNumber(),
+      vatAmount: invoice.taxAmount.toNumber(),
       total: invoice.total.toNumber(),
       amountPaid: invoice.amountPaid.toNumber(),
       notes: invoice.notes,
@@ -54,13 +53,11 @@ export async function GET(
         email: invoice.customer.email,
         phone: invoice.customer.phone,
       },
-      company: settings,
+      company: { ...settings, vatRegistered: settings.vatRegistered },
       items: invoice.items.map((i) => ({
         description: i.description,
-        category: i.category,
         quantity: i.quantity.toNumber(),
-        unitPrice: i.unitPrice.toNumber(),
-        recurring: i.recurring,
+        unitPrice: i.finalUnitPriceExclTax.toNumber() || i.unitPrice.toNumber(),
       })),
     })
   );

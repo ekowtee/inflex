@@ -5,8 +5,25 @@ import { useRouter } from "next/navigation";
 import { Field, Select, TextArea, TextInput } from "../_components/Field";
 import { Button } from "../_components/Button";
 import LineItemEditor, { LineItemDraft } from "../_components/LineItemEditor";
-import { calculateTotals } from "@/lib/billing";
 import { formatMoney } from "@/lib/serialize";
+
+function calculateTotals(opts: {
+  items: { quantity: number; unitPrice: number }[];
+  taxRate: number;
+  discount: number;
+}) {
+  const subtotal = opts.items.reduce((s, i) => s + i.quantity * i.unitPrice, 0);
+  const discounted = Math.max(0, subtotal - opts.discount);
+  const taxAmount = (discounted * opts.taxRate) / 100;
+  return {
+    subtotal: round2(subtotal),
+    taxAmount: round2(taxAmount),
+    total: round2(discounted + taxAmount),
+  };
+}
+function round2(n: number) {
+  return Math.round(n * 100) / 100;
+}
 
 interface CustomerOption {
   id: string;

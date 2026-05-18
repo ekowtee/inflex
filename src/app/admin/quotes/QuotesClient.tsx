@@ -9,7 +9,7 @@ import Modal from "../_components/Modal";
 import StatusBadge from "../_components/StatusBadge";
 import EmptyState from "../_components/EmptyState";
 import { Select } from "../_components/Field";
-import QuoteForm from "./QuoteForm";
+import QuoteBuilder from "./QuoteBuilder";
 import { formatDate, formatMoney } from "@/lib/serialize";
 
 type Quote = {
@@ -25,16 +25,14 @@ type Quote = {
 
 type Customer = { id: string; name: string; company: string | null };
 
-const STATUSES = ["ALL", "DRAFT", "SENT", "ACCEPTED", "DECLINED", "EXPIRED"];
+const STATUSES = ["ALL", "DRAFT", "PENDING_APPROVAL", "SENT", "ACCEPTED", "DECLINED", "EXPIRED"];
 
 export default function QuotesClient({
   quotes,
   customers,
-  defaultCurrency,
 }: {
   quotes: Quote[];
   customers: Customer[];
-  defaultCurrency: string;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -64,7 +62,7 @@ export default function QuotesClient({
         >
           {STATUSES.map((s) => (
             <option key={s} value={s}>
-              {s === "ALL" ? "All statuses" : s}
+              {s === "ALL" ? "All statuses" : s.replace(/_/g, " ")}
             </option>
           ))}
         </Select>
@@ -152,9 +150,8 @@ export default function QuotesClient({
         title="New quote"
         size="xl"
       >
-        <QuoteForm
+        <QuoteBuilder
           customers={customers}
-          defaultCurrency={defaultCurrency}
           initial={preselectCustomerId ? { customerId: preselectCustomerId } : undefined}
           onClose={() => setCreating(false)}
         />

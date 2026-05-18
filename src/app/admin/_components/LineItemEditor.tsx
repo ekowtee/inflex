@@ -1,8 +1,23 @@
 "use client";
 
 import { Plus, Trash2 } from "lucide-react";
-import { LINE_ITEM_CATEGORIES, RECURRING_INTERVALS } from "@/lib/billing";
 import { Select, TextInput } from "./Field";
+
+const CATEGORY_OPTIONS = [
+  { value: "HARDWARE", label: "Hardware" },
+  { value: "SOFTWARE_LICENSING", label: "Software & Licensing" },
+  { value: "CONSULTING", label: "Consulting" },
+  { value: "MANAGED_SERVICES", label: "Managed Services" },
+  { value: "TRAINING", label: "Training" },
+  { value: "OTHER", label: "Other" },
+];
+
+const RECURRING_OPTIONS = [
+  { value: "NONE", label: "One-off" },
+  { value: "MONTHLY", label: "Monthly" },
+  { value: "QUARTERLY", label: "Quarterly" },
+  { value: "ANNUALLY", label: "Annually" },
+];
 
 export interface LineItemDraft {
   description: string;
@@ -70,7 +85,7 @@ export default function LineItemEditor({
                 value={item.category}
                 onChange={(e) => update(idx, { category: e.target.value })}
               >
-                {LINE_ITEM_CATEGORIES.map((c) => (
+                {CATEGORY_OPTIONS.map((c) => (
                   <option key={c.value} value={c.value}>
                     {c.label}
                   </option>
@@ -106,7 +121,7 @@ export default function LineItemEditor({
                 value={item.recurring}
                 onChange={(e) => update(idx, { recurring: e.target.value })}
               >
-                {RECURRING_INTERVALS.map((r) => (
+                {RECURRING_OPTIONS.map((r) => (
                   <option key={r.value} value={r.value}>
                     {r.label}
                   </option>

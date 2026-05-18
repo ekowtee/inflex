@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { decimalToNumber, formatDate, formatMoney } from "@/lib/serialize";
 import PageHeader from "../../_components/PageHeader";
 import StatusBadge from "../../_components/StatusBadge";
-import { LINE_ITEM_CATEGORIES, RECURRING_INTERVALS } from "@/lib/billing";
+import { LINE_ITEM_CATEGORY_LABELS, RECURRING_LABELS } from "@/lib/billing";
 import InvoiceDetailClient from "./InvoiceDetailClient";
 
 export const dynamic = "force-dynamic";
@@ -40,12 +40,8 @@ export default async function InvoiceDetailPage({
   const defaultCurrency = settings?.currency ?? "GHS";
 
   const outstanding = Math.max(0, invoice.total - invoice.amountPaid);
-  const categoryLabel: Record<string, string> = Object.fromEntries(
-    LINE_ITEM_CATEGORIES.map((c) => [c.value, c.label])
-  );
-  const recurringLabel: Record<string, string> = Object.fromEntries(
-    RECURRING_INTERVALS.map((r) => [r.value, r.label])
-  );
+  const categoryLabel = LINE_ITEM_CATEGORY_LABELS;
+  const recurringLabel = RECURRING_LABELS;
 
   return (
     <>

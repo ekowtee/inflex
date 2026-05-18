@@ -12,6 +12,7 @@ const navy = "#1B3764";
 const ink = "#171A20";
 const muted = "#5C6280";
 const line = "#E6E6E6";
+const internalBg = "#FFF7E6";
 
 const styles = StyleSheet.create({
   page: {
@@ -39,6 +40,25 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   docMeta: { fontSize: 9, color: muted, marginTop: 4, textAlign: "right" },
+  internalBanner: {
+    backgroundColor: internalBg,
+    padding: 6,
+    marginBottom: 12,
+    borderRadius: 3,
+    fontSize: 9,
+    color: "#8B5A00",
+    fontFamily: "Helvetica-Bold",
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    textAlign: "center",
+  },
+  projectTitle: {
+    fontSize: 13,
+    fontFamily: "Helvetica-Bold",
+    color: navy,
+    marginBottom: 12,
+    textTransform: "uppercase",
+  },
   twoCol: { flexDirection: "row", justifyContent: "space-between", marginBottom: 16 },
   block: { width: "48%" },
   blockLabel: {
@@ -79,8 +99,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   td: { fontSize: 9, color: ink },
+  specsBlock: {
+    marginTop: 4,
+    paddingLeft: 8,
+    borderLeftWidth: 1,
+    borderLeftColor: line,
+    fontSize: 8,
+    color: muted,
+  },
   totalsBox: {
-    width: "40%",
+    width: "45%",
     marginLeft: "auto",
     marginTop: 8,
     padding: 12,
@@ -104,7 +132,22 @@ const styles = StyleSheet.create({
   },
   grandTotalLabel: { fontSize: 11, fontFamily: "Helvetica-Bold", color: navy },
   grandTotalValue: { fontSize: 11, fontFamily: "Helvetica-Bold", color: navy },
-  footer: { marginTop: 32 },
+  internalSection: {
+    backgroundColor: internalBg,
+    padding: 10,
+    borderRadius: 4,
+    marginTop: 12,
+    marginBottom: 12,
+  },
+  internalLabel: {
+    fontSize: 8,
+    color: "#8B5A00",
+    fontFamily: "Helvetica-Bold",
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    marginBottom: 6,
+  },
+  footer: { marginTop: 24 },
   footerSectionTitle: {
     fontSize: 8,
     color: muted,
@@ -124,12 +167,25 @@ const styles = StyleSheet.create({
   },
 });
 
+export type BillingMode = "customer" | "internal";
+
 export interface BillingLine {
   description: string;
-  category: string;
+  partNumber?: string | null;
+  specs?: string | null;
+  kind?: string;
   quantity: number;
-  unitPrice: number;
-  recurring: string;
+  unitPrice: number;          // grossed-up unit price (what customer sees)
+  // Internal-only:
+  landedCost?: number;
+  financeChargePct?: number;
+  markupPct?: number;
+  surchargePct?: number;
+  discountPct?: number;
+  whtGrossUpAmount?: number;
+  costLineTotal?: number;
+  lineGpAmount?: number;
+  lineGpMarginPct?: number;
 }
 
 export interface BillingCustomer {
@@ -158,34 +214,76 @@ export interface BillingCompany {
   momoProvider: string | null;
   momoNumber: string | null;
   momoAccountName: string | null;
+  vatRegistered?: boolean;
+}
+
+export interface VatBreakdownPdf {
+  step1LeviesAmount: number;
+  step2VatOnLeviedAmount: number;
+  vatAmount: number;
+  effectivePct: number;
+  rates?: { standardPct: number; nhilPct: number; getfundPct: number; covidLevyPct: number };
 }
 
 export interface BillingDocumentProps {
+  mode?: BillingMode;
   kind: "QUOTE" | "INVOICE";
   number: string;
   status: string;
+  revision?: number;
   issueDate: string | Date | null;
   validUntil?: string | Date | null;
   dueDate?: string | Date | null;
   currency: string;
   subtotal: number;
-  taxRate: number;
-  taxAmount: number;
-  discount: number;
+  vatBreakdown?: VatBreakdownPdf | null;
+  vatAmount?: number;
+  nonVatTaxApplied?: boolean;
+  nonVatTaxLabel?: string;
+  nonVatTaxPct?: number;
+  nonVatTaxAmount?: number;
   total: number;
   amountPaid?: number;
+
+  // Internal-only aggregates
+  totalGp?: number;
+  totalGpMarginPct?: number;
+
+  // FX (customer-facing footer attribution)
+  fxRate?: number | null;
+  fxRateSource?: string | null;
+  fxRateDate?: string | Date | null;
+
+  // WHT
+  whtPct?: number;
+  whtCategoryLabel?: string;
+
+  // Customer-facing meta
+  projectTitle?: string | null;
+  attentionTo?: string | null;
+  solutionArchitectName?: string | null;
   scopeOfWork?: string | null;
   notes?: string | null;
+
   customer: BillingCustomer;
   company: BillingCompany;
   items: BillingLine[];
 }
 
 export function BillingDocument(props: BillingDocumentProps) {
+  const mode: BillingMode = props.mode ?? "customer";
   const isQuote = props.kind === "QUOTE";
+  const isInternal = mode === "internal";
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        {isInternal && (
+          <Text style={styles.internalBanner}>
+            Internal copy — not for the customer
+          </Text>
+        )}
+
         <View style={styles.header} fixed>
           <View>
             <Text style={styles.companyName}>{props.company.companyName}</Text>
@@ -213,25 +311,41 @@ export function BillingDocument(props: BillingDocumentProps) {
           <View>
             <Text style={styles.docTitle}>{isQuote ? "Quote" : "Invoice"}</Text>
             <Text style={styles.docMeta}># {props.number}</Text>
-            <Text style={styles.docMeta}>
-              Issued {formatDate(props.issueDate)}
-            </Text>
+            {props.revision && props.revision > 1 && (
+              <Text style={styles.docMeta}>Revision {props.revision}</Text>
+            )}
+            <Text style={styles.docMeta}>Issued {formatDate(props.issueDate)}</Text>
             {isQuote && props.validUntil && (
-              <Text style={styles.docMeta}>
-                Valid until {formatDate(props.validUntil)}
-              </Text>
+              <Text style={styles.docMeta}>Valid until {formatDate(props.validUntil)}</Text>
             )}
             {!isQuote && props.dueDate && (
               <Text style={styles.docMeta}>Due {formatDate(props.dueDate)}</Text>
             )}
-            <Text style={styles.docMeta}>{props.status}</Text>
+            <Text style={styles.docMeta}>{props.status.replace(/_/g, " ")}</Text>
           </View>
         </View>
 
+        {props.projectTitle && (
+          <Text style={styles.projectTitle}>{props.projectTitle}</Text>
+        )}
+
         <View style={styles.twoCol}>
           <View style={styles.block}>
-            <Text style={styles.blockLabel}>Bill to</Text>
-            <Text style={[styles.blockText, { fontFamily: "Helvetica-Bold" }]}>
+            <Text style={styles.blockLabel}>
+              {props.attentionTo ? "Attention" : "Bill to"}
+            </Text>
+            {props.attentionTo && (
+              <Text style={[styles.blockText, { fontFamily: "Helvetica-Bold" }]}>
+                {props.attentionTo}
+              </Text>
+            )}
+            <Text
+              style={
+                props.attentionTo
+                  ? styles.blockText
+                  : [styles.blockText, { fontFamily: "Helvetica-Bold" }]
+              }
+            >
               {props.customer.name}
             </Text>
             {props.customer.company && (
@@ -244,6 +358,12 @@ export function BillingDocument(props: BillingDocumentProps) {
               <Text style={styles.blockText}>{props.customer.phone}</Text>
             )}
           </View>
+          {props.solutionArchitectName && (
+            <View style={styles.block}>
+              <Text style={styles.blockLabel}>Solution architect</Text>
+              <Text style={styles.blockText}>{props.solutionArchitectName}</Text>
+            </View>
+          )}
         </View>
 
         {props.scopeOfWork && (
@@ -253,6 +373,7 @@ export function BillingDocument(props: BillingDocumentProps) {
           </View>
         )}
 
+        {/* Customer-facing line table */}
         <View style={styles.table}>
           <View style={styles.tableHeader}>
             <Text style={[styles.th, { flex: 4 }]}>Description</Text>
@@ -264,10 +385,17 @@ export function BillingDocument(props: BillingDocumentProps) {
             <View key={idx} style={styles.tableRow} wrap={false}>
               <View style={{ flex: 4 }}>
                 <Text style={styles.td}>{item.description}</Text>
-                {(item.category || item.recurring !== "NONE") && (
+                {isInternal && item.partNumber && (
                   <Text style={[styles.td, { color: muted, fontSize: 8 }]}>
-                    {item.category.replace(/_/g, " ")}
-                    {item.recurring !== "NONE" && ` · ${item.recurring.toLowerCase()}`}
+                    P/N {item.partNumber}
+                  </Text>
+                )}
+                {item.specs && (
+                  <Text style={styles.specsBlock}>{item.specs}</Text>
+                )}
+                {item.kind && item.kind !== "PRODUCT" && (
+                  <Text style={[styles.td, { color: muted, fontSize: 8 }]}>
+                    {item.kind.replace(/_/g, " ")}
                   </Text>
                 )}
               </View>
@@ -284,6 +412,7 @@ export function BillingDocument(props: BillingDocumentProps) {
           ))}
         </View>
 
+        {/* Totals */}
         <View style={styles.totalsBox}>
           <View style={styles.totalsRow}>
             <Text style={styles.totalsLabel}>Subtotal</Text>
@@ -291,22 +420,42 @@ export function BillingDocument(props: BillingDocumentProps) {
               {formatMoney(props.subtotal, props.currency)}
             </Text>
           </View>
-          {props.discount > 0 && (
+          {props.vatBreakdown && (
+            <>
+              <View style={styles.totalsRow}>
+                <Text style={styles.totalsLabel}>Levies (NHIL+GETFund+Covid)</Text>
+                <Text style={styles.totalsValue}>
+                  {formatMoney(props.vatBreakdown.step1LeviesAmount, props.currency)}
+                </Text>
+              </View>
+              <View style={styles.totalsRow}>
+                <Text style={styles.totalsLabel}>
+                  VAT ({props.vatBreakdown.rates?.standardPct ?? 15}% on base+levies)
+                </Text>
+                <Text style={styles.totalsValue}>
+                  {formatMoney(props.vatBreakdown.step2VatOnLeviedAmount, props.currency)}
+                </Text>
+              </View>
+              <View style={styles.totalsRow}>
+                <Text style={[styles.totalsLabel, { fontFamily: "Helvetica-Bold" }]}>
+                  Total tax ({props.vatBreakdown.effectivePct.toFixed(2)}% effective)
+                </Text>
+                <Text style={[styles.totalsValue, { fontFamily: "Helvetica-Bold" }]}>
+                  {formatMoney(props.vatBreakdown.vatAmount, props.currency)}
+                </Text>
+              </View>
+            </>
+          )}
+          {!props.vatBreakdown && props.nonVatTaxApplied && props.nonVatTaxAmount && props.nonVatTaxAmount > 0 && (
             <View style={styles.totalsRow}>
-              <Text style={styles.totalsLabel}>Discount</Text>
+              <Text style={styles.totalsLabel}>
+                {props.nonVatTaxLabel ?? "Sales Tax"} ({(props.nonVatTaxPct ?? 0).toFixed(2)}%)
+              </Text>
               <Text style={styles.totalsValue}>
-                − {formatMoney(props.discount, props.currency)}
+                {formatMoney(props.nonVatTaxAmount, props.currency)}
               </Text>
             </View>
           )}
-          <View style={styles.totalsRow}>
-            <Text style={styles.totalsLabel}>
-              Tax ({props.taxRate.toFixed(2)}%)
-            </Text>
-            <Text style={styles.totalsValue}>
-              {formatMoney(props.taxAmount, props.currency)}
-            </Text>
-          </View>
           <View style={styles.grandTotalRow}>
             <Text style={styles.grandTotalLabel}>Total</Text>
             <Text style={styles.grandTotalValue}>
@@ -326,15 +475,54 @@ export function BillingDocument(props: BillingDocumentProps) {
                   Outstanding
                 </Text>
                 <Text style={[styles.totalsValue, { fontFamily: "Helvetica-Bold" }]}>
-                  {formatMoney(
-                    Math.max(0, props.total - props.amountPaid),
-                    props.currency
-                  )}
+                  {formatMoney(Math.max(0, props.total - props.amountPaid), props.currency)}
                 </Text>
               </View>
             </>
           )}
         </View>
+
+        {/* Internal-only pricing pipeline */}
+        {isInternal && (
+          <View style={styles.internalSection}>
+            <Text style={styles.internalLabel}>
+              Internal pricing pipeline — gross profit {formatMoney(props.totalGp ?? 0, props.currency)}
+              {props.totalGpMarginPct !== undefined && ` (${props.totalGpMarginPct.toFixed(1)}%)`}
+            </Text>
+            <View style={styles.tableHeader}>
+              <Text style={[styles.th, { flex: 3 }]}>Description</Text>
+              <Text style={[styles.th, { flex: 1.5, textAlign: "right" }]}>Landed</Text>
+              <Text style={[styles.th, { flex: 1, textAlign: "right" }]}>Fin %</Text>
+              <Text style={[styles.th, { flex: 1, textAlign: "right" }]}>Markup %</Text>
+              <Text style={[styles.th, { flex: 1.5, textAlign: "right" }]}>Cost total</Text>
+              <Text style={[styles.th, { flex: 1.5, textAlign: "right" }]}>GP</Text>
+              <Text style={[styles.th, { flex: 1, textAlign: "right" }]}>GP%</Text>
+            </View>
+            {props.items.map((item, idx) => (
+              <View key={idx} style={styles.tableRow} wrap={false}>
+                <Text style={[styles.td, { flex: 3 }]}>{item.description}</Text>
+                <Text style={[styles.td, { flex: 1.5, textAlign: "right" }]}>
+                  {formatMoney(item.landedCost ?? 0, props.currency)}
+                </Text>
+                <Text style={[styles.td, { flex: 1, textAlign: "right" }]}>
+                  {(item.financeChargePct ?? 0).toFixed(2)}%
+                </Text>
+                <Text style={[styles.td, { flex: 1, textAlign: "right" }]}>
+                  {(item.markupPct ?? 0).toFixed(2)}%
+                </Text>
+                <Text style={[styles.td, { flex: 1.5, textAlign: "right" }]}>
+                  {formatMoney(item.costLineTotal ?? 0, props.currency)}
+                </Text>
+                <Text style={[styles.td, { flex: 1.5, textAlign: "right" }]}>
+                  {formatMoney(item.lineGpAmount ?? 0, props.currency)}
+                </Text>
+                <Text style={[styles.td, { flex: 1, textAlign: "right" }]}>
+                  {(item.lineGpMarginPct ?? 0).toFixed(1)}%
+                </Text>
+              </View>
+            ))}
+          </View>
+        )}
 
         <View style={styles.footer}>
           {!isQuote && props.company.paymentTerms && (
@@ -343,32 +531,49 @@ export function BillingDocument(props: BillingDocumentProps) {
               <Text style={styles.footerText}>{props.company.paymentTerms}</Text>
             </>
           )}
-          {!isQuote &&
-            (props.company.bankName || props.company.momoProvider) && (
-              <>
-                <Text style={styles.footerSectionTitle}>Payment details</Text>
-                {props.company.bankName && (
-                  <Text style={styles.footerText}>
-                    Bank: {props.company.bankName}
-                    {props.company.bankBranch ? ` (${props.company.bankBranch})` : ""}
-                    {"\n"}Account name: {props.company.bankAccountName ?? "—"}
-                    {"\n"}Account number: {props.company.bankAccountNo ?? "—"}
-                    {props.company.bankSwift
-                      ? `\nSWIFT/BIC: ${props.company.bankSwift}`
-                      : ""}
-                  </Text>
-                )}
-                {props.company.momoProvider && (
-                  <Text style={styles.footerText}>
-                    Mobile money ({props.company.momoProvider}):{" "}
-                    {props.company.momoNumber} · {props.company.momoAccountName}
-                  </Text>
-                )}
-              </>
-            )}
-          {props.notes && (
+          {!isQuote && (props.company.bankName || props.company.momoProvider) && (
             <>
-              <Text style={styles.footerSectionTitle}>Notes</Text>
+              <Text style={styles.footerSectionTitle}>Payment details</Text>
+              {props.company.bankName && (
+                <Text style={styles.footerText}>
+                  Bank: {props.company.bankName}
+                  {props.company.bankBranch ? ` (${props.company.bankBranch})` : ""}
+                  {"\n"}Account name: {props.company.bankAccountName ?? "—"}
+                  {"\n"}Account number: {props.company.bankAccountNo ?? "—"}
+                  {props.company.bankSwift ? `\nSWIFT/BIC: ${props.company.bankSwift}` : ""}
+                </Text>
+              )}
+              {props.company.momoProvider && (
+                <Text style={styles.footerText}>
+                  Mobile money ({props.company.momoProvider}): {props.company.momoNumber} ·{" "}
+                  {props.company.momoAccountName}
+                </Text>
+              )}
+            </>
+          )}
+          {props.whtPct && props.whtPct > 0 && (
+            <Text style={styles.footerText}>
+              Withholding tax of {props.whtPct.toFixed(2)}%
+              {props.whtCategoryLabel ? ` (${props.whtCategoryLabel})` : ""} is
+              included in the unit prices above as required by the Ghana Revenue
+              Authority. Deduct and remit this amount on our behalf when paying.
+            </Text>
+          )}
+          {props.company.vatRegistered === false && (
+            <Text style={[styles.footerText, { fontSize: 8, color: muted }]}>
+              {props.company.companyName} is currently not VAT-registered.
+            </Text>
+          )}
+          {props.fxRate && (
+            <Text style={[styles.footerText, { fontSize: 8, color: muted }]}>
+              FX rate: 1 USD = {props.fxRate} {props.currency}
+              {props.fxRateSource ? ` (source: ${props.fxRateSource})` : ""}
+              {props.fxRateDate ? ` on ${formatDate(props.fxRateDate)}` : ""}
+            </Text>
+          )}
+          {props.notes && isInternal && (
+            <>
+              <Text style={styles.footerSectionTitle}>Internal notes</Text>
               <Text style={styles.footerText}>{props.notes}</Text>
             </>
           )}

@@ -86,7 +86,7 @@ export async function PUT(
   const updateData: {
     name: string;
     email: string;
-    role: "DIRECTOR" | "FINANCE";
+    role: "DIRECTOR" | "FINANCE" | "SALES";
     isActive: boolean;
     passwordHash?: string;
   } = {

@@ -8,6 +8,7 @@ import { Button } from "../_components/Button";
 const ROLES = [
   { value: "DIRECTOR", label: "Director" },
   { value: "FINANCE", label: "Finance" },
+  { value: "SALES", label: "Sales" },
 ];
 
 export interface UserFormValues {

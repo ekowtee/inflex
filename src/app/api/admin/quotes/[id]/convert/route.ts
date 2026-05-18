@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/guard";
-import { nextInvoiceNumber } from "@/lib/billing";
+import { nextInvoiceNumber, toDecimal } from "@/lib/billing";
 
 export const dynamic = "force-dynamic";
 
@@ -51,9 +51,26 @@ export async function POST(
       items: {
         create: quote.items.map((item) => ({
           description: item.description,
+          kind: item.kind,
           category: item.category,
           quantity: item.quantity,
-          unitPrice: item.unitPrice,
+          unitPrice: item.finalUnitPriceExclTax,
+          finalUnitPriceExclTax: item.finalUnitPriceExclTax,
+          finalLineTotalExclTax: item.finalLineTotalExclTax,
+          // Copy through for traceability; invoice editor doesn't re-run the pipeline
+          landedCost: item.landedCost,
+          landedCostCurrency: item.landedCostCurrency,
+          markupTierId: item.markupTierId,
+          markupPct: item.markupPct,
+          surchargePct: item.surchargePct,
+          discountPct: item.discountPct,
+          financeChargePct: item.financeChargePct,
+          whtGrossUpAmount: item.whtGrossUpAmount,
+          costLineTotal: item.costLineTotal,
+          lineGpAmount: item.lineGpAmount,
+          lineGpMarginPct: item.lineGpMarginPct,
+          partNumber: item.partNumber,
+          specs: item.specs,
           recurring: item.recurring,
           sortOrder: item.sortOrder,
         })),
@@ -63,3 +80,6 @@ export async function POST(
 
   return NextResponse.json(invoice, { status: 201 });
 }
+
+// silence unused-import lint on toDecimal — kept for future symmetry with quote routes
+void toDecimal;
