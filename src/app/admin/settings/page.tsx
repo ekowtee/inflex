@@ -3,6 +3,7 @@ import { currentSession } from "@/lib/guard";
 import { decimalToNumber } from "@/lib/serialize";
 import PageHeader from "../_components/PageHeader";
 import SettingsForm from "./SettingsForm";
+import EmailTestPanel from "./EmailTestPanel";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Settings" };
@@ -29,6 +30,9 @@ export default async function SettingsPage() {
           You can view these settings but only a director can edit them.
         </div>
       )}
+      <div className="mb-8">
+        <EmailTestPanel />
+      </div>
       <SettingsForm initial={settings} readOnly={readOnly} />
     </>
   );
