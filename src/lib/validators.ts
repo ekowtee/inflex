@@ -28,25 +28,38 @@ export const publicContactSchema = z.object({
   turnstileToken: z.string().max(2000).optional().nullable(),
 });
 
-export const userCreateSchema = z.object({
+export const USER_KINDS = ["INTERNAL", "EXTERNAL"] as const;
+
+// INTERNAL users get a login and need a password. EXTERNAL users are
+// kept as records only and skip the password rule.
+const userBase = z.object({
   name: z.string().min(1, "Name is required").max(200),
   email: z.string().email("Valid email required").max(200),
   role: z.enum(["DIRECTOR", "FINANCE", "SALES"]),
-  password: z.string().min(8, "Password must be at least 8 characters").max(200),
+  kind: z.enum(USER_KINDS).default("INTERNAL"),
   isActive: z.boolean().default(true),
 });
 
-export const userUpdateSchema = z.object({
-  name: z.string().min(1).max(200),
-  email: z.string().email().max(200),
-  role: z.enum(["DIRECTOR", "FINANCE", "SALES"]),
+export const userCreateSchema = userBase
+  .extend({
+    password: z.string().max(200).optional().or(z.literal("")),
+  })
+  .refine(
+    (d) =>
+      d.kind === "EXTERNAL" || (typeof d.password === "string" && d.password.length >= 8),
+    {
+      message: "Password must be at least 8 characters for internal users",
+      path: ["password"],
+    }
+  );
+
+export const userUpdateSchema = userBase.extend({
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
     .max(200)
     .optional()
     .or(z.literal("")),
-  isActive: z.boolean(),
 });
 
 // ---------- Leads ----------

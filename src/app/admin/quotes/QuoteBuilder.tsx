@@ -899,9 +899,10 @@ function LineRow({
     (item.kind === "LABOUR" && item.labourEntries.length > 0) ||
     (item.kind === "OUTSTATION" && item.outstationEntries.length > 0);
   const isCalcKind = item.kind === "LABOUR" || item.kind === "OUTSTATION";
-  // Open by default when the line is a calculator with no entries yet — pushes
-  // the rep to fill them in.
-  const [expanded, setExpanded] = useState(isCalcKind && !isCalculated);
+  // Always open by default — reps need the markup tier / category / specs
+  // visible without an extra click. They can still collapse a line once it's
+  // fully filled in.
+  const [expanded, setExpanded] = useState(true);
 
   return (
     <div className="rounded-lg border border-white/10 bg-white/[0.02] p-3 space-y-3">

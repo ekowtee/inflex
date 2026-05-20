@@ -23,7 +23,7 @@ export async function GET() {
       orderBy: { sortOrder: "asc" },
     }),
     prisma.user.findMany({
-      where: { isActive: true },
+      where: { isActive: true, kind: "INTERNAL" },
       select: { id: true, name: true, role: true },
       orderBy: { name: "asc" },
     }),

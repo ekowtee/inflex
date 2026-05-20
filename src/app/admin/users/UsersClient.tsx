@@ -7,6 +7,7 @@ import { Button } from "../_components/Button";
 import Modal from "../_components/Modal";
 import StatusBadge from "../_components/StatusBadge";
 import EmptyState from "../_components/EmptyState";
+import { Select } from "../_components/Field";
 import UserForm, { UserFormValues } from "./UserForm";
 import { formatDate } from "@/lib/serialize";
 
@@ -15,10 +16,13 @@ type User = {
   email: string;
   name: string;
   role: string;
+  kind: string;
   isActive: boolean;
   lastLoginAt: string | null;
   createdAt: string;
 };
+
+const KIND_FILTERS = ["ALL", "INTERNAL", "EXTERNAL"];
 
 export default function UsersClient({
   users,
@@ -32,6 +36,11 @@ export default function UsersClient({
   const [editing, setEditing] = useState<UserFormValues | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [kindFilter, setKindFilter] = useState("ALL");
+
+  const filtered = users.filter(
+    (u) => kindFilter === "ALL" || u.kind === kindFilter
+  );
 
   async function onDelete(user: User) {
     if (!confirm(`Delete ${user.name}? This cannot be undone.`)) return;
@@ -55,22 +64,40 @@ export default function UsersClient({
         </div>
       )}
 
-      <div className="flex justify-end mb-4">
+      <div className="flex items-center gap-3 mb-4">
+        <Select
+          value={kindFilter}
+          onChange={(e) => setKindFilter(e.target.value)}
+          className="w-44"
+        >
+          {KIND_FILTERS.map((k) => (
+            <option key={k} value={k}>
+              {k === "ALL" ? "All types" : k === "INTERNAL" ? "Internal only" : "External only"}
+            </option>
+          ))}
+        </Select>
+        <div className="flex-1" />
         <Button onClick={() => setCreating(true)}>
           <Plus className="w-4 h-4" />
           New user
         </Button>
       </div>
 
-      {users.length === 0 ? (
+      {filtered.length === 0 ? (
         <EmptyState
-          title="No users yet"
-          description="Add your first director or finance team member to grant them access."
+          title={users.length === 0 ? "No users yet" : "No matches"}
+          description={
+            users.length === 0
+              ? "Add your first director or finance team member to grant them access."
+              : "Try a different type filter."
+          }
           action={
-            <Button onClick={() => setCreating(true)}>
-              <Plus className="w-4 h-4" />
-              New user
-            </Button>
+            users.length === 0 ? (
+              <Button onClick={() => setCreating(true)}>
+                <Plus className="w-4 h-4" />
+                New user
+              </Button>
+            ) : undefined
           }
         />
       ) : (
@@ -80,6 +107,7 @@ export default function UsersClient({
               <tr>
                 <th className="text-left px-4 py-3 font-medium">Name</th>
                 <th className="text-left px-4 py-3 font-medium hidden md:table-cell">Email</th>
+                <th className="text-left px-4 py-3 font-medium">Type</th>
                 <th className="text-left px-4 py-3 font-medium">Role</th>
                 <th className="text-left px-4 py-3 font-medium">Status</th>
                 <th className="text-left px-4 py-3 font-medium hidden lg:table-cell">Last login</th>
@@ -87,8 +115,9 @@ export default function UsersClient({
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {users.map((u) => {
+              {filtered.map((u) => {
                 const isSelf = u.id === currentUserId;
+                const isExternal = u.kind === "EXTERNAL";
                 return (
                   <tr key={u.id} className="hover:bg-white/[0.03]">
                     <td className="px-4 py-3 text-white font-medium">
@@ -101,21 +130,36 @@ export default function UsersClient({
                       {u.email}
                     </td>
                     <td className="px-4 py-3">
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
+                          isExternal
+                            ? "bg-amber-500/10 text-amber-200 border-amber-500/30"
+                            : "bg-sky-500/10 text-sky-200 border-sky-500/30"
+                        }`}
+                      >
+                        {isExternal ? "External" : "Internal"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
                       <StatusBadge status={u.role} />
                     </td>
                     <td className="px-4 py-3">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
-                          u.isActive
-                            ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
-                            : "bg-white/5 text-white/40 border-white/10"
-                        }`}
-                      >
-                        {u.isActive ? "Active" : "Disabled"}
-                      </span>
+                      {isExternal ? (
+                        <span className="text-xs text-white/40">—</span>
+                      ) : (
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
+                            u.isActive
+                              ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+                              : "bg-white/5 text-white/40 border-white/10"
+                          }`}
+                        >
+                          {u.isActive ? "Active" : "Disabled"}
+                        </span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-white/60 text-xs hidden lg:table-cell">
-                      {formatDate(u.lastLoginAt)}
+                      {isExternal ? "—" : formatDate(u.lastLoginAt)}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="inline-flex items-center gap-3">
@@ -126,6 +170,7 @@ export default function UsersClient({
                               name: u.name,
                               email: u.email,
                               role: u.role,
+                              kind: u.kind,
                               isActive: u.isActive,
                             })
                           }

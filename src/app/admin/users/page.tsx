@@ -21,6 +21,7 @@ export default async function UsersPage() {
       email: true,
       name: true,
       role: true,
+      kind: true,
       isActive: true,
       lastLoginAt: true,
       createdAt: true,
@@ -33,7 +34,7 @@ export default async function UsersPage() {
       <PageHeader
         eyebrow="Access control"
         title="Users"
-        description="Manage who can sign in. Directors have full access; finance users handle quotes, invoices, and payments."
+        description="Manage who can sign in. Internal users (Director / Finance / Sales) log into the platform; external users are kept as records only."
       />
       <UsersClient users={users} currentUserId={session?.user?.id ?? null} />
     </>

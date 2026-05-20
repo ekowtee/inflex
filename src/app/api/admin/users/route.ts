@@ -16,6 +16,7 @@ export async function GET() {
       email: true,
       name: true,
       role: true,
+      kind: true,
       isActive: true,
       lastLoginAt: true,
       createdAt: true,
@@ -46,13 +47,20 @@ export async function POST(req: NextRequest) {
       { status: 409 }
     );
   }
-  const passwordHash = await bcrypt.hash(data.password, 10);
+  // External users can't log in — store a placeholder hash that no bcrypt
+  // input can ever match. Force inactive so they don't accidentally count
+  // against the architect picker etc.
+  const passwordHash =
+    data.kind === "EXTERNAL" || !data.password
+      ? "!"
+      : await bcrypt.hash(data.password, 10);
   const created = await prisma.user.create({
     data: {
       name: data.name,
       email: data.email.toLowerCase(),
       role: data.role,
-      isActive: data.isActive,
+      kind: data.kind,
+      isActive: data.kind === "EXTERNAL" ? false : data.isActive,
       passwordHash,
     },
     select: {
@@ -60,6 +68,7 @@ export async function POST(req: NextRequest) {
       email: true,
       name: true,
       role: true,
+      kind: true,
       isActive: true,
       lastLoginAt: true,
       createdAt: true,

@@ -15,12 +15,22 @@ enum UserRole {
   SALES
 }
 
+// INTERNAL = Inflexions staff who log in and operate the platform.
+// EXTERNAL = people we want a record of (consultants, partner reps, etc.)
+//            but who don't need a login. They're hidden from the
+//            architect dropdown and other staff-only pickers.
+enum UserKind {
+  INTERNAL
+  EXTERNAL
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
   name         String
   passwordHash String
   role         UserRole @default(FINANCE)
+  kind         UserKind @default(INTERNAL)
   isActive     Boolean  @default(true)
   lastLoginAt  DateTime?
   createdAt    DateTime @default(now())
@@ -31,6 +41,7 @@ model User {
   leadConversions Lead[]           @relation("LeadConverter")
 
   @@index([role])
+  @@index([kind])
   @@index([isActive])
 }
 

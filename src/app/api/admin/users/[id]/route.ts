@@ -20,6 +20,7 @@ export async function GET(
       email: true,
       name: true,
       role: true,
+      kind: true,
       isActive: true,
       lastLoginAt: true,
       createdAt: true,
@@ -87,15 +88,18 @@ export async function PUT(
     name: string;
     email: string;
     role: "DIRECTOR" | "FINANCE" | "SALES";
+    kind: "INTERNAL" | "EXTERNAL";
     isActive: boolean;
     passwordHash?: string;
   } = {
     name: data.name,
     email: data.email.toLowerCase(),
     role: data.role,
-    isActive: data.isActive,
+    kind: data.kind,
+    // EXTERNAL users never count as active platform users (they don't log in).
+    isActive: data.kind === "EXTERNAL" ? false : data.isActive,
   };
-  if (data.password && data.password.length > 0) {
+  if (data.password && data.password.length > 0 && data.kind === "INTERNAL") {
     updateData.passwordHash = await bcrypt.hash(data.password, 10);
   }
   const updated = await prisma.user.update({
@@ -106,6 +110,7 @@ export async function PUT(
       email: true,
       name: true,
       role: true,
+      kind: true,
       isActive: true,
       lastLoginAt: true,
       createdAt: true,

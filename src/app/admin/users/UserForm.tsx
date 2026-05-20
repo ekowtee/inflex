@@ -11,11 +11,17 @@ const ROLES = [
   { value: "SALES", label: "Sales" },
 ];
 
+const KINDS = [
+  { value: "INTERNAL", label: "Internal (platform user)" },
+  { value: "EXTERNAL", label: "External (record only — no login)" },
+];
+
 export interface UserFormValues {
   id?: string;
   name?: string;
   email?: string;
   role?: string;
+  kind?: string;
   isActive?: boolean;
 }
 
@@ -32,16 +38,19 @@ export default function UserForm({
     name: initial?.name ?? "",
     email: initial?.email ?? "",
     role: initial?.role ?? "FINANCE",
+    kind: initial?.kind ?? "INTERNAL",
     isActive: initial?.isActive ?? true,
     password: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const isInternal = form.kind === "INTERNAL";
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!isEdit && form.password.length < 8) {
+    if (!isEdit && isInternal && form.password.length < 8) {
       setError("Password must be at least 8 characters.");
       return;
     }
@@ -50,6 +59,7 @@ export default function UserForm({
       name: form.name.trim(),
       email: form.email.trim(),
       role: form.role,
+      kind: form.kind,
       isActive: form.isActive,
       ...(form.password ? { password: form.password } : {}),
     };
@@ -88,6 +98,18 @@ export default function UserForm({
             onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
         </Field>
+        <Field label="User type" required>
+          <Select
+            value={form.kind}
+            onChange={(e) => setForm({ ...form, kind: e.target.value })}
+          >
+            {KINDS.map((k) => (
+              <option key={k.value} value={k.value}>
+                {k.label}
+              </option>
+            ))}
+          </Select>
+        </Field>
         <Field label="Role" required>
           <Select
             value={form.role}
@@ -100,36 +122,41 @@ export default function UserForm({
             ))}
           </Select>
         </Field>
-        <Field
-          label={isEdit ? "New password (leave blank to keep current)" : "Password"}
-          required={!isEdit}
-          hint="Minimum 8 characters"
-        >
-          <TextInput
-            type="password"
-            autoComplete="new-password"
+        {isInternal && (
+          <Field
+            label={isEdit ? "New password (leave blank to keep current)" : "Password"}
             required={!isEdit}
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-          />
-        </Field>
+            hint="Minimum 8 characters"
+          >
+            <TextInput
+              type="password"
+              autoComplete="new-password"
+              required={!isEdit}
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+            />
+          </Field>
+        )}
       </div>
 
-      <label className="inline-flex items-center gap-2 text-sm text-white/80">
-        <input
-          type="checkbox"
-          checked={form.isActive}
-          onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
-          className="rounded border-white/20 bg-white/5 text-[#BD2E25] focus:ring-[#BD2E25]"
-        />
-        Account is active
-      </label>
+      {isInternal && (
+        <label className="inline-flex items-center gap-2 text-sm text-white/80">
+          <input
+            type="checkbox"
+            checked={form.isActive}
+            onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
+            className="rounded border-white/20 bg-white/5 text-[#BD2E25] focus:ring-[#BD2E25]"
+          />
+          Account is active
+        </label>
+      )}
 
       <p className="text-xs text-white/40 leading-relaxed">
-        <strong className="text-white/60">Director</strong> can do everything
-        including managing users and editing company settings.{" "}
-        <strong className="text-white/60">Finance</strong> can manage customers,
-        quotes, invoices, and payments, and view settings (no edit).
+        <strong className="text-white/60">Internal</strong> users log in and operate
+        the platform (Director / Finance / Sales).{" "}
+        <strong className="text-white/60">External</strong> users are kept as
+        records — they don't get a password and don't appear in pickers like
+        the solution architect dropdown.
       </p>
 
       {error && (
