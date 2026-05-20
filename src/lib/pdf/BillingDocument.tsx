@@ -132,8 +132,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: "Helvetica-Bold",
     color: navy,
+    marginTop: 4,
     marginBottom: 12,
     textTransform: "uppercase",
+    textAlign: "center",
   },
   twoCol: { flexDirection: "row", justifyContent: "space-between", marginBottom: 16 },
   block: { width: "48%" },
@@ -408,10 +410,6 @@ export function BillingDocument(props: BillingDocumentProps) {
           </View>
         </View>
 
-        {props.projectTitle && (
-          <Text style={styles.projectTitle}>{props.projectTitle}</Text>
-        )}
-
         <View style={styles.twoCol}>
           <View style={styles.block}>
             <Text style={styles.blockLabel}>
@@ -492,6 +490,10 @@ export function BillingDocument(props: BillingDocumentProps) {
             )}
           </View>
         </View>
+
+        {props.projectTitle && (
+          <Text style={styles.projectTitle}>{props.projectTitle}</Text>
+        )}
 
         {props.scopeOfWork && (
           <View style={styles.scopeBlock}>
