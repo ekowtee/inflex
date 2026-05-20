@@ -4,6 +4,9 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
+  Svg,
+  Path,
 } from "@react-pdf/renderer";
 import { formatDate, formatMoney } from "../serialize";
 
@@ -13,6 +16,74 @@ const ink = "#171A20";
 const muted = "#5C6280";
 const line = "#E6E6E6";
 const internalBg = "#FFF7E6";
+
+// PDF money formatter — forces the ISO code ("GHS") instead of the cedi
+// symbol, which the embedded Helvetica font can't render (shows as "μ").
+function fmtMoney(amount: number, currency: string): string {
+  return formatMoney(amount, currency, { display: "code" });
+}
+
+// Embed the logo from disk as a data URI so the PDF never depends on a
+// network fetch (a failed Image fetch can throw and abort the whole render).
+// Read once and cache; if the file can't be found we just skip the logo.
+let logoDataUri: string | null | undefined;
+function getLogo(): string | null {
+  if (logoDataUri !== undefined) return logoDataUri;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const fs = require("node:fs") as typeof import("node:fs");
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const path = require("node:path") as typeof import("node:path");
+    const file = path.join(process.cwd(), "public", "inflexlogo.png");
+    logoDataUri = `data:image/png;base64,${fs.readFileSync(file).toString("base64")}`;
+  } catch {
+    logoDataUri = null;
+  }
+  return logoDataUri;
+}
+
+// Hide a legal name in the bill-to block when it's just the trading name with
+// a company-type suffix (Ltd / PLC / etc.) — avoids "ARB APEX Bank" sitting
+// right above "ARB APEX Bank PLC".
+function isRedundantLegalName(name: string, legalName: string): boolean {
+  const norm = (s: string) =>
+    s
+      .toLowerCase()
+      .replace(/[.,]/g, "")
+      .replace(/\b(ltd|limited|plc|llc|inc|co|company|gh|ghana)\b/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  const a = norm(name);
+  const b = norm(legalName);
+  return a === b || a.includes(b) || b.includes(a);
+}
+
+// Tiny line icons for the bill-to contact rows. Drawn as SVG so they don't
+// depend on any font glyphs.
+function ContactIcon({ kind }: { kind: "pin" | "mail" | "phone" }) {
+  return (
+    <Svg width={9} height={9} viewBox="0 0 24 24" style={{ marginTop: 1, marginRight: 4 }}>
+      {kind === "pin" && (
+        <Path
+          d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"
+          fill={muted}
+        />
+      )}
+      {kind === "mail" && (
+        <Path
+          d="M2 5h20v14H2V5zm10 7L3.5 6.5h17L12 12zm0 2.2L3 8.5V18h18V8.5l-9 5.7z"
+          fill={muted}
+        />
+      )}
+      {kind === "phone" && (
+        <Path
+          d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .7-.2 1l-2.3 2.2z"
+          fill={muted}
+        />
+      )}
+    </Svg>
+  );
+}
 
 const styles = StyleSheet.create({
   page: {
@@ -25,19 +96,24 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: 24,
     borderBottomWidth: 2,
     borderBottomColor: brand,
     paddingBottom: 16,
   },
-  companyName: { fontSize: 14, fontFamily: "Helvetica-Bold", color: navy },
-  companyMeta: { fontSize: 9, color: muted, marginTop: 2 },
+  logo: { width: 170, height: 38, objectFit: "contain" },
+  companyBlock: { alignItems: "flex-end" },
+  companyName: { fontSize: 12, fontFamily: "Helvetica-Bold", color: navy, textAlign: "right" },
+  companyMeta: { fontSize: 8, color: muted, marginTop: 2, textAlign: "right" },
+  contactRow: { flexDirection: "row", alignItems: "flex-start", marginTop: 2 },
   docTitle: {
     fontSize: 18,
     fontFamily: "Helvetica-Bold",
     color: brand,
     textTransform: "uppercase",
     letterSpacing: 1,
+    textAlign: "right",
   },
   docMeta: { fontSize: 9, color: muted, marginTop: 4, textAlign: "right" },
   internalBanner: {
@@ -290,6 +366,7 @@ export function BillingDocument(props: BillingDocumentProps) {
   const mode: BillingMode = props.mode ?? "customer";
   const isQuote = props.kind === "QUOTE";
   const isInternal = mode === "internal";
+  const logo = getLogo();
 
   return (
     <Document>
@@ -301,7 +378,12 @@ export function BillingDocument(props: BillingDocumentProps) {
         )}
 
         <View style={styles.header} fixed>
-          <View>
+          {logo ? (
+            <Image src={logo} style={styles.logo} />
+          ) : (
+            <Text style={styles.companyName}>{props.company.companyName}</Text>
+          )}
+          <View style={styles.companyBlock}>
             <Text style={styles.companyName}>{props.company.companyName}</Text>
             {props.company.addressLine1 && (
               <Text style={styles.companyMeta}>{props.company.addressLine1}</Text>
@@ -314,30 +396,15 @@ export function BillingDocument(props: BillingDocumentProps) {
                 {[props.company.city, props.company.country].filter(Boolean).join(", ")}
               </Text>
             )}
-            {props.company.email && (
-              <Text style={styles.companyMeta}>{props.company.email}</Text>
-            )}
             {props.company.phone && (
               <Text style={styles.companyMeta}>{props.company.phone}</Text>
             )}
+            {props.company.email && (
+              <Text style={styles.companyMeta}>{props.company.email}</Text>
+            )}
             {props.company.taxId && (
-              <Text style={styles.companyMeta}>Tax ID: {props.company.taxId}</Text>
+              <Text style={styles.companyMeta}>TIN: {props.company.taxId}</Text>
             )}
-          </View>
-          <View>
-            <Text style={styles.docTitle}>{isQuote ? "Quote" : "Invoice"}</Text>
-            <Text style={styles.docMeta}># {props.number}</Text>
-            {props.revision && props.revision > 1 && (
-              <Text style={styles.docMeta}>Revision {props.revision}</Text>
-            )}
-            <Text style={styles.docMeta}>Issued {formatDate(props.issueDate)}</Text>
-            {isQuote && props.validUntil && (
-              <Text style={styles.docMeta}>Valid until {formatDate(props.validUntil)}</Text>
-            )}
-            {!isQuote && props.dueDate && (
-              <Text style={styles.docMeta}>Due {formatDate(props.dueDate)}</Text>
-            )}
-            <Text style={styles.docMeta}>{props.status.replace(/_/g, " ")}</Text>
           </View>
         </View>
 
@@ -370,32 +437,60 @@ export function BillingDocument(props: BillingDocumentProps) {
             >
               {props.customer.name}
             </Text>
-            {props.customer.legalName && props.customer.legalName !== props.customer.name && (
-              <Text style={styles.blockText}>{props.customer.legalName}</Text>
+            {props.customer.legalName &&
+              !isRedundantLegalName(props.customer.name, props.customer.legalName) && (
+                <Text style={styles.blockText}>{props.customer.legalName}</Text>
+              )}
+            {props.customer.addressLines && props.customer.addressLines.length > 0 && (
+              <View style={styles.contactRow}>
+                <ContactIcon kind="pin" />
+                <View style={{ flex: 1 }}>
+                  {props.customer.addressLines.map((addr, i) => (
+                    <Text key={`addr-${i}`} style={styles.blockText}>{addr}</Text>
+                  ))}
+                </View>
+              </View>
             )}
-            {props.customer.addressLines?.map((line, i) => (
-              <Text key={`addr-${i}`} style={styles.blockText}>{line}</Text>
-            ))}
             {props.customer.taxId && (
-              <Text style={styles.blockText}>TIN: {props.customer.taxId}</Text>
+              <Text style={[styles.blockText, { marginTop: 2 }]}>TIN: {props.customer.taxId}</Text>
             )}
             {(props.customer.contact?.email || props.customer.email) && (
-              <Text style={styles.blockText}>
-                {props.customer.contact?.email ?? props.customer.email}
-              </Text>
+              <View style={styles.contactRow}>
+                <ContactIcon kind="mail" />
+                <Text style={[styles.blockText, { flex: 1 }]}>
+                  {props.customer.contact?.email ?? props.customer.email}
+                </Text>
+              </View>
             )}
             {(props.customer.contact?.phone || props.customer.phone) && (
-              <Text style={styles.blockText}>
-                {props.customer.contact?.phone ?? props.customer.phone}
+              <View style={styles.contactRow}>
+                <ContactIcon kind="phone" />
+                <Text style={[styles.blockText, { flex: 1 }]}>
+                  {props.customer.contact?.phone ?? props.customer.phone}
+                </Text>
+              </View>
+            )}
+          </View>
+          <View style={styles.block}>
+            <Text style={styles.docTitle}>{isQuote ? "Quote" : "Invoice"}</Text>
+            <Text style={styles.docMeta}># {props.number}</Text>
+            {props.revision && props.revision > 1 && (
+              <Text style={styles.docMeta}>Revision {props.revision}</Text>
+            )}
+            <Text style={styles.docMeta}>Issued {formatDate(props.issueDate)}</Text>
+            {isQuote && props.validUntil && (
+              <Text style={styles.docMeta}>Valid until {formatDate(props.validUntil)}</Text>
+            )}
+            {!isQuote && props.dueDate && (
+              <Text style={styles.docMeta}>Due {formatDate(props.dueDate)}</Text>
+            )}
+            <Text style={styles.docMeta}>{props.status.replace(/_/g, " ")}</Text>
+            {props.solutionArchitectName && (
+              <Text style={[styles.docMeta, { marginTop: 6 }]}>
+                Solution architect: {props.solutionArchitectName}
               </Text>
             )}
           </View>
-          {props.solutionArchitectName && (
-            <View style={styles.block}>
-              <Text style={styles.blockLabel}>Solution architect</Text>
-              <Text style={styles.blockText}>{props.solutionArchitectName}</Text>
-            </View>
-          )}
         </View>
 
         {props.scopeOfWork && (
@@ -435,10 +530,10 @@ export function BillingDocument(props: BillingDocumentProps) {
                 {item.quantity}
               </Text>
               <Text style={[styles.td, { flex: 1.5, textAlign: "right" }]}>
-                {formatMoney(item.unitPrice, props.currency)}
+                {fmtMoney(item.unitPrice, props.currency)}
               </Text>
               <Text style={[styles.td, { flex: 1.5, textAlign: "right" }]}>
-                {formatMoney(item.quantity * item.unitPrice, props.currency)}
+                {fmtMoney(item.quantity * item.unitPrice, props.currency)}
               </Text>
             </View>
           ))}
@@ -449,7 +544,7 @@ export function BillingDocument(props: BillingDocumentProps) {
           <View style={styles.totalsRow}>
             <Text style={styles.totalsLabel}>Subtotal</Text>
             <Text style={styles.totalsValue}>
-              {formatMoney(props.subtotal, props.currency)}
+              {fmtMoney(props.subtotal, props.currency)}
             </Text>
           </View>
           {props.vatBreakdown && (
@@ -459,7 +554,7 @@ export function BillingDocument(props: BillingDocumentProps) {
                   NHIL ({(props.vatBreakdown.rates?.nhilPct ?? 2.5).toFixed(2)}%)
                 </Text>
                 <Text style={styles.totalsValue}>
-                  {formatMoney(props.vatBreakdown.nhilAmount, props.currency)}
+                  {fmtMoney(props.vatBreakdown.nhilAmount, props.currency)}
                 </Text>
               </View>
               <View style={styles.totalsRow}>
@@ -467,7 +562,7 @@ export function BillingDocument(props: BillingDocumentProps) {
                   GETFund ({(props.vatBreakdown.rates?.getfundPct ?? 2.5).toFixed(2)}%)
                 </Text>
                 <Text style={styles.totalsValue}>
-                  {formatMoney(props.vatBreakdown.getfundAmount, props.currency)}
+                  {fmtMoney(props.vatBreakdown.getfundAmount, props.currency)}
                 </Text>
               </View>
               <View style={styles.totalsRow}>
@@ -475,7 +570,7 @@ export function BillingDocument(props: BillingDocumentProps) {
                   VAT ({(props.vatBreakdown.rates?.standardPct ?? 15).toFixed(2)}%)
                 </Text>
                 <Text style={styles.totalsValue}>
-                  {formatMoney(props.vatBreakdown.vatStandardAmount, props.currency)}
+                  {fmtMoney(props.vatBreakdown.vatStandardAmount, props.currency)}
                 </Text>
               </View>
               <View style={styles.totalsRow}>
@@ -483,7 +578,7 @@ export function BillingDocument(props: BillingDocumentProps) {
                   Total tax ({props.vatBreakdown.effectivePct.toFixed(2)}%)
                 </Text>
                 <Text style={[styles.totalsValue, { fontFamily: "Helvetica-Bold" }]}>
-                  {formatMoney(props.vatBreakdown.vatAmount, props.currency)}
+                  {fmtMoney(props.vatBreakdown.vatAmount, props.currency)}
                 </Text>
               </View>
             </>
@@ -494,14 +589,14 @@ export function BillingDocument(props: BillingDocumentProps) {
                 {props.nonVatTaxLabel ?? "Sales Tax"} ({(props.nonVatTaxPct ?? 0).toFixed(2)}%)
               </Text>
               <Text style={styles.totalsValue}>
-                {formatMoney(props.nonVatTaxAmount, props.currency)}
+                {fmtMoney(props.nonVatTaxAmount, props.currency)}
               </Text>
             </View>
           )}
           <View style={styles.grandTotalRow}>
             <Text style={styles.grandTotalLabel}>Total</Text>
             <Text style={styles.grandTotalValue}>
-              {formatMoney(props.total, props.currency)}
+              {fmtMoney(props.total, props.currency)}
             </Text>
           </View>
           {!isQuote && props.amountPaid !== undefined && props.amountPaid > 0 && (
@@ -509,7 +604,7 @@ export function BillingDocument(props: BillingDocumentProps) {
               <View style={[styles.totalsRow, { marginTop: 6 }]}>
                 <Text style={styles.totalsLabel}>Paid</Text>
                 <Text style={styles.totalsValue}>
-                  {formatMoney(props.amountPaid, props.currency)}
+                  {fmtMoney(props.amountPaid, props.currency)}
                 </Text>
               </View>
               <View style={styles.totalsRow}>
@@ -517,7 +612,7 @@ export function BillingDocument(props: BillingDocumentProps) {
                   Outstanding
                 </Text>
                 <Text style={[styles.totalsValue, { fontFamily: "Helvetica-Bold" }]}>
-                  {formatMoney(Math.max(0, props.total - props.amountPaid), props.currency)}
+                  {fmtMoney(Math.max(0, props.total - props.amountPaid), props.currency)}
                 </Text>
               </View>
             </>
@@ -528,7 +623,7 @@ export function BillingDocument(props: BillingDocumentProps) {
         {isInternal && (
           <View style={styles.internalSection}>
             <Text style={styles.internalLabel}>
-              Internal pricing pipeline — gross profit {formatMoney(props.totalGp ?? 0, props.currency)}
+              Internal pricing pipeline — gross profit {fmtMoney(props.totalGp ?? 0, props.currency)}
               {props.totalGpMarginPct !== undefined && ` (${props.totalGpMarginPct.toFixed(1)}%)`}
             </Text>
             <View style={styles.tableHeader}>
@@ -545,7 +640,7 @@ export function BillingDocument(props: BillingDocumentProps) {
               <View key={idx} style={styles.tableRow} wrap={false}>
                 <Text style={[styles.td, { flex: 3 }]}>{item.description}</Text>
                 <Text style={[styles.td, { flex: 1.5, textAlign: "right" }]}>
-                  {formatMoney(item.landedCost ?? 0, props.currency)}
+                  {fmtMoney(item.landedCost ?? 0, props.currency)}
                 </Text>
                 <Text style={[styles.td, { flex: 1, textAlign: "right" }]}>
                   {(item.surchargePct ?? 0).toFixed(2)}%
@@ -557,10 +652,10 @@ export function BillingDocument(props: BillingDocumentProps) {
                   {(item.markupPct ?? 0).toFixed(2)}%
                 </Text>
                 <Text style={[styles.td, { flex: 1.5, textAlign: "right" }]}>
-                  {formatMoney(item.costLineTotal ?? 0, props.currency)}
+                  {fmtMoney(item.costLineTotal ?? 0, props.currency)}
                 </Text>
                 <Text style={[styles.td, { flex: 1.5, textAlign: "right" }]}>
-                  {formatMoney(item.lineGpAmount ?? 0, props.currency)}
+                  {fmtMoney(item.lineGpAmount ?? 0, props.currency)}
                 </Text>
                 <Text style={[styles.td, { flex: 1, textAlign: "right" }]}>
                   {(item.lineGpMarginPct ?? 0).toFixed(1)}%

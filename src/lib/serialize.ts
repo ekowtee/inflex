@@ -33,10 +33,18 @@ export function decimalToNumber<T>(value: T): Serialized<T> {
   return transform(value) as Serialized<T>;
 }
 
-export function formatMoney(amount: number, currency = "GHS"): string {
+export function formatMoney(
+  amount: number,
+  currency = "GHS",
+  opts?: { display?: "symbol" | "code" }
+): string {
   return new Intl.NumberFormat("en-GH", {
     style: "currency",
     currency,
+    // PDFs use the ISO code ("GHS 1,234.00") because the embedded Helvetica
+    // font has no glyph for the cedi sign ₵ (it renders as "μ"). The web UI
+    // keeps the nicer symbol.
+    currencyDisplay: opts?.display ?? "symbol",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(amount);
