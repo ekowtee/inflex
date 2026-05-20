@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin, currentSession } from "@/lib/guard";
 import { BillingDocument } from "@/lib/pdf/BillingDocument";
 import { buildBillingCustomer } from "@/lib/pdf/billingCustomer";
+import { convertCurrency } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -68,6 +69,19 @@ export async function GET(
       ? Number(quote.whtCategory.rate)
       : 0;
 
+  // Landed cost is stored in the line's own currency; FX-convert it into the
+  // quote currency so the internal pricing table is consistent with the
+  // (already-converted) cost / GP columns. Falls back to the raw value if a
+  // rate is somehow missing.
+  const quoteFxRate = quote.fxRate != null ? Number(quote.fxRate) : null;
+  const landedInQuoteCurrency = (amount: number, fromCurrency: string) => {
+    try {
+      return convertCurrency(amount, fromCurrency, quote.currency, quoteFxRate);
+    } catch {
+      return amount;
+    }
+  };
+
   const buffer = await renderToBuffer(
     BillingDocument({
       mode,
@@ -109,7 +123,7 @@ export async function GET(
         kind: i.kind,
         quantity: i.quantity.toNumber(),
         unitPrice: i.finalUnitPriceExclTax.toNumber(),
-        landedCost: i.landedCost.toNumber(),
+        landedCost: landedInQuoteCurrency(i.landedCost.toNumber(), i.landedCostCurrency),
         financeChargePct: Number(i.financeChargePct),
         markupPct: Number(i.markupPct),
         surchargePct: Number(i.surchargePct),

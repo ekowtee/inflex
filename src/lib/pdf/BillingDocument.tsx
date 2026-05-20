@@ -169,14 +169,23 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
-  // Header cell for dense numeric tables — no letter-spacing so labels stay
-  // narrow enough not to wrap in tight columns.
-  thNum: {
-    fontSize: 8,
-    fontFamily: "Helvetica-Bold",
-    color: muted,
-    textTransform: "uppercase",
+  // Internal pricing pipeline — two-row card per line item.
+  internalItem: {
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: "#EADFC2",
   },
+  internalItemTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 3,
+  },
+  internalItemDesc: { fontSize: 9, color: ink, flex: 1, paddingRight: 12 },
+  internalItemGp: { fontSize: 9, fontFamily: "Helvetica-Bold", color: navy, textAlign: "right" },
+  internalMetrics: { flexDirection: "row", flexWrap: "wrap" },
+  internalMetric: { fontSize: 8, color: muted, marginRight: 16, marginTop: 1 },
+  internalMetricVal: { color: ink, fontFamily: "Helvetica-Bold" },
   tableRow: {
     flexDirection: "row",
     borderBottomWidth: 1,
@@ -629,48 +638,57 @@ export function BillingDocument(props: BillingDocumentProps) {
           )}
         </View>
 
-        {/* Internal-only pricing pipeline. Kept together (wrap=false) so the
-            header never orphans at the bottom of a page. */}
+        {/* Internal-only pricing pipeline. Each line gets two rows — a
+            description + GP headline, then the cost breakdown — so the figures
+            are legible instead of crammed into one wide row. Kept together
+            (wrap=false) so it never orphans across a page break. */}
         {isInternal && (
           <View style={styles.internalSection} wrap={false}>
             <Text style={styles.internalLabel}>
               Internal pricing pipeline — gross profit {fmtMoney(props.totalGp ?? 0, props.currency)}
               {props.totalGpMarginPct !== undefined && ` (${props.totalGpMarginPct.toFixed(1)}%)`}
             </Text>
-            <View style={styles.tableHeader}>
-              <Text style={[styles.thNum, { flex: 2.8 }]}>Description</Text>
-              <Text style={[styles.thNum, { flex: 2, textAlign: "right" }]}>Landed</Text>
-              <Text style={[styles.thNum, { flex: 1.1, textAlign: "right" }]}>Surch %</Text>
-              <Text style={[styles.thNum, { flex: 1, textAlign: "right" }]}>Fin %</Text>
-              <Text style={[styles.thNum, { flex: 1.4, textAlign: "right" }]}>Markup %</Text>
-              <Text style={[styles.thNum, { flex: 2, textAlign: "right" }]}>Cost</Text>
-              <Text style={[styles.thNum, { flex: 2, textAlign: "right" }]}>GP</Text>
-              <Text style={[styles.thNum, { flex: 1.1, textAlign: "right" }]}>GP %</Text>
-            </View>
             {props.items.map((item, idx) => (
-              <View key={idx} style={styles.tableRow} wrap={false}>
-                <Text style={[styles.td, { flex: 2.8 }]}>{item.description}</Text>
-                <Text style={[styles.td, { flex: 2, textAlign: "right" }]}>
-                  {fmtMoney(item.landedCost ?? 0, props.currency)}
-                </Text>
-                <Text style={[styles.td, { flex: 1.1, textAlign: "right" }]}>
-                  {(item.surchargePct ?? 0).toFixed(2)}%
-                </Text>
-                <Text style={[styles.td, { flex: 1, textAlign: "right" }]}>
-                  {(item.financeChargePct ?? 0).toFixed(2)}%
-                </Text>
-                <Text style={[styles.td, { flex: 1.4, textAlign: "right" }]}>
-                  {(item.markupPct ?? 0).toFixed(2)}%
-                </Text>
-                <Text style={[styles.td, { flex: 2, textAlign: "right" }]}>
-                  {fmtMoney(item.costLineTotal ?? 0, props.currency)}
-                </Text>
-                <Text style={[styles.td, { flex: 2, textAlign: "right" }]}>
-                  {fmtMoney(item.lineGpAmount ?? 0, props.currency)}
-                </Text>
-                <Text style={[styles.td, { flex: 1.1, textAlign: "right" }]}>
-                  {(item.lineGpMarginPct ?? 0).toFixed(1)}%
-                </Text>
+              <View key={idx} style={styles.internalItem} wrap={false}>
+                <View style={styles.internalItemTop}>
+                  <Text style={styles.internalItemDesc}>{item.description}</Text>
+                  <Text style={styles.internalItemGp}>
+                    GP {fmtMoney(item.lineGpAmount ?? 0, props.currency)} ·{" "}
+                    {(item.lineGpMarginPct ?? 0).toFixed(1)}%
+                  </Text>
+                </View>
+                <View style={styles.internalMetrics}>
+                  <Text style={styles.internalMetric}>
+                    Landed{" "}
+                    <Text style={styles.internalMetricVal}>
+                      {fmtMoney(item.landedCost ?? 0, props.currency)}
+                    </Text>
+                  </Text>
+                  <Text style={styles.internalMetric}>
+                    Surcharge{" "}
+                    <Text style={styles.internalMetricVal}>
+                      {(item.surchargePct ?? 0).toFixed(2)}%
+                    </Text>
+                  </Text>
+                  <Text style={styles.internalMetric}>
+                    Finance{" "}
+                    <Text style={styles.internalMetricVal}>
+                      {(item.financeChargePct ?? 0).toFixed(2)}%
+                    </Text>
+                  </Text>
+                  <Text style={styles.internalMetric}>
+                    Markup{" "}
+                    <Text style={styles.internalMetricVal}>
+                      {(item.markupPct ?? 0).toFixed(2)}%
+                    </Text>
+                  </Text>
+                  <Text style={styles.internalMetric}>
+                    Cost{" "}
+                    <Text style={styles.internalMetricVal}>
+                      {fmtMoney(item.costLineTotal ?? 0, props.currency)}
+                    </Text>
+                  </Text>
+                </View>
               </View>
             ))}
           </View>
@@ -716,7 +734,7 @@ export function BillingDocument(props: BillingDocumentProps) {
               {props.company.companyName} is currently not VAT-registered.
             </Text>
           )}
-          {props.fxRate && (
+          {props.fxRate && props.currency !== "USD" && (
             <Text style={[styles.footerText, { fontSize: 8, color: muted }]}>
               FX rate: 1 USD = {props.fxRate} {props.currency}
               {props.fxRateSource ? ` (source: ${props.fxRateSource})` : ""}
