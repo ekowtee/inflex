@@ -169,6 +169,14 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
+  // Header cell for dense numeric tables — no letter-spacing so labels stay
+  // narrow enough not to wrap in tight columns.
+  thNum: {
+    fontSize: 8,
+    fontFamily: "Helvetica-Bold",
+    color: muted,
+    textTransform: "uppercase",
+  },
   tableRow: {
     flexDirection: "row",
     borderBottomWidth: 1,
@@ -621,45 +629,46 @@ export function BillingDocument(props: BillingDocumentProps) {
           )}
         </View>
 
-        {/* Internal-only pricing pipeline */}
+        {/* Internal-only pricing pipeline. Kept together (wrap=false) so the
+            header never orphans at the bottom of a page. */}
         {isInternal && (
-          <View style={styles.internalSection}>
+          <View style={styles.internalSection} wrap={false}>
             <Text style={styles.internalLabel}>
               Internal pricing pipeline — gross profit {fmtMoney(props.totalGp ?? 0, props.currency)}
               {props.totalGpMarginPct !== undefined && ` (${props.totalGpMarginPct.toFixed(1)}%)`}
             </Text>
             <View style={styles.tableHeader}>
-              <Text style={[styles.th, { flex: 3 }]}>Description</Text>
-              <Text style={[styles.th, { flex: 1.5, textAlign: "right" }]}>Landed</Text>
-              <Text style={[styles.th, { flex: 1, textAlign: "right" }]}>Surch %</Text>
-              <Text style={[styles.th, { flex: 1, textAlign: "right" }]}>Fin %</Text>
-              <Text style={[styles.th, { flex: 1, textAlign: "right" }]}>Markup %</Text>
-              <Text style={[styles.th, { flex: 1.5, textAlign: "right" }]}>Cost total</Text>
-              <Text style={[styles.th, { flex: 1.5, textAlign: "right" }]}>GP</Text>
-              <Text style={[styles.th, { flex: 1, textAlign: "right" }]}>GP%</Text>
+              <Text style={[styles.thNum, { flex: 2.8 }]}>Description</Text>
+              <Text style={[styles.thNum, { flex: 2, textAlign: "right" }]}>Landed</Text>
+              <Text style={[styles.thNum, { flex: 1.1, textAlign: "right" }]}>Surch %</Text>
+              <Text style={[styles.thNum, { flex: 1, textAlign: "right" }]}>Fin %</Text>
+              <Text style={[styles.thNum, { flex: 1.4, textAlign: "right" }]}>Markup %</Text>
+              <Text style={[styles.thNum, { flex: 2, textAlign: "right" }]}>Cost</Text>
+              <Text style={[styles.thNum, { flex: 2, textAlign: "right" }]}>GP</Text>
+              <Text style={[styles.thNum, { flex: 1.1, textAlign: "right" }]}>GP %</Text>
             </View>
             {props.items.map((item, idx) => (
               <View key={idx} style={styles.tableRow} wrap={false}>
-                <Text style={[styles.td, { flex: 3 }]}>{item.description}</Text>
-                <Text style={[styles.td, { flex: 1.5, textAlign: "right" }]}>
+                <Text style={[styles.td, { flex: 2.8 }]}>{item.description}</Text>
+                <Text style={[styles.td, { flex: 2, textAlign: "right" }]}>
                   {fmtMoney(item.landedCost ?? 0, props.currency)}
                 </Text>
-                <Text style={[styles.td, { flex: 1, textAlign: "right" }]}>
+                <Text style={[styles.td, { flex: 1.1, textAlign: "right" }]}>
                   {(item.surchargePct ?? 0).toFixed(2)}%
                 </Text>
                 <Text style={[styles.td, { flex: 1, textAlign: "right" }]}>
                   {(item.financeChargePct ?? 0).toFixed(2)}%
                 </Text>
-                <Text style={[styles.td, { flex: 1, textAlign: "right" }]}>
+                <Text style={[styles.td, { flex: 1.4, textAlign: "right" }]}>
                   {(item.markupPct ?? 0).toFixed(2)}%
                 </Text>
-                <Text style={[styles.td, { flex: 1.5, textAlign: "right" }]}>
+                <Text style={[styles.td, { flex: 2, textAlign: "right" }]}>
                   {fmtMoney(item.costLineTotal ?? 0, props.currency)}
                 </Text>
-                <Text style={[styles.td, { flex: 1.5, textAlign: "right" }]}>
+                <Text style={[styles.td, { flex: 2, textAlign: "right" }]}>
                   {fmtMoney(item.lineGpAmount ?? 0, props.currency)}
                 </Text>
-                <Text style={[styles.td, { flex: 1, textAlign: "right" }]}>
+                <Text style={[styles.td, { flex: 1.1, textAlign: "right" }]}>
                   {(item.lineGpMarginPct ?? 0).toFixed(1)}%
                 </Text>
               </View>
