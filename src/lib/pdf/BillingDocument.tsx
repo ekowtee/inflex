@@ -430,11 +430,6 @@ export function BillingDocument(props: BillingDocumentProps) {
       `${props.advancePaymentPct.toFixed(0)}% advance payment is required to confirm the order; the balance is due on delivery and acceptance.`
     );
   }
-  if (isQuote && props.projectCycleWeeks && props.projectCycleWeeks > 0) {
-    autoTerms.push(
-      `Delivery is within ${props.projectCycleWeeks} week${props.projectCycleWeeks === 1 ? "" : "s"} of order confirmation.`
-    );
-  }
   const terms = isQuote
     ? [...autoTerms, ...splitTerms(props.quoteTerms || DEFAULT_QUOTE_TERMS)]
     : [];
