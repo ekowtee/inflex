@@ -443,7 +443,7 @@ export function BillingDocument(props: BillingDocumentProps) {
           </Text>
         )}
 
-        <View style={styles.header} fixed>
+        <View style={styles.header}>
           {logo ? (
             <Image src={logo} style={styles.logo} />
           ) : (
