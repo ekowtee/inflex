@@ -103,6 +103,9 @@ export interface QuoteBuilderInitial {
   projectTitle?: string | null;
   attentionTo?: string | null;
   solutionArchitectId?: string | null;
+  preparedById?: string | null;
+  approvedById?: string | null;
+  documentDate?: string | null;
   scopeOfWork?: string | null;
   notes?: string | null;
   currency?: string;
@@ -221,6 +224,11 @@ export default function QuoteBuilder({
     projectTitle: initial?.projectTitle ?? "",
     attentionTo: initial?.attentionTo ?? "",
     solutionArchitectId: initial?.solutionArchitectId ?? "",
+    preparedById: initial?.preparedById ?? "",
+    approvedById: initial?.approvedById ?? "",
+    documentDate: initial?.documentDate
+      ? new Date(initial.documentDate).toISOString().slice(0, 10)
+      : "",
     scopeOfWork: initial?.scopeOfWork ?? "",
     notes: initial?.notes ?? "",
     currency: initial?.currency ?? "GHS",
@@ -447,6 +455,9 @@ export default function QuoteBuilder({
       projectTitle: header.projectTitle || null,
       attentionTo: header.attentionTo || null,
       solutionArchitectId: header.solutionArchitectId || null,
+      preparedById: header.preparedById || null,
+      approvedById: header.approvedById || null,
+      documentDate: header.documentDate || null,
       scopeOfWork: header.scopeOfWork || null,
       notes: header.notes || null,
       currency: header.currency,
@@ -601,6 +612,42 @@ export default function QuoteBuilder({
               type="date"
               value={header.validUntil}
               onChange={(e) => updateHeader("validUntil", e.target.value)}
+            />
+          </Field>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <Field label="Prepared by" hint="Signature block on the PDF">
+            <Select
+              value={header.preparedById}
+              onChange={(e) => updateHeader("preparedById", e.target.value)}
+            >
+              <option value="">— None —</option>
+              {reference.architects.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.name} ({u.role})
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label="Approved by">
+            <Select
+              value={header.approvedById}
+              onChange={(e) => updateHeader("approvedById", e.target.value)}
+            >
+              <option value="">— None —</option>
+              {reference.architects.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.name} ({u.role})
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label="Document date" hint="Date printed on the signature block">
+            <TextInput
+              type="date"
+              value={header.documentDate}
+              onChange={(e) => updateHeader("documentDate", e.target.value)}
             />
           </Field>
         </div>

@@ -36,6 +36,8 @@ export async function GET(
         customer: true,
         contact: true,
         solutionArchitect: { select: { name: true } },
+        preparedBy: { select: { name: true, role: true } },
+        approvedBy: { select: { name: true, role: true } },
         whtCategory: true,
         items: { orderBy: { sortOrder: "asc" } },
       },
@@ -114,6 +116,13 @@ export async function GET(
       solutionArchitectName: quote.solutionArchitect?.name,
       scopeOfWork: quote.scopeOfWork,
       notes: quote.notes,
+      // Footer / signature block
+      documentDate: quote.documentDate ?? quote.createdAt,
+      preparedByName: quote.preparedBy?.name ?? null,
+      approvedByName: quote.approvedBy?.name ?? null,
+      advancePaymentPct: Number(quote.advancePaymentPct),
+      projectCycleWeeks: quote.projectCycleWeeks,
+      quoteTerms: settings.quoteTerms,
       customer: buildBillingCustomer(quote.customer, quote.contact),
       company: { ...settings, vatRegistered: settings.vatRegistered },
       items: quote.items.map((i) => ({

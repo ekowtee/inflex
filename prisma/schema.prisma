@@ -37,6 +37,8 @@ model User {
   updatedAt    DateTime @updatedAt
 
   architectQuotes Quote[]          @relation("SolutionArchitect")
+  preparedQuotes  Quote[]          @relation("QuotePreparedBy")
+  approvedQuotes  Quote[]          @relation("QuoteApprovedBy")
   quoteRevisions  QuoteRevision[]
   leadConversions Lead[]           @relation("LeadConverter")
 
@@ -234,6 +236,15 @@ model Quote {
   solutionArchitectId    String?
   solutionArchitect      User?    @relation("SolutionArchitect", fields: [solutionArchitectId], references: [id])
 
+  // Signature block on the PDF. Preparer/approver are internal users;
+  // documentDate is the date printed against the signatures (defaults to the
+  // issue date but is editable per quote).
+  preparedById   String?
+  preparedBy     User?     @relation("QuotePreparedBy", fields: [preparedById], references: [id])
+  approvedById   String?
+  approvedBy     User?     @relation("QuoteApprovedBy", fields: [approvedById], references: [id])
+  documentDate   DateTime?
+
   scopeOfWork String?
   notes       String?
 
@@ -291,6 +302,8 @@ model Quote {
   @@index([contactId])
   @@index([createdAt])
   @@index([solutionArchitectId])
+  @@index([preparedById])
+  @@index([approvedById])
 }
 
 // ---------- Invoices ----------
@@ -475,6 +488,11 @@ model CompanySettings {
   currency        String   @default("GHS")
   quotePrefix     String   @default("Q")
   invoicePrefix   String   @default("INV")
+
+  // Editable boilerplate Terms & Conditions printed on quote PDFs — one term
+  // per line. Validity / payment / delivery / FX terms are generated per
+  // quote and merged ahead of these.
+  quoteTerms      String?
   nextQuoteNumber   Int    @default(1)
   nextInvoiceNumber Int    @default(1)
 

@@ -9,6 +9,7 @@ import {
   Path,
 } from "@react-pdf/renderer";
 import { formatDate, formatMoney } from "../serialize";
+import { DEFAULT_QUOTE_TERMS, splitTerms } from "../quoteTerms";
 
 const brand = "#BD2E25";
 const navy = "#1B3764";
@@ -251,6 +252,29 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   footerText: { fontSize: 9, color: ink, marginBottom: 8 },
+  termsBlock: { marginBottom: 12 },
+  termRow: { flexDirection: "row", marginBottom: 3 },
+  termNum: { fontSize: 9, color: muted, width: 16 },
+  termText: { fontSize: 9, color: ink, flex: 1, lineHeight: 1.35 },
+  signatureBlock: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 28,
+  },
+  signatureCol: { width: "30%", alignItems: "center" },
+  signatureName: { fontSize: 10, fontFamily: "Helvetica-Bold", color: ink, marginBottom: 2 },
+  signatureLine: {
+    width: "100%",
+    borderTopWidth: 1,
+    borderTopColor: "#9AA0AE",
+    marginBottom: 4,
+  },
+  signatureLabel: {
+    fontSize: 8,
+    color: muted,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+  },
   pageNumber: {
     position: "absolute",
     bottom: 20,
@@ -376,6 +400,14 @@ export interface BillingDocumentProps {
   scopeOfWork?: string | null;
   notes?: string | null;
 
+  // Footer / terms / signature (quotes)
+  documentDate?: string | Date | null;
+  preparedByName?: string | null;
+  approvedByName?: string | null;
+  advancePaymentPct?: number;
+  projectCycleWeeks?: number;
+  quoteTerms?: string | null;
+
   customer: BillingCustomer;
   company: BillingCompany;
   items: BillingLine[];
@@ -386,6 +418,32 @@ export function BillingDocument(props: BillingDocumentProps) {
   const isQuote = props.kind === "QUOTE";
   const isInternal = mode === "internal";
   const logo = getLogo();
+
+  // Assemble the quote Terms & Conditions: per-quote auto terms first, then
+  // the director's editable boilerplate from Settings (or the default).
+  const usesFx = Boolean(props.fxRate) || props.currency === "USD";
+  const autoTerms: string[] = [];
+  if (isQuote && props.validUntil) {
+    autoTerms.push(`This quotation is valid until ${formatDate(props.validUntil)}.`);
+  }
+  if (isQuote && props.advancePaymentPct && props.advancePaymentPct > 0) {
+    autoTerms.push(
+      `${props.advancePaymentPct.toFixed(0)}% advance payment is required to confirm the order; the balance is due on delivery and acceptance.`
+    );
+  }
+  if (isQuote && props.projectCycleWeeks && props.projectCycleWeeks > 0) {
+    autoTerms.push(
+      `Delivery is within ${props.projectCycleWeeks} week${props.projectCycleWeeks === 1 ? "" : "s"} of order confirmation.`
+    );
+  }
+  if (isQuote && usesFx) {
+    autoTerms.push(
+      "The applicable exchange rate is the prevailing CAL Bank USD purchasing rate at the time of payment."
+    );
+  }
+  const terms = isQuote
+    ? [...autoTerms, ...splitTerms(props.quoteTerms || DEFAULT_QUOTE_TERMS)]
+    : [];
 
   return (
     <Document>
@@ -695,13 +753,29 @@ export function BillingDocument(props: BillingDocumentProps) {
         )}
 
         <View style={styles.footer}>
+          {/* Quote terms (auto + editable boilerplate) as a numbered list */}
+          {isQuote && terms.length > 0 && (
+            <View style={styles.termsBlock} wrap={false}>
+              <Text style={styles.footerSectionTitle}>Terms &amp; conditions</Text>
+              {terms.map((term, i) => (
+                <View key={i} style={styles.termRow}>
+                  <Text style={styles.termNum}>{i + 1}.</Text>
+                  <Text style={styles.termText}>{term}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {/* Invoice payment terms */}
           {!isQuote && props.company.paymentTerms && (
             <>
               <Text style={styles.footerSectionTitle}>Payment terms</Text>
               <Text style={styles.footerText}>{props.company.paymentTerms}</Text>
             </>
           )}
-          {!isQuote && (props.company.bankName || props.company.momoProvider) && (
+
+          {/* Payment details — shown on quotes and invoices */}
+          {(props.company.bankName || props.company.momoProvider) && (
             <>
               <Text style={styles.footerSectionTitle}>Payment details</Text>
               {props.company.bankName && (
@@ -721,6 +795,7 @@ export function BillingDocument(props: BillingDocumentProps) {
               )}
             </>
           )}
+
           {props.whtPct && props.whtPct > 0 && (
             <Text style={styles.footerText}>
               Withholding tax of {props.whtPct.toFixed(2)}%
@@ -746,6 +821,29 @@ export function BillingDocument(props: BillingDocumentProps) {
               <Text style={styles.footerSectionTitle}>Internal notes</Text>
               <Text style={styles.footerText}>{props.notes}</Text>
             </>
+          )}
+
+          {/* Signature block (quotes) */}
+          {isQuote && (
+            <View style={styles.signatureBlock} wrap={false}>
+              <View style={styles.signatureCol}>
+                <Text style={styles.signatureName}>{props.preparedByName ?? " "}</Text>
+                <View style={styles.signatureLine} />
+                <Text style={styles.signatureLabel}>Prepared by</Text>
+              </View>
+              <View style={styles.signatureCol}>
+                <Text style={styles.signatureName}>{props.approvedByName ?? " "}</Text>
+                <View style={styles.signatureLine} />
+                <Text style={styles.signatureLabel}>Approved by</Text>
+              </View>
+              <View style={styles.signatureCol}>
+                <Text style={styles.signatureName}>
+                  {props.documentDate ? formatDate(props.documentDate) : " "}
+                </Text>
+                <View style={styles.signatureLine} />
+                <Text style={styles.signatureLabel}>Date</Text>
+              </View>
+            </View>
           )}
         </View>
 

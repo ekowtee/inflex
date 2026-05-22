@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Field, TextArea, TextInput } from "../_components/Field";
 import { Button } from "../_components/Button";
 import { computeVatBreakdown } from "@/lib/pricing";
+import { DEFAULT_QUOTE_TERMS } from "@/lib/quoteTerms";
 
 export interface SettingsValues {
   companyName?: string;
@@ -28,6 +29,7 @@ export interface SettingsValues {
   currency?: string;
   quotePrefix?: string;
   invoicePrefix?: string;
+  quoteTerms?: string | null;
 
   // VAT
   vatRegistered?: boolean;
@@ -369,6 +371,22 @@ export default function SettingsForm({
               rows={3}
               value={form.paymentTerms ?? ""}
               onChange={(e) => update("paymentTerms", e.target.value)}
+            />
+          </Field>
+        </Section>
+
+        <Section title="Quote terms & conditions">
+          <p className="text-xs text-white/40 mb-2">
+            One term per line — printed as a numbered list on quote PDFs. Validity,
+            payment schedule, delivery lead time, and the exchange-rate clause are
+            generated automatically from each quote and printed ahead of these.
+          </p>
+          <Field label="Terms & conditions">
+            <TextArea
+              rows={6}
+              value={form.quoteTerms ?? ""}
+              onChange={(e) => update("quoteTerms", e.target.value)}
+              placeholder={DEFAULT_QUOTE_TERMS}
             />
           </Field>
         </Section>

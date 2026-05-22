@@ -225,6 +225,9 @@ export const quoteSchema = z.object({
   projectTitle: z.string().max(300).optional().nullable(),
   attentionTo: z.string().max(300).optional().nullable(),
   solutionArchitectId: z.string().optional().nullable(),
+  preparedById: z.string().optional().nullable(),
+  approvedById: z.string().optional().nullable(),
+  documentDate: z.string().optional().nullable(),
   scopeOfWork: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   currency: z.string().min(3).max(3).default("GHS"),
@@ -316,6 +319,7 @@ export const settingsSchema = z.object({
   currency: z.string().default("GHS"),
   quotePrefix: z.string().min(1).max(10).default("Q"),
   invoicePrefix: z.string().min(1).max(10).default("INV"),
+  quoteTerms: z.string().max(5000).optional().nullable(),
 
   // VAT (Ghana 2026). NHIL/GETFund/VAT each apply to subtotal independently
   // and sum to 20% with defaults — no cascading.
