@@ -796,19 +796,6 @@ export function BillingDocument(props: BillingDocumentProps) {
             </>
           )}
 
-          {props.whtPct && props.whtPct > 0 && (
-            <Text style={styles.footerText}>
-              Withholding tax of {props.whtPct.toFixed(2)}%
-              {props.whtCategoryLabel ? ` (${props.whtCategoryLabel})` : ""} is
-              included in the unit prices above as required by the Ghana Revenue
-              Authority. Deduct and remit this amount on our behalf when paying.
-            </Text>
-          )}
-          {props.company.vatRegistered === false && (
-            <Text style={[styles.footerText, { fontSize: 8, color: muted }]}>
-              {props.company.companyName} is currently not VAT-registered.
-            </Text>
-          )}
           {props.fxRate && props.currency !== "USD" && (
             <Text style={[styles.footerText, { fontSize: 8, color: muted }]}>
               FX rate: 1 USD = {props.fxRate} {props.currency}
