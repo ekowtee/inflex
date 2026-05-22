@@ -421,7 +421,6 @@ export function BillingDocument(props: BillingDocumentProps) {
 
   // Assemble the quote Terms & Conditions: per-quote auto terms first, then
   // the director's editable boilerplate from Settings (or the default).
-  const usesFx = Boolean(props.fxRate) || props.currency === "USD";
   const autoTerms: string[] = [];
   if (isQuote && props.validUntil) {
     autoTerms.push(`This quotation is valid until ${formatDate(props.validUntil)}.`);
@@ -434,11 +433,6 @@ export function BillingDocument(props: BillingDocumentProps) {
   if (isQuote && props.projectCycleWeeks && props.projectCycleWeeks > 0) {
     autoTerms.push(
       `Delivery is within ${props.projectCycleWeeks} week${props.projectCycleWeeks === 1 ? "" : "s"} of order confirmation.`
-    );
-  }
-  if (isQuote && usesFx) {
-    autoTerms.push(
-      "The applicable exchange rate is the prevailing CAL Bank USD purchasing rate at the time of payment."
     );
   }
   const terms = isQuote
