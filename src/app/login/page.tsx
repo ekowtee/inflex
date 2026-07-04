@@ -30,7 +30,17 @@ function LoginForm() {
       setError("Invalid username or password.");
       return;
     }
-    router.replace(result?.url ?? callbackUrl);
+    let targetUrl = callbackUrl;
+    if (result?.url) {
+      try {
+        const parsed = new URL(result.url);
+        // If the redirect URL is on the same host but different port/protocol, keep it relative
+        targetUrl = parsed.pathname + parsed.search + parsed.hash;
+      } catch {
+        targetUrl = result.url;
+      }
+    }
+    router.replace(targetUrl);
     router.refresh();
   }
 
