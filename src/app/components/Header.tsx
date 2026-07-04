@@ -257,20 +257,11 @@ export default function Header() {
               ))}
             </div>
 
-            {/* Desktop Contact button (choice: h-16, square) */}
+            {/* Contact button */}
             <Link
               href="/contact"
               onClick={closeAllDropdowns}
-              className="hidden lg:inline-flex items-center justify-center px-6 h-16 border border-transparent text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
-            >
-              Contact us
-            </Link>
-
-            {/* Mobile Contact button */}
-            <Link
-              href="/contact"
-              onClick={closeAllDropdowns}
-              className="lg:hidden inline-flex items-center justify-center px-4 h-10 border border-transparent text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md focus:outline-none transition-colors"
+              className="inline-flex items-center justify-center border border-transparent text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors px-4 h-10 rounded-md lg:px-6 lg:h-16 lg:rounded-none"
             >
               Contact us
             </Link>
