@@ -127,17 +127,7 @@ export default function Header() {
         />
       </Link>
 
-      {/* Contact button in the right margin (Desktop only - absolute position) */}
-      <Link
-        href="/contact"
-        onClick={closeAllDropdowns}
-        className="absolute top-0 h-16 border border-transparent text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none transition-colors hidden lg:inline-flex items-center justify-center px-6 translate-x-1/2"
-        style={{ right: "calc((100vw - 80rem) / 4 + 1rem)" }}
-      >
-        Contact us
-      </Link>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:pl-8 lg:pr-0">
         <div className="flex justify-between items-center h-16 w-full relative">
           
           {/* Mobile Hamburger on Left */}
@@ -266,6 +256,15 @@ export default function Header() {
                 </a>
               ))}
             </div>
+
+            {/* Desktop Contact button (choice: h-16, square) */}
+            <Link
+              href="/contact"
+              onClick={closeAllDropdowns}
+              className="hidden lg:inline-flex items-center justify-center px-6 h-16 border border-transparent text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+            >
+              Contact us
+            </Link>
 
             {/* Mobile Contact button */}
             <Link
