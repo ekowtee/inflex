@@ -342,8 +342,8 @@ export default function AboutPage() {
       <section>
         <div className="relative">
           <iframe
-            title="Location map of Tsui Bleoo Rd, Accra"
-            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3970.5144110567144!2d-0.15543999999999997!3d5.63844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNcKwMzgnMTguNCJOIDDCsDA5JzE5LjYiVw!5e0!3m2!1sen!2sgh!4v1746185407560!5m2!1sen!2sgh"
+            title="Location map of East Legon, Accra"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3970.288220023456!2d-0.1540899!3d5.6350357!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdf9b4f2c00c7f7%3A0x6b44a2c2ff3284aa!2sDei%20Close%2C%20Accra!5e0!3m2!1sen!2sgh!4v1746185400000!5m2!1sen!2sgh"
             width="100%"
             height="450"
             className="w-full h-[200px] sm:h-[300px] md:h-[450px]"

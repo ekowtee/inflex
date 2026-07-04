@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import { prisma } from "./prisma";
 
 export type SessionRole = "DIRECTOR" | "FINANCE";
@@ -26,16 +27,21 @@ declare module "next-auth/jwt" {
   }
 }
 
-function constantTimeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) return false;
-  let result = 0;
-  for (let i = 0; i < a.length; i++) {
-    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+export function constantTimeEqual(a: string, b: string): boolean {
+  try {
+    const bufA = Buffer.from(a, "utf8");
+    const bufB = Buffer.from(b, "utf8");
+    if (bufA.length !== bufB.length) {
+      crypto.timingSafeEqual(bufA, bufA);
+      return false;
+    }
+    return crypto.timingSafeEqual(bufA, bufB);
+  } catch {
+    return false;
   }
-  return result === 0;
 }
 
-async function verifyPassword(
+export async function verifyPassword(
   input: string,
   stored: string | undefined
 ): Promise<boolean> {
@@ -47,7 +53,7 @@ async function verifyPassword(
   ) {
     return bcrypt.compare(input, stored);
   }
-  return constantTimeEqual(input, stored);
+  return false;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -94,15 +100,19 @@ export const authOptions: NextAuthOptions = {
         if (
           expectedUser &&
           expectedPass &&
-          constantTimeEqual(username, expectedUser) &&
-          (await verifyPassword(credentials.password, expectedPass))
+          constantTimeEqual(username, expectedUser)
         ) {
-          return {
-            id: "env:admin",
-            name: expectedUser,
-            email: process.env.ADMIN_EMAIL ?? null,
-            role: "DIRECTOR" as SessionRole,
-          };
+          const ok = expectedPass.startsWith("$2")
+            ? await bcrypt.compare(credentials.password, expectedPass)
+            : constantTimeEqual(credentials.password, expectedPass);
+          if (ok) {
+            return {
+              id: "env:admin",
+              name: expectedUser,
+              email: process.env.ADMIN_EMAIL ?? null,
+              role: "DIRECTOR" as SessionRole,
+            };
+          }
         }
 
         return null;

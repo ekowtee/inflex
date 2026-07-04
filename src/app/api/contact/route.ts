@@ -11,6 +11,30 @@ import {
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+const cleanupInterval = setInterval(() => {
+  const now = Date.now();
+  for (const [key, record] of rateLimitMap.entries()) {
+    if (now > record.resetTime) {
+      rateLimitMap.delete(key);
+    }
+  }
+}, 10 * 60 * 1000);
+
+if (cleanupInterval && typeof cleanupInterval.unref === "function") {
+  cleanupInterval.unref();
+}
+
+function getClientIp(req: NextRequest): string {
+  return (
+    req.headers.get("cf-connecting-ip") ||
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") ||
+    "127.0.0.1"
+  );
+}
+
 /**
  * Public lead capture. Anyone can POST. Writes to the Lead table — not
  * Customer (which is the qualified-account model). The rep promotes leads to
@@ -23,6 +47,33 @@ export const runtime = "nodejs";
  *     fresh Lead but link it to that Customer so the rep sees the match.
  */
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  const now = Date.now();
+  const limit = 5;
+  const windowMs = 10 * 60 * 1000;
+
+  const record = rateLimitMap.get(ip);
+  if (record) {
+    if (now > record.resetTime) {
+      rateLimitMap.set(ip, { count: 1, resetTime: now + windowMs });
+    } else if (record.count >= limit) {
+      const retryAfter = Math.ceil((record.resetTime - now) / 1000);
+      return NextResponse.json(
+        { error: `Too many requests from this IP. Please try again after ${retryAfter} seconds.` },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(retryAfter),
+          },
+        }
+      );
+    } else {
+      record.count += 1;
+    }
+  } else {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + windowMs });
+  }
+
   let body: unknown;
   try {
     body = await req.json();
@@ -187,10 +238,7 @@ async function verifyTurnstile(
     const body = new URLSearchParams();
     body.set("secret", secret);
     body.set("response", token);
-    const remoteIp =
-      req.headers.get("cf-connecting-ip") ||
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      "";
+    const remoteIp = getClientIp(req);
     if (remoteIp) body.set("remoteip", remoteIp);
     const res = await fetch(
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
