@@ -1,0 +1,83 @@
+name: Performance gate
+
+# Runs scripts/perf-gate.mjs on a clean Linux runner.
+#
+# Why here and not on a laptop: Lighthouse's network model charges the bytes
+# Chrome receives, and on at least one developer machine a TLS-inspecting
+# product hands Chrome uncompressed bodies, inflating every simulated timing
+# about threefold. A hosted runner has no such interference, so its numbers
+# are the ones the thresholds in scripts/budgets.json are judged against.
+#
+# The bundle checks (route shell, motion chunk, fonts, images) are exact and
+# fail the job. The Lighthouse thresholds are reported in the job summary and
+# fail the job only once the site is expected to meet them: flip
+# LIGHTHOUSE_BLOCKING to "true" at the end of Phase 1.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: perf-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  LIGHTHOUSE_BLOCKING: "false"
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npx next build
+        env:
+          # The build only needs a syntactically valid connection string for
+          # prisma generate; no database is contacted.
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+
+      - name: Bundle budgets (blocking)
+        run: node scripts/perf-gate.mjs --bundles | tee bundles.txt
+
+      - name: Lighthouse
+        id: lighthouse
+        continue-on-error: ${{ env.LIGHTHOUSE_BLOCKING != 'true' }}
+        run: node scripts/perf-gate.mjs --runs 3 | tee lighthouse.txt
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo '## Performance gate'
+            echo
+            echo '```'
+            cat bundles.txt
+            echo
+            sed -n '/LIGHTHOUSE/,$p' lighthouse.txt 2>/dev/null || echo 'Lighthouse did not run'
+            echo '```'
+            if [ "${{ steps.lighthouse.outcome }}" = "failure" ] && [ "$LIGHTHOUSE_BLOCKING" != "true" ]; then
+              echo
+              echo '_Lighthouse thresholds are advisory until the end of Phase 1 (LIGHTHOUSE_BLOCKING=false)._'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: perf-gate
+          path: |
+            bundles.txt
+            lighthouse.txt
+          if-no-files-found: ignore

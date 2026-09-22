@@ -276,6 +276,22 @@ The frame-time probe in the hero spec (90 frames, mean above 24 ms demotes a tie
 | Tier distribution | Report only | If Tier C exceeds 25% of desktop sessions, the probe is too strict or the shaders too heavy |
 | Crossfade success | ≥ 90% of Tier A sessions reach the live scene within 8 s | Custom event |
 
+### 9.2a Where the lab numbers are taken (added 22 September 2026)
+
+The Lighthouse thresholds are judged on the GitHub Actions runner
+(`.github/workflows/perf-gate.yml`), not on a developer laptop. On the
+owner's machine, ESET Security's TLS filtering hands Chrome uncompressed
+response bodies (the main stylesheet arrives at 105 KB where the wire size is
+under 2 KB), so Lighthouse's network model charges about three times the real
+bytes and every simulated timing is inflated to match, local and production
+alike. The bundle checks are unaffected and remain valid anywhere. To get a
+meaningful local reading, exclude the browser from ESET's SSL/TLS protocol
+filtering, or use PageSpeed Insights.
+
+First production measurement of the Phase 0 build from a clean runner is the
+first run of that workflow; earlier figures in `PHASE0_REPORT.md` §4 were
+taken on the affected laptop and are directionally right only.
+
 ### 9.3 Definition of "first paint" for this site
 
 First paint is not a blank canvas clearing to obsidian. It is **the H1 legible and the hero composition visible**, which means the LQIP has painted behind the copy. That happens at FCP. The visitor's impression of speed is set at LCP, when the sharp poster replaces the blur. The live 3D scene arriving later is invisible as a performance event because the crossfade starts from an identical still. This is the whole reason the poster pair exists, and it is why the LCP target is the only first-paint number the owner needs to watch.
