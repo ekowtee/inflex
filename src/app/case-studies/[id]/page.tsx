@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
@@ -13,10 +12,10 @@ export default function CaseStudyDetailPage() {
   const currentId = params.id as string;
   const study = caseStudies.find((cs) => cs.id === currentId);
 
-  const related = useMemo(() => {
-    const others = caseStudies.filter((cs) => cs.id !== currentId);
-    return others.sort(() => Math.random() - 0.5).slice(0, 3);
-  }, [currentId]);
+  // Deterministic: this page is prerendered, and a random order during
+  // render made the server and the client disagree on which cards to show.
+  // No memo: filtering a handful of studies is cheaper than remembering it.
+  const related = caseStudies.filter((cs) => cs.id !== currentId).slice(0, 3);
 
   if (!study) {
     return (

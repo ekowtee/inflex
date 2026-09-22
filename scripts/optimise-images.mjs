@@ -14,8 +14,8 @@
  * Nothing is ever deleted. public/brand/ is left alone: those are the
  * generated mark assets.
  */
-import { readdirSync, statSync, mkdirSync, renameSync, existsSync, writeFileSync, readFileSync } from "node:fs";
-import { join, dirname, relative, sep, extname } from "node:path";
+import { statSync, mkdirSync, renameSync, existsSync, writeFileSync, readFileSync } from "node:fs";
+import { join, dirname, relative } from "node:path";
 import sharp from "sharp";
 
 const DRY = process.argv.includes("--dry");
@@ -117,7 +117,7 @@ if (!DRY && converted.length) {
     `\nphotographs: ${(before / 1024 / 1024).toFixed(1)} MB -> ${(after / 1024 / 1024).toFixed(1)} MB`
   );
   const worst = converted
-    .map(([i, p]) => [sizeOf(p), p])
+    .map(([, p]) => [sizeOf(p), p])
     .sort((a, b) => b[0] - a[0])
     .slice(0, 8);
   console.log("largest remaining:");

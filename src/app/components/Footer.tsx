@@ -9,7 +9,6 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* 1) Logo & Contact */}
           <div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <Image
               src="/assets/logo.png"
               alt="Inflexions-IT"

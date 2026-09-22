@@ -1,6 +1,6 @@
 "use client";
 
-import { createElement, useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { stagger } from "./tokens";
 
 type RevealTag =
@@ -86,7 +86,7 @@ function observe(element: Element, onEnter: Callback): () => void {
 export default function Reveal({
   children,
   delay = 0,
-  as = "div",
+  as: Tag = "div",
   className = "",
 }: RevealProps) {
   const ref = useRef<HTMLElement>(null);
@@ -98,28 +98,38 @@ export default function Reveal({
     const element = ref.current;
     if (!element) return;
 
-    const box = element.getBoundingClientRect();
-    const belowFold = box.top > window.innerHeight * 0.9;
-    if (!belowFold) {
-      setHidden(false);
-      return;
-    }
+    // Decide on the next frame rather than synchronously in the effect body:
+    // the measurement needs a laid-out element anyway, and it keeps the
+    // state change out of the render that just committed.
+    let cleanup: (() => void) | undefined;
+    const frame = requestAnimationFrame(() => {
+      const box = element.getBoundingClientRect();
+      const belowFold = box.top > window.innerHeight * 0.9;
+      if (!belowFold) {
+        setHidden(false);
+        return;
+      }
+      setHidden(true);
+      cleanup = observe(element, () => setHidden(false));
+    });
 
-    setHidden(true);
-    return observe(element, () => setHidden(false));
+    return () => {
+      cancelAnimationFrame(frame);
+      cleanup?.();
+    };
   }, []);
 
   const capped = Math.min(delay, stagger.max);
   const state =
     hidden === null ? "" : hidden ? " motion-reveal" : " motion-reveal motion-reveal-in";
 
-  return createElement(
-    as,
-    {
-      ref,
-      className: `${className}${state}`.trim(),
-      style: capped && hidden !== null ? { transitionDelay: `${capped}ms` } : undefined,
-    },
-    children
+  return (
+    <Tag
+      ref={ref as React.RefObject<never>}
+      className={`${className}${state}`.trim()}
+      style={capped && hidden !== null ? { transitionDelay: `${capped}ms` } : undefined}
+    >
+      {children}
+    </Tag>
   );
 }

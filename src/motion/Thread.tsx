@@ -34,8 +34,8 @@ export default function Thread({
     const element = ref.current;
     if (!element) return;
     if (typeof IntersectionObserver !== "function") {
-      setDrawn(true);
-      return;
+      const frame = requestAnimationFrame(() => setDrawn(true));
+      return () => cancelAnimationFrame(frame);
     }
     const observer = new IntersectionObserver(
       (entries) => {

@@ -155,7 +155,7 @@ export default function UserForm({
         <strong className="text-white/60">Internal</strong> users log in and operate
         the platform (Director / Finance / Sales).{" "}
         <strong className="text-white/60">External</strong> users are kept as
-        records — they don't get a password and don't appear in pickers like
+        records — they don&apos;t get a password and don&apos;t appear in pickers like
         the solution architect dropdown.
       </p>
 

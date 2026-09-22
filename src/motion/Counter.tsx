@@ -43,12 +43,16 @@ export default function Counter({
     const element = ref.current;
     if (!element) return;
 
+    let frame = 0;
+
+    // Reduced motion, or no IntersectionObserver: show the final value on the
+    // next frame. Setting state synchronously inside the effect body would
+    // cascade a render off the one that just committed.
     if (prefersReducedMotion() || typeof IntersectionObserver !== "function") {
-      setDisplay(value);
-      return;
+      frame = requestAnimationFrame(() => setDisplay(value));
+      return () => cancelAnimationFrame(frame);
     }
 
-    let frame = 0;
     const observer = new IntersectionObserver(
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting) || started.current) {
