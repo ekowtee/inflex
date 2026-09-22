@@ -23,7 +23,7 @@ import type { CoreWorkerResult } from "./worker/formations.worker";
 import { HALF, NODE_COUNT, TEXTURE_WIDTH, FORMATIONS } from "./worker/formations";
 import { nodesVertex, nodesFragment } from "./shaders/nodes";
 import { edgesVertex, edgesFragment } from "./shaders/edges";
-import { palette, lights, atmosphere, nodes as nodeSettings } from "./rig";
+import { palette, lights, atmosphere, nodes as nodeSettings, tierB } from "./rig";
 import type { Tier } from "@/motion/tier";
 
 export interface CoreHandles {
@@ -71,6 +71,11 @@ const sharedUniforms = (texture: DataTexture, tier: Tier) => ({
   // 1 when drawing straight to the canvas (Tier B); the Tier A composite
   // encodes instead.
   uEncodeSRGB: { value: tier === "A" ? 0 : 1 },
+  // Tier B has no bloom: the ember pass draws wide additive halos instead,
+  // and the sheet gets a little gain to match the Tier A poster it fades
+  // from. Both are 1 on Tier A.
+  uEmberHalo: { value: tier === "A" ? 1 : tierB.emberHalo },
+  uGain: { value: tier === "A" ? 1 : tierB.gain },
 });
 
 export function buildCore(data: CoreWorkerResult, tier: Tier, dpr: number): CoreHandles {

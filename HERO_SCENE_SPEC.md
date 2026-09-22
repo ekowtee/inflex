@@ -428,6 +428,16 @@ is now the behaviour of `src/three/core/`.
   desktop, above the §9.1 budget; see PERFORMANCE_PLAN.md for the decision.
 - **Display XL is 4.6vw**, not 6.5vw, which wrapped the hero headline to six
   lines at 1440 px and pushed the call to action below the fold.
+- **Tier B stand-ins for the post stage** (from the first real phone, 22
+  September): the ember pass draws each ember node as a 3.2× soft Gaussian
+  halo, additive, so the line glows without a bloom pass instead of reading
+  as bare dots; the sheet takes a 1.25 linear gain to match the Tier A
+  poster it fades from (`tierB` in rig.ts, `uEmberHalo` and `uGain`).
+- **Touch drift is 4° over 12 s**, not 1.5° over 20 s: on a phone there is
+  no parallax to supply motion and the spec value read as a still image.
+- **The ember pulse travels down the line** (phase by height with a little
+  per-node scatter) rather than flickering per node.
+
 
 ## 12. File additions
 

@@ -31,6 +31,8 @@ export const nodesVertex = stripGlsl(/* glsl */ `
   uniform float uProximity;
   uniform vec3 uKeyDir;
   uniform vec3 uRimDir;
+  uniform float uEmberPass;
+  uniform float uEmberHalo;
 
   out float vHeat;
   out float vShade;
@@ -121,7 +123,9 @@ export const nodesVertex = stripGlsl(/* glsl */ `
     vShade = 0.15 + 0.85 * smoothstep(-0.8, 0.9, key);
     vRim = 0.45 * pow(max(0.0, dot(n, uRimDir)), 3.0);
     vHeat = heat;
-    vPulse = 0.85 + 0.15 * sin(uTime * 0.9 + aSeed * TAU);
+    // The pulse travels down the line: phase by height, a little per-node
+    // scatter so it reads as embers rather than a marquee.
+    vPulse = 0.85 + 0.15 * sin(uTime * 1.1 - from.y * 3.0 + aSeed * 1.2);
     vPresence = presence(mix(from.xyz, to.xyz, m), resting);
 
     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
@@ -129,7 +133,10 @@ export const nodesVertex = stripGlsl(/* glsl */ `
     gl_Position = projectionMatrix * mvPosition;
 
     float size = uSize * (1.0 + 0.4 * heat) * (5.4 / max(vDepth, 0.5));
-    gl_PointSize = clamp(size, 2.5, 6.0) * uDpr;
+    // Without a bloom pass (Tier B) the ember pass draws a wide soft halo
+    // instead, so the ember sprites grow by uEmberHalo in that pass only.
+    float halo = mix(1.0, uEmberHalo, uEmberPass);
+    gl_PointSize = clamp(size, 2.5, 6.0) * uDpr * halo;
   }
 `);
 
@@ -152,6 +159,8 @@ export const nodesFragment = stripGlsl(/* glsl */ `
   uniform float uOpacity;
   uniform float uEmberPass;
   uniform float uEncodeSRGB;
+  uniform float uEmberHalo;
+  uniform float uGain;
 
   out vec4 fragColor;
 
@@ -190,12 +199,22 @@ export const nodesFragment = stripGlsl(/* glsl */ `
     float alpha = (core + halo) * depthCue * uOpacity * keep;
 
     if (uEmberPass > 0.5) {
+      if (uEmberHalo > 1.0) {
+        // No bloom pass: a soft Gaussian halo, additive, stands in for it.
+        // Many overlapping halos along the line sum into the glow.
+        float g = exp(-d * d * 18.0) * 0.16 * vPulse * uOpacity * vPresence.x;
+        vec3 e = uEmber * g;
+        if (uEncodeSRGB > 0.5) e = toSRGB(min(e, vec3(1.0)));
+        fragColor = vec4(e, 0.0);
+        return;
+      }
       // Bloom source: emit the ember colour scaled by the disc, no fog.
       vec3 e = ember * (core + halo) * uOpacity;
       if (uEncodeSRGB > 0.5) e = toSRGB(min(e, vec3(1.0)));
       fragColor = vec4(e, alpha);
       return;
     }
+    color *= uGain;
     if (uEncodeSRGB > 0.5) color = toSRGB(min(color, vec3(1.0)));
     fragColor = vec4(color * alpha, alpha);
   }

@@ -47,8 +47,8 @@ export default function ServicesPage() {
               <Image
                 src="/assets/logo.png"
                 alt="Inflexions-IT Logo"
-                width={192}
-                height={40}
+                width={770}
+                height={150}
                 className="max-h-full max-w-full object-contain"
                 sizes="(min-width: 1024px) 50vw, 100vw"
               />

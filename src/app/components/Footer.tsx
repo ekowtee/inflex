@@ -12,8 +12,8 @@ export default function Footer() {
             <Image
               src="/assets/logo.png"
               alt="Inflexions-IT"
-              width={192}
-              height={40}
+              width={770}
+              height={150}
               className="h-12 w-auto"
             />
 

@@ -112,6 +112,7 @@ Recorded in `HERO_SCENE_SPEC.md` §11a. The ones that matter to the plan:
 - **Display XL is 4.6vw**, not 6.5vw.
 - **Posters captured at 1920 wide**, not 2560; the 2560 captures were 205 KB.
 - **Bloom rest intensity 0.38**, not 0.55.
+- **Tier B tuned from the first real phone:** additive ember halos in place of bloom, a 1.25 gain on the sheet, touch drift raised to 4° over 12 s, and a travelling ember pulse. Posters were not recaptured: the pulse formula changed the per-node brightness pattern of the ember by up to 15%, positions are untouched, and the 900 ms crossfade hides it.
 
 ## 6. Known gaps and follow-ups
 

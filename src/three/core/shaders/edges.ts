@@ -137,6 +137,7 @@ export const edgesFragment = stripGlsl(/* glsl */ `
   uniform float uProximity;
   uniform float uEmberPass;
   uniform float uEncodeSRGB;
+  uniform float uGain;
 
   out vec4 fragColor;
 
@@ -168,7 +169,8 @@ export const edgesFragment = stripGlsl(/* glsl */ `
       fragColor = vec4(e * alpha, alpha);
       return;
     }
-    if (uEncodeSRGB > 0.5) color = toSRGB(color);
+    color *= uGain;
+    if (uEncodeSRGB > 0.5) color = toSRGB(min(color, vec3(1.0)));
     fragColor = vec4(color * alpha, alpha);
   }
 `);

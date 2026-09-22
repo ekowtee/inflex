@@ -84,9 +84,13 @@ export function breathing(time: number): { x: number; y: number } {
   };
 }
 
-/** Touch drift (§8.4): a 20-second ellipse of 1.5° when there is no pointer. */
+/**
+ * Touch drift (§8.4): a 12-second ellipse of 4° when there is no pointer.
+ * The spec's 1.5° over 20 s read as a still image on a phone, where there
+ * is no parallax to supply motion; 4° is the least that visibly breathes.
+ */
 export function touchDrift(time: number): { yaw: number; pitch: number } {
-  const w = (Math.PI * 2) / 20;
-  const rad = (1.5 * Math.PI) / 180;
+  const w = (Math.PI * 2) / 12;
+  const rad = (4 * Math.PI) / 180;
   return { yaw: Math.sin(time * w) * rad, pitch: Math.cos(time * w) * rad * 0.6 };
 }

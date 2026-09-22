@@ -41,6 +41,14 @@ export const bloom = {
   blurScale: 0.5,
 } as const;
 
+/** Tier B stand-ins for the post stage (HERO_SCENE_SPEC.md §9.2). */
+export const tierB = {
+  /** Ember sprite size multiplier in the additive ember pass. */
+  emberHalo: 3.2,
+  /** Linear gain on the sheet's colour to match the Tier A poster. */
+  gain: 1.25,
+} as const;
+
 export const nodes = {
   /**
    * Base point size in CSS px before DPR and distance. The soft-disc
