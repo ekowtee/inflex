@@ -54,8 +54,9 @@ export default function CallToAction() {
                 : "translate-y-[30px] opacity-0"
             } text-white/90 text-base sm:text-lg mb-6 sm:mb-8`}
           >
-            Book a 30-minute AI readiness session with our Solutions
-            Architect. No pitch&mdash;just a clear path to intelligent operations.
+            Book a 30-minute architecture review. With a Solutions
+            Architect, not a salesperson. No pitch. You leave with a written
+            view of what to fix first.
           </p>
 
           <div
@@ -70,8 +71,11 @@ export default function CallToAction() {
               href="/contact"
               className="inline-block bg-white hover:bg-gray-100 text-[#BD2E25] font-semibold px-6 sm:px-8 py-3 rounded-[6px] transition-colors duration-300"
             >
-              Book Your Session
+              Book the review
             </Link>
+            <p className="mt-4 text-xs sm:text-sm text-white/70 tracking-wide">
+              No cost. No obligation. One conversation.
+            </p>
           </div>
         </div>
       </div>

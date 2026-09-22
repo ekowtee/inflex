@@ -45,7 +45,7 @@ export default function HeroBanner() {
                   : "translate-y-[30px] opacity-0"
               } text-2xl md:text-[32px] lg:text-4xl font-bold text-white leading-[1.2] mb-4`}
             >
-              Intelligent Infrastructure That Never Sleeps
+              Engineered for the enterprises that can&apos;t afford to guess.
             </h1>
 
             <p
@@ -56,9 +56,14 @@ export default function HeroBanner() {
                   : "translate-y-[30px] opacity-0"
               } text-sm md:text-base text-white/90 leading-relaxed mb-6`}
             >
-              We design, deploy, and manage AI-driven networks, cloud,
-              and security&mdash;with intelligent automation that keeps you
-              ahead, not just online.
+              Network, cloud, security and data&mdash;engineered as one
+              system, run by the team that built a national LTE core and two
+              Tier III data centres.
+            </p>
+
+            <p className="text-sm text-white/80 leading-relaxed mb-6">
+              Book a 30-minute architecture review. With a Solutions
+              Architect, not a salesperson. No pitch.
             </p>
 
             <div
@@ -70,7 +75,7 @@ export default function HeroBanner() {
               } w-full md:w-[254px] h-[60px] bg-[#BD2E25] rounded-[6px] flex items-center justify-center`}
             >
               <Link href="/contact" className="text-white font-semibold">
-                Get Your Free IT Assessment
+                Book the review
               </Link>
             </div>
           </div>

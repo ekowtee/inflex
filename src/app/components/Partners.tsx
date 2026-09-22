@@ -2,15 +2,16 @@
 
 import "./partners.css";
 
+// Real client roster. Logo files live in /public/logos. MTN Ghana is
+// deliberately not included until written permission is confirmed.
 const logos = [
-  { src: "/assets/clients/part1.svg", alt: "NOVA" },
-  { src: "/assets/clients/part2.png", alt: "Belle Vista" },
-  { src: "/assets/clients/part3.png", alt: "Niobe" },
-  { src: "/assets/clients/part4.png", alt: "Rabito Clinic" },
-  { src: "/assets/clients/part5.png", alt: "DSTRKT4" },
-  { src: "/assets/clients/part6.png", alt: "Acme Group" },
-  { src: "/assets/clients/part7.png", alt: "Zenith Corp" },
-  { src: "/assets/clients/part8.png", alt: "Labianca" },
+  { src: "/logos/ba.png", alt: "British Airways" },
+  { src: "/logos/CEIBS.png", alt: "CEIBS" },
+  { src: "/logos/atc.svg", alt: "ATC (American Tower Corporation)" },
+  { src: "/logos/blu.png", alt: "Blu Telecommunications" },
+  { src: "/logos/innovaddb.png", alt: "Innova DDB" },
+  { src: "/logos/ninani.png", alt: "The Ninani Group" },
+  { src: "/logos/lifeforms1.png", alt: "Lifeforms" },
 ];
 
 export default function Partners() {

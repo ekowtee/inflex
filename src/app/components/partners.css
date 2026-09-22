@@ -24,20 +24,19 @@
 .partners-item {
   width: 120px;
   height: 40px;
-  border-radius: 6px;
+  object-fit: contain;
   position: absolute;
-  left: max(calc(200px * 8), 100%);
+  left: max(calc(200px * 7), 100%);
   animation-name: scrollLeft;
   animation-duration: 40s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
 
-.partners-item1 { animation-delay: calc(40s / 8 * (8 - 1) * -1); }
-.partners-item2 { animation-delay: calc(40s / 8 * (8 - 2) * -1); }
-.partners-item3 { animation-delay: calc(40s / 8 * (8 - 3) * -1); }
-.partners-item4 { animation-delay: calc(40s / 8 * (8 - 4) * -1); }
-.partners-item5 { animation-delay: calc(40s / 8 * (8 - 5) * -1); }
-.partners-item6 { animation-delay: calc(40s / 8 * (8 - 6) * -1); }
-.partners-item7 { animation-delay: calc(40s / 8 * (8 - 7) * -1); }
-.partners-item8 { animation-delay: calc(40s / 8 * (8 - 8) * -1); }
+.partners-item1 { animation-delay: calc(40s / 7 * (7 - 1) * -1); }
+.partners-item2 { animation-delay: calc(40s / 7 * (7 - 2) * -1); }
+.partners-item3 { animation-delay: calc(40s / 7 * (7 - 3) * -1); }
+.partners-item4 { animation-delay: calc(40s / 7 * (7 - 4) * -1); }
+.partners-item5 { animation-delay: calc(40s / 7 * (7 - 5) * -1); }
+.partners-item6 { animation-delay: calc(40s / 7 * (7 - 6) * -1); }
+.partners-item7 { animation-delay: calc(40s / 7 * (7 - 7) * -1); }

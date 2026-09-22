@@ -67,7 +67,7 @@ export default function ContactPage() {
       }
       setMessage({
         type: "success",
-        text: "Thanks — we've received your message and will be in touch within two working days.",
+        text: "Received. A Solutions Architect will reply within one working day to fix a time. If it is urgent, call +233 20 888 9270.",
       });
       formRef.current?.reset();
       // Reset the Turnstile widget so a second submission gets a fresh token.
@@ -194,10 +194,11 @@ export default function ContactPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="md:w-2/3 text-white space-y-4">
               <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
-                Let&apos;s Build Something That Lasts
+                Book your architecture review.
               </h1>
               <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-2xl">
-                Get in touch and let&apos;s start the conversation.
+                Thirty minutes, a Solutions Architect, no pitch. Tell us what
+                you are running and what worries you, and we will come prepared.
               </p>
             </div>
           </div>
@@ -304,7 +305,7 @@ export default function ContactPage() {
             </select>
             <textarea
               name="message"
-              placeholder="Tell us a bit about what you need — scope, timeline, budget if you have one."
+              placeholder="What are you running, and what worries you?"
               aria-label="Your message"
               className="w-full h-40 border border-white bg-transparent text-white placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-white"
             />
@@ -326,7 +327,7 @@ export default function ContactPage() {
                 disabled={sending}
                 className="bg-white text-[#BD2E25] font-medium py-2 px-6 hover:bg-[#F2F2F2] transition-colors duration-200 disabled:opacity-50"
               >
-                {sending ? "Sending..." : "Send Your Message"}
+                {sending ? "Sending..." : "Request the review"}
               </button>
             </div>
           </form>
