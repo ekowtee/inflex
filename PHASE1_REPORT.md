@@ -64,6 +64,21 @@ The hero fixes did what they were meant to: home blocking time fell from 511 ms 
 
 That gap is not real. Lighthouse's own trace of the home page puts first paint and largest paint at the same instant (207 ms unthrottled; identical again under real DevTools throttling). Blocking the web fonts changes nothing. The 2 s comes from the simulated throttling model, which charges a text LCP for every script fetched before the paint, so the headline is billed for downloading and parsing the React and Next runtime on a 4× slowed CPU even though those scripts are `async` and never block the paint. PERFORMANCE_PLAN.md §9.5 has the detail.
 
+The observed pass on the next commit (`6a8c042`), same runner, real throttling:
+
+| Route | FCP | LCP (observed) | SI | TBT | CLS |
+|---|---|---|---|---|---|
+| `/` | 1679 | **1679** | 1919 | 374 | 0.018 |
+| `/solutions` | 1662 | 1933 | 1841 | 40 | 0.000 |
+| `/solutions/network-infrastructure` | 1657 | 1861 | 1814 | 46 | 0.000 |
+| `/academy` | 1667 | 1903 | 1836 | 42 | 0.006 |
+| `/contact` | 1627 | 1627 | 1637 | 60 | 0.083 |
+
+LCP is the first paint on the home page and within 0.3 s of it everywhere else, all under 2.5 s. Two things in this table breach a threshold and neither is the hero:
+
+- **Home TBT 374 ms.** Attributed locally under the same throttling: about 225 ms is the style and layout of the whole home page at first paint (no script; the page is 124 KB of server-rendered HTML), about 160 ms is React hydration, and the rest is the motion engine and the environment evaluating much later, which the observed pass still counts because the animation loops keep the main thread from ever reaching Lighthouse's "interactive" quiet window. The first two are the shell and the page's length, not Phase 1; the third is a lab-window artefact. If it matters for the gate, the honest fix is `content-visibility: auto` on the below-the-fold sections (Phase 2, since it interacts with smooth scroll).
+- **Contact CLS 0.083, home 0.018.** Both measure 0.000 locally under the same throttling, and 0.000 on the simulated pass on the same runner minutes earlier. Run-to-run on the shared runner, most likely font arrival timing. Worth watching, not worth acting on from one sample.
+
 What changed as a result:
 
 - `scripts/perf-gate.mjs --throttling devtools` observes the paint under real throttling instead of modelling it. The CI workflow now runs both and prints both tables on the commit.
