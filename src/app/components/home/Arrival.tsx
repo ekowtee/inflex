@@ -146,6 +146,9 @@ export default function Arrival() {
 
   return (
     <section
+      id="arrival"
+      data-beat="0"
+      data-register="obsidian"
       className="on-obsidian relative isolate min-h-[100svh] w-full overflow-hidden bg-obsidian-950"
       aria-label="Introduction"
       data-scrolled={scrolled ? "" : undefined}

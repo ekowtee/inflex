@@ -13,7 +13,6 @@
  * One link per panel, and the same drawn border as Beat 3's cards in red
  * rather than ember — the Ivory register's version of the thread.
  */
-import Link from "next/link";
 import EdgeDraw from "./EdgeDraw";
 import ExitLink from "./ExitLink";
 
