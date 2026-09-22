@@ -9,9 +9,6 @@
  */
 import { launch } from "chrome-launcher";
 import { mkdir, writeFile } from "node:fs/promises";
-import { createRequire } from "node:module";
-
-const require = createRequire(import.meta.url);
 
 const label = process.argv[2] ?? "shot";
 const portArg = process.argv.indexOf("--port");
@@ -29,15 +26,13 @@ async function cdp(chrome) {
   const res = await fetch(`http://127.0.0.1:${chrome.port}/json/list`);
   const targets = await res.json();
   const page = targets.find((t) => t.type === "page");
-  const WebSocket = require("ws");
-  const ws = new WebSocket(page.webSocketDebuggerUrl, {
-    maxPayload: 256 * 1024 * 1024,
-  });
-  await new Promise((r) => ws.on("open", r));
+  // Node 22 ships a global WebSocket, so no client library is needed.
+  const ws = new WebSocket(page.webSocketDebuggerUrl);
+  await new Promise((r) => ws.addEventListener("open", r, { once: true }));
   let id = 0;
   const pending = new Map();
-  ws.on("message", (raw) => {
-    const msg = JSON.parse(raw.toString());
+  ws.addEventListener("message", (event) => {
+    const msg = JSON.parse(event.data.toString());
     if (msg.id && pending.has(msg.id)) {
       pending.get(msg.id)(msg.result);
       pending.delete(msg.id);
