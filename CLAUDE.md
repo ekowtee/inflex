@@ -9,7 +9,7 @@ Rebuilt 22 September 2026 with the owner's approval. Do NOT change the items mar
 - **Social icons:** between the nav links and Contact on desktop; bottom row of the mobile menu.
 - **Container:** `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`.
 - **Height:** `h-14` on mobile, `h-16` desktop, fixed to top with `z-50`.
-- **Registers:** transparent over any element carrying `data-header-dark` (the home hero), with the light logo `/inflexlogo-light.png` and silver links; solid white with a hairline once scrolled past it and on every other page. Keep both registers working when editing.
+- **Registers:** a frosted Obsidian tint with blur over any element carrying `data-header-dark` (the home hero), with the light logo `/inflexlogo-light.png` and silver links; solid white with a hairline once scrolled past it and on every other page. Keep both registers working when editing.
 - **Dropdown state (locked pattern):** a single `openDropdown` (string | null) controls which menu is open on desktop and which accordion is open in the mobile menu. Extend this, never add per-menu booleans.
 - **Icons:** Lucide only (Menu, X, ChevronDown).
 

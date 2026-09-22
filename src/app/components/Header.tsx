@@ -4,8 +4,8 @@
  * Site header.
  *
  * Two registers. Over the arrival (any element carrying `data-header-dark`,
- * which the home hero does) the bar is transparent on Obsidian with the light
- * logo; once the visitor scrolls past it, and on every other page, it is the
+ * which the home hero does) the bar is a light frost on Obsidian (a tint and
+ * a blur) with the light logo; once the visitor scrolls past it, and on every other page, it is the
  * solid white bar with a hairline. The mobile menu is a full-screen Obsidian
  * panel with the dropdown groups as accordions.
  *
@@ -141,17 +141,14 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,box-shadow] duration-300 ${
-        dark ? "bg-transparent border-b border-transparent" : "bg-white border-b border-[#E6E6E6]"
-      } ${isMobileMenuOpen ? "!bg-obsidian-950" : ""}`}
+        dark
+          ? // A light frost over the hero rather than full transparency: a
+            // tint of Obsidian with a blur, and a hairline at 8% white.
+            "bg-obsidian-950/45 backdrop-blur-md border-b border-white/[0.08] supports-[backdrop-filter]:bg-obsidian-950/35"
+          : "bg-white border-b border-[#E6E6E6]"
+      } ${isMobileMenuOpen ? "!bg-obsidian-950 !backdrop-blur-none" : ""}`}
       data-register={dark ? "obsidian" : "ivory"}
     >
-      {/* Legibility over the hero: a soft fall-off, not a bar. */}
-      <div
-        aria-hidden="true"
-        className={`pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-obsidian-950/70 to-transparent transition-opacity duration-300 ${
-          overDark && !isMobileMenuOpen ? "opacity-100" : "opacity-0"
-        }`}
-      />
 
       {/* Logo in the left margin (desktop only, absolute position — locked) */}
       <Link
