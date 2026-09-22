@@ -57,7 +57,14 @@ jobs:
       - name: Lighthouse
         id: lighthouse
         continue-on-error: ${{ env.LIGHTHOUSE_BLOCKING != 'true' }}
-        run: node scripts/perf-gate.mjs --runs 3 | tee lighthouse.txt
+        # Two tables. The first is Lighthouse's simulated model, which charges a
+        # text LCP for every script fetched before the paint and so reports the
+        # shell's parse time as headline "render delay". The second throttles
+        # the real browser and reports the observed paint. PERFORMANCE_PLAN.md
+        # section 9.5 explains why the two disagree by about two seconds.
+        run: |
+          node scripts/perf-gate.mjs --runs 3 | tee lighthouse.txt
+          node scripts/perf-gate.mjs --runs 3 --throttling devtools | sed -n '/LIGHTHOUSE/,$p' | tee -a lighthouse.txt
 
       - name: Summary
         if: always()

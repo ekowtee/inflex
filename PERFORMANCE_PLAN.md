@@ -310,6 +310,49 @@ requested only when the Tier C crossfade needs it; Tier B holds the
 environment chunk until three seconds after the LCP candidate so its parse
 and compile fall after the page's quiet window.
 
+### 9.5 Modelled LCP against observed LCP (found 22 September 2026)
+
+Every route on `main` and on `phase-1-core` reports an LCP of about 3.0 to 3.4 s
+from the CI gate while FCP sits at 1.1 to 1.2 s, and the gap is the same on
+`/contact`, which has no hero, no 3D and a text LCP element. The gap is not
+real paint time. It is how Lighthouse's default `simulate` throttling models
+a text LCP:
+
+- **Observed, unthrottled** (Lighthouse's own trace of the home page): first
+  contentful paint 207 ms, largest contentful paint 207 ms. The headline
+  paints in the first frame with the fallback font, exactly as intended.
+- **Observed, DevTools throttling** (real slow-4G and 4× CPU applied to the
+  browser): FCP and LCP identical, both the first paint.
+- **Simulated** (the default, and what the CI table shows): FCP 1.2 s,
+  LCP 3.1 s, "render delay" 93 % of it. Blocking the web fonts does not
+  move it. Lighthouse's Lantern model builds the LCP estimate from every
+  request that started before the observed LCP timestamp, so a text LCP
+  that happens at first paint is charged for the route shell's download and
+  parse on a 4× CPU. The shell scripts are `async` and do not block the
+  paint in a real browser.
+
+Consequences:
+
+1. **The simulated LCP is a proxy for shell weight, not for when the
+   headline appears.** It will not drop below about 3 s on slow 4G while the
+   React and Next runtime is 150 KB gzipped, whatever the hero does. Field
+   LCP (the GA4 web-vitals events, §9.2) reports the real paint and is the
+   number that counts for ranking.
+2. **The CI table now prints both.** `scripts/perf-gate.mjs --throttling
+   devtools` observes the paint under throttling; the workflow runs it after
+   the simulated pass. The observed figure has more run-to-run variance (it
+   is a real browser on a shared runner), which is why the simulated pass
+   stays as the stable trend line.
+3. **The route shell is 165 KB gzipped for a modern browser, not 204.**
+   The 38 KB polyfill bundle is a `nomodule` script that module-capable
+   browsers never request; the gate was counting it. Corrected in the gate
+   on 22 September 2026. The 205 KB ceiling stands; the headroom is now
+   40 KB rather than 1 KB.
+
+Decision for the owner (§10): which LCP figure gates the build once
+`LIGHTHOUSE_BLOCKING` turns on at the end of Phase 1. The recommendation is
+the observed one, with the simulated table kept for trend.
+
 ### 9.3 Definition of "first paint" for this site
 
 First paint is not a blank canvas clearing to obsidian. It is **the H1 legible and the hero composition visible**, which means the LQIP has painted behind the copy. That happens at FCP. The visitor's impression of speed is set at LCP, when the sharp poster replaces the blur. The live 3D scene arriving later is invisible as a performance event because the crossfade starts from an identical still. This is the whole reason the poster pair exists, and it is why the LCP target is the only first-paint number the owner needs to watch.
@@ -323,6 +366,7 @@ First paint is not a blank canvas clearing to obsidian. It is **the H1 legible a
 1. **Budget revision.** Approve the corrected budgets: route shell 205 KB, motion 60 KB, environment 190 KB (was 190 and 230 in the creative direction). Net first-party JavaScript on Tier A rises from the PRD's 350 KB to about 435 KB, all of it after first paint; Tier C stays under 350 KB.
 2. **Image clean-up before motion work.** Approve Phase 0 deleting unreferenced files from `public/` (92 MB to under 15 MB) and converting every remaining photograph to AVIF and WebP. Original files should be kept outside the served folder, not in git history alone.
 3. **Post-processing library.** Approve replacing `postprocessing` with the hand-written three-pass stage. It removes about 80 KB and a dependency; the trade is that bloom quality is ours to tune rather than a library default.
+4. **Which LCP figure gates the build** (added 22 September 2026, open). Lighthouse's simulated LCP charges the headline for the framework's parse time and cannot pass 2.5 s on slow 4G with a 143 KB runtime; the observed LCP under real throttling is the first paint. §9.5. Recommendation: gate on the observed median of three runs and keep the simulated table for trend.
 
 ---
 

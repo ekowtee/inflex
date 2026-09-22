@@ -7,6 +7,8 @@
  *   npm run perf -- --bundles   skip Lighthouse, check budgets only
  *   npm run perf -- --url https://example.com   measure a deployed site
  *                                instead of a local next start
+ *   npm run perf -- --throttling devtools   observe paint times under real
+ *                                throttling instead of modelling them
  *
  * Fails the process on any breach, so it can gate a build.
  */
@@ -25,6 +27,12 @@ const RUNS = runsArg > -1 ? Number(args[runsArg + 1]) : 3;
 const BUNDLES_ONLY = args.includes("--bundles");
 const urlArg = args.indexOf("--url");
 const REMOTE_URL = urlArg > -1 ? args[urlArg + 1].replace(/\/$/, "") : null;
+const throttlingArg = args.indexOf("--throttling");
+const THROTTLING = throttlingArg > -1 ? args[throttlingArg + 1] : "simulate";
+if (!["simulate", "devtools"].includes(THROTTLING)) {
+  console.error(`--throttling must be "simulate" or "devtools", got "${THROTTLING}"`);
+  process.exit(2);
+}
 
 const failures = [];
 const note = (ok, label, actual, budget, unit) => {
@@ -53,7 +61,18 @@ function checkBundles() {
   }
   const html = readFileSync(htmlPath, "utf8");
 
-  const scripts = [...new Set([...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map((m) => m[1]))];
+  // Scripts the route ships to a modern browser. The polyfill bundle is a
+  // noModule script: browsers that understand modules skip it, so it is
+  // neither shell weight nor a Lighthouse request.
+  const scripts = [
+    ...new Set(
+      [...html.matchAll(/<script\b[^>]*>/g)]
+        .map((m) => m[0])
+        .filter((tag) => !/\bnomodule\b/i.test(tag))
+        .map((tag) => tag.match(/\bsrc="([^"]+)"/)?.[1])
+        .filter(Boolean)
+    ),
+  ];
   const shell = scripts.reduce((t, u) => {
     const p = resolveChunk(u);
     return p ? t + gz(p) : t;
@@ -229,7 +248,7 @@ measuring ${base}`);
       chromeFlags: ["--headless=new", "--disable-gpu", "--no-sandbox"],
     });
 
-    console.log(`\nLIGHTHOUSE  (mobile, slow 4G, 4x CPU, ${RUNS} run${RUNS > 1 ? "s" : ""} per route, median)`);
+    console.log(`\nLIGHTHOUSE  (mobile, slow 4G, 4x CPU, ${THROTTLING}, ${RUNS} run${RUNS > 1 ? "s" : ""} per route, median)`);
     const header = ["route".padEnd(34), ...METRICS.map(([, short]) => short.padStart(6) + " ")].join("");
     console.log("  " + header);
 
@@ -247,7 +266,15 @@ measuring ${base}`);
             // Hand-rolling the throttling object mixes the simulate and
             // devtools fields and produced numbers that moved by a factor of
             // two between runs.
-            settings: { formFactor: "mobile", onlyCategories: ["performance"] },
+            settings: {
+              formFactor: "mobile",
+              onlyCategories: ["performance"],
+              // "simulate" (the default) models paint times from the request
+              // graph and charges a text LCP for every script fetched before
+              // the paint; "devtools" throttles the real browser and reports
+              // the observed paint. PERFORMANCE_PLAN.md §9.5.
+              throttlingMethod: THROTTLING,
+            },
           }
         );
         samples.push(result.lhr);

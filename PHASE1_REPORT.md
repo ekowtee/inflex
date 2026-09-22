@@ -24,14 +24,14 @@ From `npm run perf -- --bundles` on this branch:
 
 | Budget | Actual | Limit |
 |---|---|---|
-| Route shell | 204.1 KB gz | 205 KB |
+| Route shell | 165.4 KB gz | 205 KB |
 | Motion chunk | 49.1 KB gz | 60 KB |
 | **Environment chunk** | **141.5 KB gz** | 190 KB |
 | Preloaded fonts | 46.1 KB | 48 KB |
 | Posters, desktop (1920 wide) | 158 KB WebP / 108 KB AVIF | 160 / 110 KB |
 | Posters, mobile (780 wide) | 86 KB WebP / 63 KB AVIF | 90 / 65 KB |
 
-The environment chunk was 248 KB with `@react-three/fiber`; removing it and writing the scene in vanilla three with named imports brought it to 146 KB, and a single import site for the canvas to 141.5 KB. The gate now counts only the lazy chunks the home route can reach, because the bundler emits a second copy of the environment for the capture route and the directory-wide count was adding both. The shell rose 3 KB for the arrival component and sits 1.2 KB under its ceiling, which is tight; Phase 2 should expect to take something out of the shell before adding to it.
+The environment chunk was 248 KB with `@react-three/fiber`; removing it and writing the scene in vanilla three with named imports brought it to 146 KB, and a single import site for the canvas to 141.5 KB. The gate now counts only the lazy chunks the home route can reach, because the bundler emits a second copy of the environment for the capture route and the directory-wide count was adding both. The shell figure fell from 204 to 165 KB because the gate had been counting the 38 KB polyfill bundle, which is a `nomodule` script that module-capable browsers never request. Of the 165 KB, about 143 KB is the React and Next runtime; the site's own client code in the shell is about 22 KB.
 
 ## 3. Acceptance checks from HERO_SCENE_SPEC.md §10
 
@@ -42,11 +42,39 @@ The environment chunk was 248 KB with `@react-three/fiber`; removing it and writ
 | 3 | Banding | Dither is in the composite. Not verified on a physical 1080p panel. |
 | 4 | Frame time, Tier A and B floors | **Not measurable here.** Headless Chrome renders through SwiftShader. Needs the device matrix. |
 | 5 | Poster weight | **Pass** (table above). |
-| 6 | LCP ≤ 2.5 s, environment chunk absent before LCP | The first CI run on this branch measured home LCP at 3.55 s with the headline as the LCP element (a full-viewport image is never an LCP candidate in Chrome; PERFORMANCE_PLAN.md §9.4). Causes found and fixed: both posters preloaded on every device, lit posters fetched up front, the environment evaluated inside the blocking window on Tier B. Re-measured figure: see the CI comment on the latest commit. |
+| 6 | LCP ≤ 2.5 s, environment chunk absent before LCP | **Pass on the observed paint; the simulated table still says 3.2 s.** See §3a. The environment is requested only after the LCP entry is observed, and on Tier B three seconds later still. |
 | 7 | Parallax settles in ≥ 0.6 s | By construction (damping 0.06 per frame). Needs a hand on a mouse. |
 | 8 | Proximity never exceeds silver | By construction (cap 0.35 heat, below the ember threshold). |
 | 9 | Tier C on a real phone | Reduced-motion emulation: no canvas in the document, the unlit poster is the LCP element, the lit poster crossfades in. Needs the real phone for the rest. |
 | 10 | Context loss | Handler wired; not simulated. |
+
+## 3a. The LCP number, and a call for you
+
+The CI table after the hero fixes (commit `39836f1`):
+
+| Route | FCP | LCP (simulated) | SI | TBT |
+|---|---|---|---|---|
+| `/` | 1221 | 3256 | 1902 | 72 |
+| `/solutions` | 1218 | 3179 | 1240 | 58 |
+| `/solutions/network-infrastructure` | 1065 | 3047 | 1149 | 78 |
+| `/academy` | 1214 | 3070 | 1214 | 55 |
+| `/contact` | 1065 | 3083 | 1285 | 41 |
+
+The hero fixes did what they were meant to: home blocking time fell from 511 ms to 72 ms and speed index from 3.9 s to 1.9 s, and the home page now behaves like every other route. What they did not do is move LCP, and neither did anything else: `/contact`, with no hero and no 3D, has the same 2 s gap between first paint and LCP as the home page, and it had it on `main` before Phase 1.
+
+That gap is not real. Lighthouse's own trace of the home page puts first paint and largest paint at the same instant (207 ms unthrottled; identical again under real DevTools throttling). Blocking the web fonts changes nothing. The 2 s comes from the simulated throttling model, which charges a text LCP for every script fetched before the paint, so the headline is billed for downloading and parsing the React and Next runtime on a 4× slowed CPU even though those scripts are `async` and never block the paint. PERFORMANCE_PLAN.md §9.5 has the detail.
+
+What changed as a result:
+
+- `scripts/perf-gate.mjs --throttling devtools` observes the paint under real throttling instead of modelling it. The CI workflow now runs both and prints both tables on the commit.
+- The gate no longer counts the `nomodule` polyfill bundle as shell weight (38 KB that modern browsers never fetch).
+
+**The call:** when Lighthouse becomes blocking at the end of Phase 1, which LCP figure gates the build?
+
+1. **Observed (recommended).** It is the paint a visitor sees and it matches what GA4 will report from the field. It varies more run to run on a shared runner, so the threshold should be applied to the median of three runs, as now.
+2. **Simulated.** Stable, but it cannot pass 2.5 s on slow 4G while the framework runtime is 143 KB, so gating on it means either accepting a permanent red or raising the threshold to about 3.5 s, at which point it is a shell-weight budget with an LCP label.
+
+Nothing in the hero depends on this choice; it decides what the gate says, not what the page does.
 
 ## 4. What to check on real hardware (yours to do)
 
