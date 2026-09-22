@@ -87,7 +87,7 @@ export class CoreScene {
   private right = new Vector3(1, 0, 0);
 
   constructor(private options: CoreSceneOptions) {
-    const { container, data, tier, dpr, capture = false } = options;
+    const { container, tier, dpr } = options;
 
     this.renderer = new WebGLRenderer({
       antialias: false,
@@ -122,30 +122,62 @@ export class CoreScene {
     // ember pass. Every pass clears explicitly.
     this.scene.background = null;
 
-    this.handles = buildCore(data, tier, dpr);
-    this.scene.add(this.handles.edges, this.handles.points, this.handles.emberEdges, this.handles.emberPoints);
     this.ground = buildGround(tier !== "A");
     this.scene.add(this.ground);
-
     if (tier === "A") this.post = new PostStage(gl);
 
     gl.domElement.addEventListener("webglcontextlost", this.onContextLost);
     this.detachPointer = attachPointer();
 
-    const remembered = sessionStorage.getItem("core-tier-demoted");
-    this.probe = { frames: 0, total: 0, done: capture || remembered !== null };
-
+    // Placeholder until init() has built the real handles; tick() waits.
+    this.handles = null as unknown as CoreHandles;
     this.measure();
     this.resize = new ResizeObserver(() => this.measure());
     this.resize.observe(container);
 
-    void gl
-      .compileAsync(this.scene, this.camera)
-      .catch(() => undefined)
-      .then(() => {
-        if (!this.disposed) this.compiled = true;
-      });
+    void this.init();
+  }
 
+  /** A short yield so no single main-thread task runs long. */
+  private static yieldToBrowser(): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, 0));
+  }
+
+  /**
+   * Set-up in stages with yields between them: building the edge attributes,
+   * uploading the geometry, and compiling the shaders are each a sizeable
+   * main-thread task on a mid-range phone, and one long task costs more in
+   * blocking time than three short ones.
+   */
+  private async init(): Promise<void> {
+    const { data, tier, dpr, capture = false } = this.options;
+    const gl = this.renderer;
+
+    await CoreScene.yieldToBrowser();
+    if (this.disposed) return;
+    const handles = buildCore(data, tier, dpr);
+    this.scene.add(handles.edges, handles.points, handles.emberEdges, handles.emberPoints);
+
+    await CoreScene.yieldToBrowser();
+    if (this.disposed) {
+      disposeCore(handles);
+      return;
+    }
+    try {
+      await gl.compileAsync(this.scene, this.camera);
+    } catch {
+      /* drivers without parallel compile finish on the first draw instead */
+    }
+    if (this.disposed) {
+      disposeCore(handles);
+      return;
+    }
+    this.compiled = true;
+    this.handles = handles;
+
+    const remembered = sessionStorage.getItem("core-tier-demoted");
+    this.probe = { frames: 0, total: 0, done: capture || remembered !== null };
+    this.lastFrame = performance.now();
     this.frame = requestAnimationFrame(this.tick);
   }
 
@@ -185,7 +217,7 @@ export class CoreScene {
   };
 
   private tick = () => {
-    if (this.disposed) return;
+    if (this.disposed || !this.handles) return;
     this.frame = requestAnimationFrame(this.tick);
 
     const { tier, capture = false, mountedAt, onDemote, onLive } = this.options;
@@ -312,7 +344,7 @@ export class CoreScene {
     this.detachPointer();
     this.renderer.domElement.removeEventListener("webglcontextlost", this.onContextLost);
     this.post?.dispose();
-    disposeCore(this.handles);
+    if (this.handles) disposeCore(this.handles);
     this.ground.geometry.dispose();
     this.ground.material.dispose();
     this.renderer.dispose();

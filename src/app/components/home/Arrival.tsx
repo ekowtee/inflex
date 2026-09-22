@@ -3,61 +3,138 @@
 /**
  * Beat 0 — the arrival. SCROLL_NARRATIVE.md Beat 0, HERO_SCENE_SPEC.md §9.
  *
- * The server renders the copy and the unlit poster: that is the first paint
- * and the LCP element, and neither waits for JavaScript. On Tier A and B the
+ * The server renders the copy and the unlit poster. On Tier A and B the
  * environment chunk loads after the LCP candidate paints, the scene mounts
  * behind the poster at the unlit state, and when the readiness contract is
  * met the poster fades over 900 ms and the arrival light plays. Tier C, and
  * any failure, crossfades the unlit poster to the lit one instead, so every
  * visitor gets the beat.
+ *
+ * Two things learned from Chrome, recorded in PERFORMANCE_PLAN.md §9.4:
+ * an image that covers the whole viewport is never an LCP candidate, so the
+ * headline is the LCP element and its font path is what the metric measures;
+ * and the poster is a plain <picture> rather than next/image, because two
+ * next/image elements with `priority` preloaded both the desktop and the
+ * mobile poster on every device.
  */
 import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { useMotionTier } from "@/motion/useMotionTier";
 import { afterLcpIdle } from "@/motion/loadMotion";
 import Magnetic from "@/motion/Magnetic";
 import { duration, ease } from "@/motion/tokens";
 import { posters } from "@/three/core/posters";
-
-const CoreCanvas = dynamic(() => import("@/three/core/CoreCanvas"), { ssr: false });
+import { CoreCanvas } from "@/three/core/loadCore";
 
 type Stage = "poster" | "loading" | "live" | "fallback";
+
+/** Tier B waits past the page's quiet window before asking for the scene. */
+const TIER_B_HOLD_MS = 3000;
+
+const posterStyle = (visible: boolean, ms: number): React.CSSProperties => ({
+  position: "absolute",
+  inset: 0,
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  // Centred: the camera's vertical field of view is fixed, so the poster and
+  // the live scene share the vertical extent and crop the horizontal about
+  // the centre. Any other position breaks the crossfade registration.
+  objectPosition: "50% 50%",
+  opacity: visible ? 1 : 0,
+  transition: `opacity ${ms}ms ${ease.out}`,
+});
+
+function Poster({
+  lit,
+  visible,
+  ms,
+  eager,
+  onLoad,
+}: {
+  lit: boolean;
+  visible: boolean;
+  ms: number;
+  eager: boolean;
+  onLoad?: () => void;
+}) {
+  const d = lit ? posters.desktop.lit : posters.desktop.unlit;
+  const m = lit ? posters.mobile.lit : posters.mobile.unlit;
+  return (
+    <picture>
+      <source media="(min-width: 768px)" type="image/avif" srcSet={d.avif} />
+      <source media="(min-width: 768px)" type="image/webp" srcSet={d.webp} />
+      <source type="image/avif" srcSet={m.avif} />
+      {/* A plain img: media-specific sources with different aspect ratios,
+          which next/image cannot express, and which preloaded both variants
+          on every device. */}
+      <img
+        src={m.webp}
+        alt=""
+        width={posters.mobile.width}
+        height={posters.mobile.height}
+        fetchPriority={eager ? "high" : "auto"}
+        loading={eager ? "eager" : "lazy"}
+        decoding="async"
+        draggable={false}
+        onLoad={onLoad}
+        style={posterStyle(visible, ms)}
+      />
+    </picture>
+  );
+}
 
 export default function Arrival() {
   const tier = useMotionTier();
   const [stage, setStage] = useState<Stage>("poster");
   const [posterHidden, setPosterHidden] = useState(false);
-  const [litVisible, setLitVisible] = useState(false);
+  const [wantLit, setWantLit] = useState(false);
+  const [litLoaded, setLitLoaded] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // Tier A/B: request the environment after the LCP candidate has painted.
+  // Tier B holds a further three seconds so the parse and compile land after
+  // the page's quiet window rather than inside its blocking-time budget.
   useEffect(() => {
     if (tier === "C" || stage !== "poster") return;
     let cancelled = false;
+    let timer = 0;
     afterLcpIdle(() => {
-      if (!cancelled) setStage("loading");
+      if (cancelled) return;
+      timer = window.setTimeout(
+        () => {
+          if (!cancelled) setStage("loading");
+        },
+        tier === "B" ? TIER_B_HOLD_MS : 0
+      );
     });
     return () => {
       cancelled = true;
+      window.clearTimeout(timer);
     };
   }, [tier, stage]);
 
-  // Tier C: the arrival light as a poster crossfade, once the page is calm.
+  // Tier C, or any failure: the arrival light as a poster crossfade once the
+  // page is calm. The lit poster is only requested at this point.
   useEffect(() => {
     if (tier !== "C" && stage !== "fallback") return;
-    const t = setTimeout(() => setLitVisible(true), 1200);
-    return () => clearTimeout(t);
+    const t = window.setTimeout(() => setWantLit(true), 1200);
+    return () => window.clearTimeout(t);
   }, [tier, stage]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(true);
+    window.addEventListener("scroll", onScroll, { passive: true, once: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const onLive = useCallback(() => {
     setStage("live");
     setPosterHidden(true);
   }, []);
 
-  const onFail = useCallback(() => {
-    setStage("fallback");
-  }, []);
+  const onFail = useCallback(() => setStage("fallback"), []);
+  const onLitLoad = useCallback(() => setLitLoaded(true), []);
 
   const showScene = (tier === "A" || tier === "B") && (stage === "loading" || stage === "live");
 
@@ -65,70 +142,25 @@ export default function Arrival() {
     <section
       className="on-obsidian relative isolate min-h-[100svh] w-full overflow-hidden bg-obsidian-950"
       aria-label="Introduction"
+      data-scrolled={scrolled ? "" : undefined}
     >
       {showScene && <CoreCanvas tier={tier === "A" ? "A" : "B"} onLive={onLive} onFail={onFail} />}
 
-      {/* The poster pair. Unlit is the LCP element; lit is the Tier C arrival.
-          Centred object-position is what keeps the poster registered with the
-          live scene: the camera's vertical field of view is fixed, so both
-          share the vertical extent and crop the horizontal about the centre. */}
-      <div className="absolute inset-0 z-[1]" aria-hidden="true">
-        <Image
-          src={posters.desktop.unlit}
-          alt=""
-          fill
-          priority
-          fetchPriority="high"
-          sizes="100vw"
-          placeholder="blur"
-          blurDataURL={posters.lqip}
-          className="hidden object-cover md:block"
-          style={{
-            objectPosition: "50% 50%",
-            opacity: posterHidden ? 0 : 1,
-            transition: `opacity ${duration.scene}ms ${ease.out}`,
-          }}
-        />
-        <Image
-          src={posters.mobile.unlit}
-          alt=""
-          fill
-          priority
-          fetchPriority="high"
-          sizes="100vw"
-          placeholder="blur"
-          blurDataURL={posters.lqip}
-          className="object-cover md:hidden"
-          style={{
-            objectPosition: "50% 50%",
-            opacity: posterHidden ? 0 : 1,
-            transition: `opacity ${duration.scene}ms ${ease.out}`,
-          }}
-        />
-        <Image
-          src={posters.desktop.lit}
-          alt=""
-          fill
-          sizes="100vw"
-          className="hidden object-cover md:block"
-          style={{
-            objectPosition: "50% 50%",
-            opacity: litVisible && !posterHidden ? 1 : 0,
-            transition: `opacity 1800ms ${ease.out}`,
-          }}
-        />
-        <Image
-          src={posters.mobile.lit}
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover md:hidden"
-          style={{
-            objectPosition: "50% 50%",
-            opacity: litVisible && !posterHidden ? 1 : 0,
-            transition: `opacity 1800ms ${ease.out}`,
-          }}
-        />
+      {/* The poster pair on the LQIP. Unlit paints first; lit is the Tier C
+          arrival and is requested only when needed. */}
+      <div
+        className="absolute inset-0 z-[1]"
+        aria-hidden="true"
+        style={{
+          backgroundImage: `url(${posters.lqip})`,
+          backgroundSize: "cover",
+          backgroundPosition: "50% 50%",
+        }}
+      >
+        <Poster lit={false} visible={!posterHidden} ms={duration.scene} eager />
+        {wantLit && (
+          <Poster lit visible={litLoaded && !posterHidden} ms={1800} eager={false} onLoad={onLitLoad} />
+        )}
       </div>
 
       {/* Copy. Approved Variant A, SCROLL_NARRATIVE.md §7. */}

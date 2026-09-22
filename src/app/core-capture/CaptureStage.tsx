@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import CoreCanvas from "@/three/core/CoreCanvas";
+import { CoreCanvas } from "@/three/core/loadCore";
 import { store } from "@/three/core/store";
 import { setCameraOverride } from "@/three/core/camera";
 import { Vector3 } from "three";

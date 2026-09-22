@@ -5,12 +5,16 @@
  */
 export const posters = {
   desktop: {
-    unlit: "/three/posters/f0-unlit-desktop.webp",
-    lit: "/three/posters/f0-lit-desktop.webp",
+    width: 1920,
+    height: 1080,
+    unlit: { avif: "/three/posters/f0-unlit-desktop.avif", webp: "/three/posters/f0-unlit-desktop.webp" },
+    lit: { avif: "/three/posters/f0-lit-desktop.avif", webp: "/three/posters/f0-lit-desktop.webp" },
   },
   mobile: {
-    unlit: "/three/posters/f0-unlit-mobile.webp",
-    lit: "/three/posters/f0-lit-mobile.webp",
+    width: 780,
+    height: 1688,
+    unlit: { avif: "/three/posters/f0-unlit-mobile.avif", webp: "/three/posters/f0-unlit-mobile.webp" },
+    lit: { avif: "/three/posters/f0-lit-mobile.avif", webp: "/three/posters/f0-lit-mobile.webp" },
   },
   lqip:
     "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAABQAwCdASoYAA4APu1kqU2ppaOiMAgBMB2JaQAAetDUSZaaAAD+8P82tzMYDiAAAAA=",

@@ -77,19 +77,33 @@ function checkBundles() {
     return p ? THREE.test(readFileSync(p, "utf8")) : false;
   });
 
-  // the motion chunk is whatever lazy chunks carry the engines; the
-  // environment chunk is whatever carries three.js, r3f and the Core
+  // The lazy chunks are whatever the route can reach from its shell: each
+  // chunk names the chunks it can load, so walk those references. Counting
+  // the whole chunk directory instead double-counts the environment when the
+  // bundler emits a second copy of it for another route (the capture stage).
+  // The motion chunk is the reachable set carrying the engines; the
+  // environment chunk is the reachable set carrying three.js and the Core.
   const chunkDir = ".next/static/chunks";
+  const reachable = new Set();
+  const queue = scripts.map(resolveChunk).filter(Boolean);
+  while (queue.length) {
+    const p = queue.pop();
+    if (reachable.has(p)) continue;
+    reachable.add(p);
+    const src = readFileSync(p, "utf8");
+    for (const m of src.matchAll(/static\/chunks\/([^"'`\s]+\.js)/g)) {
+      const next = join(chunkDir, m[1]);
+      if (existsSync(next) && !reachable.has(next)) queue.push(next);
+    }
+  }
+  const shellSet = new Set(scripts.map(resolveChunk).filter(Boolean));
   let motion = 0;
   let environment = 0;
-  if (existsSync(chunkDir)) {
-    for (const f of readdirSync(chunkDir)) {
-      if (!f.endsWith(".js")) continue;
-      const p = join(chunkDir, f);
-      const src = readFileSync(p, "utf8");
-      if (ENGINE.test(src)) motion += gz(p);
-      else if (THREE.test(src) || /texelFetch\(uPositions|formations\.worker/.test(src)) environment += gz(p);
-    }
+  for (const p of reachable) {
+    if (shellSet.has(p)) continue;
+    const src = readFileSync(p, "utf8");
+    if (ENGINE.test(src)) motion += gz(p);
+    else if (THREE.test(src) || /texelFetch\(uPositions|formations\.worker/.test(src)) environment += gz(p);
   }
 
   const walk = (dir, out = []) => {

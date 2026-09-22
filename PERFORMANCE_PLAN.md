@@ -292,6 +292,24 @@ First production measurement of the Phase 0 build from a clean runner is the
 first run of that workflow; earlier figures in `PHASE0_REPORT.md` §4 were
 taken on the affected laptop and are directionally right only.
 
+### 9.4 What Chrome counts as the LCP element (found 22 September 2026)
+
+Chrome does not consider an image that covers the entire viewport as an LCP
+candidate; it treats it as wallpaper. Verified with stripped test pages: the
+poster at 90% of the viewport is the LCP element, a photograph at full bleed
+is not, and the home page's only candidate is the H1. So the hero's LCP
+element is the headline, and the LCP time is when the headline last painted,
+which moves when the web font arrives. That makes the headline's font path
+the thing the metric measures, not the poster. §9.1's note that the LCP
+element "must be the poster" is withdrawn.
+
+Consequences applied in `Arrival.tsx`: one poster per device through a
+`<picture>` with media-specific sources (two `next/image` elements with
+`priority` preloaded both posters on every device); the lit poster is
+requested only when the Tier C crossfade needs it; Tier B holds the
+environment chunk until three seconds after the LCP candidate so its parse
+and compile fall after the page's quiet window.
+
 ### 9.3 Definition of "first paint" for this site
 
 First paint is not a blank canvas clearing to obsidian. It is **the H1 legible and the hero composition visible**, which means the LQIP has painted behind the copy. That happens at FCP. The visitor's impression of speed is set at LCP, when the sharp poster replaces the blur. The live 3D scene arriving later is invisible as a performance event because the crossfade starts from an identical still. This is the whole reason the poster pair exists, and it is why the LCP target is the only first-paint number the owner needs to watch.

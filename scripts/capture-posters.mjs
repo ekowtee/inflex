@@ -176,12 +176,16 @@ try {
  */
 export const posters = {
   desktop: {
-    unlit: "/three/posters/f0-unlit-desktop.webp",
-    lit: "/three/posters/f0-lit-desktop.webp",
+    width: ${SIZES[0].w},
+    height: ${SIZES[0].h},
+    unlit: { avif: "/three/posters/f0-unlit-desktop.avif", webp: "/three/posters/f0-unlit-desktop.webp" },
+    lit: { avif: "/three/posters/f0-lit-desktop.avif", webp: "/three/posters/f0-lit-desktop.webp" },
   },
   mobile: {
-    unlit: "/three/posters/f0-unlit-mobile.webp",
-    lit: "/three/posters/f0-lit-mobile.webp",
+    width: ${SIZES[1].w},
+    height: ${SIZES[1].h},
+    unlit: { avif: "/three/posters/f0-unlit-mobile.avif", webp: "/three/posters/f0-unlit-mobile.webp" },
+    lit: { avif: "/three/posters/f0-lit-mobile.avif", webp: "/three/posters/f0-lit-mobile.webp" },
   },
   lqip:
     "${dataUri}",
