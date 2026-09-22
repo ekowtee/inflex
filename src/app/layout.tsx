@@ -10,7 +10,7 @@ const rubik = Rubik({
   subsets: ["latin"],
   variable: "--font-rubik",
   display: "swap",
-  weight: ["400", "500", "700", "800"],
+  weight: ["400", "500", "600", "700"],
   fallback: ["system-ui", "sans-serif"], // Fallback if loading fails
   preload: true,
   adjustFontFallback: true, // Reduce layout shift
@@ -19,7 +19,7 @@ const rubik = Rubik({
 // Configure Krub with improved options
 const krub = Krub({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["500"],
   display: "swap",
   variable: "--font-krub",
   fallback: ["system-ui", "sans-serif"], // Fallback if loading fails
