@@ -37,7 +37,8 @@ export default function ServicesPage() {
             width={1376}
             height={768}
             className="w-full h-[200px] sm:h-[300px] md:h-[450px] object-cover border border-[#D0D0D0] shadow-lg"
-            sizes="(min-width: 1024px) 50vw, 100vw"
+            sizes="(min-width: 1280px) 1216px, 100vw"
+            priority
           />
         </div>
         <div className="py-12 flex flex-col md:flex-row items-center md:items-start gap-8">

@@ -1,3 +1,7 @@
+/**
+ * Route proxy (the Next 16 name for what was `middleware.ts`): gates the
+ * admin pages and their API on a signed-in director or finance role.
+ */
 import { withAuth } from "next-auth/middleware";
 
 export default withAuth({

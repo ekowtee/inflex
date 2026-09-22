@@ -14,7 +14,7 @@ export default function Footer() {
               alt="Inflexions-IT"
               width={192}
               height={40}
-              className="h-12"
+              className="h-12 w-auto"
             />
 
             <div className="space-y-5 mt-8">

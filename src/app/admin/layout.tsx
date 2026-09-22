@@ -31,7 +31,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             src="/inflexlogo.png"
             alt="Inflexions IT Admin"
             width={144}
-            height={36}
+            height={28}
             priority
             className="brightness-0 invert"
           />

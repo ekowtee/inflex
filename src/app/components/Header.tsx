@@ -122,7 +122,7 @@ export default function Header() {
           src="/inflexlogo.png"
           alt="Inflexions IT Logo"
           width={168}
-          height={42}
+          height={33}
           priority
         />
       </Link>
@@ -154,7 +154,7 @@ export default function Header() {
               src="/inflexlogo.png"
               alt="Inflexions IT Logo"
               width={112}
-              height={28}
+              height={22}
               priority
             />
           </Link>
