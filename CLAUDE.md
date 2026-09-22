@@ -26,6 +26,11 @@ Three peer top-level offerings. Do not confuse them or fold one into another:
 - **PRD.md**: Full product requirements document (site architecture, page specs, design system, content). Always consult before building new pages or components.
 - **ACADEMY_PROPOSAL.md**: Director-facing strategic brief for Inflexions Academy.
 - **ACADEMY_IMPLEMENTATION_PLAN.md**: Technical blueprint that drove the Academy build.
+- **CREATIVE_DIRECTION_3D.md**: Creative direction and phased build order for the premium 3D redesign (the "Core" object, Obsidian/Ivory registers, motion tokens, performance gates). Consult before any front-end redesign work.
+- **SCROLL_NARRATIVE.md**: Home page narrative spec (beat order, visitor question ladder, copy sheet, thread motif). Supersedes Section 7 of CREATIVE_DIRECTION_3D.md for the home page.
+- **HERO_SCENE_SPEC.md**: Hero 3D scene spec (palette in linear space, device tiers, loading budget, camera keyframes, shader lighting rig, geometry limits, cursor interaction, poster fallback). Authoritative for the hero; revises parts of CREATIVE_DIRECTION_3D.md Section 6.
+- **COPY_DECK.md**: Full home page text layer in two tonal variants (A Precision, B Momentum) with offer, objection and proof analysis, pricing frame and CTA. SCROLL_NARRATIVE.md copy sheet stays the baseline until the owner picks a variant.
+- **PERFORMANCE_PLAN.md**: Measured baseline, corrected chunk budgets (shell 205 / motion 60 / environment 190 KB gz), render cost per scene, image compression plan, lazy-load order, first-paint targets and gates. Overrides the budget numbers in CREATIVE_DIRECTION_3D.md and HERO_SCENE_SPEC.md.
 
 ## Known Issue: `.next` cache corruption
 On Windows, the `.next` build cache frequently corrupts when files change while the dev server is running, producing `ENOENT: no such file or directory` errors for `app-build-manifest.json` or `_buildManifest.js.tmp`. Fix: `rm -rf .next` and restart the dev server.
