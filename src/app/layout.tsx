@@ -3,6 +3,7 @@ import { Rubik, Krub } from "next/font/google";
 import "./globals.css";
 import MarketingChrome from "./MarketingChrome";
 import GoogleAnalytics from "./components/GoogleAnalytics";
+import WebVitals from "./components/WebVitals";
 import React from "react";
 
 // Configure Rubik font with improved options
@@ -76,6 +77,7 @@ export default function RootLayout({
         </a>
         <MarketingChrome>{children}</MarketingChrome>
         <GoogleAnalytics />
+        <WebVitals />
       </body>
     </html>
   );
