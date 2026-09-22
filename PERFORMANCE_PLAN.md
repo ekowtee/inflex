@@ -284,6 +284,8 @@ First paint is not a blank canvas clearing to obsidian. It is **the H1 legible a
 
 ## 10. Decisions for the owner
 
+> **Decided 22 September 2026.** 1: corrected budgets approved; they are the perf-gate thresholds. 2: image clean-up approved as the first Phase 0 task, with unreferenced files **moved** to an unserved `assets-src/` folder rather than deleted. Corrected measurement: only 7.9 MB of the 91 MB is unreferenced; the size comes down through AVIF/WebP conversion of referenced photography, with masters moved to `assets-src/`. 3: `postprocessing` replacement approved; the library is never installed. Also decided: the placeholder testimonial block is removed from the live site now.
+
 1. **Budget revision.** Approve the corrected budgets: route shell 205 KB, motion 60 KB, environment 190 KB (was 190 and 230 in the creative direction). Net first-party JavaScript on Tier A rises from the PRD's 350 KB to about 435 KB, all of it after first paint; Tier C stays under 350 KB.
 2. **Image clean-up before motion work.** Approve Phase 0 deleting unreferenced files from `public/` (92 MB to under 15 MB) and converting every remaining photograph to AVIF and WebP. Original files should be kept outside the served folder, not in git history alone.
 3. **Post-processing library.** Approve replacing `postprocessing` with the hand-written three-pass stage. It removes about 80 KB and a dependency; the trade is that bloom quality is ours to tune rather than a library default.
