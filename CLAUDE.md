@@ -1,15 +1,17 @@
 # Project Rules — Inflexions IT Website
 
-## Navbar (Header.tsx) — LOCKED
-Do NOT modify the navbar layout, positioning, or structure unless the user explicitly requests it. The following are locked:
+## Navbar (Header.tsx) — partly locked
+Rebuilt 22 September 2026 with the owner's approval. Do NOT change the items marked locked; the rest may evolve with the redesign.
 
-- **Logo**: Absolutely positioned in the left margin, centered between the left viewport edge and the content area. Uses `calc((100vw - 80rem) / 4 + 1rem)` for left positioning. Hidden on mobile.
-- **Nav links**: Left-aligned inside the `max-w-7xl` container. Order: Home, About, Solutions (dropdown), Services (dropdown), Academy (dropdown), Case study, Careers.
-- **Contact us button**: Right-aligned, full navbar height (`h-16`), red background (`bg-red-600`).
-- **Social icons**: Between nav links and Contact button on desktop, in mobile menu on mobile.
-- **Container**: `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8` — all nav items and the Contact button sit within these margins.
-- **Height**: `h-16` (64px), fixed to top with `z-50`.
-- **Dropdown state**: Single `openDropdown` state (string | null) controls which menu is open — extend this state pattern when adding new dropdowns, don't add per-menu booleans.
+- **Logo (LOCKED — owner decision):** absolutely positioned in the left margin, centred between the viewport edge and the content area, `calc((100vw - 80rem) / 4 + 1rem)`. Hidden on mobile, where a centred logo sits in the bar. Never move it, even though it clips at some widths.
+- **Nav links (locked order):** Home, About, Solutions (dropdown), Services (dropdown), Academy (dropdown), Case study, Careers. Left-aligned inside the `max-w-7xl` container.
+- **Contact us:** desktop keeps the full-height (`h-16`) red block, right-aligned. Mobile uses a compact `h-9` pill; the full-screen menu carries a full-width red Contact button as its one red element.
+- **Social icons:** between the nav links and Contact on desktop; bottom row of the mobile menu.
+- **Container:** `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`.
+- **Height:** `h-14` on mobile, `h-16` desktop, fixed to top with `z-50`.
+- **Registers:** transparent over any element carrying `data-header-dark` (the home hero), with the light logo `/inflexlogo-light.png` and silver links; solid white with a hairline once scrolled past it and on every other page. Keep both registers working when editing.
+- **Dropdown state (locked pattern):** a single `openDropdown` (string | null) controls which menu is open on desktop and which accordion is open in the mobile menu. Extend this, never add per-menu booleans.
+- **Icons:** Lucide only (Menu, X, ChevronDown).
 
 ## Offering Categories
 Three peer top-level offerings. Do not confuse them or fold one into another:

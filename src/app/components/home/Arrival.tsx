@@ -149,6 +149,7 @@ export default function Arrival() {
       className="on-obsidian relative isolate min-h-[100svh] w-full overflow-hidden bg-obsidian-950"
       aria-label="Introduction"
       data-scrolled={scrolled ? "" : undefined}
+      data-header-dark=""
     >
       {showScene && <CoreCanvas tier={tier === "A" ? "A" : "B"} onLive={onLive} onFail={onFail} />}
 

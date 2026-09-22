@@ -79,10 +79,12 @@
     font-family: var(--font-rubik), system-ui, sans-serif;
     /* 6.5vw wrapped the nine-word hero headline to six lines at 1440 px and
        pushed the call to action below the fold. 4.6vw holds it to four. */
-    font-size: clamp(2.5rem, 4.6vw, 4.75rem);
+    /* Floor 2.125rem: 2.5rem on a 390 px phone wrapped the headline into
+       awkward two-word lines. */
+    font-size: clamp(2.125rem, 4.6vw, 4.75rem);
     font-weight: 700;
     letter-spacing: -0.035em;
-    line-height: 0.95;
+    line-height: 0.98;
     text-wrap: balance;
   }
 
@@ -114,7 +116,8 @@
 
   .type-body-l {
     font-family: var(--font-rubik), system-ui, sans-serif;
-    font-size: 1.125rem;
+    /* 1rem on phones, 1.125rem from about 640 px. */
+    font-size: clamp(1rem, 0.9rem + 0.35vw, 1.125rem);
     font-weight: 400;
     letter-spacing: 0;
     line-height: 1.6;
@@ -122,7 +125,7 @@
 
   .type-body {
     font-family: var(--font-rubik), system-ui, sans-serif;
-    font-size: 1rem;
+    font-size: clamp(0.9375rem, 0.88rem + 0.2vw, 1rem);
     font-weight: 400;
     letter-spacing: 0;
     line-height: 1.6;
