@@ -26,6 +26,9 @@ concurrency:
 env:
   LIGHTHOUSE_BLOCKING: "false"
 
+permissions:
+  contents: write
+
 jobs:
   gate:
     runs-on: ubuntu-latest
@@ -72,6 +75,21 @@ jobs:
               echo '_Lighthouse thresholds are advisory until the end of Phase 1 (LIGHTHOUSE_BLOCKING=false)._'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Post results on the commit
+        if: always() && github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "### Performance gate (${{ runner.os }} runner)"
+            echo '```'
+            cat bundles.txt
+            echo
+            sed -n '/LIGHTHOUSE/,$p' lighthouse.txt 2>/dev/null || true
+            echo '```'
+          } > comment.md
+          gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/comments" -f body="$(cat comment.md)" >/dev/null && echo "comment posted"
 
       - uses: actions/upload-artifact@v4
         if: always()
