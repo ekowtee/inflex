@@ -17,7 +17,9 @@
     "db:status:prod": "node scripts/prisma-prod.mjs migrate status",
     "db:seed": "dotenv -e .env.local -- tsx prisma/seed.ts",
     "db:seed:prod": "node scripts/prisma-prod.mjs db seed",
-    "test": "tsx --test src/lib/__tests__/*.test.ts src/motion/__tests__/*.test.ts"
+    "test": "tsx --test src/lib/__tests__/*.test.ts src/motion/__tests__/*.test.ts",
+    "perf": "node scripts/perf-gate.mjs",
+    "images:inventory": "node scripts/image-inventory.mjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

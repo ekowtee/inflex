@@ -1,0 +1,28 @@
+{
+  "_comment": "Phase 0 performance gate thresholds. Source: PERFORMANCE_PLAN.md §9.1 and §2.2, approved by the owner on 22 September 2026. Times are milliseconds, sizes are gzipped bytes.",
+  "routes": [
+    "/",
+    "/solutions",
+    "/solutions/network-infrastructure",
+    "/academy",
+    "/contact"
+  ],
+  "lab": {
+    "server-response-time": 600,
+    "first-contentful-paint": 1800,
+    "largest-contentful-paint": 2500,
+    "cumulative-layout-shift": 0.02,
+    "total-blocking-time": 200,
+    "speed-index": 3000
+  },
+  "bundles": {
+    "routeShellGzip": 209920,
+    "motionChunkGzip": 61440,
+    "environmentChunkGzip": 194560,
+    "preloadedFontBytes": 49152
+  },
+  "images": {
+    "maxServedRasterBytes": 256000,
+    "maxPublicDirBytes": 15728640
+  }
+}

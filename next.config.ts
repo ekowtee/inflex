@@ -21,6 +21,13 @@ const nextConfig: NextConfig = {
     // Serve AVIF where the browser accepts it, WebP otherwise. The sources
     // in public/ are already WebP; this is the optimizer's output format.
     formats: ["image/avif", "image/webp"],
+    // Next's defaults generate eight srcset candidates per responsive image.
+    // On a page with 49 images that is a lot of markup for the preload
+    // scanner to walk before first paint, and this site has no 4K artwork to
+    // serve. Four device widths and three fixed sizes cover every layout the
+    // design uses.
+    deviceSizes: [640, 750, 1080, 1920],
+    imageSizes: [96, 180, 240],
   },
   async headers() {
     return [
