@@ -387,6 +387,48 @@ Tier B is not a degraded Tier A. It is designed on its own, and the in-shader ha
 
 ---
 
+## 11a. Implementation notes (Phase 1, 22 September 2026)
+
+What the build found that this specification got wrong or left open. Each
+is now the behaviour of `src/three/core/`.
+
+- **No React binding for three.** `@react-three/fiber` imports the whole of
+  three as a namespace and resolves classes by name at runtime, which
+  defeats tree shaking in every bundler: the environment chunk measured
+  248 KB gzipped. The scene is vanilla three with named imports, driven by
+  one `requestAnimationFrame` loop in `CoreScene.ts`; the chunk is 146 KB.
+- **Custom shaders get no sRGB output transform** from three. Every shader
+  that writes to the canvas encodes linear → sRGB itself (`toSRGB`), and the
+  Tier A composite encodes once for the whole frame.
+- **No tone mapping.** AgX crushed the palette, which is dark by design, to
+  black. Colours are authored in sRGB, used in linear, written back
+  unchanged; ember at 1.4× clips to a saturated red as intended.
+- **Sheet spacing is derived from the node count**, not 0.038 as written in
+  §4.2, which yields only 10k hex cells. Spacing is about 0.029.
+- **Point size floor is 2.5 CSS px, base 3.6.** Below that the soft-disc
+  fragment samples almost entirely in the halo and a dense sheet renders as
+  specks.
+- **The ember line is |x| < 0.032** (about 2% of nodes) with a skirt to
+  0.12, not 0.11 and 0.35: the wider band read as a painted stripe.
+- **Key shading is positional**, not normal-based: a near-flat sheet gives a
+  normal-based key nothing to vary against. Rim stays normal-based.
+- **The sheet dissolves at its borders and varies in density** (`presence`
+  in both shaders) so it reads as a structure of light rather than a cut
+  rectangle of cloth. Ember ignores the density field but respects the
+  border.
+- **Hero camera key** is (−1.3, 1.3, 6.0) looking at (−1.0, −0.15, 0),
+  chosen from two capture rounds: the sheet sits right of the copy, seen
+  from upper-left so its lower edge draws the S-curve.
+- **`scene.background` must stay null.** three forces a clear on every
+  `render()` when it is a Color, which wiped the base layer under the
+  additive ember pass in Tier B.
+- **Capture mode** (`capture: true`) disables the probe, the deadline, idle
+  motion and pointer influence so headless software rendering can produce
+  still, reproducible posters. Posters came in at 207 KB WebP / 120 KB AVIF
+  desktop, above the §9.1 budget; see PERFORMANCE_PLAN.md for the decision.
+- **Display XL is 4.6vw**, not 6.5vw, which wrapped the hero headline to six
+  lines at 1440 px and pushed the call to action below the fold.
+
 ## 12. File additions
 
 ```

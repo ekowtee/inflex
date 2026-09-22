@@ -77,14 +77,18 @@ function checkBundles() {
     return p ? THREE.test(readFileSync(p, "utf8")) : false;
   });
 
-  // the motion chunk is whatever lazy chunks carry the engines
+  // the motion chunk is whatever lazy chunks carry the engines; the
+  // environment chunk is whatever carries three.js, r3f and the Core
   const chunkDir = ".next/static/chunks";
   let motion = 0;
+  let environment = 0;
   if (existsSync(chunkDir)) {
     for (const f of readdirSync(chunkDir)) {
       if (!f.endsWith(".js")) continue;
       const p = join(chunkDir, f);
-      if (ENGINE.test(readFileSync(p, "utf8"))) motion += gz(p);
+      const src = readFileSync(p, "utf8");
+      if (ENGINE.test(src)) motion += gz(p);
+      else if (THREE.test(src) || /texelFetch\(uPositions|formations\.worker/.test(src)) environment += gz(p);
     }
   }
 
@@ -106,6 +110,7 @@ function checkBundles() {
   const rows = [
     ["route shell", shell, budgets.bundles.routeShellGzip, "gz"],
     ["motion chunk", motion, budgets.bundles.motionChunkGzip, "gz"],
+    ["environment chunk", environment, budgets.bundles.environmentChunkGzip, "gz"],
     ["preloaded fonts", fontBytes, budgets.bundles.preloadedFontBytes, ""],
     ["public/ total", publicBytes, budgets.images.maxPublicDirBytes, ""],
   ];
@@ -211,7 +216,7 @@ measuring ${base}`);
     });
 
     console.log(`\nLIGHTHOUSE  (mobile, slow 4G, 4x CPU, ${RUNS} run${RUNS > 1 ? "s" : ""} per route, median)`);
-    const header = ["route".padEnd(34), ...METRICS.map(([, short]) => short.padStart(7))].join("");
+    const header = ["route".padEnd(34), ...METRICS.map(([, short]) => short.padStart(6) + " ")].join("");
     console.log("  " + header);
 
     for (const route of budgets.routes) {
@@ -243,7 +248,7 @@ measuring ${base}`);
         const budget = budgets.lab[audit];
         const shown = unit === "ms" ? Math.round(value) : value.toFixed(3);
         const ok = note(value <= budget, `${route} ${short}`, shown, budget, unit);
-        cells.push((ok ? " " : "!") + String(shown).padStart(6));
+        cells.push(String(shown).padStart(6) + (ok ? " " : "!"));
       }
       console.log("  " + route.padEnd(34) + cells.join(""));
       if (route === "/" && lcpElement) {

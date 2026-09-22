@@ -57,7 +57,7 @@ At the 1.6 Mbps slow 4G profile, 14.6 MB is 73 seconds of download. The page wor
 | Package | Version | Whole package | Realistic tree-shaken use | Notes |
 |---|---|---|---|---|
 | `three` | 0.186 | 185 KB | 120 to 135 KB | Points, LineSegments, ShaderMaterial, WebGLRenderer, DataTexture, render targets, camera, fog. No loaders, no controls, no standard materials. |
-| `@react-three/fiber` | 9.7 | 52 KB | 40 KB | Reconciler is the bulk; not reducible. |
+| ~~`@react-three/fiber`~~ | — | — | — | **Removed 22 September 2026.** Its namespace import of three defeats tree shaking; the scene is vanilla three. |
 | `postprocessing` | 6.39 | **113 KB** | 75 to 85 KB | Poor tree-shaking; the EffectComposer pulls most of the library. **Removed from the plan.** |
 | `gsap` core | 3.15 | 27 KB | 27 KB | Plus ScrollTrigger, about 15 KB, and SplitText, about 8 KB. |
 | `lenis` | 1.3 | 5.5 KB | 5.5 KB | |
@@ -71,7 +71,7 @@ The creative direction set two budgets: route shell 190 KB, environment 230 KB. 
 |---|---|---|---|---|
 | **Route shell** | Next runtime, React DOM, page components, motion primitives (CSS-driven fallbacks only), `lucide-react` icons used on the page | **≤ 205 KB** | 200 KB (218 today minus 18 KB `react-slick`) | Immediately. Does not gate LCP. |
 | **Motion** | GSAP core, ScrollTrigger, SplitText, Lenis, the ScrollTrigger timeline | **≤ 60 KB** | 56 KB | After LCP, every tier. Until it arrives, the hero's line reveals run on CSS animations so the arrival never waits for it. |
-| **Environment** | `three`, `@react-three/fiber`, the Core components, shaders, the hand-written post stage, the formation worker | **≤ 190 KB** | 175 KB | After the motion chunk, Tier A and B only, after the poster has painted and the tier gate has passed. |
+| **Environment** | `three` (named imports, tree-shaken), the Core, shaders, the hand-written post stage, the formation worker | **≤ 190 KB** | **146 KB measured** | After the motion chunk, Tier A and B only, after the poster has painted and the tier gate has passed. |
 | **Formation data** | Generated in the worker | 0 KB | 0 KB | Never downloaded. |
 | **Mark silhouette** | `mark-silhouette.svg` re-exported with one-decimal coordinates and run through svgo | ≤ 12 KB | 30 KB today, about 11 KB after | When Beat 8 is within 200 vh. |
 | **GA4** | gtag.js | about 95 KB | 95 KB | `lazyOnload`, after everything above. Not on any budget line because it is not ours, and not before LCP under any circumstances. |

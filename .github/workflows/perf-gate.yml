@@ -15,7 +15,7 @@ name: Performance gate
 
 on:
   push:
-    branches: [main]
+    branches: [main, "phase-*"]
   pull_request:
   workflow_dispatch:
 

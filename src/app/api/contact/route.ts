@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { publicContactSchema, CONTACT_SUBJECTS } from "@/lib/validators";
+import { publicContactSchema } from "@/lib/validators";
 import {
   escapeHtml,
   salesNotificationAddress,
@@ -416,4 +416,3 @@ function row(label: string, value: string, isHtml = false): string {
 }
 
 // Re-exported so other modules can stay in sync with the subject options.
-export { CONTACT_SUBJECTS };
