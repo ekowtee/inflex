@@ -62,7 +62,12 @@ export default function TrustedBy() {
           {logos.map((logo, i) => (
             <div
               key={logo.alt}
-              className={`${span(i)} flex h-10 items-center justify-center md:h-12 md:min-w-0 md:flex-1`}
+              /* The cell carries the band colour because the screen blend
+                 needs an opaque backdrop inside its own group, and the row
+                 above it is a group of its own: will-change: transform makes
+                 a stacking context, which isolates blending from the section
+                 behind. Same colour as the band, so nothing shows. */
+              className={`${span(i)} flex h-10 items-center justify-center bg-obsidian-950 md:h-12 md:min-w-0 md:flex-1`}
             >
               <Image
                 src={logo.src}
@@ -70,7 +75,11 @@ export default function TrustedBy() {
                 width={logo.width}
                 height={logo.height}
                 sizes="(min-width: 768px) 150px, 30vw"
-                className="h-auto max-h-full w-auto max-w-full object-contain opacity-90 mix-blend-screen [filter:grayscale(1)_invert(1)_brightness(0.8)]"
+                /* brightness before invert clamps every plate to pure white
+                   first — two of the seven are 247, not 255, and would
+                   otherwise leave a faint box; brightness after it sets how
+                   bright the mark lands, which is silver, never white. */
+                className="h-auto max-h-full w-auto max-w-full object-contain mix-blend-screen [filter:grayscale(1)_brightness(1.1)_invert(1)_brightness(0.85)]"
               />
             </div>
           ))}

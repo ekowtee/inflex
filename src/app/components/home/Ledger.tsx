@@ -85,8 +85,11 @@ export default function Ledger() {
     >
       {rows.map((row) => (
         <div key={row.isLead} className="contents">
+          {/* self-start matters: a grid item stretches to its row, and the
+              row is as tall as the two-line answer beside it. Stretched, the
+              strike's top:50% lands under the text instead of through it. */}
           <p
-            className="strike type-body w-fit text-neutral-500"
+            className="strike type-body w-fit self-start text-neutral-500"
             data-struck={struck ? "" : undefined}
           >
             {row.was}
