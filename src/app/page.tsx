@@ -1,5 +1,5 @@
 import Arrival from "./components/home/Arrival";
-import Partners from "./components/Partners";
+import TrustedBy from "./components/home/TrustedBy";
 import StrategicPartnerSection from "./components/StrategicPartnerSection";
 import ComprehensiveSolutions from "./components/ComprehensiveSolutions";
 import InflexionsAdvantage from "./components/InflexionsAdvantage";
@@ -43,10 +43,8 @@ export default function Home() {
       {/* Hero Section */}
       <Arrival />
 
-      {/* Partners Section */}
-      <div id="trusted-by">
-        <Partners />
-      </div>
+      {/* Beat 1 — the roster */}
+      <TrustedBy />
 
       {/* Strategic Partner Section */}
       <StrategicPartnerSection />
