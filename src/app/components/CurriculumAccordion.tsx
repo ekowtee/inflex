@@ -23,7 +23,7 @@ export default function CurriculumAccordion({
             <button
               onClick={() => setOpenIndex(isOpen ? -1 : idx)}
               aria-expanded={isOpen}
-              className="w-full flex justify-between items-center text-left p-5 hover:bg-[#F7F8FA] transition-colors"
+              className="w-full flex justify-between items-center text-left p-5 rounded-[6px] hover:bg-[#F7F8FA] transition-colors"
             >
               <div className="flex-1 min-w-0 pr-4">
                 <h4 className="text-base font-semibold text-[#171A20] mb-1">

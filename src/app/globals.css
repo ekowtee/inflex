@@ -52,15 +52,102 @@
   --color-info-text: #1565C0;
   --color-info-border: #42A5F5;
 
+  /* ─── Obsidian register (the dark environment) ───
+     CREATIVE_DIRECTION_3D.md §5.2. Red is light here, never fill.
+     `ember` is emissive and is for the 3D scene only — never text, never UI. */
+  --color-obsidian-950: #07080B;
+  --color-obsidian-900: #0A0C10;
+  --color-obsidian-800: #10131A;
+  --color-obsidian-700: #181C25;
+  --color-silver-100: #E6E7EA;
+  --color-silver-300: #C9CBD1;
+  --color-silver-500: #A9ADB8;
+  --color-graphite: #8F8D8D;
+  --color-ember: #FF3B2F;
+
   /* ─── Font Families ─── */
   --font-sans: var(--font-rubik), system-ui, sans-serif;
   --font-rubik: var(--font-rubik), system-ui, sans-serif;
   --font-krub: var(--font-krub), system-ui, sans-serif;
 }
 
-html {
-  scroll-behavior: smooth;
+/* Type tiers — CREATIVE_DIRECTION_3D.md §5.3.
+   Size, weight, tracking and line height only. Colour, max-width and margin
+   stay with the component so a tier can be used in either register. */
+@layer components {
+  .type-display-xl {
+    font-family: var(--font-rubik), system-ui, sans-serif;
+    font-size: clamp(2.75rem, 6.5vw, 6.5rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+    text-wrap: balance;
+  }
+
+  .type-display-l {
+    font-family: var(--font-rubik), system-ui, sans-serif;
+    font-size: clamp(2.25rem, 4.5vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    text-wrap: balance;
+  }
+
+  .type-h2 {
+    font-family: var(--font-rubik), system-ui, sans-serif;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  .type-h3 {
+    font-family: var(--font-rubik), system-ui, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  .type-body-l {
+    font-family: var(--font-rubik), system-ui, sans-serif;
+    font-size: 1.125rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.6;
+  }
+
+  .type-body {
+    font-family: var(--font-rubik), system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.6;
+  }
+
+  .type-eyebrow {
+    font-family: var(--font-krub), system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .type-telemetry {
+    font-family: var(--font-krub), system-ui, sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
 }
+
+/* No `scroll-behavior: smooth` here: Lenis owns scrolling and the two fight.
+   Anchor navigation goes through lenis.scrollTo (src/motion/LenisProvider). */
 
 * {
   box-sizing: border-box;
@@ -70,6 +157,13 @@ html {
 :focus-visible {
   outline: 2px solid #BD2E25;
   outline-offset: 2px;
+}
+
+/* Brand red is invisible against the Obsidian register. Any dark surface
+   carries .on-obsidian so focus stays visible. */
+.on-obsidian :focus-visible,
+.on-obsidian:focus-visible {
+  outline-color: #E6E7EA;
 }
 
 /* Respect reduced-motion preferences */
@@ -94,9 +188,3 @@ body {
   color: var(--foreground);
 }
 
-/* Rounded edges on all main page buttons/CTAs */
-main div:has(> a[href="/contact"]),
-main div:has(> a[href="/case-study"]),
-main button {
-  border-radius: 6px;
-}

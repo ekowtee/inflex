@@ -325,7 +325,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={sending}
-                className="bg-white text-[#BD2E25] font-medium py-2 px-6 hover:bg-[#F2F2F2] transition-colors duration-200 disabled:opacity-50"
+                className="bg-white text-[#BD2E25] font-medium py-2 px-6 rounded-[6px] hover:bg-[#F2F2F2] transition-colors duration-200 disabled:opacity-50"
               >
                 {sending ? "Sending..." : "Request the review"}
               </button>

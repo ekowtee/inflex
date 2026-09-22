@@ -68,7 +68,7 @@ export default function Faq() {
                   <button
                     onClick={() => setOpenIndex(isOpen ? -1 : idx)}
                     aria-expanded={isOpen}
-                    className="w-full flex justify-between items-center text-left text-[#262626]"
+                    className="w-full flex justify-between items-center text-left text-[#262626] rounded-[6px]"
                   >
                     <span className="text-lg">{item.question}</span>
                     <ChevronRight
@@ -110,7 +110,7 @@ export default function Faq() {
                   <p className="font-medium">(233) 208 889 270</p>
                 </div>
               </div>
-              <button className="bg-white text-[#BD2E25] px-6 py-2 font-medium hover:bg-[#F2F2F2] transition">
+              <button className="bg-white text-[#BD2E25] px-6 py-2 font-medium rounded-[6px] hover:bg-[#F2F2F2] transition">
                 Contact Us
               </button>
             </div>
