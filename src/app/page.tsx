@@ -6,7 +6,6 @@ import InflexionsAdvantage from "./components/InflexionsAdvantage";
 import IntelligentAutomation from "./components/IntelligentAutomation";
 import AcademyPromo from "./components/AcademyPromo";
 import MainPartners from "./components/MainPartners";
-import TestimonialSlider from "./components/TestimonialSlider";
 import CallToAction from "./components/CallToAction";
 import JsonLd from "./components/JsonLd";
 
@@ -65,11 +64,6 @@ export default function Home() {
       {/* Main Partners Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <MainPartners />
-      </div>
-
-      {/* Testimonial Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <TestimonialSlider />
       </div>
 
       {/* Call to Action Banner */}

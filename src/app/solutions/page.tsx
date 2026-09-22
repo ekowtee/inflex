@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from "react";
 import MainPartners from "../components/MainPartners";
-import TestimonialSlider from "../components/TestimonialSlider";
 import Banner from "../components/Banner";
 
 function useInView(threshold = 0.1) {
@@ -279,9 +278,6 @@ export default function SolutionsPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <MainPartners />
-      </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <TestimonialSlider />
       </div>
       <Banner />
     </div>
