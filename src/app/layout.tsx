@@ -60,6 +60,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${rubik.variable} ${krub.variable} h-full`}>
+      <head>
+        {/* Without JavaScript the Reveal primitive never receives its
+            entrance class, so neutralise the hidden state entirely. */}
+        <noscript>
+          <style>{`.motion-reveal{opacity:1!important;transform:none!important}.motion-thread{transform:scaleY(1)!important}`}</style>
+        </noscript>
+      </head>
       <body className="flex flex-col min-h-full font-sans">
         <a
           href="#main-content"

@@ -1,32 +1,8 @@
-"use client";
-
-import { useEffect, useState, useRef } from "react";
 import MainPartners from "../components/MainPartners";
 import Banner from "../components/Banner";
-
-function useInView(threshold = 0.1) {
-  const ref = useRef<HTMLElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { threshold }
-    );
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return [ref, inView] as const;
-}
-
-const base = "transform transition-all duration-[600ms] ease-out";
+import Reveal from "@/motion/Reveal";
 
 export default function SolutionsPage() {
-  const [headlineRef, headlineIn] = useInView();
-  const [card1Ref, card1In] = useInView();
-  const [card2Ref, card2In] = useInView();
-  const [card3Ref, card3In] = useInView();
-  const [card4Ref, card4In] = useInView();
-
   return (
     <div>
       {/* Hero */}
@@ -83,78 +59,43 @@ export default function SolutionsPage() {
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="flex items-center justify-center">
-            <h2
-              ref={headlineRef as React.RefObject<HTMLHeadingElement>}
-              className={`${base} ${
-                headlineIn
-                  ? "translate-y-0 opacity-100 delay-[0ms]"
-                  : "translate-y-[30px] opacity-0"
-              } text-3xl md:text-4xl font-semibold text-[#171A20] leading-snug text-center md:text-left`}
-            >
+            <Reveal as="h2" className="text-3xl md:text-4xl font-semibold text-[#171A20] leading-snug text-center md:text-left">
               Four Domains.
               <br />
               One Integrated
               <br />
               Stack.
-            </h2>
+            </Reveal>
           </div>
           <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8">
-            <div
-              ref={card1Ref as React.RefObject<HTMLDivElement>}
-              className={`${base} ${
-                card1In
-                  ? "translate-y-0 opacity-100 delay-[100ms]"
-                  : "translate-y-[30px] opacity-0"
-              } border-l-2 border-[#BD2E25] pl-6`}
-            >
+            <Reveal as="div" delay={100} className="border-l-2 border-[#BD2E25] pl-6">
               <h3 className="text-xl font-semibold text-[#171A20]">Data-centric Solutions</h3>
               <p className="mt-1 text-lg font-medium text-[#262626]">Turn Raw Data into Strategic Advantage</p>
               <p className="mt-2 text-sm text-[#41444B] leading-relaxed">
                 Unlock the full value of your data with advanced analytics, business intelligence, AI-driven insights, and data governance. From predictive modelling and machine learning pipelines to real-time dashboards and automated reporting, we build the data infrastructure that turns information into your most powerful strategic asset.
               </p>
-            </div>
-            <div
-              ref={card2Ref as React.RefObject<HTMLDivElement>}
-              className={`${base} ${
-                card2In
-                  ? "translate-y-0 opacity-100 delay-[200ms]"
-                  : "translate-y-[30px] opacity-0"
-              } border-l-2 border-[#D0D0D0] pl-6`}
-            >
+            </Reveal>
+            <Reveal as="div" delay={200} className="border-l-2 border-[#D0D0D0] pl-6">
               <h3 className="text-xl font-semibold text-[#171A20]">Network Infrastructure</h3>
               <p className="mt-1 text-lg font-medium text-[#262626]">Building Your High-Performance Digital Backbone</p>
               <p className="mt-2 text-sm text-[#41444B] leading-relaxed">
                 Secure, reliable, and scalable network infrastructure is non-negotiable. We design, implement, and manage LAN, WAN, SD-WAN, and wireless solutions that ensure seamless connectivity, optimal performance, and robust security for your critical operations.
               </p>
-            </div>
-            <div
-              ref={card3Ref as React.RefObject<HTMLDivElement>}
-              className={`${base} ${
-                card3In
-                  ? "translate-y-0 opacity-100 delay-[300ms]"
-                  : "translate-y-[30px] opacity-0"
-              } border-l-2 border-[#D0D0D0] pl-6`}
-            >
+            </Reveal>
+            <Reveal as="div" delay={300} className="border-l-2 border-[#D0D0D0] pl-6">
               <h3 className="text-xl font-semibold text-[#171A20]">Cloud Services</h3>
               <p className="mt-1 text-lg font-medium text-[#262626]">Harnessing the Power and Agility of the Cloud</p>
               <p className="mt-2 text-sm text-[#41444B] leading-relaxed">
                 Navigate your cloud journey with confidence. We offer cloud strategy consulting, migration services (AWS, Azure, Google Cloud), hybrid cloud integration, and cloud management, enabling scalability, cost-efficiency, and innovation.
               </p>
-            </div>
-            <div
-              ref={card4Ref as React.RefObject<HTMLDivElement>}
-              className={`${base} ${
-                card4In
-                  ? "translate-y-0 opacity-100 delay-[300ms]"
-                  : "translate-y-[30px] opacity-0"
-              } border-l-2 border-[#D0D0D0] pl-6`}
-            >
+            </Reveal>
+            <Reveal as="div" delay={300} className="border-l-2 border-[#D0D0D0] pl-6">
               <h3 className="text-xl font-semibold text-[#171A20]">Data Security</h3>
               <p className="mt-1 text-lg font-medium text-[#262626]">End-to-End Protection for Your Most Critical Assets</p>
               <p className="mt-2 text-sm text-[#41444B] leading-relaxed">
                 Cyber threats don&apos;t wait, and neither should your defences. We deliver comprehensive security assessments, threat monitoring, incident response, and compliance frameworks that protect your data, infrastructure, and reputation around the clock.
               </p>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>

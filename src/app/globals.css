@@ -149,6 +149,55 @@
 /* No `scroll-behavior: smooth` here: Lenis owns scrolling and the two fight.
    Anchor navigation goes through lenis.scrollTo (src/motion/LenisProvider). */
 
+/* Motion tokens, mirrored from src/motion/tokens.ts so the CSS-driven
+   entrances match the JavaScript ones exactly. src/motion/__tests__/
+   tokens.test.ts fails if these drift apart. */
+:root {
+  --motion-duration-micro: 120ms;
+  --motion-duration-ui: 240ms;
+  --motion-duration-reveal: 480ms;
+  --motion-duration-scene: 900ms;
+  --motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --motion-ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+  --motion-distance-reveal: 16px;
+  --motion-distance-line: 12px;
+}
+
+@layer components {
+  /* The entrance primitive (src/motion/Reveal.tsx). */
+  .motion-reveal {
+    opacity: 0;
+    transform: translateY(var(--motion-distance-reveal));
+    transition:
+      opacity var(--motion-duration-reveal) var(--motion-ease-out),
+      transform var(--motion-duration-reveal) var(--motion-ease-out);
+  }
+
+  .motion-reveal-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Masked lines produced by SplitText (src/motion/SplitLines.tsx). */
+  .motion-split-line {
+    display: block;
+    will-change: transform;
+  }
+
+  /* The carry motif (src/motion/Thread.tsx). */
+  .motion-thread {
+    width: 1px;
+    transform: scaleY(0);
+    transform-origin: top center;
+    transition: transform var(--motion-duration-reveal) var(--motion-ease-out);
+  }
+
+  .motion-thread-drawn {
+    transform: scaleY(1);
+  }
+}
+
 * {
   box-sizing: border-box;
 }

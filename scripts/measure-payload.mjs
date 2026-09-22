@@ -65,11 +65,14 @@ const report = {
   imgBytes: imgs.reduce((t, u) => t + publicBytes(u), 0),
   imgTags: (html.match(/<img/g) ?? []).length,
   imgFiles: imgs.length,
+  // The bare words "gsap" and "lenis" appear in our own loader as property
+  // names, so match on engine internals instead: these strings exist only
+  // inside the libraries themselves.
   hasGsapOrLenis: scripts.some((u) => {
     const p = resolve(u);
     if (!p) return false;
     const src = readFileSync(p, "utf8");
-    return /\bgsap\b/.test(src) || /\blenis\b/i.test(src);
+    return /_gsap|quickSetter|registerEase|lenis-smooth|virtualScroll/.test(src);
   }),
 };
 

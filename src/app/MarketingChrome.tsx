@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import LenisProvider from "../motion/LenisProvider";
 
 const HIDE_PREFIXES = ["/admin", "/login"];
 
@@ -22,6 +23,7 @@ export default function MarketingChrome({
 
   return (
     <>
+      <LenisProvider />
       <Header />
       <main id="main-content" className="flex-grow">
         {children}

@@ -1,34 +1,10 @@
-"use client";
-
-import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Partners from "../components/Partners";
 import Banner from "../components/Banner";
 import Leaders from "../components/Leaders";
-
-function useInView(threshold = 0.1) {
-  const ref = useRef<HTMLElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { threshold }
-    );
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return [ref, inView] as const;
-}
-
-const base = "transform transition-all duration-[600ms] ease-out";
+import Reveal from "@/motion/Reveal";
 
 export default function AboutPage() {
-  const [aboutHeadingRef, aboutHeadingIn] = useInView();
-  const [aboutSpanRef, aboutSpanIn] = useInView();
-  const [aboutP1Ref, aboutP1In] = useInView();
-  const [aboutP2Ref, aboutP2In] = useInView();
-  const [aboutP3Ref, aboutP3In] = useInView();
-
   return (
     <>
       {/* Hero */}
@@ -147,68 +123,33 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row">
             <div className="w-full lg:w-1/2 py-12 lg:py-20 lg:pr-12 text-white space-y-6">
-            <h2
-              ref={aboutHeadingRef as React.RefObject<HTMLHeadingElement>}
-              className={`${base} ${
-                aboutHeadingIn
-                  ? "translate-y-0 opacity-100 delay-[600ms]"
-                  : "translate-y-[30px] opacity-0"
-              } text-[20px] lg:text-[24px] leading-[28px] lg:leading-[36px] font-semibold mb-6`}
-            >
+            <Reveal as="h2" delay={600} className="text-[20px] lg:text-[24px] leading-[28px] lg:leading-[36px] font-semibold mb-6">
               Engineering the Future, One Solution at a Time
-            </h2>
-            <span
-              ref={aboutSpanRef as React.RefObject<HTMLSpanElement>}
-              className={`${base} ${
-                aboutSpanIn
-                  ? "translate-y-0 opacity-100 delay-[0ms]"
-                  : "translate-y-[30px] opacity-0"
-              } text-[14px] lg:text-[16px] leading-[22px] lg:leading-[25px] block`}
-            >
+            </Reveal>
+            <Reveal as="span" className="text-[14px] lg:text-[16px] leading-[22px] lg:leading-[25px] block">
               Founded in 2012 in Accra, Ghana, Inflexions I.T. Services was
               built on a singular conviction: the right technology, expertly
               implemented, is the inflexion point between stagnation and
               growth. Our core team brings decades of collective experience in
               IT systems integration.
-            </span>
-            <p
-              ref={aboutP1Ref as React.RefObject<HTMLParagraphElement>}
-              className={`${base} ${
-                aboutP1In
-                  ? "translate-y-0 opacity-100 delay-[100ms]"
-                  : "translate-y-[30px] opacity-0"
-              } text-[14px] lg:text-[16px] leading-[22px] lg:leading-[25px]`}
-            >
+            </Reveal>
+            <Reveal as="p" delay={100} className="text-[14px] lg:text-[16px] leading-[22px] lg:leading-[25px]">
               Today, we are the technology partner enterprises trust to
               navigate the AI era. We embed machine learning, AIOps, and
               intelligent automation into every solution we deliver&mdash;creating
               distinct competitive advantages, not incremental improvements.
-            </p>
-            <p
-              ref={aboutP2Ref as React.RefObject<HTMLParagraphElement>}
-              className={`${base} ${
-                aboutP2In
-                  ? "translate-y-0 opacity-100 delay-[200ms]"
-                  : "translate-y-[30px] opacity-0"
-              } text-[14px] lg:text-[16px] leading-[22px] lg:leading-[25px]`}
-            >
+            </Reveal>
+            <Reveal as="p" delay={200} className="text-[14px] lg:text-[16px] leading-[22px] lg:leading-[25px]">
               From our headquarters in Accra, we serve clients across Ghana
               with the ambition and capability to expand throughout West
               Africa. Our privately-owned structure means one thing: speed,
               accountability, and zero bureaucracy.
-            </p>
-            <p
-              ref={aboutP3Ref as React.RefObject<HTMLParagraphElement>}
-              className={`${base} ${
-                aboutP3In
-                  ? "translate-y-0 opacity-100 delay-[300ms]"
-                  : "translate-y-[30px] opacity-0"
-              } text-[14px] lg:text-[16px] leading-[22px] lg:leading-[25px]`}
-            >
+            </Reveal>
+            <Reveal as="p" delay={300} className="text-[14px] lg:text-[16px] leading-[22px] lg:leading-[25px]">
               Every engagement is a turning point. We help enterprises move
               from reactive IT spending to strategic technology
               investment&mdash;and the results speak for themselves.
-            </p>
+            </Reveal>
             <Link
               href="/contact"
               className="inline-block bg-[#BD2E25] hover:bg-[#A02923] text-white font-semibold px-8 py-3 rounded-[6px] transition-colors duration-300 mt-4"

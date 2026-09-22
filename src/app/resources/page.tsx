@@ -1,24 +1,6 @@
-"use client";
-
-import { useEffect, useState, useRef } from "react";
 import Blog from "../components/Blog";
 import Banner from "../components/Banner";
-
-function useInView(threshold = 0.1) {
-  const ref = useRef<HTMLElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { threshold }
-    );
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return [ref, inView] as const;
-}
-
-const base = "transform transition-all duration-[600ms] ease-out";
+import Reveal from "@/motion/Reveal";
 
 const whitepapers = [
   {
@@ -61,9 +43,6 @@ const webinars = [
 ];
 
 export default function ResourcesPage() {
-  const [insightsTitleRef, insightsTitleIn] = useInView();
-  const [insightsParaRef, insightsParaIn] = useInView();
-
   return (
     <div>
       {/* Hero */}
@@ -100,26 +79,12 @@ export default function ResourcesPage() {
               />
             </div>
             <div className="md:ml-8 text-left">
-              <h1
-                ref={insightsTitleRef as React.RefObject<HTMLHeadingElement>}
-                className={`${base} ${
-                  insightsTitleIn
-                    ? "translate-y-0 opacity-100 delay-[0ms]"
-                    : "translate-y-[30px] opacity-0"
-                } text-4xl font-bold mb-4 text-black`}
-              >
+              <Reveal as="h1" className="text-4xl font-bold mb-4 text-black">
                 Expert Intelligence for IT Leaders
-              </h1>
-              <p
-                ref={insightsParaRef as React.RefObject<HTMLParagraphElement>}
-                className={`${base} ${
-                  insightsParaIn
-                    ? "translate-y-0 opacity-100 delay-[100ms]"
-                    : "translate-y-[30px] opacity-0"
-                } text-lg text-[#262626] max-w-2xl`}
-              >
+              </Reveal>
+              <Reveal as="p" delay={100} className="text-lg text-[#262626] max-w-2xl">
                 Deep dives into the trends, frameworks, and strategies that matter most to technology leaders. Cut through the noise with insights built on real-world implementation experience.
-              </p>
+              </Reveal>
             </div>
           </div>
         </header>
