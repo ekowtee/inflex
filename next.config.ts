@@ -2,16 +2,16 @@ import type { NextConfig } from "next";
 
 const cspHeader = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com;
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com https://www.googletagmanager.com;
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-  img-src 'self' blob: data: https://inflexions.tech;
+  img-src 'self' blob: data: https://inflexions.tech https://www.google-analytics.com https://www.googletagmanager.com;
   font-src 'self' https://fonts.gstatic.com;
   object-src 'none';
   base-uri 'self';
   form-action 'self';
   frame-ancestors 'none';
   frame-src 'self' https://challenges.cloudflare.com https://www.google.com;
-  connect-src 'self' https://challenges.cloudflare.com;
+  connect-src 'self' https://challenges.cloudflare.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com;
 `
   .replace(/\s{2,}/g, " ")
   .trim();
