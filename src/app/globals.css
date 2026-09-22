@@ -77,7 +77,9 @@
 @layer components {
   .type-display-xl {
     font-family: var(--font-rubik), system-ui, sans-serif;
-    font-size: clamp(2.75rem, 6.5vw, 6.5rem);
+    /* 6.5vw wrapped the nine-word hero headline to six lines at 1440 px and
+       pushed the call to action below the fold. 4.6vw holds it to four. */
+    font-size: clamp(2.5rem, 4.6vw, 4.75rem);
     font-weight: 700;
     letter-spacing: -0.035em;
     line-height: 0.95;
@@ -196,6 +198,29 @@
   .motion-thread-drawn {
     transform: scaleY(1);
   }
+
+  /* The scroll cue in the hero: a 1 px line that grows to 32 px and fades,
+     every 2.4 s. Pauses once the visitor has scrolled. */
+  .motion-scroll-cue {
+    display: inline-block;
+    width: 1px;
+    height: 32px;
+    background: currentColor;
+    transform-origin: top center;
+    animation: motion-scroll-cue 2.4s var(--motion-ease-out) infinite;
+  }
+
+  [data-scrolled] .motion-scroll-cue {
+    animation: none;
+    opacity: 0.4;
+  }
+}
+
+@keyframes motion-scroll-cue {
+  0% { transform: scaleY(0); opacity: 0; }
+  35% { transform: scaleY(1); opacity: 1; }
+  80% { transform: scaleY(1); opacity: 0; }
+  100% { transform: scaleY(0); opacity: 0; }
 }
 
 * {
