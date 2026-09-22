@@ -1,4 +1,4 @@
-import HeroBanner from "./components/HeroBanner";
+import Arrival from "./components/home/Arrival";
 import Partners from "./components/Partners";
 import StrategicPartnerSection from "./components/StrategicPartnerSection";
 import ComprehensiveSolutions from "./components/ComprehensiveSolutions";
@@ -41,10 +41,12 @@ export default function Home() {
       />
 
       {/* Hero Section */}
-      <HeroBanner />
+      <Arrival />
 
       {/* Partners Section */}
-      <Partners />
+      <div id="trusted-by">
+        <Partners />
+      </div>
 
       {/* Strategic Partner Section */}
       <StrategicPartnerSection />

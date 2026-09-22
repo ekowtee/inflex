@@ -57,7 +57,7 @@ At the 1.6 Mbps slow 4G profile, 14.6 MB is 73 seconds of download. The page wor
 | Package | Version | Whole package | Realistic tree-shaken use | Notes |
 |---|---|---|---|---|
 | `three` | 0.186 | 185 KB | 120 to 135 KB | Points, LineSegments, ShaderMaterial, WebGLRenderer, DataTexture, render targets, camera, fog. No loaders, no controls, no standard materials. |
-| `@react-three/fiber` | 9.7 | 52 KB | 40 KB | Reconciler is the bulk; not reducible. |
+| ~~`@react-three/fiber`~~ | — | — | — | **Removed 22 September 2026.** Its namespace import of three defeats tree shaking; the scene is vanilla three. |
 | `postprocessing` | 6.39 | **113 KB** | 75 to 85 KB | Poor tree-shaking; the EffectComposer pulls most of the library. **Removed from the plan.** |
 | `gsap` core | 3.15 | 27 KB | 27 KB | Plus ScrollTrigger, about 15 KB, and SplitText, about 8 KB. |
 | `lenis` | 1.3 | 5.5 KB | 5.5 KB | |
@@ -71,7 +71,7 @@ The creative direction set two budgets: route shell 190 KB, environment 230 KB. 
 |---|---|---|---|---|
 | **Route shell** | Next runtime, React DOM, page components, motion primitives (CSS-driven fallbacks only), `lucide-react` icons used on the page | **≤ 205 KB** | 200 KB (218 today minus 18 KB `react-slick`) | Immediately. Does not gate LCP. |
 | **Motion** | GSAP core, ScrollTrigger, SplitText, Lenis, the ScrollTrigger timeline | **≤ 60 KB** | 56 KB | After LCP, every tier. Until it arrives, the hero's line reveals run on CSS animations so the arrival never waits for it. |
-| **Environment** | `three`, `@react-three/fiber`, the Core components, shaders, the hand-written post stage, the formation worker | **≤ 190 KB** | 175 KB | After the motion chunk, Tier A and B only, after the poster has painted and the tier gate has passed. |
+| **Environment** | `three` (named imports, tree-shaken), the Core, shaders, the hand-written post stage, the formation worker | **≤ 190 KB** | **146 KB measured** | After the motion chunk, Tier A and B only, after the poster has painted and the tier gate has passed. |
 | **Formation data** | Generated in the worker | 0 KB | 0 KB | Never downloaded. |
 | **Mark silhouette** | `mark-silhouette.svg` re-exported with one-decimal coordinates and run through svgo | ≤ 12 KB | 30 KB today, about 11 KB after | When Beat 8 is within 200 vh. |
 | **GA4** | gtag.js | about 95 KB | 95 KB | `lazyOnload`, after everything above. Not on any budget line because it is not ours, and not before LCP under any circumstances. |
@@ -292,6 +292,67 @@ First production measurement of the Phase 0 build from a clean runner is the
 first run of that workflow; earlier figures in `PHASE0_REPORT.md` §4 were
 taken on the affected laptop and are directionally right only.
 
+### 9.4 What Chrome counts as the LCP element (found 22 September 2026)
+
+Chrome does not consider an image that covers the entire viewport as an LCP
+candidate; it treats it as wallpaper. Verified with stripped test pages: the
+poster at 90% of the viewport is the LCP element, a photograph at full bleed
+is not, and the home page's only candidate is the H1. So the hero's LCP
+element is the headline, and the LCP time is when the headline last painted,
+which moves when the web font arrives. That makes the headline's font path
+the thing the metric measures, not the poster. §9.1's note that the LCP
+element "must be the poster" is withdrawn.
+
+Consequences applied in `Arrival.tsx`: one poster per device through a
+`<picture>` with media-specific sources (two `next/image` elements with
+`priority` preloaded both posters on every device); the lit poster is
+requested only when the Tier C crossfade needs it; Tier B holds the
+environment chunk until three seconds after the LCP candidate so its parse
+and compile fall after the page's quiet window.
+
+### 9.5 Modelled LCP against observed LCP (found 22 September 2026)
+
+Every route on `main` and on `phase-1-core` reports an LCP of about 3.0 to 3.4 s
+from the CI gate while FCP sits at 1.1 to 1.2 s, and the gap is the same on
+`/contact`, which has no hero, no 3D and a text LCP element. The gap is not
+real paint time. It is how Lighthouse's default `simulate` throttling models
+a text LCP:
+
+- **Observed, unthrottled** (Lighthouse's own trace of the home page): first
+  contentful paint 207 ms, largest contentful paint 207 ms. The headline
+  paints in the first frame with the fallback font, exactly as intended.
+- **Observed, DevTools throttling** (real slow-4G and 4× CPU applied to the
+  browser): FCP and LCP identical, both the first paint.
+- **Simulated** (the default, and what the CI table shows): FCP 1.2 s,
+  LCP 3.1 s, "render delay" 93 % of it. Blocking the web fonts does not
+  move it. Lighthouse's Lantern model builds the LCP estimate from every
+  request that started before the observed LCP timestamp, so a text LCP
+  that happens at first paint is charged for the route shell's download and
+  parse on a 4× CPU. The shell scripts are `async` and do not block the
+  paint in a real browser.
+
+Consequences:
+
+1. **The simulated LCP is a proxy for shell weight, not for when the
+   headline appears.** It will not drop below about 3 s on slow 4G while the
+   React and Next runtime is 150 KB gzipped, whatever the hero does. Field
+   LCP (the GA4 web-vitals events, §9.2) reports the real paint and is the
+   number that counts for ranking.
+2. **The CI table now prints both.** `scripts/perf-gate.mjs --throttling
+   devtools` observes the paint under throttling; the workflow runs it after
+   the simulated pass. The observed figure has more run-to-run variance (it
+   is a real browser on a shared runner), which is why the simulated pass
+   stays as the stable trend line.
+3. **The route shell is 165 KB gzipped for a modern browser, not 204.**
+   The 38 KB polyfill bundle is a `nomodule` script that module-capable
+   browsers never request; the gate was counting it. Corrected in the gate
+   on 22 September 2026. The 205 KB ceiling stands; the headroom is now
+   40 KB rather than 1 KB.
+
+Decision for the owner (§10): which LCP figure gates the build once
+`LIGHTHOUSE_BLOCKING` turns on at the end of Phase 1. The recommendation is
+the observed one, with the simulated table kept for trend.
+
 ### 9.3 Definition of "first paint" for this site
 
 First paint is not a blank canvas clearing to obsidian. It is **the H1 legible and the hero composition visible**, which means the LQIP has painted behind the copy. That happens at FCP. The visitor's impression of speed is set at LCP, when the sharp poster replaces the blur. The live 3D scene arriving later is invisible as a performance event because the crossfade starts from an identical still. This is the whole reason the poster pair exists, and it is why the LCP target is the only first-paint number the owner needs to watch.
@@ -305,6 +366,7 @@ First paint is not a blank canvas clearing to obsidian. It is **the H1 legible a
 1. **Budget revision.** Approve the corrected budgets: route shell 205 KB, motion 60 KB, environment 190 KB (was 190 and 230 in the creative direction). Net first-party JavaScript on Tier A rises from the PRD's 350 KB to about 435 KB, all of it after first paint; Tier C stays under 350 KB.
 2. **Image clean-up before motion work.** Approve Phase 0 deleting unreferenced files from `public/` (92 MB to under 15 MB) and converting every remaining photograph to AVIF and WebP. Original files should be kept outside the served folder, not in git history alone.
 3. **Post-processing library.** Approve replacing `postprocessing` with the hand-written three-pass stage. It removes about 80 KB and a dependency; the trade is that bloom quality is ours to tune rather than a library default.
+4. **Which LCP figure gates the build** (added 22 September 2026, open). Lighthouse's simulated LCP charges the headline for the framework's parse time and cannot pass 2.5 s on slow 4G with a 143 KB runtime; the observed LCP under real throttling is the first paint. §9.5. Recommendation: gate on the observed median of three runs and keep the simulated table for trend.
 
 ---
 

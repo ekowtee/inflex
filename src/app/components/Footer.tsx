@@ -12,9 +12,9 @@ export default function Footer() {
             <Image
               src="/assets/logo.png"
               alt="Inflexions-IT"
-              width={192}
-              height={40}
-              className="h-12"
+              width={770}
+              height={150}
+              className="h-12 w-auto"
             />
 
             <div className="space-y-5 mt-8">

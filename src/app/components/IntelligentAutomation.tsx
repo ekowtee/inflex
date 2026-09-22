@@ -88,14 +88,12 @@ export default function IntelligentAutomation() {
                   key={logo.alt}
                   className="relative group bg-white h-[56px] sm:h-[64px] flex-1 flex items-center justify-center rounded-[10px] shadow-md"
                 >
-                  <Image
-                    src={logo.src}
-                    alt={logo.alt}
-                    width={80}
-                    height={36}
-                    className="w-[60px] sm:w-[80px] h-[28px] sm:h-[36px] object-contain"
-                    unoptimized
-                  />
+                  {/* Sized box with a fill image: the logo keeps its aspect ratio
+                      inside the box, and the box may shrink on narrow screens without
+                      next/image warning that only one dimension changed. */}
+                  <span className="relative block max-w-full w-[60px] sm:w-[80px] h-[28px] sm:h-[36px]">
+                    <Image src={logo.src} alt={logo.alt} fill sizes="80px" className="object-contain" unoptimized />
+                  </span>
                   <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#BD2E25] text-white text-xs font-medium px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-[#BD2E25]">
                     {logo.alt}
                   </span>

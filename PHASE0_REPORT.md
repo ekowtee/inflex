@@ -112,6 +112,8 @@ Two honest caveats:
 
 ## 5. Questions for the owner
 
+> **Resolution, 22 September 2026.** The gate now runs on a GitHub Actions runner (`.github/workflows/perf-gate.yml`); the laptop figures below were inflated about threefold by ESET's TLS filtering. From the clean runner, the production Phase 0 build measures FCP 1.1 s, TBT under 80 ms and CLS 0.000 on every route; only LCP misses, at 2.4 to 3.4 s against 2.5 s, on the stock hero photograph that Phase 1 replaces with the poster. Thresholds are unchanged. Question 3 is resolved (ESLint fixed on `main`).
+
 **1. The Lighthouse thresholds cannot be met before Phase 1, and I did not relax them.**
 
 `scripts/budgets.json` still carries the numbers from the performance plan. They were written for the finished site, where the hero is a poster image generated from the 3D scene. This branch still serves the stock photograph, which is the LCP element on every route, and the 200 KB React and Next shell costs 300 to 500 ms of blocking time on a 4× throttled CPU no matter what the page contains.

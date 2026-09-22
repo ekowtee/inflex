@@ -192,14 +192,12 @@ export default function SolutionsPage() {
                 key={lab.alt}
                 className="relative group bg-white h-[144px] w-[300px] flex items-center justify-center rounded-[10px] shadow-md hover:shadow-lg transition-shadow duration-300"
               >
-                <Image
-                  src={lab.src}
-                  alt={lab.alt}
-                  width={180}
-                  height={72}
-                  className="w-[180px] h-[72px] object-contain"
-                  unoptimized
-                />
+                {/* Sized box with a fill image: the logo keeps its aspect ratio
+                    inside the box, and the box may shrink on narrow screens without
+                    next/image warning that only one dimension changed. */}
+                <span className="relative block max-w-full w-[180px] h-[72px]">
+                  <Image src={lab.src} alt={lab.alt} fill sizes="180px" className="object-contain" unoptimized />
+                </span>
                 <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#BD2E25] text-white text-xs font-medium px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-[#BD2E25]">
                   {lab.alt}
                 </span>

@@ -5,7 +5,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import LenisProvider from "../motion/LenisProvider";
 
-const HIDE_PREFIXES = ["/admin", "/login"];
+const HIDE_PREFIXES = ["/admin", "/login", "/core-capture"];
 
 export default function MarketingChrome({
   children,
