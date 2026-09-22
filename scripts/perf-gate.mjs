@@ -5,6 +5,8 @@
  *   npm run perf            three Lighthouse runs per route, median
  *   npm run perf -- --runs 1    one run per route, for a quick check
  *   npm run perf -- --bundles   skip Lighthouse, check budgets only
+ *   npm run perf -- --url https://example.com   measure a deployed site
+ *                                instead of a local next start
  *
  * Fails the process on any breach, so it can gate a build.
  */
@@ -21,6 +23,8 @@ const args = process.argv.slice(2);
 const runsArg = args.indexOf("--runs");
 const RUNS = runsArg > -1 ? Number(args[runsArg + 1]) : 3;
 const BUNDLES_ONLY = args.includes("--bundles");
+const urlArg = args.indexOf("--url");
+const REMOTE_URL = urlArg > -1 ? args[urlArg + 1].replace(/\/$/, "") : null;
 
 const failures = [];
 const note = (ok, label, actual, budget, unit) => {
@@ -178,6 +182,8 @@ const median = (xs) => {
 };
 
 async function runLighthouse() {
+  if (REMOTE_URL) return runLighthouseAgainst(REMOTE_URL, null);
+
   if (!existsSync(".next/BUILD_ID")) {
     console.log("no build found, running next build…");
     await new Promise((resolve, reject) => {
@@ -192,9 +198,14 @@ async function runLighthouse() {
     shell: true,
   });
   const base = `http://localhost:${port}`;
+  return runLighthouseAgainst(base, server);
+}
 
+async function runLighthouseAgainst(base, server) {
   try {
     await wait(base + "/");
+    console.log(`
+measuring ${base}`);
     const chrome = await chromeLauncher.launch({
       chromeFlags: ["--headless=new", "--disable-gpu", "--no-sandbox"],
     });
@@ -242,7 +253,7 @@ async function runLighthouse() {
 
     await chrome.kill();
   } finally {
-    server.kill();
+    server?.kill();
   }
 }
 
