@@ -31,7 +31,7 @@ type Stage = "poster" | "loading" | "live" | "fallback";
 /** Tier B waits past the page's quiet window before asking for the scene. */
 const TIER_B_HOLD_MS = 3000;
 
-const posterStyle = (visible: boolean, ms: number): React.CSSProperties => ({
+const posterStyle = (visible: boolean, ms: number, lqip: boolean): React.CSSProperties => ({
   position: "absolute",
   inset: 0,
   width: "100%",
@@ -43,6 +43,12 @@ const posterStyle = (visible: boolean, ms: number): React.CSSProperties => ({
   objectPosition: "50% 50%",
   opacity: visible ? 1 : 0,
   transition: `opacity ${ms}ms ${ease.out}`,
+  // The placeholder lives on the image itself, never on the wrapper: the
+  // wrapper sits above the live canvas and does not fade, so anything
+  // painted on it would hide the scene once the poster has gone.
+  ...(lqip
+    ? { backgroundImage: `url(${posters.lqip})`, backgroundSize: "cover", backgroundPosition: "50% 50%" }
+    : {}),
 });
 
 function Poster({
@@ -78,7 +84,7 @@ function Poster({
         decoding="async"
         draggable={false}
         onLoad={onLoad}
-        style={posterStyle(visible, ms)}
+        style={posterStyle(visible, ms, !lit)}
       />
     </picture>
   );
@@ -146,17 +152,10 @@ export default function Arrival() {
     >
       {showScene && <CoreCanvas tier={tier === "A" ? "A" : "B"} onLive={onLive} onFail={onFail} />}
 
-      {/* The poster pair on the LQIP. Unlit paints first; lit is the Tier C
-          arrival and is requested only when needed. */}
-      <div
-        className="absolute inset-0 z-[1]"
-        aria-hidden="true"
-        style={{
-          backgroundImage: `url(${posters.lqip})`,
-          backgroundSize: "cover",
-          backgroundPosition: "50% 50%",
-        }}
-      >
+      {/* The poster pair. Unlit paints first, over its inline placeholder;
+          lit is the Tier C arrival and is requested only when needed. The
+          wrapper itself must stay transparent: it is above the canvas. */}
+      <div className="absolute inset-0 z-[1]" aria-hidden="true">
         <Poster lit={false} visible={!posterHidden} ms={duration.scene} eager />
         {wantLit && (
           <Poster lit visible={litLoaded && !posterHidden} ms={1800} eager={false} onLoad={onLitLoad} />
