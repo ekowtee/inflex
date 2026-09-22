@@ -1,14 +1,18 @@
 import Link from "next/link";
 import Reveal from "@/motion/Reveal";
+import Image from "next/image";
 
 export default function HeroBanner() {
   return (
     <div className="relative w-full h-[400px] md:h-[500px] overflow-hidden">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/assets/hero/herobanner2.png"
+      <Image
+        src="/assets/hero/herobanner2.webp"
         alt=""
+        width={1792}
+        height={576}
         className="w-full h-full object-cover"
+        sizes="100vw"
+        priority
       />
       <div className="absolute inset-0 bg-black/30" />
 

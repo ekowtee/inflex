@@ -1,3 +1,4 @@
+import Image from "next/image";
 const cards = [
   {
     src: "/assets/mid/mid1.png",
@@ -18,7 +19,7 @@ const cards = [
     rowSpan: "md:row-span-2 lg:h-[530px] md:h-[540px] h-[260px]",
   },
   {
-    src: "/assets/mid/mid4.png",
+    src: "/assets/mid/mid4.webp",
     title: "Unlock Future Potential:",
     text: "Turn today\u2019s data into tomorrow\u2019s competitive edge. We embed intelligence into your stack so every decision is faster and sharper. From predictive analytics dashboards to AI-driven automation, we help you move from reactive reporting to proactive strategy\u2014giving leadership the clarity to act with confidence.",
     rowSpan: "md:col-span-2 h-[259px]",
@@ -40,12 +41,13 @@ export default function InflexionsAdvantage() {
               item.rowSpan || "h-[260px]"
             } rounded-lg overflow-hidden group transition-transform duration-500`}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={item.src}
               alt={item.title}
-              loading="lazy"
+              width={388}
+              height={499}
               className="object-cover w-full h-full transform transition-transform duration-500 group-hover:scale-110"
+              sizes="100vw"
             />
 
             {/* Persistent gradient — always visible so title reads on mobile */}

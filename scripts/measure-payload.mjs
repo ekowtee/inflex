@@ -47,7 +47,13 @@ const sum = (urls, fn) =>
   }, 0);
 
 const publicBytes = (url) => {
-  const clean = decodeURIComponent(url.split("?")[0]);
+  // next/image rewrites src to /_next/image?url=<encoded>&w=&q=. Measure the
+  // source file it points at, which is what the optimizer reads.
+  let target = url;
+  const optimizer = url.match(/[?&]url=([^&]+)/);
+  if (optimizer) target = decodeURIComponent(optimizer[1]);
+  const clean = decodeURIComponent(target.split("?")[0]);
+  if (!clean.startsWith("/")) return 0;
   const p = join("public", clean.replace(/^\//, ""));
   return existsSync(p) ? statSync(p).size : 0;
 };

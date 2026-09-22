@@ -1,18 +1,21 @@
 import MainPartners from "../components/MainPartners";
 import Banner from "../components/Banner";
 import Reveal from "@/motion/Reveal";
+import Image from "next/image";
 
 export default function SolutionsPage() {
   return (
     <div>
       {/* Hero */}
       <div className="relative w-full h-[500px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/assets/about/aboutsect.png"
+        <Image
+          src="/assets/about/aboutsect.webp"
           alt="Solutions"
+          width={1338}
+          height={803}
           className="w-full h-full object-cover"
-          loading="lazy"
+          sizes="100vw"
+          priority
         />
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
@@ -40,16 +43,34 @@ export default function SolutionsPage() {
           </div>
           <div className="grid grid-cols-2 grid-rows-2 gap-4">
             <div className="rounded-lg overflow-hidden transform transition-transform duration-500 ease-out hover:scale-105">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/solutions/sol2.png" alt="Team collaborating" className="w-full h-full object-cover" />
+              <Image
+                src="/assets/solutions/sol2.webp"
+                alt="Team collaborating"
+                width={1024}
+                height={1024}
+                className="w-full h-full object-cover"
+                sizes="100vw"
+              />
             </div>
             <div className="rounded-lg overflow-hidden transform transition-transform duration-500 ease-out hover:scale-105">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/solutions/sol1.jpeg" alt="Professional working" className="w-full h-full object-cover" />
+              <Image
+                src="/assets/solutions/sol1.webp"
+                alt="Professional working"
+                width={1200}
+                height={896}
+                className="w-full h-full object-cover"
+                sizes="100vw"
+              />
             </div>
             <div className="col-span-2 rounded-lg overflow-hidden transform transition-transform duration-500 ease-out hover:scale-105">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/solutions/sol3.png" alt="Data visualization" className="w-full h-full object-cover" />
+              <Image
+                src="/assets/solutions/sol3.webp"
+                alt="Data visualization"
+                width={637}
+                height={195}
+                className="w-full h-full object-cover"
+                sizes="100vw"
+              />
             </div>
           </div>
         </div>
@@ -171,12 +192,13 @@ export default function SolutionsPage() {
                 key={lab.alt}
                 className="relative group bg-white h-[144px] w-[300px] flex items-center justify-center rounded-[10px] shadow-md hover:shadow-lg transition-shadow duration-300"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={lab.src}
                   alt={lab.alt}
+                  width={180}
+                  height={72}
                   className="w-[180px] h-[72px] object-contain"
-                  loading="lazy"
+                  unoptimized
                 />
                 <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#BD2E25] text-white text-xs font-medium px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-[#BD2E25]">
                   {lab.alt}
@@ -190,21 +212,27 @@ export default function SolutionsPage() {
       {/* Solution cards */}
       <section>
         <div className="relative w-full h-[1600px] md:h-[700px] lg:h-[750px]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/solutions/sol4.jpeg" alt="Solutions background" className="hidden md:flex w-full h-[504px] object-cover" loading="lazy" />
+          <Image
+            src="/assets/solutions/sol4.webp"
+            alt="Solutions background"
+            width={1648}
+            height={640}
+            className="hidden md:flex w-full h-[504px] object-cover"
+            sizes="(min-width: 1024px) 50vw, 100vw"
+          />
           <div className="absolute lg:bottom-10 md:bottom-10 left-0 right-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-4 md:gap-2 lg:gap-0 lg:flex-row md:flex-row flex-col items-center justify-between">
             {[
-              { img: "/assets/solutions/sol6.jpeg", title: "Data-centric Solutions" },
-              { img: "/assets/solutions/sol5.jpeg", title: "Network Infrastructure" },
-              { img: "/assets/solutions/sol7.jpeg", title: "Cloud Services" },
-              { img: "/assets/solutions/sol8.jpeg", title: "Data Security" },
+              { img: "/assets/solutions/sol6.webp", title: "Data-centric Solutions" },
+              { img: "/assets/solutions/sol5.webp", title: "Network Infrastructure" },
+              { img: "/assets/solutions/sol7.webp", title: "Cloud Services" },
+              { img: "/assets/solutions/sol8.webp", title: "Data Security" },
             ].map((item) => (
               <div key={item.title} className="relative shadow-md group">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={item.img}
                   alt={item.title}
-                  loading="lazy"
+                  width={1200}
+                  height={896}
                   className="lg:w-[260px] h-full object-cover transform transition-transform duration-300 hover:scale-105"
                 />
                 <div className="absolute bottom-0 left-2 lg:left-4 flex flex-col">

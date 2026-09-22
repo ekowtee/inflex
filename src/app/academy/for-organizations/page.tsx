@@ -78,7 +78,7 @@ export default function ForOrganizationsPage() {
         eyebrow="For Organisations"
         title="Transform your workforce. Transform your business."
         subtitle="Custom training programmes built around your strategic priorities. Delivered on-site, virtually, or hybrid — measured against the outcomes that matter to your leadership team."
-        backgroundImage="/assets/services/Servicesbg.jpeg"
+        backgroundImage="/assets/services/Servicesbg.webp"
         breadcrumbs={[
           { label: "Academy", href: "/academy" },
           { label: "For Organisations" },

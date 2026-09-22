@@ -3,18 +3,21 @@ import Partners from "../components/Partners";
 import Banner from "../components/Banner";
 import Leaders from "../components/Leaders";
 import Reveal from "@/motion/Reveal";
+import Image from "next/image";
 
 export default function AboutPage() {
   return (
     <>
       {/* Hero */}
       <div className="relative w-full h-[500px] md:h-[550px] overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/assets/about/aboutbg.jpeg"
+        <Image
+          src="/assets/about/aboutbg.webp"
           alt="About Inflexions IT"
+          width={1504}
+          height={704}
           className="w-full h-full object-cover"
-          loading="lazy"
+          sizes="100vw"
+          priority
         />
         <div className="absolute inset-0 bg-black/50" />
         {/* Hero text — standard positioning */}
@@ -90,17 +93,21 @@ export default function AboutPage() {
             </div>
             <div className="w-full md:w-1/2">
               <div className="grid grid-cols-2 gap-4">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/assets/about/strategy.jpeg"
+                <Image
+                  src="/assets/about/strategy.webp"
                   alt="Strategic technology planning in modern conference room"
+                  width={1024}
+                  height={1024}
                   className="w-full h-[200px] md:h-[280px] object-cover rounded-lg shadow-lg"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                 />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/assets/about/Implementation.png"
+                <Image
+                  src="/assets/about/Implementation.webp"
                   alt="IT professional in enterprise data centre"
+                  width={1024}
+                  height={1024}
                   className="w-full h-[200px] md:h-[280px] object-cover rounded-lg shadow-lg mt-8"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                 />
               </div>
             </div>
@@ -112,12 +119,13 @@ export default function AboutPage() {
       <section className="relative bg-[#2A2A2A] overflow-hidden">
         {/* Image — positioned to fill right half and bleed to edge */}
         <div className="hidden lg:block absolute top-0 right-0 w-1/2 h-full">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/about/aboutsect.png"
+          <Image
+            src="/assets/about/aboutsect.webp"
             alt="Modern data center with server infrastructure"
-            loading="lazy"
+            width={1338}
+            height={803}
             className="object-cover w-full h-full"
+            sizes="100vw"
           />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -161,12 +169,13 @@ export default function AboutPage() {
         </div>
         {/* Mobile/tablet image — normal flow */}
         <div className="lg:hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/about/aboutsect.png"
+          <Image
+            src="/assets/about/aboutsect.webp"
             alt="Modern data center with server infrastructure"
-            loading="lazy"
+            width={1338}
+            height={803}
             className="object-cover w-full h-[300px]"
+            sizes="(min-width: 1024px) 50vw, 100vw"
           />
         </div>
       </section>
@@ -203,11 +212,13 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="relative">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/assets/about/vvvvv.png"
+                <Image
+                  src="/assets/about/vvvvv.webp"
                   alt="Virtual reality experience"
+                  width={1024}
+                  height={1024}
                   className="w-full h-auto lg:h-[243px] rounded-[15px] object-cover"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                 />
                 <div className="absolute -bottom-6 -right-6 lg:-bottom-8 lg:-right-8">
                   <div className="bg-[#BD2E25] text-white w-[140px] h-[140px] lg:w-[160px] lg:h-[160px] flex flex-col items-center justify-center rounded-2xl border-4 border-white shadow-lg">
@@ -223,11 +234,13 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="w-full space-y-8">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="/assets/about/exp1.png"
                 alt="Team meeting"
+                width={495}
+                height={243}
                 className="w-full h-auto lg:h-[263px] rounded-[15px] object-cover"
+                sizes="(min-width: 1024px) 50vw, 100vw"
               />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                 <div className="space-y-2">

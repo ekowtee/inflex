@@ -1,3 +1,4 @@
+import Image from "next/image";
 const allPartners: Record<string, { src: string; alt: string }[]> = {
   "network-infrastructure": [
     { src: "/assets/partners/cisco.svg", alt: "Cisco" },
@@ -52,12 +53,13 @@ export default function SolutionPartners({ solution }: { solution: string }) {
               title={partner.alt}
               className="relative group bg-white h-[144px] w-[300px] flex items-center justify-center rounded-[10px] shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-300"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={partner.src}
                 alt={partner.alt}
+                width={180}
+                height={72}
                 className="w-[180px] h-[72px] object-contain"
-                loading="lazy"
+                unoptimized
               />
               <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#BD2E25] text-white text-xs font-medium px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-[#BD2E25]">
                 {partner.alt}

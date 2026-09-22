@@ -47,7 +47,7 @@ export default function AcademyLandingPage() {
         eyebrow="Inflexions Academy"
         title="Develop the capabilities that shape the next decade."
         subtitle="Expert-led training in AI, cybersecurity, cloud, and digital strategy — for individuals advancing their careers and organisations building competitive teams."
-        backgroundImage="/assets/solutions/sol6.jpeg"
+        backgroundImage="/assets/solutions/sol6.webp"
       />
 
       <AudienceSwitcher />

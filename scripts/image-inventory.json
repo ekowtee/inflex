@@ -1,0 +1,1223 @@
+[
+  {
+    "path": "/assets/case/casestudy7.webp",
+    "file": "public/assets/case/casestudy7.webp",
+    "bytes": 191322,
+    "width": 1312,
+    "height": 816,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/data.ts"
+    ]
+  },
+  {
+    "path": "/assets/blog/webinar2.webp",
+    "file": "public/assets/blog/webinar2.webp",
+    "bytes": 188678,
+    "width": 1024,
+    "height": 1024,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/resources/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/case/ImageA.webp",
+    "file": "public/assets/case/ImageA.webp",
+    "bytes": 184204,
+    "width": 1376,
+    "height": 768,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/data.ts"
+    ]
+  },
+  {
+    "path": "/assets/solutions/sol4.webp",
+    "file": "public/assets/solutions/sol4.webp",
+    "bytes": 140128,
+    "width": 1648,
+    "height": 640,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/academy/data.ts",
+      "src/app/solutions/cloud-services/page.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/blog/cloud-computing.webp",
+    "file": "public/assets/blog/cloud-computing.webp",
+    "bytes": 136820,
+    "width": 1500,
+    "height": 1000,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/resources/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/ai/ai3.webp",
+    "file": "public/assets/ai/ai3.webp",
+    "bytes": 135904,
+    "width": 1312,
+    "height": 816,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/IntelligentAutomation.tsx"
+    ]
+  },
+  {
+    "path": "/assets/hero/swap2.webp",
+    "file": "public/assets/hero/swap2.webp",
+    "bytes": 131882,
+    "width": 1600,
+    "height": 900,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/SwapGrid.tsx"
+    ]
+  },
+  {
+    "path": "/assets/career/careerbg.webp",
+    "file": "public/assets/career/careerbg.webp",
+    "bytes": 123148,
+    "width": 1920,
+    "height": 652,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/resources/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/hero/swap3.webp",
+    "file": "public/assets/hero/swap3.webp",
+    "bytes": 117404,
+    "width": 1920,
+    "height": 1020,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/SwapGrid.tsx"
+    ]
+  },
+  {
+    "path": "/assets/services/Servicesbg.webp",
+    "file": "public/assets/services/Servicesbg.webp",
+    "bytes": 116962,
+    "width": 1648,
+    "height": 640,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/academy/for-organizations/page.tsx",
+      "src/app/services/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/mid/mid3.png",
+    "file": "public/assets/mid/mid3.png",
+    "bytes": 106530,
+    "width": 388,
+    "height": 499,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/InflexionsAdvantage.tsx"
+    ]
+  },
+  {
+    "path": "/assets/case/casestudy8.webp",
+    "file": "public/assets/case/casestudy8.webp",
+    "bytes": 101720,
+    "width": 1200,
+    "height": 896,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/data.ts"
+    ]
+  },
+  {
+    "path": "/assets/solutions/sol2.webp",
+    "file": "public/assets/solutions/sol2.webp",
+    "bytes": 98246,
+    "width": 1024,
+    "height": 1024,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/academy/data.ts",
+      "src/app/solutions/network-infrastructure/page.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/services/Services3.webp",
+    "file": "public/assets/services/Services3.webp",
+    "bytes": 95884,
+    "width": 1376,
+    "height": 768,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/services/managed/page.tsx",
+      "src/app/services/page.tsx",
+      "src/app/services/support/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/case/inner8.webp",
+    "file": "public/assets/case/inner8.webp",
+    "bytes": 95774,
+    "width": 1200,
+    "height": 896,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/data.ts"
+    ]
+  },
+  {
+    "path": "/assets/about/aboutbg.webp",
+    "file": "public/assets/about/aboutbg.webp",
+    "bytes": 93426,
+    "width": 1504,
+    "height": 704,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/about/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/bgsvg/image.png",
+    "file": "public/assets/bgsvg/image.png",
+    "bytes": 92196,
+    "width": 492,
+    "height": 353,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/StrategicPartnerSection.tsx"
+    ]
+  },
+  {
+    "path": "/assets/case/inner7.webp",
+    "file": "public/assets/case/inner7.webp",
+    "bytes": 88392,
+    "width": 1200,
+    "height": 896,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/data.ts"
+    ]
+  },
+  {
+    "path": "/assets/services/Services4.webp",
+    "file": "public/assets/services/Services4.webp",
+    "bytes": 83766,
+    "width": 1376,
+    "height": 768,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/services/page.tsx",
+      "src/app/services/support/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/career/careersbg.webp",
+    "file": "public/assets/career/careersbg.webp",
+    "bytes": 82196,
+    "width": 1504,
+    "height": 704,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/careers/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/services/Services2.webp",
+    "file": "public/assets/services/Services2.webp",
+    "bytes": 80872,
+    "width": 1376,
+    "height": 768,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/academy/data.ts",
+      "src/app/services/managed/page.tsx",
+      "src/app/services/page.tsx",
+      "src/app/services/professional/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/case/ImageC.webp",
+    "file": "public/assets/case/ImageC.webp",
+    "bytes": 80474,
+    "width": 1376,
+    "height": 768,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/case-study/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/about/vvvvv.webp",
+    "file": "public/assets/about/vvvvv.webp",
+    "bytes": 76440,
+    "width": 1024,
+    "height": 1024,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/about/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/about/exp1.png",
+    "file": "public/assets/about/exp1.png",
+    "bytes": 70290,
+    "width": 495,
+    "height": 243,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/about/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/blog/webinar3.webp",
+    "file": "public/assets/blog/webinar3.webp",
+    "bytes": 69214,
+    "width": 1536,
+    "height": 1024,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/resources/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/about/aboutsect.webp",
+    "file": "public/assets/about/aboutsect.webp",
+    "bytes": 66248,
+    "width": 1338,
+    "height": 803,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/about/page.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/blog/webinar1.webp",
+    "file": "public/assets/blog/webinar1.webp",
+    "bytes": 63588,
+    "width": 1024,
+    "height": 1024,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/resources/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/case/ImageB.webp",
+    "file": "public/assets/case/ImageB.webp",
+    "bytes": 61608,
+    "width": 1376,
+    "height": 768,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/data.ts"
+    ]
+  },
+  {
+    "path": "/assets/career/career2.png",
+    "file": "public/assets/career/career2.png",
+    "bytes": 60537,
+    "width": 386,
+    "height": 218,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/FeaturedJobs.tsx"
+    ]
+  },
+  {
+    "path": "/assets/solutions/sol6.webp",
+    "file": "public/assets/solutions/sol6.webp",
+    "bytes": 59498,
+    "width": 1648,
+    "height": 640,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/academy/data.ts",
+      "src/app/academy/page.tsx",
+      "src/app/components/AcademyPromo.tsx",
+      "src/app/solutions/data-centric-solutions/page.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/solutions/sol7.webp",
+    "file": "public/assets/solutions/sol7.webp",
+    "bytes": 57862,
+    "width": 1200,
+    "height": 896,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/academy/data.ts",
+      "src/app/solutions/cloud-services/page.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/solutions/sol1.webp",
+    "file": "public/assets/solutions/sol1.webp",
+    "bytes": 57374,
+    "width": 1200,
+    "height": 896,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/academy/data.ts",
+      "src/app/solutions/data-centric-solutions/page.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/vidmiin.webp",
+    "file": "public/assets/vidmiin.webp",
+    "bytes": 56150,
+    "width": 1920,
+    "height": 499,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/careers/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/case/casebg.webp",
+    "file": "public/assets/case/casebg.webp",
+    "bytes": 55660,
+    "width": 1504,
+    "height": 704,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/case-study/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/case/ImageE.webp",
+    "file": "public/assets/case/ImageE.webp",
+    "bytes": 55168,
+    "width": 1200,
+    "height": 896,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/data.ts"
+    ]
+  },
+  {
+    "path": "/assets/about/Implementation.webp",
+    "file": "public/assets/about/Implementation.webp",
+    "bytes": 55018,
+    "width": 1024,
+    "height": 1024,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/about/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/services/Services1.webp",
+    "file": "public/assets/services/Services1.webp",
+    "bytes": 54178,
+    "width": 1376,
+    "height": 768,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/academy/data.ts",
+      "src/app/services/page.tsx",
+      "src/app/services/professional/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/about/jade.webp",
+    "file": "public/assets/about/jade.webp",
+    "bytes": 53670,
+    "width": 720,
+    "height": 914,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Leaders.tsx"
+    ]
+  },
+  {
+    "path": "/assets/about/strategy.webp",
+    "file": "public/assets/about/strategy.webp",
+    "bytes": 53458,
+    "width": 1024,
+    "height": 1024,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/about/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/career/career4.png",
+    "file": "public/assets/career/career4.png",
+    "bytes": 52814,
+    "width": 386,
+    "height": 218,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/FeaturedJobs.tsx"
+    ]
+  },
+  {
+    "path": "/assets/mid/mid2.png",
+    "file": "public/assets/mid/mid2.png",
+    "bytes": 50456,
+    "width": 385,
+    "height": 214,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/InflexionsAdvantage.tsx"
+    ]
+  },
+  {
+    "path": "/assets/ai/ai1.webp",
+    "file": "public/assets/ai/ai1.webp",
+    "bytes": 49958,
+    "width": 1312,
+    "height": 816,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/IntelligentAutomation.tsx"
+    ]
+  },
+  {
+    "path": "/assets/ai/ai4.webp",
+    "file": "public/assets/ai/ai4.webp",
+    "bytes": 47418,
+    "width": 1312,
+    "height": 816,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/IntelligentAutomation.tsx"
+    ]
+  },
+  {
+    "path": "/assets/hero/ban1.webp",
+    "file": "public/assets/hero/ban1.webp",
+    "bytes": 47302,
+    "width": 1919,
+    "height": 441,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/CallToAction.tsx"
+    ]
+  },
+  {
+    "path": "/assets/contactbg.webp",
+    "file": "public/assets/contactbg.webp",
+    "bytes": 45466,
+    "width": 1504,
+    "height": 704,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/contact/page.tsx"
+    ]
+  },
+  {
+    "path": "/fav.png",
+    "file": "public/fav.png",
+    "bytes": 45259,
+    "width": 500,
+    "height": 512,
+    "kind": "raster",
+    "referencedBy": [
+      "(conventional)"
+    ]
+  },
+  {
+    "path": "/assets/about/ekowmain1.webp",
+    "file": "public/assets/about/ekowmain1.webp",
+    "bytes": 45054,
+    "width": 848,
+    "height": 1264,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Leaders.tsx"
+    ]
+  },
+  {
+    "path": "/assets/solutions/sol5.webp",
+    "file": "public/assets/solutions/sol5.webp",
+    "bytes": 44494,
+    "width": 1648,
+    "height": 640,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/academy/data.ts",
+      "src/app/solutions/network-infrastructure/page.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/blog/blogger.webp",
+    "file": "public/assets/blog/blogger.webp",
+    "bytes": 42514,
+    "width": 1024,
+    "height": 1024,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/resources/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/solutions/sol8.webp",
+    "file": "public/assets/solutions/sol8.webp",
+    "bytes": 42164,
+    "width": 1648,
+    "height": 640,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/academy/data.ts",
+      "src/app/solutions/data-security/page.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/hero/herobanner2.webp",
+    "file": "public/assets/hero/herobanner2.webp",
+    "bytes": 40664,
+    "width": 1792,
+    "height": 576,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/HeroBanner.tsx"
+    ]
+  },
+  {
+    "path": "/assets/about/vidmin.webp",
+    "file": "public/assets/about/vidmin.webp",
+    "bytes": 37132,
+    "width": 1920,
+    "height": 412,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Banner.tsx"
+    ]
+  },
+  {
+    "path": "/assets/ai/ai2.webp",
+    "file": "public/assets/ai/ai2.webp",
+    "bytes": 36744,
+    "width": 1312,
+    "height": 816,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/IntelligentAutomation.tsx"
+    ]
+  },
+  {
+    "path": "/assets/mid/mid1.png",
+    "file": "public/assets/mid/mid1.png",
+    "bytes": 36513,
+    "width": 385,
+    "height": 214,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/InflexionsAdvantage.tsx"
+    ]
+  },
+  {
+    "path": "/assets/blog/blog3.png",
+    "file": "public/assets/blog/blog3.png",
+    "bytes": 35205,
+    "width": 299,
+    "height": 168,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Blog.tsx"
+    ]
+  },
+  {
+    "path": "/assets/blog/blog2.png",
+    "file": "public/assets/blog/blog2.png",
+    "bytes": 34493,
+    "width": 299,
+    "height": 168,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Blog.tsx"
+    ]
+  },
+  {
+    "path": "/assets/blog/blog1.png",
+    "file": "public/assets/blog/blog1.png",
+    "bytes": 34368,
+    "width": 299,
+    "height": 168,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Blog.tsx"
+    ]
+  },
+  {
+    "path": "/assets/career/career3.png",
+    "file": "public/assets/career/career3.png",
+    "bytes": 34033,
+    "width": 386,
+    "height": 218,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/FeaturedJobs.tsx"
+    ]
+  },
+  {
+    "path": "/assets/career/faq.webp",
+    "file": "public/assets/career/faq.webp",
+    "bytes": 32920,
+    "width": 1024,
+    "height": 1024,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Faq.tsx"
+    ]
+  },
+  {
+    "path": "/assets/hero/swap1.webp",
+    "file": "public/assets/hero/swap1.webp",
+    "bytes": 32696,
+    "width": 600,
+    "height": 296,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/SwapGrid.tsx"
+    ]
+  },
+  {
+    "path": "/assets/case/ImageD.webp",
+    "file": "public/assets/case/ImageD.webp",
+    "bytes": 32242,
+    "width": 1456,
+    "height": 720,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/data.ts"
+    ]
+  },
+  {
+    "path": "/assets/about/anthonymain.webp",
+    "file": "public/assets/about/anthonymain.webp",
+    "bytes": 30924,
+    "width": 1000,
+    "height": 800,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Leaders.tsx"
+    ]
+  },
+  {
+    "path": "/brand/mark.svg",
+    "file": "public/brand/mark.svg",
+    "bytes": 30799,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": []
+  },
+  {
+    "path": "/brand/mark-silhouette.svg",
+    "file": "public/brand/mark-silhouette.svg",
+    "bytes": 30726,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": []
+  },
+  {
+    "path": "/assets/career/career1.webp",
+    "file": "public/assets/career/career1.webp",
+    "bytes": 26326,
+    "width": 642,
+    "height": 380,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/careers/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/mid/mid4.webp",
+    "file": "public/assets/mid/mid4.webp",
+    "bytes": 24382,
+    "width": 791,
+    "height": 259,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/InflexionsAdvantage.tsx"
+    ]
+  },
+  {
+    "path": "/brand/mark-mask.png",
+    "file": "public/brand/mark-mask.png",
+    "bytes": 23532,
+    "width": 2000,
+    "height": 2048,
+    "kind": "raster",
+    "referencedBy": []
+  },
+  {
+    "path": "/assets/sub/subtract.webp",
+    "file": "public/assets/sub/subtract.webp",
+    "bytes": 22076,
+    "width": 815,
+    "height": 826,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/ComprehensiveSolutions.tsx"
+    ]
+  },
+  {
+    "path": "/assets/hero/swap4.webp",
+    "file": "public/assets/hero/swap4.webp",
+    "bytes": 21782,
+    "width": 626,
+    "height": 351,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/SwapGrid.tsx"
+    ]
+  },
+  {
+    "path": "/logos/innovaddb.png",
+    "file": "public/logos/innovaddb.png",
+    "bytes": 21303,
+    "width": 756,
+    "height": 279,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/ClientStrip.tsx",
+      "src/app/components/Partners.tsx"
+    ]
+  },
+  {
+    "path": "/og-image.jpeg",
+    "file": "public/og-image.jpeg",
+    "bytes": 21033,
+    "width": 1200,
+    "height": 634,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/layout.tsx",
+      "(conventional)"
+    ]
+  },
+  {
+    "path": "/assets/solutions/sol3.webp",
+    "file": "public/assets/solutions/sol3.webp",
+    "bytes": 13100,
+    "width": 637,
+    "height": 195,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/academy/data.ts",
+      "src/app/solutions/data-security/page.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  },
+  {
+    "path": "/inflexlogo.png",
+    "file": "public/inflexlogo.png",
+    "bytes": 12973,
+    "width": 1408,
+    "height": 274,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/admin/layout.tsx",
+      "src/app/components/Header.tsx",
+      "src/lib/email.ts",
+      "(conventional)"
+    ]
+  },
+  {
+    "path": "/brand/mark-heat.png",
+    "file": "public/brand/mark-heat.png",
+    "bytes": 12371,
+    "width": 2000,
+    "height": 2048,
+    "kind": "raster",
+    "referencedBy": []
+  },
+  {
+    "path": "/logos/ninani.png",
+    "file": "public/logos/ninani.png",
+    "bytes": 9193,
+    "width": 159,
+    "height": 89,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/ClientStrip.tsx",
+      "src/app/components/Partners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/hero/map.webp",
+    "file": "public/assets/hero/map.webp",
+    "bytes": 6556,
+    "width": 766,
+    "height": 458,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx"
+    ]
+  },
+  {
+    "path": "/logos/CEIBS.png",
+    "file": "public/logos/CEIBS.png",
+    "bytes": 5281,
+    "width": 262,
+    "height": 70,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/ClientStrip.tsx",
+      "src/app/components/Partners.tsx"
+    ]
+  },
+  {
+    "path": "/logos/atc.webp",
+    "file": "public/logos/atc.webp",
+    "bytes": 4788,
+    "width": 240,
+    "height": 120,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Partners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/logo.png",
+    "file": "public/assets/logo.png",
+    "bytes": 4196,
+    "width": 192,
+    "height": 40,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Footer.tsx",
+      "src/app/contact/page.tsx",
+      "src/app/page.tsx",
+      "src/app/services/page.tsx"
+    ]
+  },
+  {
+    "path": "/logos/lifeforms1.png",
+    "file": "public/logos/lifeforms1.png",
+    "bytes": 3157,
+    "width": 272,
+    "height": 57,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/ClientStrip.tsx",
+      "src/app/components/Partners.tsx"
+    ]
+  },
+  {
+    "path": "/logos/blu.png",
+    "file": "public/logos/blu.png",
+    "bytes": 3058,
+    "width": 164,
+    "height": 121,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/ClientStrip.tsx",
+      "src/app/components/Partners.tsx"
+    ]
+  },
+  {
+    "path": "/logos/ba.png",
+    "file": "public/logos/ba.png",
+    "bytes": 2961,
+    "width": 295,
+    "height": 63,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/ClientStrip.tsx",
+      "src/app/components/Partners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/hikvision.svg",
+    "file": "public/assets/partners/hikvision.svg",
+    "bytes": 2726,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/cisco.svg",
+    "file": "public/assets/partners/cisco.svg",
+    "bytes": 2611,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/bgsvg/Background.png",
+    "file": "public/assets/bgsvg/Background.png",
+    "bytes": 2431,
+    "width": 421,
+    "height": 554,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/StrategicPartnerSection.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/dell.svg",
+    "file": "public/assets/partners/dell.svg",
+    "bytes": 1465,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/openai.svg",
+    "file": "public/assets/partners/openai.svg",
+    "bytes": 1376,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/IntelligentAutomation.tsx",
+      "src/app/components/SolutionPartners.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/huawei.svg",
+    "file": "public/assets/partners/huawei.svg",
+    "bytes": 1338,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/lenovo.svg",
+    "file": "public/assets/partners/lenovo.svg",
+    "bytes": 1224,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/cloudflare.svg",
+    "file": "public/assets/partners/cloudflare.svg",
+    "bytes": 1193,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/schneider.svg",
+    "file": "public/assets/partners/schneider.svg",
+    "bytes": 785,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/google.svg",
+    "file": "public/assets/partners/google.svg",
+    "bytes": 706,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/IntelligentAutomation.tsx",
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/redhat.svg",
+    "file": "public/assets/partners/redhat.svg",
+    "bytes": 696,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/hp.svg",
+    "file": "public/assets/partners/hp.svg",
+    "bytes": 656,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/avaya.svg",
+    "file": "public/assets/partners/avaya.svg",
+    "bytes": 589,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/digitalocean.svg",
+    "file": "public/assets/partners/digitalocean.svg",
+    "bytes": 446,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx"
+    ]
+  },
+  {
+    "path": "/icons/Instagram.png",
+    "file": "public/icons/Instagram.png",
+    "bytes": 436,
+    "width": 20,
+    "height": 20,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Header.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/microsoft.svg",
+    "file": "public/assets/partners/microsoft.svg",
+    "bytes": 426,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/amazon.svg",
+    "file": "public/assets/partners/amazon.svg",
+    "bytes": 421,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx"
+    ]
+  },
+  {
+    "path": "/icons/facebook.png",
+    "file": "public/icons/facebook.png",
+    "bytes": 389,
+    "width": 22,
+    "height": 20,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Header.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/eset.svg",
+    "file": "public/assets/partners/eset.svg",
+    "bytes": 380,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx"
+    ]
+  },
+  {
+    "path": "/icons/twitter.png",
+    "file": "public/icons/twitter.png",
+    "bytes": 379,
+    "width": 20,
+    "height": 16,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Header.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/sophos.svg",
+    "file": "public/assets/partners/sophos.svg",
+    "bytes": 375,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx"
+    ]
+  },
+  {
+    "path": "/icons/linkedin.png",
+    "file": "public/icons/linkedin.png",
+    "bytes": 326,
+    "width": 20,
+    "height": 20,
+    "kind": "raster",
+    "referencedBy": [
+      "src/app/components/Header.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/xai.svg",
+    "file": "public/assets/partners/xai.svg",
+    "bytes": 314,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/IntelligentAutomation.tsx",
+      "src/app/components/SolutionPartners.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  },
+  {
+    "path": "/assets/partners/anthropic.svg",
+    "file": "public/assets/partners/anthropic.svg",
+    "bytes": 297,
+    "width": null,
+    "height": null,
+    "kind": "vector",
+    "referencedBy": [
+      "src/app/components/IntelligentAutomation.tsx",
+      "src/app/components/MainPartners.tsx",
+      "src/app/components/SolutionPartners.tsx",
+      "src/app/solutions/page.tsx"
+    ]
+  }
+]

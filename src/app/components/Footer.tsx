@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Mail, Phone, Instagram, Facebook, Twitter, Linkedin } from "lucide-react";
 
@@ -9,9 +10,11 @@ export default function Footer() {
           {/* 1) Logo & Contact */}
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src="/assets/logo.png"
               alt="Inflexions-IT"
+              width={192}
+              height={40}
               className="h-12"
             />
 

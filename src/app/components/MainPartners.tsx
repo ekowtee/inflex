@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const partners = [
   // Slide 1 — mix of infra heavyweights + AI labs
@@ -94,7 +95,7 @@ export default function MainPartners() {
         <div className="flex-1 pt-0 lg:pt-10 md:pt-0">
           <div
             className="relative w-full bg-cover bg-center"
-            style={{ backgroundImage: `url(/assets/hero/map.png)` }}
+            style={{ backgroundImage: `url(/assets/hero/map.webp)` }}
           >
             <div className="relative z-10 lg:p-8 p-0">
               <span className="block text-black mt-2 font-normal text-[20px] leading-normal">
@@ -111,12 +112,13 @@ export default function MainPartners() {
                     className="relative group bg-white h-[100px] sm:h-[120px] lg:h-[144px] flex items-center justify-center rounded-[10px] shadow-md cursor-pointer transition-all duration-500"
                     style={{ animationDelay: `${i * 60}ms` }}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                       src={logo.src}
                       alt={logo.alt}
+                      width={180}
+                      height={72}
                       className="w-[180px] h-[72px] object-contain"
-                      loading="lazy"
+                      unoptimized
                     />
                     <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#BD2E25] text-white text-xs font-medium px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-[#BD2E25]">
                       {logo.alt}

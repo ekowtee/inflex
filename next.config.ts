@@ -17,6 +17,11 @@ const cspHeader = `
   .trim();
 
 const nextConfig: NextConfig = {
+  images: {
+    // Serve AVIF where the browser accepts it, WebP otherwise. The sources
+    // in public/ are already WebP; this is the optimizer's output format.
+    formats: ["image/avif", "image/webp"],
+  },
   async headers() {
     return [
       {

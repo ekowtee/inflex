@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import AcademyHero from "../../components/AcademyHero";
 import ProgrammeCard from "../../components/ProgrammeCard";
 import Banner from "../../components/Banner";
+import Image from "next/image";
 import {
   domains,
   getDomain,
@@ -104,12 +105,14 @@ export default async function DomainPage({
               </Link>
             </div>
             <div className="rounded-lg overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={domain.overviewImage}
                 alt=""
+                width={1200}
+                height={896}
                 className="w-full h-full object-cover rounded-lg"
-                loading="lazy"
+                sizes="100vw"
+                priority
               />
             </div>
           </div>

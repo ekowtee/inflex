@@ -1,23 +1,24 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const capabilities = [
   {
-    src: "/assets/ai/ai1.jpeg",
+    src: "/assets/ai/ai1.webp",
     title: "Predictive Analytics",
     text: "Demand forecasting, anomaly detection, and real-time operational dashboards that turn historical data into forward-looking intelligence.",
   },
   {
-    src: "/assets/ai/ai2.jpeg",
+    src: "/assets/ai/ai2.webp",
     title: "Process Automation",
     text: "Workflow orchestration, intelligent document processing, and robotic process automation that eliminate manual bottlenecks.",
   },
   {
-    src: "/assets/ai/ai3.jpeg",
+    src: "/assets/ai/ai3.webp",
     title: "Data Strategy & Architecture",
     text: "Data warehousing, pipeline design, and governance frameworks that give your organisation a single source of truth.",
   },
   {
-    src: "/assets/ai/ai4.jpeg",
+    src: "/assets/ai/ai4.webp",
     title: "AI Integration",
     text: "Embedding machine-learning models into existing business systems\u2014API-first, vendor-neutral, and built to scale.",
   },
@@ -43,12 +44,13 @@ export default function IntelligentAutomation() {
                   key={item.title}
                   className="relative w-full h-[180px] sm:h-[220px] lg:h-[240px] rounded-lg overflow-hidden group transition-transform duration-500"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={item.src}
                     alt={item.title}
-                    loading="lazy"
+                    width={1312}
+                    height={816}
                     className="object-cover w-full h-full transform transition-transform duration-500 group-hover:scale-110"
+                    sizes="100vw"
                   />
 
                   {/* Gradient — always visible on mobile, hover on desktop */}
@@ -86,12 +88,13 @@ export default function IntelligentAutomation() {
                   key={logo.alt}
                   className="relative group bg-white h-[56px] sm:h-[64px] flex-1 flex items-center justify-center rounded-[10px] shadow-md"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={logo.src}
                     alt={logo.alt}
+                    width={80}
+                    height={36}
                     className="w-[60px] sm:w-[80px] h-[28px] sm:h-[36px] object-contain"
-                    loading="lazy"
+                    unoptimized
                   />
                   <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#BD2E25] text-white text-xs font-medium px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-[#BD2E25]">
                     {logo.alt}

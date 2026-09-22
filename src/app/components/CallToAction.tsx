@@ -1,15 +1,17 @@
 import Link from "next/link";
 import Reveal from "@/motion/Reveal";
+import Image from "next/image";
 
 export default function CallToAction() {
   return (
     <section className="relative w-full min-h-[300px] md:h-[400px] overflow-hidden">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/assets/hero/ban1.png"
+      <Image
+        src="/assets/hero/ban1.webp"
         alt=""
-        loading="lazy"
+        width={1919}
+        height={441}
         className="absolute inset-0 w-full h-full object-cover"
+        sizes="100vw"
       />
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center px-4 max-w-2xl">

@@ -3,18 +3,21 @@
 import Banner from "../../components/Banner";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
+import Image from "next/image";
 
 export default function ManagedServicesPage() {
   return (
     <div>
       {/* Hero */}
       <div className="relative w-full h-[500px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/assets/services/Services3.jpeg"
+        <Image
+          src="/assets/services/Services3.webp"
           alt="Managed Services"
+          width={1376}
+          height={768}
           className="w-full h-full object-cover"
-          loading="eager"
+          sizes="100vw"
+          priority
         />
         <div className="absolute inset-0 bg-black/60" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
@@ -88,11 +91,13 @@ export default function ManagedServicesPage() {
                   headcount.
                 </p>
               </div>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/assets/services/Services2.jpeg"
+              <Image
+                src="/assets/services/Services2.webp"
                 alt="IT infrastructure management"
+                width={1376}
+                height={768}
                 className="w-full h-[280px] lg:h-[320px] object-cover rounded-lg shadow-lg"
+                sizes="(min-width: 1024px) 50vw, 100vw"
               />
             </div>
           </div>

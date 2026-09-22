@@ -1,16 +1,18 @@
 import SwapGrid from "./SwapGrid";
+import Image from "next/image";
 
 export default function ComprehensiveSolutions() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col md:flex-col lg:flex-row lg:h-[800px] h-full w-full gap-x-10">
         <div className="flex-1 py-2 md:py-4 lg:py-20">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/sub/subtract.png"
+          <Image
+            src="/assets/sub/subtract.webp"
             alt=""
+            width={815}
+            height={826}
             className="w-full lg:h-[700px] h-auto object-cover object-center"
-            loading="lazy"
+            sizes="(min-width: 1024px) 50vw, 100vw"
           />
         </div>
         <div className="flex-1 py-4 md:py-10 lg:py-20">

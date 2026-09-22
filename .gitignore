@@ -40,3 +40,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Image originals kept out of the served folder (PERFORMANCE_PLAN.md §6.1).
+# assets-src/originals/ IS committed: those are the masters for every image
+# still in use, so a future re-encode never needs git history.
+# assets-src/unreferenced/ is NOT committed: nothing in the site uses these
+# files. Archive them elsewhere before deleting the working copy.
+assets-src/unreferenced/
+
+# Phase 0 scratch output (screenshots, payload snapshots)
+.phase0/

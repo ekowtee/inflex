@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Clock, ArrowRight } from "lucide-react";
 import type { Programme } from "../academy/data";
 import LevelBadge from "./LevelBadge";
+import Image from "next/image";
 
 export default function ProgrammeCard({
   programme,
@@ -18,12 +19,13 @@ export default function ProgrammeCard({
       className="group flex flex-col h-full bg-white border border-[#D0D0D0] rounded-lg overflow-hidden hover:shadow-lg hover:border-[#BD2E25] transition-all duration-300"
     >
       <div className="relative w-full h-48 overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={programme.heroImage}
           alt=""
+          width={1200}
+          height={896}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          loading="lazy"
+          sizes="100vw"
         />
         <div className="absolute top-3 left-3">
           <LevelBadge level={programme.level} />

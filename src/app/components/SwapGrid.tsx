@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const cards = [
   {
     title: "Network Infrastructure",
-    photo: "/assets/hero/swap1.jpg",
+    photo: "/assets/hero/swap1.webp",
     href: "/solutions/network-infrastructure",
     subtext:
       "Secure, high-performance LAN, WAN, SD-WAN, and wireless solutions engineered for reliability at enterprise scale.",
@@ -20,14 +21,14 @@ const cards = [
   },
   {
     title: "Cloud Services",
-    photo: "/assets/hero/swap3.jpg",
+    photo: "/assets/hero/swap3.webp",
     href: "/solutions/cloud-services",
     subtext:
       "Strategic cloud migration, hybrid integration, and managed services across AWS, Azure, and Google Cloud.",
   },
   {
     title: "Data-centric Solutions",
-    photo: "/assets/hero/swap4.jpg",
+    photo: "/assets/hero/swap4.webp",
     href: "/solutions/data-centric-solutions",
     subtext:
       "Advanced analytics, AI-driven insights, and data governance that turn raw information into strategic advantage.",
@@ -104,11 +105,13 @@ function Card({
       onMouseEnter={() => setHoveredIdx(index)}
       onMouseLeave={() => setHoveredIdx(null)}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={card.photo}
         alt={card.title}
+        width={1600}
+        height={900}
         className="w-full h-full object-cover transform transition-transform duration-[800ms] group-hover:scale-105"
+        sizes="100vw"
       />
       {/* Smooth gradients */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/85 transition-opacity duration-500" />

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 interface AcademyHeroProps {
   title: string;
@@ -17,12 +18,14 @@ export default function AcademyHero({
 }: AcademyHeroProps) {
   return (
     <div className="relative w-full h-[500px]">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={backgroundImage}
         alt=""
+        width={1200}
+        height={896}
         className="w-full h-full object-cover"
-        loading="eager"
+        sizes="100vw"
+        priority
       />
       <div className="absolute inset-0 bg-black/60" />
       <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">

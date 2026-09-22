@@ -4,14 +4,22 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { caseStudies } from "../data";
 import Banner from "../components/Banner";
+import Image from "next/image";
 
 export default function CaseStudyPage() {
   return (
     <div>
       {/* Hero */}
       <div className="relative w-full h-[300px] md:h-[500px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/case/casebg.jpeg" alt="Case Studies" className="w-full h-full object-cover" loading="eager" />
+        <Image
+          src="/assets/case/casebg.webp"
+          alt="Case Studies"
+          width={1504}
+          height={704}
+          className="w-full h-full object-cover"
+          sizes="100vw"
+          priority
+        />
         <div className="absolute inset-0 bg-black/30" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -42,11 +50,13 @@ export default function CaseStudyPage() {
             </p>
           </div>
           <div className="h-auto md:h-full">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/case/ImageC.jpeg"
+            <Image
+              src="/assets/case/ImageC.webp"
               alt="ICT consultants reviewing network architecture and data centre floor plans"
+              width={1376}
+              height={768}
               className="w-full h-full object-cover rounded-lg shadow-lg"
+              sizes="100vw"
             />
           </div>
         </div>
@@ -61,11 +71,13 @@ export default function CaseStudyPage() {
               href={`/case-studies/${item.id}`}
               className="relative group block overflow-hidden shadow-lg rounded-lg"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={item.image}
                 alt={item.title}
+                width={1312}
+                height={816}
                 className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(min-width: 1024px) 50vw, 100vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5 text-white">

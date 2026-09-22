@@ -1,6 +1,7 @@
 import Blog from "../components/Blog";
 import Banner from "../components/Banner";
 import Reveal from "@/motion/Reveal";
+import Image from "next/image";
 
 const whitepapers = [
   {
@@ -8,7 +9,7 @@ const whitepapers = [
     title: "Architecting a Secure Hybrid Cloud Environment",
     description:
       "In-depth whitepaper covering security foundations and deployment models for hybrid clouds.",
-    coverUrl: "/assets/blog/cloud-computing.jpg",
+    coverUrl: "/assets/blog/cloud-computing.webp",
     downloadLink: "/resources/whitepapers/hybrid-cloud",
   },
   {
@@ -16,7 +17,7 @@ const whitepapers = [
     title: "Maximizing ROI with IT Service Management",
     description:
       "Explore frameworks and metrics to measure and improve ROI on ITSM initiatives. In-depth work around to clock to deliver.",
-    coverUrl: "/assets/blog/webinar3.png",
+    coverUrl: "/assets/blog/webinar3.webp",
     downloadLink: "/resources/whitepapers/itsm-roi",
   },
 ];
@@ -28,7 +29,7 @@ const webinars = [
     description:
       "On-demand webinar diving into the capabilities and benefits of SD-WAN for modern networks.",
     date: "April 28, 2025",
-    imageUrl: "/assets/blog/webinar1.png",
+    imageUrl: "/assets/blog/webinar1.webp",
     recordingLink: "/webinars/sd-wan-explained",
   },
   {
@@ -37,7 +38,7 @@ const webinars = [
     description:
       "Live session on best practices to secure remote workforces in 2025 and beyond.",
     date: "May 15, 2025",
-    imageUrl: "/assets/blog/webinar2.png",
+    imageUrl: "/assets/blog/webinar2.webp",
     registerLink: "/contact",
   },
 ];
@@ -47,12 +48,14 @@ export default function ResourcesPage() {
     <div>
       {/* Hero */}
       <div className="relative w-full h-[300px] md:h-[500px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/assets/career/careerbg.png"
+        <Image
+          src="/assets/career/careerbg.webp"
           alt="Resources"
+          width={1920}
+          height={652}
           className="w-full h-full object-cover"
-          loading="lazy"
+          sizes="100vw"
+          priority
         />
         <div className="absolute inset-0 bg-black/30" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
@@ -71,11 +74,13 @@ export default function ResourcesPage() {
         <header className="mb-12">
           <div className="flex flex-col md:flex-row items-center py-8">
             <div className="flex-shrink-0 mb-6 md:mb-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/assets/blog/blogger.png"
+              <Image
+                src="/assets/blog/blogger.webp"
                 alt="Insights & Resources"
+                width={1024}
+                height={1024}
                 className="w-full h-full lg:w-[400px] md:h-[300px] rounded-lg object-cover"
+                sizes="100vw"
               />
             </div>
             <div className="md:ml-8 text-left">
@@ -101,11 +106,13 @@ export default function ResourcesPage() {
                 href={item.downloadLink}
                 className="block border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={item.coverUrl}
                   alt={item.title}
+                  width={1500}
+                  height={1000}
                   className="w-full h-48 object-cover"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                 />
                 <div className="p-4">
                   <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
@@ -130,11 +137,13 @@ export default function ResourcesPage() {
                 key={event.id}
                 className="border rounded-lg p-6 flex flex-col md:flex-row justify-between items-start md:items-center hover:shadow-lg transition-shadow"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={event.imageUrl}
                   alt={event.title}
+                  width={1024}
+                  height={1024}
                   className="w-full md:w-48 h-32 object-cover rounded mb-4 md:mb-0 md:mr-6"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                 />
                 <div className="flex-1">
                   <h3 className="text-2xl font-semibold mb-2">{event.title}</h3>

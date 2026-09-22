@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const featuredJobs = [
   {
@@ -40,12 +41,13 @@ export default function FeaturedJobs() {
               key={job.id}
               className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={job.image}
                 alt={job.title}
+                width={386}
+                height={218}
                 className="w-full h-48 object-cover"
-                loading="lazy"
+                sizes="(min-width: 1024px) 50vw, 100vw"
               />
               <div className="p-6 flex-1 flex flex-col">
                 <h3 className="text-xl font-semibold mb-2">{job.title}</h3>

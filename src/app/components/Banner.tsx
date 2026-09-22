@@ -1,14 +1,16 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Banner() {
   return (
     <div className="relative w-full h-[300px] md:h-[400px] overflow-hidden">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/assets/about/vidmin.png"
+      <Image
+        src="/assets/about/vidmin.webp"
         alt="Cloud technology interface"
+        width={1920}
+        height={412}
         className="w-full h-full object-cover"
-        loading="lazy"
+        sizes="100vw"
       />
       <div className="absolute inset-0 bg-[#1B3764]/80" />
       <div className="absolute inset-0 flex items-center justify-center">

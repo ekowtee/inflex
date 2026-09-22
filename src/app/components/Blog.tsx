@@ -1,3 +1,4 @@
+import Image from "next/image";
 const blog = [
   {
     id: 1,
@@ -38,12 +39,13 @@ export default function Blog() {
             key={id}
             className="bg-[#F6F6F6] rounded-2xl shadow-md overflow-hidden flex flex-col"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={image}
               alt={title}
+              width={299}
+              height={168}
               className="w-full h-40 md:h-48 object-cover rounded-t-2xl"
-              loading="lazy"
+              sizes="(min-width: 1024px) 50vw, 100vw"
             />
             <div className="py-6 px-4 flex-1 flex flex-col">
               <h3 className="text-base md:text-lg font-medium text-[#262626] mb-2">

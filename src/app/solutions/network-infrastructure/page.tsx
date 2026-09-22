@@ -5,6 +5,7 @@ import SolutionPartners from "../../components/SolutionPartners";
 import RelatedTraining from "../../components/RelatedTraining";
 import Link from "next/link";
 import { CheckCircle, Network, Server, Shield } from "lucide-react";
+import Image from "next/image";
 
 const capabilities = [
   "LAN & WAN Architecture Design",
@@ -41,12 +42,14 @@ export default function NetworkInfrastructurePage() {
     <div>
       {/* Hero */}
       <div className="relative w-full h-[500px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/assets/solutions/sol5.jpeg"
+        <Image
+          src="/assets/solutions/sol5.webp"
           alt="Network Infrastructure"
+          width={1648}
+          height={640}
           className="w-full h-full object-cover"
-          loading="eager"
+          sizes="100vw"
+          priority
         />
         <div className="absolute inset-0 bg-black/60" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
@@ -95,12 +98,13 @@ export default function NetworkInfrastructurePage() {
               </Link>
             </div>
             <div className="rounded-lg overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/assets/solutions/sol2.png"
+              <Image
+                src="/assets/solutions/sol2.webp"
                 alt="Network infrastructure overview"
+                width={1024}
+                height={1024}
                 className="w-full h-full object-cover rounded-lg"
-                loading="lazy"
+                sizes="100vw"
               />
             </div>
           </div>

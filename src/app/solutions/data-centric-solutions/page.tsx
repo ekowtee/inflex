@@ -5,6 +5,7 @@ import SolutionPartners from "../../components/SolutionPartners";
 import RelatedTraining from "../../components/RelatedTraining";
 import Link from "next/link";
 import { CheckCircle, Brain, Database, Cpu } from "lucide-react";
+import Image from "next/image";
 
 const capabilities = [
   "Data Architecture & Governance",
@@ -41,12 +42,14 @@ export default function DataCentricSolutionsPage() {
     <div>
       {/* Hero */}
       <div className="relative w-full h-[500px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/assets/solutions/sol6.jpeg"
+        <Image
+          src="/assets/solutions/sol6.webp"
           alt="Data-centric Solutions"
+          width={1648}
+          height={640}
           className="w-full h-full object-cover"
-          loading="eager"
+          sizes="100vw"
+          priority
         />
         <div className="absolute inset-0 bg-black/60" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
@@ -68,12 +71,13 @@ export default function DataCentricSolutionsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
             <div className="rounded-lg overflow-hidden order-2 lg:order-1">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/assets/solutions/sol1.jpeg"
+              <Image
+                src="/assets/solutions/sol1.webp"
                 alt="Data-centric solutions overview"
+                width={1200}
+                height={896}
                 className="w-full h-full object-cover rounded-lg"
-                loading="lazy"
+                sizes="100vw"
               />
             </div>
             <div className="order-1 lg:order-2">

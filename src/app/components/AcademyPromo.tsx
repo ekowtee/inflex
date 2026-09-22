@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Brain, Cloud, ShieldCheck, TrendingUp } from "lucide-react";
+import Image from "next/image";
 
 const domainPills = [
   { icon: Brain, label: "AI & Intelligent Systems" },
@@ -13,12 +14,13 @@ export default function AcademyPromo() {
     <section className="py-16 lg:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-2xl bg-[#1B3764]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/solutions/sol6.jpeg"
+          <Image
+            src="/assets/solutions/sol6.webp"
             alt=""
+            width={1648}
+            height={640}
             className="absolute inset-0 w-full h-full object-cover opacity-20"
-            loading="lazy"
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#1B3764] via-[#1B3764]/95 to-[#1B3764]/70" />
           <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 lg:p-12 items-center">

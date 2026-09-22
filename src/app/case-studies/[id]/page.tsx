@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { caseStudies } from "../../data";
 import Banner from "../../components/Banner";
+import Image from "next/image";
 
 export default function CaseStudyDetailPage() {
   const params = useParams();
@@ -34,8 +35,15 @@ export default function CaseStudyDetailPage() {
     <>
       {/* Hero */}
       <div className="relative w-full h-[300px] md:h-[500px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={study.heroImage ?? study.image} alt={study.title} className="w-full h-full object-cover" loading="eager" />
+        <Image
+          src={study.heroImage ?? study.image}
+          alt={study.title}
+          width={1376}
+          height={768}
+          className="w-full h-full object-cover"
+          sizes="100vw"
+          priority
+        />
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -62,8 +70,14 @@ export default function CaseStudyDetailPage() {
 
         <div className="flex flex-col md:flex-row items-start gap-8">
           <div className="w-full md:w-1/2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={study.innerImage1} alt="Project overview" className="w-full h-auto object-cover shadow-lg rounded-lg" />
+            <Image
+              src={study.innerImage1}
+              alt="Project overview"
+              width={1200}
+              height={896}
+              className="w-full h-auto object-cover shadow-lg rounded-lg"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
           </div>
           <div className="w-full md:w-1/2">
             <h2 className="text-3xl font-semibold text-[#171A20] mb-6">Project Details</h2>
@@ -167,8 +181,14 @@ export default function CaseStudyDetailPage() {
         </div>
 
         <div className="relative w-full overflow-hidden rounded-lg shadow-lg mt-10">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={study.storyImage ?? study.image} alt={study.title} className="w-full lg:h-[500px] object-cover" />
+          <Image
+            src={study.storyImage ?? study.image}
+            alt={study.title}
+            width={1376}
+            height={768}
+            className="w-full lg:h-[500px] object-cover"
+            sizes="(min-width: 1024px) 50vw, 100vw"
+          />
         </div>
       </section>
 
@@ -183,8 +203,14 @@ export default function CaseStudyDetailPage() {
                 href={`/case-studies/${item.id}`}
                 className="relative group block overflow-hidden shadow-lg rounded-lg"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={item.image} alt={item.title} className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" />
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  width={1312}
+                  height={816}
+                  className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-64 h-[220px] bg-[#BD2E25]/0 group-hover:bg-[#BD2E25]/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
                     <ArrowUpRight size={48} className="text-white" />

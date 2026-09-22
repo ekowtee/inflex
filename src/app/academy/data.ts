@@ -59,8 +59,8 @@ export const domains: AcademyDomain[] = [
     overview:
       "Artificial intelligence is no longer optional. Our AI & Intelligent Systems track moves learners from conceptual understanding to hands-on application — covering large language models, prompt engineering, industry-specific use cases, and AI-era business strategy. Every programme is grounded in real enterprise deployments, not theoretical sandboxes.",
     icon: Brain,
-    heroImage: "/assets/solutions/sol6.jpeg",
-    overviewImage: "/assets/solutions/sol1.jpeg",
+    heroImage: "/assets/solutions/sol6.webp",
+    overviewImage: "/assets/solutions/sol1.webp",
     benefits: [
       {
         title: "Practitioner-Led",
@@ -90,8 +90,8 @@ export const domains: AcademyDomain[] = [
     overview:
       "Infrastructure is the foundation every digital initiative rests on. Our Infrastructure & Cloud programmes give engineers and architects the depth to design, deploy, and operate resilient systems across AWS, Azure, on-premises networks, virtualised estates, and containerised workloads. Every course balances vendor certifications with vendor-agnostic engineering judgement.",
     icon: Cloud,
-    heroImage: "/assets/solutions/sol7.jpeg",
-    overviewImage: "/assets/solutions/sol5.jpeg",
+    heroImage: "/assets/solutions/sol7.webp",
+    overviewImage: "/assets/solutions/sol5.webp",
     benefits: [
       {
         title: "Hands-On Labs",
@@ -121,8 +121,8 @@ export const domains: AcademyDomain[] = [
     overview:
       "Regulatory pressure and threat sophistication are rising simultaneously. Our Cybersecurity & Compliance programmes prepare practitioners for the realities of modern security — from day-to-day security operations to formal audit frameworks. Curricula are aligned with internationally recognised standards including ISO 27001, ISACA CISA, and ISACA CISM.",
     icon: ShieldCheck,
-    heroImage: "/assets/solutions/sol8.jpeg",
-    overviewImage: "/assets/solutions/sol2.jpeg",
+    heroImage: "/assets/solutions/sol8.webp",
+    overviewImage: "/assets/solutions/sol2.webp",
     benefits: [
       {
         title: "Standards-Aligned",
@@ -152,8 +152,8 @@ export const domains: AcademyDomain[] = [
     overview:
       "Technology alone does not transform a business — strategy does. Our Digital Strategy & Transformation programmes equip executives, founders, and marketing leaders with frameworks to build digital-first organisations, launch successful ventures, and make data-driven decisions. Grounded in commercial realities, not consulting jargon.",
     icon: TrendingUp,
-    heroImage: "/assets/services/Services1.jpeg",
-    overviewImage: "/assets/services/Services2.jpeg",
+    heroImage: "/assets/services/Services1.webp",
+    overviewImage: "/assets/services/Services2.webp",
     benefits: [
       {
         title: "Commercially Grounded",
@@ -237,7 +237,7 @@ export const programmes: Programme[] = [
         duration: "4 hours",
       },
     ],
-    heroImage: "/assets/solutions/sol6.jpeg",
+    heroImage: "/assets/solutions/sol6.webp",
     featured: true,
     audienceTypes: ["individual", "corporate"],
   },
@@ -307,7 +307,7 @@ export const programmes: Programme[] = [
         duration: "6 hours",
       },
     ],
-    heroImage: "/assets/solutions/sol1.jpeg",
+    heroImage: "/assets/solutions/sol1.webp",
     featured: true,
     audienceTypes: ["individual", "corporate"],
   },
@@ -374,7 +374,7 @@ export const programmes: Programme[] = [
         duration: "4 hours",
       },
     ],
-    heroImage: "/assets/solutions/sol3.jpeg",
+    heroImage: "/assets/solutions/sol3.webp",
     audienceTypes: ["individual", "corporate"],
   },
   {
@@ -442,7 +442,7 @@ export const programmes: Programme[] = [
         duration: "6 hours",
       },
     ],
-    heroImage: "/assets/solutions/sol7.jpeg",
+    heroImage: "/assets/solutions/sol7.webp",
     featured: true,
     audienceTypes: ["individual", "corporate"],
   },
@@ -506,7 +506,7 @@ export const programmes: Programme[] = [
         duration: "4 hours",
       },
     ],
-    heroImage: "/assets/solutions/sol5.jpeg",
+    heroImage: "/assets/solutions/sol5.webp",
     audienceTypes: ["individual", "corporate"],
   },
   {
@@ -570,7 +570,7 @@ export const programmes: Programme[] = [
         duration: "4 hours",
       },
     ],
-    heroImage: "/assets/solutions/sol4.jpeg",
+    heroImage: "/assets/solutions/sol4.webp",
     audienceTypes: ["individual", "corporate"],
   },
   {
@@ -634,7 +634,7 @@ export const programmes: Programme[] = [
         duration: "4 hours",
       },
     ],
-    heroImage: "/assets/solutions/sol8.jpeg",
+    heroImage: "/assets/solutions/sol8.webp",
     featured: true,
     audienceTypes: ["individual", "corporate"],
   },
@@ -711,7 +711,7 @@ export const programmes: Programme[] = [
         duration: "8 hours",
       },
     ],
-    heroImage: "/assets/solutions/sol2.jpeg",
+    heroImage: "/assets/solutions/sol2.webp",
     featured: true,
     audienceTypes: ["individual", "corporate"],
   },
@@ -776,7 +776,7 @@ export const programmes: Programme[] = [
         duration: "4 hours",
       },
     ],
-    heroImage: "/assets/services/Services2.jpeg",
+    heroImage: "/assets/services/Services2.webp",
     audienceTypes: ["individual", "corporate"],
   },
   {
@@ -840,7 +840,7 @@ export const programmes: Programme[] = [
         duration: "2 hours",
       },
     ],
-    heroImage: "/assets/services/Services1.jpeg",
+    heroImage: "/assets/services/Services1.webp",
     audienceTypes: ["individual", "corporate"],
   },
 ];

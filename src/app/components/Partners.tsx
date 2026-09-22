@@ -1,13 +1,14 @@
 "use client";
 
 import "./partners.css";
+import Image from "next/image";
 
 // Real client roster. Logo files live in /public/logos. MTN Ghana is
 // deliberately not included until written permission is confirmed.
 const logos = [
   { src: "/logos/ba.png", alt: "British Airways" },
   { src: "/logos/CEIBS.png", alt: "CEIBS" },
-  { src: "/logos/atc.svg", alt: "ATC (American Tower Corporation)" },
+  { src: "/logos/atc.webp", alt: "ATC (American Tower Corporation)" },
   { src: "/logos/blu.png", alt: "Blu Telecommunications" },
   { src: "/logos/innovaddb.png", alt: "Innova DDB" },
   { src: "/logos/ninani.png", alt: "The Ninani Group" },
@@ -23,13 +24,14 @@ export default function Partners() {
       <div className="py-5">
         <div className="partners-wrapper">
           {logos.map((logo, i) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              key={logo.alt}
+            <Image
               src={logo.src}
+              key={logo.alt}
               alt={logo.alt}
+              width={120}
+              height={40}
               className={`partners-item partners-item${i + 1}`}
-              loading="lazy"
+              unoptimized
             />
           ))}
         </div>

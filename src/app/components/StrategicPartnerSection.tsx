@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 import Reveal from "@/motion/Reveal";
+import Image from "next/image";
 
 export default function StrategicPartnerSection() {
   return (
@@ -28,20 +29,22 @@ export default function StrategicPartnerSection() {
 
         <div className="relative flex flex-col flex-1 items-center justify-center mt-2 md:mt-0 lg:mt-0">
           <div className="relative">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src="/assets/bgsvg/Background.png"
               alt=""
+              width={421}
+              height={554}
               className="w-full max-w-[419px] h-full object-contain"
-              loading="lazy"
+              sizes="(min-width: 1024px) 50vw, 100vw"
             />
             <div className="absolute top-[calc(12.5%-10px)] bottom-[calc(12.5%+15px+44px)] left-[calc(0.5%-1px)] right-[calc(0.5%-2px)] overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="/assets/bgsvg/image.png"
                 alt="Professional at work"
+                width={492}
+                height={353}
                 className="w-full h-full object-cover"
-                loading="lazy"
+                sizes="100vw"
               />
             </div>
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChevronRight, Phone } from "lucide-react";
+import Image from "next/image";
 
 const FAQ_ITEMS = [
   {
@@ -89,12 +90,13 @@ export default function Faq() {
 
         {/* Right: Hero image + consultation box */}
         <div className="relative w-full md:hidden lg:block">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/career/faq.png"
+          <Image
+            src="/assets/career/faq.webp"
             alt="Consultation"
+            width={1024}
+            height={1024}
             className="w-full h-auto object-cover"
-            loading="lazy"
+            sizes="(min-width: 1024px) 50vw, 100vw"
           />
           <div className="absolute top-[25%] left-0 right-0 lg:left-[-80px] flex md:justify-start justify-center items-center">
             <div className="bg-[#BD2E25] text-white p-8 max-w-sm shadow-lg transform scale-50 md:scale-100">

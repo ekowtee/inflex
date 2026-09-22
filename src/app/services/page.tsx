@@ -1,13 +1,21 @@
 import Banner from "../components/Banner";
 import Reveal from "@/motion/Reveal";
+import Image from "next/image";
 
 export default function ServicesPage() {
   return (
     <div>
       {/* Hero */}
       <div className="relative w-full h-[500px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/services/Servicesbg.jpeg" alt="Services" className="w-full h-full object-cover" loading="eager" />
+        <Image
+          src="/assets/services/Servicesbg.webp"
+          alt="Services"
+          width={1648}
+          height={640}
+          className="w-full h-full object-cover"
+          sizes="100vw"
+          priority
+        />
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,18 +31,26 @@ export default function ServicesPage() {
       {/* Service Delivery Models */}
       <section className="bg-white max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="pt-8">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/services/Services1.jpeg"
+          <Image
+            src="/assets/services/Services1.webp"
             alt="Service banner"
+            width={1376}
+            height={768}
             className="w-full h-[200px] sm:h-[300px] md:h-[450px] object-cover border border-[#D0D0D0] shadow-lg"
+            sizes="(min-width: 1024px) 50vw, 100vw"
           />
         </div>
         <div className="py-12 flex flex-col md:flex-row items-center md:items-start gap-8">
           <div className="w-full md:w-1/3 flex justify-center">
             <div className="bg-white border-2 border-[#E6E6E6] shadow-sm p-6 flex items-center justify-center w-full h-auto md:h-[309px]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/logo.png" alt="Inflexions-IT Logo" className="max-h-full max-w-full object-contain" />
+              <Image
+                src="/assets/logo.png"
+                alt="Inflexions-IT Logo"
+                width={192}
+                height={40}
+                className="max-h-full max-w-full object-contain"
+                sizes="(min-width: 1024px) 50vw, 100vw"
+              />
             </div>
           </div>
           <div className="w-full md:w-2/3 pt-4">
@@ -86,8 +102,14 @@ export default function ServicesPage() {
             </div>
           </div>
           <div className="w-full md:w-1/2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/services/Services2.jpeg" alt="Professional Services" className="w-full h-auto lg:h-[559px] object-cover shadow-lg" />
+            <Image
+              src="/assets/services/Services2.webp"
+              alt="Professional Services"
+              width={1376}
+              height={768}
+              className="w-full h-auto lg:h-[559px] object-cover shadow-lg"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
           </div>
         </div>
       </section>
@@ -96,8 +118,14 @@ export default function ServicesPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col md:flex-row items-center gap-8">
           <div className="w-full md:w-1/2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/services/Services3.jpeg" alt="Managed Services" className="w-full h-auto lg:h-[559px] object-cover shadow-lg" />
+            <Image
+              src="/assets/services/Services3.webp"
+              alt="Managed Services"
+              width={1376}
+              height={768}
+              className="w-full h-auto lg:h-[559px] object-cover shadow-lg"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
           </div>
           <div className="flex flex-col lg:flex-row md:flex-row items-start lg:pl-8 pl-0 md:pl-0 md:w-1/2">
             <div className="flex flex-col items-start flex-none mb-6 md:mb-0 md:mr-6">
@@ -152,8 +180,14 @@ export default function ServicesPage() {
             </div>
           </div>
           <div className="w-full md:w-1/2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/services/Services4.jpeg" alt="Support Services" className="w-full h-auto lg:h-[559px] object-cover shadow-lg" />
+            <Image
+              src="/assets/services/Services4.webp"
+              alt="Support Services"
+              width={1376}
+              height={768}
+              className="w-full h-auto lg:h-[559px] object-cover shadow-lg"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
           </div>
         </div>
       </section>
@@ -162,8 +196,14 @@ export default function ServicesPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col md:flex-row items-center gap-8">
           <div className="w-full md:w-1/2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/services/Services1.jpeg" alt="Digital Transformation Advisory" className="w-full h-auto lg:h-[559px] object-cover shadow-lg" />
+            <Image
+              src="/assets/services/Services1.webp"
+              alt="Digital Transformation Advisory"
+              width={1376}
+              height={768}
+              className="w-full h-auto lg:h-[559px] object-cover shadow-lg"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
           </div>
           <div className="flex flex-col lg:flex-row md:flex-row items-start lg:pl-8 pl-0 md:pl-0 md:w-1/2">
             <div className="flex flex-col items-start flex-none mb-6 md:mb-0 md:mr-6">
