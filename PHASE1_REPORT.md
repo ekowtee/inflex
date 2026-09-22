@@ -117,6 +117,7 @@ Recorded in `HERO_SCENE_SPEC.md` §11a. The ones that matter to the plan:
 
 - **Header logo clips at some widths** (about 1440 px): the locked header's absolute logo position. Untouched by decision.
 - **Beats 1 and 2 camera keys** are set (100 vh and 130 vh) but the scroll value comes from a plain scroll listener; the ScrollTrigger timeline replaces it in Phase 2.
+- **The canvas is clipped to the hero** for now. It was fixed to the viewport, and on the real site that meant the Core showed through every later section without an opaque background (the partners and stats block, the Academy card). Phase 2 pins it through Beats 1 and 2 with the ScrollTrigger timeline, under sections designed to sit over it.
 - **`/privacy` returns 404**; the footer links to it. Pre-existing.
 - **Mobile poster registration** is exact only at the captured 390×844 aspect; other phone aspects crop slightly differently from the live scene. Tier B on phones tolerates this because the crossfade is subtle at that scale, but the mobile poster should be captured at two aspects if the field data shows a dominant second shape.
 - **Formation 5 (the mark)** mirrors formation 0 until Phase 4 samples `mark-silhouette.svg`.

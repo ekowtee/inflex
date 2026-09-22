@@ -7,7 +7,7 @@
  * Tier C never reaches this component: Arrival only renders it for A and B,
  * and it is loaded with next/dynamic so three.js is never in the route
  * shell. Everything the poster contract needs is reported through onLive
- * and onFail; the canvas itself sits behind the page and takes no input.
+ * and onFail; the canvas sits behind the hero copy and takes no input.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Tier } from "@/motion/tier";
@@ -110,10 +110,15 @@ export default function CoreCanvas({ tier: initialTier, onLive, onFail, capture 
 
   if (!data) return null;
 
+  // Absolute within the hero section, which is `relative isolate
+  // overflow-hidden`, so the scene is clipped to the arrival. A fixed canvas
+  // showed through every later section without an opaque background. When
+  // Phase 2 pins the Core through Beats 1 and 2, the ScrollTrigger timeline
+  // owns this and the sections it runs under are designed for it.
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-0"
+      className="absolute inset-0 z-0"
       style={{ pointerEvents: "none" }}
       aria-hidden="true"
       data-core-tier={tier}
