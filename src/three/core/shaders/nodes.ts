@@ -24,6 +24,7 @@ export const nodesVertex = stripGlsl(/* glsl */ `
   uniform float uTime;
   uniform float uNoise;
   uniform float uHeatGate;
+  uniform float uSpread;
   uniform float uIdle;
   uniform float uSize;
   uniform float uDpr;
@@ -110,6 +111,16 @@ export const nodesVertex = stripGlsl(/* glsl */ `
     if (resting) {
       float across = (from.x + 2.4) / 4.8;
       heat *= 1.0 - smoothstep(uHeatGate - 0.25, uHeatGate, across);
+    }
+
+    // The intelligence band: warmth spreads from the line through the whole
+    // fabric as uSpread rises 0 → 1, with a ragged front so it reads as
+    // travelling along the structure. Capped below full ember so the sheet
+    // warms rather than blazes; only the line itself blooms.
+    if (resting && uSpread > 0.0) {
+      float front = uSpread * 2.9;
+      float reach = abs(from.x) + 0.3 * aSeed;
+      heat = max(heat, 0.78 * (1.0 - smoothstep(front - 0.5, front, reach)));
     }
 
     // Proximity warmth: nodes near the pointer rise toward silver, never ember.
@@ -209,7 +220,8 @@ export const nodesFragment = stripGlsl(/* glsl */ `
         return;
       }
       // Bloom source: emit the ember colour scaled by the disc, no fog.
-      vec3 e = ember * (core + halo) * uOpacity;
+      // Scaled by heat so the spread's warmth does not bloom; the line does.
+      vec3 e = ember * (core + halo) * uOpacity * smoothstep(0.5, 1.0, vHeat);
       if (uEncodeSRGB > 0.5) e = toSRGB(min(e, vec3(1.0)));
       fragColor = vec4(e, alpha);
       return;

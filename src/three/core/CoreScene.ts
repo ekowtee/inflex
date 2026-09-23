@@ -448,6 +448,7 @@ export class CoreScene {
       u.uMix.value = capture ? store.mix : track.mix;
       u.uNoise.value = capture ? store.noise : track.noise;
       u.uHeatGate.value = gate;
+      u.uSpread.value = capture ? 0 : track.spread;
       u.uOpacity.value = store.opacity;
       u.uIdle.value = capture ? 0 : 1;
       u.uProximity.value = pointer.active && !capture ? 1 : 0;

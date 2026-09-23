@@ -59,6 +59,7 @@ const sharedUniforms = (texture: DataTexture, tier: Tier) => ({
   uTime: { value: 0 },
   uNoise: { value: 0 },
   uHeatGate: { value: -0.3 },
+  uSpread: { value: 0 },
   uIdle: { value: nodeSettings.idleAmplitude },
   uPointerWorld: { value: new Vector2(99, 99) },
   uProximity: { value: 0 },

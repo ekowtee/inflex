@@ -25,6 +25,9 @@
  *                 sub-range hold still.
  *   after 4       the Core fades out, and while hidden it resets to the
  *                 sheet for the intelligence band and the ask.
+ *   Beat 5.5      the intelligence band: warmth spreads from the ember
+ *                 line through the whole sheet ("it is the fabric"), rising
+ *                 while the band comes up and holding until it leaves.
  */
 import { BEAT_START_VH } from "./timeline";
 
@@ -38,6 +41,8 @@ export interface SceneState {
   /** Ember gate from the page's side; the scene takes min() with the arrival light. */
   gate: number;
   ground: number;
+  /** Beat 5.5: how far warmth has spread from the line through the sheet, 0 to 1. */
+  spread: number;
 }
 
 /** Row i of the pinned chapter shows formation PILLAR_FORMATION[i]. */
@@ -69,8 +74,10 @@ export function sceneStateAt(vh: number): SceneState {
   const b3 = BEAT_START_VH[3];
   const b4 = BEAT_START_VH[4];
   const b5 = BEAT_START_VH[5];
+  const b55 = BEAT_START_VH[5.5];
+  const b6 = BEAT_START_VH[6];
 
-  const rest: SceneState = { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0 };
+  const rest: SceneState = { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0, spread: 0 };
 
   // ─── Beats 0 to 3: the sheet, its unmaking and its resolve ─────────────
   if (vh < b3 - 20) {
@@ -109,6 +116,14 @@ export function sceneStateAt(vh: number): SceneState {
     return { ...rest, from: 4, to: 4, ground: GROUND[4] };
   }
 
-  // ─── after the pillars: hidden, reset to the sheet ─────────────────────
+  // ─── the intelligence band: the sheet, warmth spreading through it ────
+  // Starts while the Core is still fading up under the ledger's Ivory, so
+  // the spread is well under way when the band's top reaches the viewport
+  // top, and completes over the band's own scroll.
+  if (vh >= b55 - 40 && vh < b6 + 20) {
+    return { ...rest, spread: smooth((vh - (b55 - 40)) / 70) };
+  }
+
+  // ─── otherwise: hidden, reset to the sheet ─────────────────────────────
   return rest;
 }

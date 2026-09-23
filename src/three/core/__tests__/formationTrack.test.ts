@@ -4,7 +4,7 @@ import { sceneStateAt, pillarHoldVh, PILLAR_FORMATION, PILLAR_VH } from "../form
 import { BEAT_START_VH } from "../timeline";
 
 test("the hero is the resting sheet, lit, with no noise", () => {
-  assert.deepEqual(sceneStateAt(0), { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0 });
+  assert.deepEqual(sceneStateAt(0), { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0, spread: 0 });
 });
 
 test("Beat 1 unmakes the sheet and Beat 2 resolves it", () => {
@@ -41,6 +41,15 @@ test("mix is continuous across the whole pinned chapter", () => {
     assert.ok(Math.abs(b - a) < 0.08, `jump at ${vh}: ${a} → ${b}`);
     last = s;
   }
+});
+
+test("warmth spreads through the sheet in the intelligence band only", () => {
+  assert.equal(sceneStateAt(BEAT_START_VH[5.5] - 50).spread, 0);
+  const mid = sceneStateAt(BEAT_START_VH[5.5]).spread;
+  assert.ok(mid > 0.4 && mid < 0.8, `spread at the band's top is ${mid}`);
+  assert.equal(sceneStateAt(BEAT_START_VH[5.5] + 40).spread, 1);
+  assert.equal(sceneStateAt(BEAT_START_VH[8] + 5).spread, 0);
+  assert.equal(sceneStateAt(BEAT_START_VH[4] + 50).spread, 0);
 });
 
 test("after the pillars the sheet is back for the intelligence band and the ask", () => {

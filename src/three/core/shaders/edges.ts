@@ -27,6 +27,7 @@ export const edgesVertex = stripGlsl(/* glsl */ `
   uniform float uTime;
   uniform float uNoise;
   uniform float uHeatGate;
+  uniform float uSpread;
   uniform float uIdle;
   uniform vec2 uPointerWorld;
   uniform float uProximity;
@@ -96,6 +97,12 @@ export const edgesVertex = stripGlsl(/* glsl */ `
       float across = (from.x + 2.4) / 4.8;
       heat *= 1.0 - smoothstep(uHeatGate - 0.25, uHeatGate, across);
     }
+    // Identical to the node shader's spread, so an edge warms with its ends.
+    if (resting && uSpread > 0.0) {
+      float front = uSpread * 2.9;
+      float reach = abs(from.x) + 0.3 * seed;
+      heat = max(heat, 0.78 * (1.0 - smoothstep(front - 0.5, front, reach)));
+    }
     return vec4(pos, heat);
   }
 
@@ -152,19 +159,21 @@ export const edgesFragment = stripGlsl(/* glsl */ `
     if (vStretch <= 0.001) discard;
     if (uEmberPass > 0.5 && vHot < 0.5) discard;
 
-    bool hot = vHot > 0.5;
-    vec3 color = hot ? uEmber : mix(uGraphite, uSilver300, vShade) * 0.85;
-    float alpha = hot ? 0.6 : 0.45;
+    // Graded rather than binary: the spread's 0.78 heat warms an edge
+    // toward ember, the line's 1.0 takes it all the way.
+    float hot = smoothstep(0.5, 1.0, vHot);
+    vec3 color = mix(mix(uGraphite, uSilver300, vShade) * 0.85, uEmber, hot);
+    float alpha = mix(0.45, 0.6, hot);
     alpha *= 1.0 + 0.6 * vProx * uProximity;
 
     float fog = 1.0 - exp(-uFogDensity * uFogDensity * vDepth * vDepth);
     color = mix(color, uFogColor, fog);
 
     float depthCue = 1.0 - 0.45 * smoothstep(4.5, 7.5, vDepth);
-    alpha *= depthCue * vStretch * uOpacity * (hot ? vPresence.x : vPresence.y);
+    alpha *= depthCue * vStretch * uOpacity * mix(vPresence.y, vPresence.x, hot);
 
     if (uEmberPass > 0.5) {
-      vec3 e = uEmber * 1.2;
+      vec3 e = uEmber * 1.2 * hot;
       if (uEncodeSRGB > 0.5) e = toSRGB(min(e, vec3(1.0)));
       fragColor = vec4(e * alpha, alpha);
       return;
