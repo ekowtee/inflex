@@ -19,7 +19,7 @@
  *   Beat 3        rest (the Core is at 0.3 behind the proof).
  *   end of 3      the morph to the lattice begins, so the pillars arrive
  *                 already in motion.
- *   Beat 4        four pillars, 80 vh each: lattice, enclosure, nebula,
+ *   Beat 4        four pillars, 80 vh each: lattice, shield, nebula,
  *                 plane. Each morph straddles the boundary between two rows,
  *                 16 vh either side, so the first and last 20% of every
  *                 sub-range hold still.

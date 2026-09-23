@@ -244,13 +244,31 @@ function sheetToDirection(n: SheetNode): [number, number, number] {
   return [c * Math.sin(lon), Math.sin(lat), c * Math.cos(lon)];
 }
 
-function formationEnclosure(nodes: SheetNode[], rand: () => number): Placement[] {
+function formationShield(nodes: SheetNode[]): Placement[] {
+  // Formation 2, Data Security: a heraldic shield, not the double sphere
+  // (owner, 23 September 2026: "a button"). Sheet x → across, sheet y →
+  // down the shield, so every sheet neighbour stays a neighbour and the
+  // edges survive. Straight shoulders, sides falling to a point; a domed
+  // face; every fourth node on a flat backing plate for thickness. The
+  // ember is a chevron across the upper face.
+  const HALF_W = 1.6;
+  const HALF_H = 1.5;
   return nodes.map((n) => {
-    const [dx, dy, dz] = sheetToDirection(n);
+    const u = n.x / SHEET_X;
+    const v = n.y / SHEET_Y;
+    // Half-width: full to the shoulder line, then narrowing to the point.
+    const below = Math.max(0, -0.05 - v) / 0.95;
+    const hw = 1 - Math.pow(below, 1.7);
     const inner = (n.col + n.row) % 4 === 0;
-    const r = inner ? 0.95 : 1.35;
-    const heat = !inner && rand() < 0.045 ? 0.8 + rand() * 0.2 : 0;
-    return { x: dx * r, y: dy * r, z: dz * r, heat };
+    const scale = inner ? 0.9 : 1;
+    const x = u * hw * HALF_W * scale;
+    const y = v * HALF_H * scale;
+    const dome = 0.34 * (1 - 0.55 * (u * u + v * v));
+    const z = inner ? -0.22 : dome;
+    // A chevron alone: with a spine as well the mark read as a peace sign.
+    const chevron = Math.abs(v - (0.3 - 0.6 * Math.abs(u))) < 0.06 && Math.abs(u) < 0.82;
+    const heat = !inner && chevron ? 1 : 0;
+    return { x, y, z, heat };
   });
 }
 
@@ -299,7 +317,7 @@ export function generateCore(seed: number = CORE_SEED): CoreData {
 
   const f0: Placement[] = sheet.map((n) => ({ x: n.x, y: n.y, z: n.z, heat: heatF0(n.x) }));
   const f1 = formationLattice(sheet, rand);
-  const f2 = formationEnclosure(sheet, rand);
+  const f2 = formationShield(sheet);
   const f3 = formationNebula(sheet, rand, noise);
   const f4 = formationPlane(sheet, noise);
   const formations = [f0, f1, f2, f3, f4];
