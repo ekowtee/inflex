@@ -14,7 +14,7 @@ import type { Tier } from "@/motion/tier";
 import type { CoreWorkerResult } from "./worker/formations.worker";
 import { CoreScene } from "./CoreScene";
 import { dprFor } from "./rig";
-import { store, resetStore } from "./store";
+import { resetStore } from "./store";
 
 export interface CoreCanvasProps {
   tier: "A" | "B";
@@ -67,25 +67,23 @@ export default function CoreCanvas({ tier: initialTier, onLive, onFail, capture 
         if (!cancelled) onFail();
       });
 
-    // Scroll position in viewport heights. Phase 2 replaces this with the
-    // ScrollTrigger timeline; the arrival needs only the raw value.
-    const onScroll = () => {
-      store.scrollVh = (window.scrollY / window.innerHeight) * 100;
-      if (store.scrollVh > 130) store.scrolledPastArrival = true;
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-
+    // Scroll position, opacity and the beat come from the spine
+    // (timeline.ts), attached by the arrival for every tier.
     return () => {
       cancelled = true;
-      window.removeEventListener("scroll", onScroll);
     };
   }, [onFail]);
 
   const handleDemote = useCallback(
     (next: Tier) => {
       if (next === "C") onFail();
-      else setTier(next);
+      else {
+        // The rebuilt scene gets its own 8 s to become ready. Inheriting the
+        // first mount's deadline meant a demotion after going live missed it
+        // at once and fell straight through to posters.
+        mountedAt.current = performance.now();
+        setTier(next);
+      }
     },
     [onFail]
   );
@@ -110,15 +108,18 @@ export default function CoreCanvas({ tier: initialTier, onLive, onFail, capture 
 
   if (!data) return null;
 
-  // Absolute within the hero section, which is `relative isolate
-  // overflow-hidden`, so the scene is clipped to the arrival. A fixed canvas
-  // showed through every later section without an opaque background. When
-  // Phase 2 pins the Core through Beats 1 and 2, the ScrollTrigger timeline
-  // owns this and the sections it runs under are designed for it.
+  // Fixed to the viewport at z-index −1 in the root stacking context (the
+  // hero deliberately does not isolate), so it paints beneath every in-flow
+  // box on the page: the chapters, the footer, anything static. The
+  // Obsidian chapters go transparent while the scene is live
+  // (globals.css, `html[data-core-live]`) so the Core shows through them;
+  // the Ivory chapters and the footer keep their backgrounds and cover it.
+  // The spine sets the node opacity per beat and the scene skips drawing
+  // while it is 0.
   return (
     <div
       ref={containerRef}
-      className="absolute inset-0 z-0"
+      className="fixed inset-0 z-[-1]"
       style={{ pointerEvents: "none" }}
       aria-hidden="true"
       data-core-tier={tier}

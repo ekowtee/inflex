@@ -55,8 +55,17 @@ const PROBE_LIMIT_MS = 24;
 const READY_FRAME_MS = 20;
 const READY_STREAK = 3;
 const LIVE_DEADLINE_MS = 8000;
+/** Watchdog while live: demote when this many consecutive frames average over the limit. */
+const WATCH_FRAMES = 90;
+const WATCH_LIMIT_MS = 40;
+/** A frame longer than this is a pause (hidden tab, blocked thread), not a render. */
+const PAUSE_MS = 250;
 const ARRIVAL_LIGHT_MS = 1800;
 const CROSSFADE_MS = 900;
+
+/** Camera truck at full pointer deflection, world units. */
+const TRUCK_X = 0.32;
+const TRUCK_Y = 0.18;
 
 const expoOut = (t: number) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
 
@@ -72,6 +81,8 @@ export class CoreScene {
   private compiled = false;
   private probe = { frames: 0, total: 0, done: true };
   private ready = { streak: 0, live: false, liveAt: 0 };
+  private watch = { frames: 0, total: 0, slow: 0 };
+  private hiddenCleared = false;
   private lastFrame = performance.now();
   private startedAt = performance.now();
   private width = 1;
@@ -225,15 +236,41 @@ export class CoreScene {
     const frameMs = now - this.lastFrame;
     const dt = Math.min(0.1, frameMs / 1000);
     this.lastFrame = now;
+    // A frame far longer than any real render is a pause, not load: the tab
+    // was hidden, the window lost the compositor, DevTools stepped in, or a
+    // dev rebuild blocked the thread. Pauses never count toward the probe
+    // or the watchdog, or one switch to another window demotes the scene.
+    const paused = frameMs > PAUSE_MS || document.hidden;
     const time = (now - this.startedAt) / 1000;
 
     // ─── probe: 90 frames, then decide ────────────────────────────────────
-    if (!this.probe.done) {
+    if (!this.probe.done && !paused) {
       this.probe.frames += 1;
       this.probe.total += frameMs;
       if (this.probe.frames >= PROBE_FRAMES) {
         this.probe.done = true;
         if (this.probe.total / this.probe.frames > PROBE_LIMIT_MS) {
+          sessionStorage.setItem("core-tier-demoted", tier === "A" ? "B" : "C");
+          onDemote(tier === "A" ? "B" : "C");
+          return;
+        }
+      }
+    }
+
+    // ─── watchdog: a live scene that cannot hold its frame time steps down ──
+    // The probe judges the first 90 frames; this judges every 90 after
+    // going live, for devices that start well and then saturate.
+    // Two consecutive slow windows, not one, so a short burst of work
+    // elsewhere on the page cannot end the scene.
+    if (this.ready.live && !capture && !paused) {
+      this.watch.frames += 1;
+      this.watch.total += frameMs;
+      if (this.watch.frames >= WATCH_FRAMES) {
+        const avg = this.watch.total / this.watch.frames;
+        this.watch.frames = 0;
+        this.watch.total = 0;
+        this.watch.slow = avg > WATCH_LIMIT_MS ? this.watch.slow + 1 : 0;
+        if (this.watch.slow >= 2) {
           sessionStorage.setItem("core-tier-demoted", tier === "A" ? "B" : "C");
           onDemote(tier === "A" ? "B" : "C");
           return;
@@ -285,11 +322,22 @@ export class CoreScene {
       pitch = 0;
     }
 
+    // The orbit pivots on the look-at point, which lies on the sheet's own
+    // plane, so rotation alone barely moves a near-flat object (measured:
+    // 4 px of ember-line travel across the full pointer range). A truck of
+    // the camera and a smaller shift of the target give the parallax a
+    // visible, heavy drift while the tilt keeps the perspective change.
+    const truckX = (yaw / YAW_MAX) * TRUCK_X;
+    const truckY = (pitch / PITCH_MAX) * TRUCK_Y;
     this.offset.copy(key.position).sub(key.lookAt);
     this.offset.applyAxisAngle(this.up, yaw);
     this.offset.applyAxisAngle(this.right, -pitch);
     const cam = this.camera;
+    this.target.x -= truckX * 0.35;
+    this.target.y -= truckY * 0.35;
     cam.position.copy(key.lookAt).add(this.offset);
+    cam.position.x -= truckX;
+    cam.position.y -= truckY;
     if (!capture) {
       cam.position.x += breath.x;
       cam.position.y += breath.y;
@@ -319,6 +367,20 @@ export class CoreScene {
     this.ground.material.uniforms.uAlpha.value = store.ground;
 
     // ─── render ───────────────────────────────────────────────────────────
+    // Behind the Ivory beats the spine sets opacity 0: keep the loop alive
+    // for the probe and the uniforms, skip the draw.
+    // Clear once on the way out, or the last presented frame stays on the
+    // canvas and shows through the next Obsidian band before it fades in.
+    if (!capture && store.opacity <= 0.001) {
+      if (!this.hiddenCleared) {
+        this.renderer.setRenderTarget(null);
+        this.renderer.setClearColor(palette.obsidian900, 0);
+        this.renderer.clear();
+        this.hiddenCleared = true;
+      }
+      return;
+    }
+    this.hiddenCleared = false;
     const gl = this.renderer;
     if (this.post) {
       this.post.render(this.scene, cam, time, store.bloom, this.setEmberPass);

@@ -1,12 +1,31 @@
+/**
+ * The home page — SCROLL_NARRATIVE.md §6.
+ *
+ * Nine beats in order. Beat 7 (Voices) is omitted: it runs only on two real,
+ * attributable, permissioned quotes, and there are none, so Beat 6 flows
+ * straight into Beat 8. It is not filled with placeholders.
+ *
+ * Registers alternate so the eye never spends more than two beats in one
+ * world, and Obsidian is broken exactly once trust has been won:
+ * 0-4 Obsidian, 5-6 Ivory, 8 Obsidian, 9 Ivory.
+ *
+ * The eight chapters that used to live here (StrategicPartnerSection,
+ * ComprehensiveSolutions, InflexionsAdvantage, IntelligentAutomation,
+ * AcademyPromo, MainPartners, CallToAction, and the Partners strip) are no
+ * longer on the home page. Their files stay: Partners is still on /about and
+ * /contact, MainPartners on /solutions, and Phase 4 removes the rest once the
+ * owner has seen this page.
+ */
 import Arrival from "./components/home/Arrival";
-import Partners from "./components/Partners";
-import StrategicPartnerSection from "./components/StrategicPartnerSection";
-import ComprehensiveSolutions from "./components/ComprehensiveSolutions";
-import InflexionsAdvantage from "./components/InflexionsAdvantage";
-import IntelligentAutomation from "./components/IntelligentAutomation";
-import AcademyPromo from "./components/AcademyPromo";
-import MainPartners from "./components/MainPartners";
-import CallToAction from "./components/CallToAction";
+import TrustedBy from "./components/home/TrustedBy";
+import TurningPoint from "./components/home/TurningPoint";
+import Receipt from "./components/home/Receipt";
+import Pillars from "./components/home/Pillars";
+import Difference from "./components/home/Difference";
+import Intelligence from "./components/home/Intelligence";
+import PartnerWall from "./components/home/PartnerWall";
+import TheAsk from "./components/home/TheAsk";
+import SideDoors from "./components/home/SideDoors";
 import JsonLd from "./components/JsonLd";
 
 export default function Home() {
@@ -40,36 +59,33 @@ export default function Home() {
         }}
       />
 
-      {/* Hero Section */}
+      {/* 0 — Where am I, and is this for me? */}
       <Arrival />
 
-      {/* Partners Section */}
-      <div id="trusted-by">
-        <Partners />
-      </div>
+      {/* 1 — Who else trusts them? */}
+      <TrustedBy />
 
-      {/* Strategic Partner Section */}
-      <StrategicPartnerSection />
+      {/* 2 — What do you actually do? */}
+      <TurningPoint />
 
-      {/* Comprehensive Solutions Section */}
-      <ComprehensiveSolutions />
+      {/* 3 — Why should I believe you? Trust is won here. */}
+      <Receipt />
 
-      {/* Inflexions Advantage Section */}
-      <InflexionsAdvantage />
+      {/* 4 — What exactly would you do for me? */}
+      <Pillars />
 
-      {/* AI & Intelligent Automation Section */}
-      <IntelligentAutomation />
+      {/* 5 — Why you and not the others I am comparing? */}
+      <Difference />
+      <Intelligence />
 
-      {/* Academy Promo Section */}
-      <AcademyPromo />
+      {/* 6 — What is my risk? Are they backed? */}
+      <PartnerWall />
 
-      {/* Main Partners Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <MainPartners />
-      </div>
+      {/* 8 — What do I do now, and what will it cost me? */}
+      <TheAsk />
 
-      {/* Call to Action Banner */}
-      <CallToAction />
+      {/* 9 — And for the visitor who is not the buyer. */}
+      <SideDoors />
     </div>
   );
 }

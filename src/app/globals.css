@@ -66,9 +66,69 @@
   --color-ember: #FF3B2F;
 
   /* ─── Font Families ─── */
-  --font-sans: var(--font-rubik), system-ui, sans-serif;
-  --font-rubik: var(--font-rubik), system-ui, sans-serif;
-  --font-krub: var(--font-krub), system-ui, sans-serif;
+  --font-sans: var(--font-rubik), "Rubik Metric", system-ui, sans-serif;
+  --font-rubik: var(--font-rubik), "Rubik Metric", system-ui, sans-serif;
+  --font-krub: var(--font-krub), "Krub Metric", system-ui, sans-serif;
+}
+
+/* Metric-matched fallback faces — PERFORMANCE_PLAN.md §5.
+   While Rubik and Krub load, text is set in the local sans with its size,
+   ascent and descent overridden to the web font's metrics, so the swap
+   moves nothing. One face per weight: the local sans has real regular and
+   bold faces only, and Rubik's width relative to them differs by weight
+   (measured in Chrome against Arial, 23 September 2026: 400 → 104.4%,
+   500 → 108.2%, 600 → 102.3%, 700 → 104.1%; Krub 500 → 106.5%). Ascent and
+   descent are Rubik's 935/250 and Krub's 1007/293 per 1000 divided by the
+   size adjustment. Roboto (Android) is within 0.3% of Arial's widths, and
+   Liberation Sans (Linux) is Arial-compatible, so one src list serves all. */
+@font-face {
+  font-family: "Rubik Metric";
+  font-weight: 400;
+  src: local("Arial"), local("Liberation Sans"), local("Roboto"), local("Helvetica Neue"), local("Helvetica");
+  size-adjust: 104.41%;
+  ascent-override: 89.55%;
+  descent-override: 23.94%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Rubik Metric";
+  font-weight: 500;
+  src: local("Arial"), local("Liberation Sans"), local("Roboto Medium"), local("Roboto"), local("Helvetica Neue"), local("Helvetica");
+  size-adjust: 108.24%;
+  ascent-override: 86.38%;
+  descent-override: 23.10%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Rubik Metric";
+  font-weight: 600;
+  src: local("Arial Bold"), local("Arial"), local("Liberation Sans Bold"), local("Liberation Sans"), local("Roboto Bold"), local("Roboto"), local("Helvetica Neue Bold"), local("Helvetica Bold");
+  size-adjust: 102.31%;
+  ascent-override: 91.39%;
+  descent-override: 24.44%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Rubik Metric";
+  font-weight: 700;
+  src: local("Arial Bold"), local("Arial"), local("Liberation Sans Bold"), local("Liberation Sans"), local("Roboto Bold"), local("Roboto"), local("Helvetica Neue Bold"), local("Helvetica Bold");
+  size-adjust: 104.13%;
+  ascent-override: 89.79%;
+  descent-override: 24.01%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Krub Metric";
+  font-weight: 500;
+  src: local("Arial"), local("Liberation Sans"), local("Roboto Medium"), local("Roboto"), local("Helvetica Neue"), local("Helvetica");
+  size-adjust: 106.53%;
+  ascent-override: 94.53%;
+  descent-override: 27.50%;
+  line-gap-override: 0%;
 }
 
 /* Type tiers — CREATIVE_DIRECTION_3D.md §5.3.
@@ -76,7 +136,7 @@
    stay with the component so a tier can be used in either register. */
 @layer components {
   .type-display-xl {
-    font-family: var(--font-rubik), system-ui, sans-serif;
+    font-family: var(--font-rubik), "Rubik Metric", system-ui, sans-serif;
     /* 6.5vw wrapped the nine-word hero headline to six lines at 1440 px and
        pushed the call to action below the fold. 4.6vw holds it to four. */
     /* Floor 2.125rem: 2.5rem on a 390 px phone wrapped the headline into
@@ -89,8 +149,10 @@
   }
 
   .type-display-l {
-    font-family: var(--font-rubik), system-ui, sans-serif;
-    font-size: clamp(2.25rem, 4.5vw, 4rem);
+    font-family: var(--font-rubik), "Rubik Metric", system-ui, sans-serif;
+    /* Floor below Display XL's 2.125rem so the tiers keep their order on
+       phones; at 2.25rem chapter headings outranked the hero and the ask. */
+    font-size: clamp(2rem, 4.5vw, 4rem);
     font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 1;
@@ -98,16 +160,18 @@
   }
 
   .type-h2 {
-    font-family: var(--font-rubik), system-ui, sans-serif;
+    font-family: var(--font-rubik), "Rubik Metric", system-ui, sans-serif;
     font-size: clamp(1.75rem, 3vw, 2.5rem);
-    font-weight: 600;
+    /* Bold like the display tiers above it; 600 against 700 read as a
+       mismatch rather than a step. */
+    font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.1;
     text-wrap: balance;
   }
 
   .type-h3 {
-    font-family: var(--font-rubik), system-ui, sans-serif;
+    font-family: var(--font-rubik), "Rubik Metric", system-ui, sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
     letter-spacing: -0.01em;
@@ -115,7 +179,7 @@
   }
 
   .type-body-l {
-    font-family: var(--font-rubik), system-ui, sans-serif;
+    font-family: var(--font-rubik), "Rubik Metric", system-ui, sans-serif;
     /* 1rem on phones, 1.125rem from about 640 px. */
     font-size: clamp(1rem, 0.9rem + 0.35vw, 1.125rem);
     font-weight: 400;
@@ -124,7 +188,7 @@
   }
 
   .type-body {
-    font-family: var(--font-rubik), system-ui, sans-serif;
+    font-family: var(--font-rubik), "Rubik Metric", system-ui, sans-serif;
     font-size: clamp(0.9375rem, 0.88rem + 0.2vw, 1rem);
     font-weight: 400;
     letter-spacing: 0;
@@ -132,7 +196,7 @@
   }
 
   .type-eyebrow {
-    font-family: var(--font-krub), system-ui, sans-serif;
+    font-family: var(--font-krub), "Krub Metric", system-ui, sans-serif;
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.18em;
@@ -141,7 +205,7 @@
   }
 
   .type-telemetry {
-    font-family: var(--font-krub), system-ui, sans-serif;
+    font-family: var(--font-krub), "Krub Metric", system-ui, sans-serif;
     font-size: 0.6875rem;
     font-weight: 500;
     letter-spacing: 0.12em;
@@ -224,6 +288,164 @@
   35% { transform: scaleY(1); opacity: 1; }
   80% { transform: scaleY(1); opacity: 0; }
   100% { transform: scaleY(0); opacity: 0; }
+}
+
+/* Home page chapter surfaces — PHASE2_BRIEF.md §4 Task 1.
+   The chapters alternate between two registers; these are the only two
+   backgrounds the home page uses, plus one soft variant for Beat 9. */
+@layer components {
+  /* The environment. Always paired with .on-obsidian so the dark focus
+     ring rule applies, and with data-header-dark so the header goes dark. */
+  .band-obsidian {
+    background: var(--color-obsidian-950);
+    color: var(--color-silver-100);
+  }
+
+  /* The reading room. */
+  .band-ivory {
+    background: #FFFFFF;
+    color: #171A20;
+  }
+
+  /* Beat 9 only: the side-door panels are white cards, so the band behind
+     them steps down a shade or the cards have nothing to sit on. */
+  .band-ivory-soft {
+    background: #F7F8FA;
+    color: #171A20;
+  }
+
+  /* The one shadow on the site — CREATIVE_DIRECTION_3D.md §5.5. Ivory only;
+     nothing on the Obsidian register ever carries a shadow. */
+  .shadow-ivory {
+    box-shadow:
+      0 1px 2px rgb(23 26 32 / 0.06),
+      0 8px 24px rgb(23 26 32 / 0.06);
+  }
+
+  /* The ledger strike — SCROLL_NARRATIVE.md §8.4. The line is drawn through
+     the reader rather than pre-printed, which is the whole point of Beat 5;
+     Difference.tsx sets data-struck when the block is 30% visible. */
+  .strike {
+    position: relative;
+  }
+
+  .strike::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1.5px;
+    background: #171A20;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 400ms var(--motion-ease-out);
+  }
+
+  .strike[data-struck]::after {
+    transform: scaleX(1);
+  }
+
+  /* Secondary action on Obsidian — CREATIVE_DIRECTION_3D.md §5.5. Primary
+     stays the solid red block; this is the quiet one beside it. */
+  .btn-secondary-obsidian {
+    display: inline-flex;
+    align-items: center;
+    height: 3.5rem;
+    padding-inline: 2rem;
+    border: 1px solid rgb(255 255 255 / 0.2);
+    border-radius: 6px;
+    transition: background-color var(--motion-duration-micro) var(--motion-ease-out);
+  }
+
+  .btn-secondary-obsidian:hover {
+    background-color: rgb(255 255 255 / 0.08);
+  }
+
+  /* Thread slot — PHASE2_BRIEF.md §5.4. A fixed 48 px well at the end of a
+     beat holding one <Thread>. Left to itself the thread aligns with its own
+     x prop (mr-auto / mx-auto / ml-auto against left:0 right:0). For Beats 2
+     and 4 the scroll spine writes --thread-x on the wrapper, because there
+     the thread is born from the Core at a projected screen point rather than
+     drawn on the page; the second rule hands placement over when it does. */
+  .thread-slot {
+    position: relative;
+    width: 100%;
+    height: 48px;
+  }
+
+  .thread-slot > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .thread-slot[style*="--thread-x"] > * {
+    left: var(--thread-x);
+    right: auto;
+    margin-inline: 0;
+  }
+}
+
+/* The scroll spine — src/three/core/timeline.ts.
+   While the Core is live (Tier A and B, once the poster has crossfaded) the
+   Obsidian chapters lose their background so the fixed canvas shows through
+   them; the Ivory chapters stay opaque and cover it. Tier C never sets the
+   attribute and keeps the solid bands. */
+html[data-core-live] .band-obsidian,
+html[data-core-live] section[data-beat="0"] {
+  background: transparent;
+}
+
+/* What shows through a transparent Obsidian band when the scene is not
+   drawing (a hidden range, a fade, a frame before the first render) is the
+   root, not the page's white: the root takes Obsidian and the body goes
+   clear so the fixed canvas, which paints between the two, stays visible.
+   Ivory bands and the footer carry their own backgrounds. */
+html[data-core-live] {
+  background: var(--color-obsidian-950);
+}
+
+html[data-core-live] body {
+  background: transparent;
+}
+
+/* Beat 4's phone posters stand in for the Core on Tier C. While the live
+   scene is behind the page they would show the same object twice. */
+html[data-core-live] [data-pillar-poster] {
+  display: none;
+}
+
+/* A thread is born from the Core (Beats 2 and 4, Phase 3). Until the spine
+   has placed it at the detaching node an unplaced 48 px ember line reads as
+   a stray mark, so it does not draw. */
+.thread-slot:not([style*="--thread-x"]) > * {
+  visibility: hidden;
+}
+
+/* Beat 4 is pinned with CSS: the section is one viewport plus 320 vh of
+   scroll, and the chapter sticks to the top for the length of it. Sticky
+   rather than a JavaScript pin so keyboard scrolling, Lenis, Safari
+   trackpads and reduced motion all get the same behaviour. Below lg the
+   rows simply stack. */
+@media (min-width: 1024px) {
+  [data-beat="4"] {
+    min-height: calc(100svh + 320vh);
+  }
+  [data-beat="4"] > [data-pin] {
+    position: sticky;
+    top: 0;
+  }
+}
+
+/* The strike is a statement, not an animation: without motion it is simply
+   already drawn. Outside @layer so it beats the component rule above. */
+@media (prefers-reduced-motion: reduce) {
+  .strike::after {
+    transform: scaleX(1);
+    transition: none;
+  }
 }
 
 * {

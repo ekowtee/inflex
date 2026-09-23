@@ -412,6 +412,8 @@ In `Difference.tsx`, each left-column line has a pseudo-element `::after` at 50%
 | 980 – 1030 | 5 hold | visible |
 | 1030 – end | fade to 0 | fading, then unmount |
 
+**Implementation note (Phase 2, 23 September 2026).** Real sections are as tall as their content, so `timeline.ts` maps scroll to the ranges above through a virtual timeline: each beat keeps its nominal length from §6, and progress is measured through the real section. The pin is CSS `position: sticky` rather than a ScrollTrigger pin (keyboard, Lenis, Safari and reduced motion all get the same behaviour), and scrub smoothing for the morphs lives in the scene's frame loop from Phase 3.
+
 ### 8.6 Mobile journey
 
 Same ten beats, same order, same copy. Beat 4 unpinned (four stacked blocks with posters). Beat 3 cards stack, Blu first. Beat 5 ledger stacks: each struck line is followed immediately by its instead line. Beat 9 panels stack. Tier C devices see posters at every Obsidian beat with the same composition as the live scene.

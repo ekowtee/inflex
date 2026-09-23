@@ -20,11 +20,12 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useMotionTier } from "@/motion/useMotionTier";
-import { afterLcpIdle } from "@/motion/loadMotion";
+import { afterLcpIdle, prefersReducedMotion } from "@/motion/loadMotion";
 import Magnetic from "@/motion/Magnetic";
 import { duration, ease } from "@/motion/tokens";
 import { posters } from "@/three/core/posters";
 import { CoreCanvas } from "@/three/core/loadCore";
+import { attachTimeline } from "@/three/core/timeline";
 
 type Stage = "poster" | "loading" | "live" | "fallback";
 
@@ -134,19 +135,41 @@ export default function Arrival() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // The spine: maps scroll to the narrative timeline for every tier and
+  // drives the pinned chapter's active row and the trust strip's slide.
+  useEffect(() => attachTimeline({ reducedMotion: prefersReducedMotion() }), []);
+
+  // While the scene is live the Obsidian chapters go transparent so the
+  // fixed canvas shows through them (globals.css).
+  useEffect(() => {
+    if (stage !== "live") return;
+    document.documentElement.setAttribute("data-core-live", "");
+    return () => document.documentElement.removeAttribute("data-core-live");
+  }, [stage]);
+
   const onLive = useCallback(() => {
     setStage("live");
     setPosterHidden(true);
   }, []);
 
-  const onFail = useCallback(() => setStage("fallback"), []);
+  // A failure or a demotion to Tier C, possibly after the scene was live:
+  // bring the poster back so the crossfade to the lit poster has a ground.
+  const onFail = useCallback(() => {
+    setStage("fallback");
+    setPosterHidden(false);
+  }, []);
   const onLitLoad = useCallback(() => setLitLoaded(true), []);
 
   const showScene = (tier === "A" || tier === "B") && (stage === "loading" || stage === "live");
 
   return (
     <section
-      className="on-obsidian relative isolate min-h-[100svh] w-full overflow-hidden bg-obsidian-950"
+      id="arrival"
+      data-beat="0"
+      data-register="obsidian"
+      // No `isolate`: the canvas inside must belong to the root stacking
+      // context so it can sit beneath the rest of the page (CoreCanvas).
+      className="on-obsidian relative min-h-[100svh] w-full overflow-hidden bg-obsidian-950"
       aria-label="Introduction"
       data-scrolled={scrolled ? "" : undefined}
       data-header-dark=""
