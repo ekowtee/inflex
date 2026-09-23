@@ -22,6 +22,7 @@ import TurningPoint from "./components/home/TurningPoint";
 import Receipt from "./components/home/Receipt";
 import Pillars from "./components/home/Pillars";
 import Difference from "./components/home/Difference";
+import Intelligence from "./components/home/Intelligence";
 import PartnerWall from "./components/home/PartnerWall";
 import TheAsk from "./components/home/TheAsk";
 import SideDoors from "./components/home/SideDoors";
@@ -75,6 +76,7 @@ export default function Home() {
 
       {/* 5 — Why you and not the others I am comparing? */}
       <Difference />
+      <Intelligence />
 
       {/* 6 — What is my risk? Are they backed? */}
       <PartnerWall />

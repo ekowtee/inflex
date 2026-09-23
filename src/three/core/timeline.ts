@@ -22,7 +22,13 @@
  */
 import { store } from "./store";
 
-/** Nominal beat lengths in viewport heights — SCROLL_NARRATIVE.md §6. */
+/**
+ * Nominal beat lengths in viewport heights — SCROLL_NARRATIVE.md §6. Beat
+ * 5.5 is the intelligence band between the ledger and the partner wall
+ * (owner, 23 September 2026); Beat 7 (Voices) is omitted and has length 0.
+ */
+export const BEAT_ORDER = [0, 1, 2, 3, 4, 5, 5.5, 6, 7, 8, 9] as const;
+
 export const BEAT_LENGTH_VH: Record<number, number> = {
   0: 100,
   1: 30,
@@ -30,6 +36,7 @@ export const BEAT_LENGTH_VH: Record<number, number> = {
   3: 120,
   4: 320,
   5: 120,
+  5.5: 90,
   6: 60,
   7: 0,
   8: 110,
@@ -40,7 +47,7 @@ export const BEAT_LENGTH_VH: Record<number, number> = {
 export const BEAT_START_VH: Record<number, number> = (() => {
   const out: Record<number, number> = {};
   let acc = 0;
-  for (let b = 0; b <= 9; b += 1) {
+  for (const b of BEAT_ORDER) {
     out[b] = acc;
     acc += BEAT_LENGTH_VH[b];
   }
@@ -120,6 +127,8 @@ export function opacityAt(vh: number): number {
   const b3 = BEAT_START_VH[3];
   const b4 = BEAT_START_VH[4];
   const b5 = BEAT_START_VH[5];
+  const b55 = BEAT_START_VH[5.5];
+  const b6 = BEAT_START_VH[6];
   const b8 = BEAT_START_VH[8];
   const b9 = BEAT_START_VH[9];
   if (vh < b3 - 10) return 1;
@@ -128,11 +137,17 @@ export function opacityAt(vh: number): number {
   if (vh < b4) return lerp(0.3, 1, (vh - (b4 - 20)) / 20);
   if (vh < b5) return 1;
   if (vh < b5 + 30) return lerp(1, 0, (vh - b5) / 30);
+  // The intelligence band: the Core fades up under the ledger's opaque
+  // Ivory, holds for the band, and fades out under the partner wall.
+  if (vh < b55 - 60) return 0;
+  if (vh < b55) return lerp(0, 1, (vh - (b55 - 60)) / 60);
+  if (vh < b6) return 1;
+  if (vh < b6 + 20) return lerp(1, 0, (vh - b6) / 20);
   // The ask arrives with its object: the fade runs over the last 20 vh of
   // the partner wall, whose opaque Ivory still covers the canvas, so the
   // Core is already there when the dark band comes up from below.
-  if (vh < b8 - 20) return 0;
-  if (vh < b8) return lerp(0, 1, (vh - (b8 - 20)) / 20);
+  if (vh < b8 - 40) return 0;
+  if (vh < b8) return lerp(0, 1, (vh - (b8 - 40)) / 40);
   if (vh < b9) return 1;
   if (vh < b9 + 40) return lerp(1, 0, (vh - b9) / 40);
   return 0;

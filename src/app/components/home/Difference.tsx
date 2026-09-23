@@ -6,21 +6,13 @@
  * answers the comparison the buyer is actually running — against the
  * reseller tier and the generalists — by naming it and crossing it out.
  *
- * The old Intelligence chapter is folded in as one row (narrative §8.2). The
- * four terms are secondary links; the exit is the one below them.
+ * The intelligence row the narrative folded in here (§8.2) has its own
+ * Obsidian band now, Intelligence.tsx, straight after this one.
  */
-import Link from "next/link";
 import Reveal from "@/motion/Reveal";
 import SplitLines from "@/motion/SplitLines";
 import ExitLink from "./ExitLink";
 import Ledger from "./Ledger";
-
-const terms = [
-  "Predictive Analytics",
-  "Process Automation",
-  "Data Strategy & Architecture",
-  "AI Integration",
-] as const;
 
 export default function Difference() {
   return (
@@ -43,27 +35,7 @@ export default function Difference() {
           <Ledger />
         </div>
 
-        <Reveal className="mt-20 border-t border-neutral-200 pt-12 md:mt-24">
-          <p className="type-eyebrow text-neutral-500">AI in every layer</p>
-          <p className="type-h3 mt-4 max-w-[32ch] text-neutral-900">
-            Intelligence is not a feature. It is the fabric.
-          </p>
-          <p className="type-body mt-5 text-neutral-600">
-            {terms.map((term, i) => (
-              <span key={term}>
-                {i > 0 && " · "}
-                <Link
-                  href="/solutions/data-centric-solutions"
-                  className="underline decoration-neutral-200 underline-offset-[3px] transition-colors duration-[var(--motion-duration-micro)] ease-[var(--motion-ease-out)] hover:decoration-primary-500"
-                >
-                  {term}
-                </Link>
-              </span>
-            ))}
-          </p>
-        </Reveal>
-
-        <div className="mt-12">
+        <div className="mt-16">
           <ExitLink href="/about" className="text-neutral-900">
             Why enterprises choose us
           </ExitLink>
