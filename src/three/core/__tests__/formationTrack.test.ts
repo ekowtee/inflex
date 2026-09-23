@@ -48,7 +48,10 @@ test("warmth spreads through the sheet in the intelligence band only", () => {
   const mid = sceneStateAt(BEAT_START_VH[5.5]).spread;
   assert.ok(mid > 0.4 && mid < 0.8, `spread at the band's top is ${mid}`);
   assert.equal(sceneStateAt(BEAT_START_VH[5.5] + 40).spread, 1);
-  assert.equal(sceneStateAt(BEAT_START_VH[8] + 5).spread, 0);
+  assert.equal(sceneStateAt(BEAT_START_VH[8]).spread, 1, "still spread as the ask comes up");
+  const late = sceneStateAt(BEAT_START_VH[8] + 60).spread;
+  assert.ok(late > 0.1 && late < 0.5, `gathering over the ask: ${late}`);
+  assert.equal(sceneStateAt(BEAT_START_VH[8] + 95).spread, 0);
   assert.equal(sceneStateAt(BEAT_START_VH[4] + 50).spread, 0);
 });
 

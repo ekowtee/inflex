@@ -28,6 +28,8 @@
  *   Beat 5.5      the intelligence band: warmth spreads from the ember
  *                 line through the whole sheet ("it is the fabric"), rising
  *                 while the band comes up and holding until it leaves.
+ *   Beat 8        the ask: the warmth gathers back into the line over the
+ *                 chapter's scroll, the object's last motion on the page.
  */
 import { BEAT_START_VH } from "./timeline";
 
@@ -75,7 +77,8 @@ export function sceneStateAt(vh: number): SceneState {
   const b4 = BEAT_START_VH[4];
   const b5 = BEAT_START_VH[5];
   const b55 = BEAT_START_VH[5.5];
-  const b6 = BEAT_START_VH[6];
+  const b8 = BEAT_START_VH[8];
+  const b9 = BEAT_START_VH[9];
 
   const rest: SceneState = { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0, spread: 0 };
 
@@ -120,8 +123,16 @@ export function sceneStateAt(vh: number): SceneState {
   // Starts while the Core is still fading up under the ledger's Ivory, so
   // the spread is well under way when the band's top reaches the viewport
   // top, and completes over the band's own scroll.
-  if (vh >= b55 - 40 && vh < b6 + 20) {
+  if (vh >= b55 - 40 && vh < b8) {
     return { ...rest, spread: smooth((vh - (b55 - 40)) / 70) };
+  }
+
+  // ─── the ask: the fabric gathers back into the line ────────────────────
+  // The warmth is still spread when the ask comes up (the partner wall hid
+  // the object, not the state), and it draws back into the ember line over
+  // the ask's own scroll, so the return is seen, not already done.
+  if (vh >= b8 && vh < b9) {
+    return { ...rest, spread: 1 - smooth((vh - b8) / 90) };
   }
 
   // ─── otherwise: hidden, reset to the sheet ─────────────────────────────

@@ -36,6 +36,13 @@ const pricing = [
   },
 ] as const;
 
+/*
+ * On desktop the chapter is one and a half screens: the copy sits at the
+ * top and the lower half is the object's. The warmth that spread through
+ * the sheet in the intelligence band gathers back into the ember line over
+ * that scroll (formationTrack.ts), the Core's last motion on the page, with
+ * the offer still in view. Phones keep one screen; the copy is long there.
+ */
 export default function TheAsk() {
   return (
     <section
@@ -46,7 +53,7 @@ export default function TheAsk() {
       className="band-obsidian on-obsidian relative w-full overflow-hidden"
       aria-label="Book the review"
     >
-      <div className="mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center px-4 py-24 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center px-4 py-24 sm:px-6 lg:min-h-[150svh] lg:justify-start lg:px-8 lg:pt-36">
         <div className="lg:max-w-[50%]">
           <Reveal as="p" className="type-eyebrow text-silver-500">
             Every engagement is an inflection point.
