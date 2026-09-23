@@ -39,6 +39,13 @@ export interface CoreStore {
   threadX: number;
   threadY: number;
   threadReady: boolean;
+  /**
+   * Viewport x, in CSS px, of the two points the threads are born from:
+   * the foot of the sheet's ember line (Beat 2) and the cap of the tallest
+   * ember column of the plane (Beat 4). Written by the scene every frame.
+   */
+  thread2X: number;
+  thread4X: number;
 }
 
 export const store: CoreStore = {
@@ -57,6 +64,8 @@ export const store: CoreStore = {
   threadX: 0,
   threadY: 0,
   threadReady: false,
+  thread2X: 0,
+  thread4X: 0,
 };
 
 /** Reset to the arrival state. Used when the scene mounts and on route change. */

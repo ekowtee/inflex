@@ -180,6 +180,13 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
   const pin = document.querySelector<HTMLElement>('[data-beat="4"] [data-pin]');
   const pillarLinks = pin ? Array.from(pin.querySelectorAll<HTMLElement>("[data-pillar-link]")) : [];
   const slideRow = document.querySelector<HTMLElement>("[data-slide-row]");
+  // The two threads that are born from the Core: the spine places each at
+  // the projected point it drops from, and keeps it there while the camera
+  // settles after the scroll stops.
+  const threadSlots = ([["2", "thread2X"], ["4", "thread4X"]] as const)
+    .map(([n, keyName]) => ({ el: document.querySelector<HTMLElement>(`[data-thread-slot="${n}"]`), keyName }))
+    .filter((t): t is { el: HTMLElement; keyName: "thread2X" | "thread4X" } => t.el !== null);
+  let lastScrollAt = 0;
   const slideBeat = () => beats.find((b) => b.beat === 1);
 
   const apply = () => {
@@ -218,22 +225,48 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
       }
     }
 
+    // Each thread exists only once the thing it drops from exists: the Beat
+    // 2 thread once the sheet has resolved and relit, the Beat 4 thread on
+    // the last row, when the column field has formed. Otherwise it is
+    // unplaced, and an unplaced thread does not draw (globals.css).
+    const bornFrom = {
+      thread2X: sample.vh >= BEAT_START_VH[2] + (BEAT_START_VH[3] - BEAT_START_VH[2]) * 0.7,
+      thread4X: sample.beat === 4 && sample.pillar === 3,
+    } as const;
+    for (const { el, keyName } of threadSlots) {
+      if (!store.threadReady || !bornFrom[keyName]) {
+        el.style.removeProperty("--thread-x");
+        continue;
+      }
+      const r = el.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > vh) continue;
+      const x = Math.min(r.width - 1, Math.max(0, store[keyName] - r.left));
+      el.style.setProperty("--thread-x", `${x.toFixed(1)}px`);
+    }
+
     if (sample.beat !== lastBeat) {
       lastBeat = sample.beat;
       document.documentElement.dataset.beatCurrent = String(sample.beat);
     }
     options.onSample?.(sample);
+    // The scene eases toward the reader for about a second after the last
+    // scroll; keep the threads in step until it has settled.
+    if (performance.now() - lastScrollAt < 1500) schedule();
   };
 
-  const schedule = () => {
+  function schedule() {
     if (!frame) frame = requestAnimationFrame(apply);
+  }
+  const onScroll = () => {
+    lastScrollAt = performance.now();
+    schedule();
   };
   const remeasure = () => {
     beats = measureBeats();
     schedule();
   };
 
-  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", remeasure);
   // Content settles after fonts and images; re-measure when the body grows.
   const observer = typeof ResizeObserver === "function" ? new ResizeObserver(remeasure) : null;
@@ -259,7 +292,7 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
   remeasure();
 
   return () => {
-    window.removeEventListener("scroll", schedule);
+    window.removeEventListener("scroll", onScroll);
     window.removeEventListener("resize", remeasure);
     observer?.disconnect();
     pillarLinks.forEach((link, i) => link.removeEventListener("focus", focusHandlers[i]));

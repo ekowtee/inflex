@@ -5,6 +5,8 @@
  *   NEXT_PUBLIC_CORE_CAPTURE=1 npx next build && node scripts/capture-posters.mjs
  *   node scripts/capture-posters.mjs --port 3000   (against a running server)
  *   node scripts/capture-posters.mjs --formations 0,1,2,3,4
+ *   node scripts/capture-posters.mjs --formations 1,2,3,4 --sizes mobile --lights lit
+ *                                (the pillar posters for phones and Tier C)
  *
  * Screenshots /core-capture with headless Chrome over CDP at the desktop and
  * portrait sizes, both light states, then writes WebP and AVIF at the
@@ -33,7 +35,10 @@ const SIZES = [
   { name: "desktop", w: 1920, h: 1080, dpr: 1 },
   { name: "mobile", w: 780, h: 1688, dpr: 1 },
 ];
-const LIGHTS = ["unlit", "lit"];
+const sizesArg = args.indexOf("--sizes");
+const lightsArg = args.indexOf("--lights");
+const LIGHTS = lightsArg > -1 ? args[lightsArg + 1].split(",") : ["unlit", "lit"];
+const SIZES_RUN = sizesArg > -1 ? SIZES.filter((s) => args[sizesArg + 1].split(",").includes(s.name)) : SIZES;
 const BUDGET = {
   desktop: { webp: 160 * 1024, avif: 110 * 1024 },
   mobile: { webp: 90 * 1024, avif: 65 * 1024 },
@@ -127,7 +132,7 @@ try {
   mkdirSync(OUT, { recursive: true });
 
   for (const formation of FORMATIONS) {
-    for (const size of SIZES) {
+    for (const size of SIZES_RUN) {
       await send("Emulation.setDeviceMetricsOverride", {
         width: size.w,
         height: size.h,

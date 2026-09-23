@@ -17,13 +17,12 @@
  *
  * Below lg there is no pin and no active row: every row is open, the
  * attribute is ignored, and each is preceded by its formation poster. The
- * posters are all the resting formation today; Phase 3 gives each row its own.
+ * posters are captured from the real scene, one per formation.
  */
 import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/motion/Reveal";
 import Thread from "@/motion/Thread";
-import { posters } from "@/three/core/posters";
 
 const pillars = [
   {
@@ -113,14 +112,14 @@ export default function Pillars() {
                     className={`border-t border-white/8 py-8 first:border-t-0 first:pt-0 lg:py-6 ${ROW_STATE[i]} transition-opacity duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)]`}
                   >
                     {/* Mobile only: the formation poster above the row copy.
-                        One image for all four rows today; Phase 3 swaps in
-                        the per-formation captures. */}
+                        Captured from the real scene, one per formation
+                        (lattice, enclosure, nebula, plane). */}
                     <div
                       data-pillar-poster
                       className="relative mb-6 h-[56vw] w-full overflow-hidden lg:hidden [html[data-core-live]_&]:hidden"
                     >
                       <Image
-                        src={posters.mobile.unlit.webp}
+                        src={`/three/posters/f${i + 1}-lit-mobile.webp`}
                         alt=""
                         fill
                         sizes="100vw"
