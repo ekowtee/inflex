@@ -58,6 +58,8 @@ const LIVE_DEADLINE_MS = 8000;
 /** Watchdog while live: demote when this many consecutive frames average over the limit. */
 const WATCH_FRAMES = 90;
 const WATCH_LIMIT_MS = 40;
+/** A frame longer than this is a pause (hidden tab, blocked thread), not a render. */
+const PAUSE_MS = 250;
 const ARRIVAL_LIGHT_MS = 1800;
 const CROSSFADE_MS = 900;
 
@@ -79,7 +81,7 @@ export class CoreScene {
   private compiled = false;
   private probe = { frames: 0, total: 0, done: true };
   private ready = { streak: 0, live: false, liveAt: 0 };
-  private watch = { frames: 0, total: 0 };
+  private watch = { frames: 0, total: 0, slow: 0 };
   private hiddenCleared = false;
   private lastFrame = performance.now();
   private startedAt = performance.now();
@@ -234,10 +236,15 @@ export class CoreScene {
     const frameMs = now - this.lastFrame;
     const dt = Math.min(0.1, frameMs / 1000);
     this.lastFrame = now;
+    // A frame far longer than any real render is a pause, not load: the tab
+    // was hidden, the window lost the compositor, DevTools stepped in, or a
+    // dev rebuild blocked the thread. Pauses never count toward the probe
+    // or the watchdog, or one switch to another window demotes the scene.
+    const paused = frameMs > PAUSE_MS || document.hidden;
     const time = (now - this.startedAt) / 1000;
 
     // ─── probe: 90 frames, then decide ────────────────────────────────────
-    if (!this.probe.done) {
+    if (!this.probe.done && !paused) {
       this.probe.frames += 1;
       this.probe.total += frameMs;
       if (this.probe.frames >= PROBE_FRAMES) {
@@ -253,14 +260,17 @@ export class CoreScene {
     // ─── watchdog: a live scene that cannot hold its frame time steps down ──
     // The probe judges the first 90 frames; this judges every 90 after
     // going live, for devices that start well and then saturate.
-    if (this.ready.live && !capture) {
+    // Two consecutive slow windows, not one, so a short burst of work
+    // elsewhere on the page cannot end the scene.
+    if (this.ready.live && !capture && !paused) {
       this.watch.frames += 1;
       this.watch.total += frameMs;
       if (this.watch.frames >= WATCH_FRAMES) {
         const avg = this.watch.total / this.watch.frames;
         this.watch.frames = 0;
         this.watch.total = 0;
-        if (avg > WATCH_LIMIT_MS) {
+        this.watch.slow = avg > WATCH_LIMIT_MS ? this.watch.slow + 1 : 0;
+        if (this.watch.slow >= 2) {
           sessionStorage.setItem("core-tier-demoted", tier === "A" ? "B" : "C");
           onDemote(tier === "A" ? "B" : "C");
           return;

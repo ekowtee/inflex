@@ -51,10 +51,10 @@ export default function SideDoors() {
               // Equal inset on every side of both doors, so the text sits
               // the same distance from the frame, the divider and the hover
               // surface.
-              className="group relative flex min-h-[26rem] flex-col px-6 py-12 transition-colors duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] hover:bg-[#F4F5F7] focus-visible:bg-[#F4F5F7] sm:px-10 md:py-16 lg:px-14"
+              className="group relative flex flex-col px-6 py-12 md:min-h-[21rem] transition-colors duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] hover:bg-[#F4F5F7] focus-visible:bg-[#F4F5F7] sm:px-10 md:py-16 lg:px-14"
             >
               <span className="type-telemetry text-neutral-500">{door.label}</span>
-              <span className="type-display-l mt-8 block max-w-[14ch] text-neutral-900">
+              <span className="type-h2 mt-6 block max-w-[18ch] text-neutral-900">
                 {door.title}
               </span>
               <span className="type-body-l mt-6 block max-w-[46ch] text-neutral-600">

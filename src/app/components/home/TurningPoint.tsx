@@ -33,7 +33,7 @@ export default function TurningPoint() {
             The inflection point
           </Reveal>
 
-          <SplitLines as="h2" className="type-h2 mt-6 text-silver-100" delay={80}>
+          <SplitLines as="h2" className="type-display-l mt-8 max-w-[16ch] text-silver-100" delay={80}>
             We engineer the inflection point.
           </SplitLines>
 

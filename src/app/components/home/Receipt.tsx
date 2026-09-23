@@ -57,7 +57,7 @@ export default function Receipt() {
           <Reveal as="p" className="type-eyebrow text-silver-500">
             Proof
           </Reveal>
-          <SplitLines as="h2" className="type-h2 mt-6 text-silver-100" delay={80}>
+          <SplitLines as="h2" className="type-display-l mt-8 max-w-[16ch] text-silver-100" delay={80}>
             We have done this at national scale. Twice.
           </SplitLines>
         </div>
@@ -74,7 +74,7 @@ export default function Receipt() {
           {cards.map((card) => (
             <article key={card.title} className="group relative border-t border-white/15 pt-8">
               <div className="flex items-baseline gap-5">
-                <p className="type-display-l tabular-nums text-silver-100">{card.year}</p>
+                <p className="type-h2 tabular-nums text-silver-100">{card.year}</p>
                 <p className="type-telemetry flex items-center gap-2 text-silver-500">
                   {card.live && (
                     <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-ember" />

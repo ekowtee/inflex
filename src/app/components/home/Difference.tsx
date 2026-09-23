@@ -27,7 +27,7 @@ export default function Difference() {
         <Reveal as="p" className="type-eyebrow text-neutral-500">
           Why Inflexions
         </Reveal>
-        <SplitLines as="h2" className="type-h2 mt-6 max-w-[24ch] text-neutral-900" delay={80}>
+        <SplitLines as="h2" className="type-display-l mt-8 max-w-[18ch] text-neutral-900" delay={80}>
           Not a reseller. Not a generalist. Not a lock-in.
         </SplitLines>
 

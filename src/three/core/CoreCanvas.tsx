@@ -77,7 +77,13 @@ export default function CoreCanvas({ tier: initialTier, onLive, onFail, capture 
   const handleDemote = useCallback(
     (next: Tier) => {
       if (next === "C") onFail();
-      else setTier(next);
+      else {
+        // The rebuilt scene gets its own 8 s to become ready. Inheriting the
+        // first mount's deadline meant a demotion after going live missed it
+        // at once and fell straight through to posters.
+        mountedAt.current = performance.now();
+        setTier(next);
+      }
     },
     [onFail]
   );
