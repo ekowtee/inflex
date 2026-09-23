@@ -167,7 +167,9 @@ export default function Arrival() {
       id="arrival"
       data-beat="0"
       data-register="obsidian"
-      className="on-obsidian relative isolate min-h-[100svh] w-full overflow-hidden bg-obsidian-950"
+      // No `isolate`: the canvas inside must belong to the root stacking
+      // context so it can sit beneath the rest of the page (CoreCanvas).
+      className="on-obsidian relative min-h-[100svh] w-full overflow-hidden bg-obsidian-950"
       aria-label="Introduction"
       data-scrolled={scrolled ? "" : undefined}
       data-header-dark=""

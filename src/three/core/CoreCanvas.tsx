@@ -102,15 +102,18 @@ export default function CoreCanvas({ tier: initialTier, onLive, onFail, capture 
 
   if (!data) return null;
 
-  // Fixed to the viewport, inside the hero's stacking context: later
-  // sections paint over it, and the Obsidian chapters go transparent while
-  // the scene is live (globals.css, `html[data-core-live]`) so the Core
-  // shows through them and the Ivory chapters cover it. The spine sets the
-  // node opacity per beat and the scene skips drawing while it is 0.
+  // Fixed to the viewport at z-index −1 in the root stacking context (the
+  // hero deliberately does not isolate), so it paints beneath every in-flow
+  // box on the page: the chapters, the footer, anything static. The
+  // Obsidian chapters go transparent while the scene is live
+  // (globals.css, `html[data-core-live]`) so the Core shows through them;
+  // the Ivory chapters and the footer keep their backgrounds and cover it.
+  // The spine sets the node opacity per beat and the scene skips drawing
+  // while it is 0.
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-0"
+      className="fixed inset-0 z-[-1]"
       style={{ pointerEvents: "none" }}
       aria-hidden="true"
       data-core-tier={tier}

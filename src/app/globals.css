@@ -329,16 +329,9 @@
    Obsidian chapters lose their background so the fixed canvas shows through
    them; the Ivory chapters stay opaque and cover it. Tier C never sets the
    attribute and keeps the solid bands. */
-html[data-core-live] .band-obsidian {
+html[data-core-live] .band-obsidian,
+html[data-core-live] section[data-beat="0"] {
   background: transparent;
-}
-
-/* Every chapter is positioned so it paints after the hero's stacking
-   context, which holds the fixed canvas. A static section's background is
-   painted before positioned boxes, so without this the canvas would sit
-   over the Ivory chapters' white. */
-section[data-beat] {
-  position: relative;
 }
 
 /* Beat 4 is pinned with CSS: the section is one viewport plus 320 vh of
