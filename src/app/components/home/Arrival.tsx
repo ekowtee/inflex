@@ -20,11 +20,12 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useMotionTier } from "@/motion/useMotionTier";
-import { afterLcpIdle } from "@/motion/loadMotion";
+import { afterLcpIdle, prefersReducedMotion } from "@/motion/loadMotion";
 import Magnetic from "@/motion/Magnetic";
 import { duration, ease } from "@/motion/tokens";
 import { posters } from "@/three/core/posters";
 import { CoreCanvas } from "@/three/core/loadCore";
+import { attachTimeline } from "@/three/core/timeline";
 
 type Stage = "poster" | "loading" | "live" | "fallback";
 
@@ -133,6 +134,18 @@ export default function Arrival() {
     window.addEventListener("scroll", onScroll, { passive: true, once: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // The spine: maps scroll to the narrative timeline for every tier and
+  // drives the pinned chapter's active row and the trust strip's slide.
+  useEffect(() => attachTimeline({ reducedMotion: prefersReducedMotion() }), []);
+
+  // While the scene is live the Obsidian chapters go transparent so the
+  // fixed canvas shows through them (globals.css).
+  useEffect(() => {
+    if (stage !== "live") return;
+    document.documentElement.setAttribute("data-core-live", "");
+    return () => document.documentElement.removeAttribute("data-core-live");
+  }, [stage]);
 
   const onLive = useCallback(() => {
     setStage("live");

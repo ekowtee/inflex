@@ -319,6 +319,9 @@ export class CoreScene {
     this.ground.material.uniforms.uAlpha.value = store.ground;
 
     // ─── render ───────────────────────────────────────────────────────────
+    // Behind the Ivory beats the spine sets opacity 0: keep the loop alive
+    // for the probe and the uniforms, skip the draw.
+    if (!capture && store.opacity <= 0.001) return;
     const gl = this.renderer;
     if (this.post) {
       this.post.render(this.scene, cam, time, store.bloom, this.setEmberPass);

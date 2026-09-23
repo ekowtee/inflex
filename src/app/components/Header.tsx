@@ -87,13 +87,18 @@ export default function Header() {
   const overDark = (hasDark.path === pathname ? hasDark.value : pathname === "/") && !pastDark;
 
   useEffect(() => {
-    const dark = document.querySelector<HTMLElement>("[data-header-dark]");
+    const darkElements = Array.from(document.querySelectorAll<HTMLElement>("[data-header-dark]"));
+    const dark = darkElements[0] ?? null;
     let frame = 0;
     const measure = () => {
       frame = 0;
       const headerPx = window.innerWidth >= 1024 ? DESKTOP_HEADER_PX : MOBILE_HEADER_PX;
-      const threshold = dark ? dark.offsetTop + dark.offsetHeight - headerPx : 0;
-      const past = !dark || window.scrollY > threshold;
+      // Dark while any dark chapter overlaps the bar's band (0 to headerPx).
+      const underBar = darkElements.some((el) => {
+        const r = el.getBoundingClientRect();
+        return r.top < headerPx && r.bottom > headerPx * 0.5;
+      });
+      const past = !underBar;
       setScrolled((s) => (s.path === pathname && s.past === past ? s : { path: pathname, past }));
     };
     const onScroll = () => {

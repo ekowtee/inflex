@@ -324,6 +324,38 @@
   }
 }
 
+/* The scroll spine — src/three/core/timeline.ts.
+   While the Core is live (Tier A and B, once the poster has crossfaded) the
+   Obsidian chapters lose their background so the fixed canvas shows through
+   them; the Ivory chapters stay opaque and cover it. Tier C never sets the
+   attribute and keeps the solid bands. */
+html[data-core-live] .band-obsidian {
+  background: transparent;
+}
+
+/* Every chapter is positioned so it paints after the hero's stacking
+   context, which holds the fixed canvas. A static section's background is
+   painted before positioned boxes, so without this the canvas would sit
+   over the Ivory chapters' white. */
+section[data-beat] {
+  position: relative;
+}
+
+/* Beat 4 is pinned with CSS: the section is one viewport plus 320 vh of
+   scroll, and the chapter sticks to the top for the length of it. Sticky
+   rather than a JavaScript pin so keyboard scrolling, Lenis, Safari
+   trackpads and reduced motion all get the same behaviour. Below lg the
+   rows simply stack. */
+@media (min-width: 1024px) {
+  [data-beat="4"] {
+    min-height: calc(100svh + 320vh);
+  }
+  [data-beat="4"] > [data-pin] {
+    position: sticky;
+    top: 0;
+  }
+}
+
 /* The strike is a statement, not an animation: without motion it is simply
    already drawn. Outside @layer so it beats the component rule above. */
 @media (prefers-reduced-motion: reduce) {
