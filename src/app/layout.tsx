@@ -12,9 +12,12 @@ const rubik = Rubik({
   variable: "--font-rubik",
   display: "swap",
   weight: ["400", "500", "600", "700"],
-  fallback: ["system-ui", "sans-serif"], // Fallback if loading fails
+  // "Rubik Fallback" is our own metric-matched face (globals.css): the
+  // loader's automatic one targets Arial only, which Android and the CI
+  // runner do not have, and the swap then shifted the hero copy.
+  fallback: ["Rubik Fallback", "system-ui", "sans-serif"],
   preload: true,
-  adjustFontFallback: true, // Reduce layout shift
+  adjustFontFallback: true,
 });
 
 // Configure Krub with improved options
@@ -23,9 +26,9 @@ const krub = Krub({
   weight: ["500"],
   display: "swap",
   variable: "--font-krub",
-  fallback: ["system-ui", "sans-serif"], // Fallback if loading fails
+  fallback: ["Krub Fallback", "system-ui", "sans-serif"],
   preload: true,
-  adjustFontFallback: true, // Reduce layout shift
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {

@@ -71,6 +71,33 @@
   --font-krub: var(--font-krub), system-ui, sans-serif;
 }
 
+/* Metric-matched fallback faces — PERFORMANCE_PLAN.md §5.
+   While Rubik and Krub load, text is set in the local sans with its size,
+   ascent and descent overridden to Rubik's or Krub's own metrics, so the
+   swap moves nothing. Values follow next/font's formula
+   (size-adjust = font avg width / fallback avg width; overrides divided by
+   it) from the published metrics: Rubik 468/935/250 per 1000, Krub
+   470/1007/293 per 1000, Arial 913/2048. Roboto (911/2048) is within 0.3%
+   of Arial, so one face serves Windows, macOS, Linux (Liberation Sans is
+   Arial-compatible) and Android. */
+@font-face {
+  font-family: "Rubik Fallback";
+  src: local("Arial"), local("Liberation Sans"), local("Roboto"), local("Helvetica Neue"), local("Helvetica");
+  size-adjust: 104.98%;
+  ascent-override: 89.06%;
+  descent-override: 23.81%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Krub Fallback";
+  src: local("Arial"), local("Liberation Sans"), local("Roboto"), local("Helvetica Neue"), local("Helvetica");
+  size-adjust: 105.43%;
+  ascent-override: 95.51%;
+  descent-override: 27.79%;
+  line-gap-override: 0%;
+}
+
 /* Type tiers — CREATIVE_DIRECTION_3D.md §5.3.
    Size, weight, tracking and line height only. Colour, max-width and margin
    stay with the component so a tier can be used in either register. */
