@@ -183,6 +183,19 @@ Rules:
 
 ---
 
+### 5.4 Fallback faces (added 23 September 2026)
+
+`adjustFontFallback` in next/font produces a metric-matched face for Arial
+only. On the Linux CI runner and on Android there is no Arial, the browser
+falls back to Liberation Sans or Roboto with no adjustment, and the swap
+moved the hero copy (CLS 0.037 on `/`, 0.083 on `/contact`, 0.030 on
+`/academy`). `globals.css` now declares `Rubik Fallback` and
+`Krub Fallback`, one face per weight, with `src: local()` lists covering
+Arial, Liberation Sans, Roboto and Helvetica and size, ascent and descent
+overrides calibrated by measurement; the loader's `fallback` option puts
+them second in each stack. Every weight measures within 0.02 % of the
+web font's width and matches its line height. CLS is 0.000 on every route.
+
 ## 6. Compression plan
 
 ### 6.1 Images: the one-time clean-up (Phase 0, before any motion work)

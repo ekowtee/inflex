@@ -217,3 +217,15 @@ Verified on the real GPU at 1280 and 390 px, every beat: registers, band backgro
 
 **Gate, first CI run on the spine:** bundles pass; observed home TBT 1.26 s and CLS 0.037, contact CLS 0.083. The TBT was the scene running under software WebGL on the GPU-less runner (PERFORMANCE_PLAN.md §9.6): software renderers now go straight to Tier C and a watchdog demotes a live scene whose frames stay slow. The two CLS figures measure 0 locally under the same throttling on every attempt and are treated as runner noise until they repeat.
 
+**Gate, final CI run on the spine (`3202c71`):** bundles pass. Observed pass, mobile, slow 4G, 4× CPU, median of three:
+
+| Route | FCP | LCP | SI | TBT | CLS |
+|---|---|---|---|---|---|
+| `/` | 1805 | 1805 | 2808 | 187 | 0.000 |
+| `/solutions` | 1782 | 1843 | 1825 | 58 | 0.000 |
+| `/solutions/network-infrastructure` | 1746 | 1746 | 1764 | 55 | 0.000 |
+| `/academy` | 1788 | 1788 | 1811 | 54 | 0.000 |
+| `/contact` | 1672 | 1672 | 1691 | 51 | 0.001 |
+
+The layout shifts were the web-font swap on machines without Arial (the Linux runner, and Android): next/font's automatic fallback targets Arial only. Our own metric-matched fallback faces, one per weight, took every route to 0.000. The one remaining red is home FCP at 1805 ms against 1800, on a runner whose first paint floor is 1670 to 1790 ms for every route; it is treated as the runner's noise band, and the threshold is reviewed against runner floors before Lighthouse turns blocking in Phase 6.
+
