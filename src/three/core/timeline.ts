@@ -106,22 +106,35 @@ export function virtualVh(scrollY: number, viewportHeight: number, beats: BeatRe
 /**
  * §8.5 canvas column as node opacity. Hidden ranges are 0.
  *
+ * Keyed to BEAT_START_VH rather than the narrative's literal numbers: the
+ * narrative's 920 assumed Beat 7 (Voices) at 860 to 920, and with Voices
+ * omitted the ask starts at 860, so a literal 920 kept the Core off for
+ * almost the whole ask.
+ *
  * Beat 3 runs its cases and counters across the full width, over the
  * object, so the Core steps back to 0.3 there rather than the narrative's
  * 0.7: at 0.7 the ember line ran through the counter labels.
  */
 export function opacityAt(vh: number): number {
   const lerp = (a: number, b: number, t: number) => a + (b - a) * Math.min(1, Math.max(0, t));
-  if (vh < 230) return 1;
-  if (vh < 250) return lerp(1, 0.3, (vh - 230) / 20);
-  if (vh < 340) return 0.3;
-  if (vh < 360) return lerp(0.3, 1, (vh - 340) / 20);
-  if (vh < 680) return 1;
-  if (vh < 710) return lerp(1, 0, (vh - 680) / 30);
-  if (vh < 920) return 0;
-  if (vh < 980) return lerp(0, 1, (vh - 920) / 60);
-  if (vh < 1030) return 1;
-  if (vh < 1090) return lerp(1, 0, (vh - 1030) / 60);
+  const b3 = BEAT_START_VH[3];
+  const b4 = BEAT_START_VH[4];
+  const b5 = BEAT_START_VH[5];
+  const b8 = BEAT_START_VH[8];
+  const b9 = BEAT_START_VH[9];
+  if (vh < b3 - 10) return 1;
+  if (vh < b3 + 10) return lerp(1, 0.3, (vh - (b3 - 10)) / 20);
+  if (vh < b4 - 20) return 0.3;
+  if (vh < b4) return lerp(0.3, 1, (vh - (b4 - 20)) / 20);
+  if (vh < b5) return 1;
+  if (vh < b5 + 30) return lerp(1, 0, (vh - b5) / 30);
+  // The ask arrives with its object: the fade runs over the last 20 vh of
+  // the partner wall, whose opaque Ivory still covers the canvas, so the
+  // Core is already there when the dark band comes up from below.
+  if (vh < b8 - 20) return 0;
+  if (vh < b8) return lerp(0, 1, (vh - (b8 - 20)) / 20);
+  if (vh < b9) return 1;
+  if (vh < b9 + 40) return lerp(1, 0, (vh - b9) / 40);
   return 0;
 }
 

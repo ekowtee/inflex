@@ -394,6 +394,19 @@ html[data-core-live] section[data-beat="0"] {
   background: transparent;
 }
 
+/* What shows through a transparent Obsidian band when the scene is not
+   drawing (a hidden range, a fade, a frame before the first render) is the
+   root, not the page's white: the root takes Obsidian and the body goes
+   clear so the fixed canvas, which paints between the two, stays visible.
+   Ivory bands and the footer carry their own backgrounds. */
+html[data-core-live] {
+  background: var(--color-obsidian-950);
+}
+
+html[data-core-live] body {
+  background: transparent;
+}
+
 /* Beat 4's phone posters stand in for the Core on Tier C. While the live
    scene is behind the page they would show the same object twice. */
 html[data-core-live] [data-pillar-poster] {
