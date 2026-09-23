@@ -55,6 +55,9 @@ const PROBE_LIMIT_MS = 24;
 const READY_FRAME_MS = 20;
 const READY_STREAK = 3;
 const LIVE_DEADLINE_MS = 8000;
+/** Watchdog while live: demote when this many consecutive frames average over the limit. */
+const WATCH_FRAMES = 90;
+const WATCH_LIMIT_MS = 40;
 const ARRIVAL_LIGHT_MS = 1800;
 const CROSSFADE_MS = 900;
 
@@ -72,6 +75,7 @@ export class CoreScene {
   private compiled = false;
   private probe = { frames: 0, total: 0, done: true };
   private ready = { streak: 0, live: false, liveAt: 0 };
+  private watch = { frames: 0, total: 0 };
   private lastFrame = performance.now();
   private startedAt = performance.now();
   private width = 1;
@@ -234,6 +238,24 @@ export class CoreScene {
       if (this.probe.frames >= PROBE_FRAMES) {
         this.probe.done = true;
         if (this.probe.total / this.probe.frames > PROBE_LIMIT_MS) {
+          sessionStorage.setItem("core-tier-demoted", tier === "A" ? "B" : "C");
+          onDemote(tier === "A" ? "B" : "C");
+          return;
+        }
+      }
+    }
+
+    // ─── watchdog: a live scene that cannot hold its frame time steps down ──
+    // The probe judges the first 90 frames; this judges every 90 after
+    // going live, for devices that start well and then saturate.
+    if (this.ready.live && !capture) {
+      this.watch.frames += 1;
+      this.watch.total += frameMs;
+      if (this.watch.frames >= WATCH_FRAMES) {
+        const avg = this.watch.total / this.watch.frames;
+        this.watch.frames = 0;
+        this.watch.total = 0;
+        if (avg > WATCH_LIMIT_MS) {
           sessionStorage.setItem("core-tier-demoted", tier === "A" ? "B" : "C");
           onDemote(tier === "A" ? "B" : "C");
           return;

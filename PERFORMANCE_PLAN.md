@@ -353,6 +353,27 @@ Decision for the owner (§10): which LCP figure gates the build once
 `LIGHTHOUSE_BLOCKING` turns on at the end of Phase 1. The recommendation is
 the observed one, with the simulated table kept for trend.
 
+### 9.6 Software WebGL and the observed pass (found 23 September 2026)
+
+The observed pass on the Phase 2 branch reported home TBT of 1.26 s against
+0.37 s on Phase 1. Local attribution on the same page: with the scene live
+under SwiftShader (no GPU, 4× CPU) the main thread is saturated, about
+6 s of work per 6 s; with the scene absent it is about 0.9 s per 6 s, most
+of it the motion ticker. The runner has no GPU, so whether the probe
+happened to demote the scene decided the number. Two guards now make that
+deterministic and protect real weak devices:
+
+- `decideTier` returns C when the WebGL renderer string names a software
+  renderer (SwiftShader, llvmpipe, Mesa offscreen). Software GL is never
+  worth the Core; CI therefore measures the Tier C path, which is what a
+  GPU-less machine gets.
+- The scene runs a watchdog after going live: 90 consecutive frames
+  averaging over 40 ms demote it one tier (the probe only judged the first
+  90). The arrival restores the poster on a late demotion.
+
+The scene's real runtime cost on Tier A and B hardware is not measurable on
+the runner and stays a device-matrix check.
+
 ### 9.3 Definition of "first paint" for this site
 
 First paint is not a blank canvas clearing to obsidian. It is **the H1 legible and the hero composition visible**, which means the LQIP has painted behind the copy. That happens at FCP. The visitor's impression of speed is set at LCP, when the sharp poster replaces the blur. The live 3D scene arriving later is invisible as a performance event because the crossfade starts from an identical still. This is the whole reason the poster pair exists, and it is why the LCP target is the only first-paint number the owner needs to watch.

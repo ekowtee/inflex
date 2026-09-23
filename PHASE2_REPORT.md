@@ -215,3 +215,5 @@ Verified on the real GPU at 1280 and 390 px, every beat: registers, band backgro
 
 **Owner decisions still open:** partner columns (Beat 6), counter values (Beat 3), naming MTN and the Ministry, the operational promises the copy makes, and the two lines where `SCROLL_NARRATIVE.md` §6 and §7 disagree (§7 shipped).
 
+**Gate, first CI run on the spine:** bundles pass; observed home TBT 1.26 s and CLS 0.037, contact CLS 0.083. The TBT was the scene running under software WebGL on the GPU-less runner (PERFORMANCE_PLAN.md §9.6): software renderers now go straight to Tier C and a watchdog demotes a live scene whose frames stay slow. The two CLS figures measure 0 locally under the same throttling on every attempt and are treated as runner noise until they repeat.
+

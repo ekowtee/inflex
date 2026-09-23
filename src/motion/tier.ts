@@ -22,6 +22,8 @@ export interface TierEnv {
   reducedData: boolean;
   /** a webgl2 context could be created */
   hasWebGL2: boolean;
+  /** the context is a software renderer (SwiftShader, llvmpipe): never worth the Core */
+  softwareGl?: boolean;
   /** navigator.deviceMemory, in GB; undefined when unreported */
   deviceMemory?: number;
   /** navigator.hardwareConcurrency; undefined when unreported */
@@ -38,6 +40,7 @@ export function decideTier(env: TierEnv): Tier {
   if (env.reducedMotion) return "C";
   if (env.saveData || env.reducedData) return "C";
   if (!env.hasWebGL2) return "C";
+  if (env.softwareGl) return "C";
   if (env.deviceMemory !== undefined && env.deviceMemory < 4) return "C";
   if (env.hardwareConcurrency !== undefined && env.hardwareConcurrency < 4) {
     return env.viewportWidth >= DESKTOP_MIN_WIDTH ? "B" : "C";
@@ -50,12 +53,18 @@ interface ConnectionLike {
   saveData?: boolean;
 }
 
-function detectWebGL2(): boolean {
+const SOFTWARE_GL = /swiftshader|llvmpipe|software|mesa offscreen|basic render/i;
+
+function detectWebGL2(): { hasWebGL2: boolean; softwareGl: boolean } {
   try {
     const canvas = document.createElement("canvas");
-    return Boolean(canvas.getContext("webgl2"));
+    const gl = canvas.getContext("webgl2");
+    if (!gl) return { hasWebGL2: false, softwareGl: false };
+    const info = gl.getExtension("WEBGL_debug_renderer_info");
+    const renderer = String(info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+    return { hasWebGL2: true, softwareGl: SOFTWARE_GL.test(renderer) };
   } catch {
-    return false;
+    return { hasWebGL2: false, softwareGl: false };
   }
 }
 
@@ -66,11 +75,13 @@ export function readTierEnv(): TierEnv {
     deviceMemory?: number;
   };
 
+  const gl = detectWebGL2();
   return {
     reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
     saveData: nav.connection?.saveData === true,
     reducedData: matchMedia("(prefers-reduced-data: reduce)").matches,
-    hasWebGL2: detectWebGL2(),
+    hasWebGL2: gl.hasWebGL2,
+    softwareGl: gl.softwareGl,
     deviceMemory: nav.deviceMemory,
     hardwareConcurrency: nav.hardwareConcurrency,
     viewportWidth: window.innerWidth,

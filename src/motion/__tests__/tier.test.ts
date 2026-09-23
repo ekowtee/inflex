@@ -98,3 +98,7 @@ test("a low-memory phone lands on tier C", () => {
     "C"
   );
 });
+
+test("a software WebGL renderer forces tier C even on a capable machine", () => {
+  assert.equal(decideTier(env({ softwareGl: true })), "C");
+});

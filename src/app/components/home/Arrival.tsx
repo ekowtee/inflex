@@ -152,7 +152,12 @@ export default function Arrival() {
     setPosterHidden(true);
   }, []);
 
-  const onFail = useCallback(() => setStage("fallback"), []);
+  // A failure or a demotion to Tier C, possibly after the scene was live:
+  // bring the poster back so the crossfade to the lit poster has a ground.
+  const onFail = useCallback(() => {
+    setStage("fallback");
+    setPosterHidden(false);
+  }, []);
   const onLitLoad = useCallback(() => setLitLoaded(true), []);
 
   const showScene = (tier === "A" || tier === "B") && (stage === "loading" || stage === "live");
