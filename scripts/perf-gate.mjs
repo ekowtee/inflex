@@ -295,6 +295,19 @@ measuring ${base}`);
       if (route === "/" && lcpElement) {
         console.log(`  ${" ".repeat(34)}LCP element: ${lcpElement.slice(0, 60)}`);
       }
+      // Attribution when the shift budget is missed: the elements that
+      // moved in the worst run, so a runner-only shift can be read from the
+      // commit comment without reproducing the runner.
+      const clsValues = samples.map((lhr) => lhr.audits["cumulative-layout-shift"]?.numericValue ?? 0);
+      if (median(clsValues) > budgets.lab["cumulative-layout-shift"]) {
+        const worst = samples[clsValues.indexOf(Math.max(...clsValues))];
+        const shifts = worst.audits["layout-shifts"]?.details?.items ?? worst.audits["layout-shift-elements"]?.details?.items ?? [];
+        for (const item of shifts.slice(0, 3)) {
+          const node = item.node ?? {};
+          const cause = item.subItems?.items?.[0]?.cause ?? "";
+          console.log(`  ${" ".repeat(34)}shift ${(item.score ?? 0).toFixed(3)}: ${(node.selector ?? node.nodeLabel ?? "?").slice(0, 70)}${cause ? ` (${cause})` : ""}`);
+        }
+      }
     }
 
     await chrome.kill();
