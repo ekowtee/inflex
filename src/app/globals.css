@@ -73,28 +73,61 @@
 
 /* Metric-matched fallback faces — PERFORMANCE_PLAN.md §5.
    While Rubik and Krub load, text is set in the local sans with its size,
-   ascent and descent overridden to Rubik's or Krub's own metrics, so the
-   swap moves nothing. Values follow next/font's formula
-   (size-adjust = font avg width / fallback avg width; overrides divided by
-   it) from the published metrics: Rubik 468/935/250 per 1000, Krub
-   470/1007/293 per 1000, Arial 913/2048. Roboto (911/2048) is within 0.3%
-   of Arial, so one face serves Windows, macOS, Linux (Liberation Sans is
-   Arial-compatible) and Android. */
+   ascent and descent overridden to the web font's metrics, so the swap
+   moves nothing. One face per weight: the local sans has real regular and
+   bold faces only, and Rubik's width relative to them differs by weight
+   (measured in Chrome against Arial, 23 September 2026: 400 → 104.4%,
+   500 → 108.2%, 600 → 102.3%, 700 → 104.1%; Krub 500 → 106.5%). Ascent and
+   descent are Rubik's 935/250 and Krub's 1007/293 per 1000 divided by the
+   size adjustment. Roboto (Android) is within 0.3% of Arial's widths, and
+   Liberation Sans (Linux) is Arial-compatible, so one src list serves all. */
 @font-face {
   font-family: "Rubik Fallback";
+  font-weight: 400;
   src: local("Arial"), local("Liberation Sans"), local("Roboto"), local("Helvetica Neue"), local("Helvetica");
-  size-adjust: 104.98%;
-  ascent-override: 89.06%;
-  descent-override: 23.81%;
+  size-adjust: 104.41%;
+  ascent-override: 89.55%;
+  descent-override: 23.94%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Rubik Fallback";
+  font-weight: 500;
+  src: local("Arial"), local("Liberation Sans"), local("Roboto Medium"), local("Roboto"), local("Helvetica Neue"), local("Helvetica");
+  size-adjust: 108.24%;
+  ascent-override: 86.38%;
+  descent-override: 23.10%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Rubik Fallback";
+  font-weight: 600;
+  src: local("Arial Bold"), local("Arial"), local("Liberation Sans Bold"), local("Liberation Sans"), local("Roboto Bold"), local("Roboto"), local("Helvetica Neue Bold"), local("Helvetica Bold");
+  size-adjust: 102.31%;
+  ascent-override: 91.39%;
+  descent-override: 24.44%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Rubik Fallback";
+  font-weight: 700;
+  src: local("Arial Bold"), local("Arial"), local("Liberation Sans Bold"), local("Liberation Sans"), local("Roboto Bold"), local("Roboto"), local("Helvetica Neue Bold"), local("Helvetica Bold");
+  size-adjust: 104.13%;
+  ascent-override: 89.79%;
+  descent-override: 24.01%;
   line-gap-override: 0%;
 }
 
 @font-face {
   font-family: "Krub Fallback";
-  src: local("Arial"), local("Liberation Sans"), local("Roboto"), local("Helvetica Neue"), local("Helvetica");
-  size-adjust: 105.43%;
-  ascent-override: 95.51%;
-  descent-override: 27.79%;
+  font-weight: 500;
+  src: local("Arial"), local("Liberation Sans"), local("Roboto Medium"), local("Roboto"), local("Helvetica Neue"), local("Helvetica");
+  size-adjust: 106.53%;
+  ascent-override: 94.53%;
+  descent-override: 27.50%;
   line-gap-override: 0%;
 }
 
