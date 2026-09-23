@@ -20,7 +20,6 @@ import Link from "next/link";
 import Magnetic from "@/motion/Magnetic";
 import Reveal from "@/motion/Reveal";
 import SplitLines from "@/motion/SplitLines";
-import Thread from "@/motion/Thread";
 
 const pricing = [
   {
@@ -49,12 +48,6 @@ export default function TheAsk() {
     >
       <div className="mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center px-4 py-24 sm:px-6 lg:px-8">
         <div className="lg:max-w-[50%]">
-          {/* The thread first: Beats 5 to 7 hid the Core, and this is where
-              the page picks the motif back up. */}
-          <div data-thread-slot="8" className="thread-slot mb-8">
-            <Thread tone="ember" x="left" />
-          </div>
-
           <Reveal as="p" className="type-eyebrow text-silver-500">
             Every engagement is an inflection point.
           </Reveal>

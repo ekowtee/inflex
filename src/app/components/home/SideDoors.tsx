@@ -3,29 +3,29 @@
  *
  * For the visitor who is not the buyer. They sit after the ask, not before
  * it: the buyer has been asked and answered, and the learner and the
- * candidate get their own doors without the buyer having to walk past them
- * on the way to a decision.
+ * candidate get their own doors without walking past them on the way to a
+ * decision. Variant B copy of COPY_DECK.md, approved for these surfaces on
+ * 22 September 2026.
  *
- * These two panels are the one place on the home page that uses Variant B of
- * COPY_DECK.md, which the owner approved for the Academy and Careers
- * surfaces on 22 September 2026.
- *
- * One link per panel, and the same drawn border as Beat 3's cards in red
- * rather than ember — the Ivory register's version of the thread.
+ * Two doors, not two cards. One band framed by a hairline above and below
+ * and split by a single hairline between the halves; each half is one link
+ * from edge to edge. No shadow, no accent border, no container inside a
+ * container. The door answers the pointer as a surface: the half warms, the
+ * link underlines and the arrow travels up and out.
  */
-import EdgeDraw from "./EdgeDraw";
-import ExitLink from "./ExitLink";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
-const panels = [
+const doors = [
   {
-    eyebrow: "Inflexions Academy",
+    label: "Inflexions Academy",
     title: "Develop Your Edge.",
     body: "The same engineers who build the systems teach them — AI, cybersecurity, cloud and digital strategy, for you or your whole team.",
     href: "/academy",
     link: "Explore programmes",
   },
   {
-    eyebrow: "Careers",
+    label: "Careers",
     title: "Build the thing the country runs on.",
     body: "If you want your work to be a data centre, a national network, or the system a ministry depends on — this is the room.",
     href: "/careers",
@@ -39,28 +39,39 @@ export default function SideDoors() {
       id="side-doors"
       data-beat="9"
       data-register="ivory"
-      className="band-ivory-soft w-full py-24 md:py-32"
+      className="band-ivory w-full py-20 md:py-28"
       aria-label="Academy and careers"
     >
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 md:grid-cols-2 md:gap-8 lg:px-8">
-        {panels.map((panel) => (
-          <EdgeDraw
-            key={panel.eyebrow}
-            tone="red"
-            className="shadow-ivory flex flex-col bg-white p-8 md:p-10"
-          >
-            <p className="type-eyebrow text-neutral-500">{panel.eyebrow}</p>
-            <h2 className="type-display-l mt-6 text-neutral-900">{panel.title}</h2>
-            <p className="type-body-l mt-6 max-w-[42ch] grow text-neutral-600">
-              {panel.body}
-            </p>
-            <div className="mt-8">
-              <ExitLink href={panel.href} className="text-neutral-900">
-                {panel.link}
-              </ExitLink>
-            </div>
-          </EdgeDraw>
-        ))}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid border-y border-neutral-200 md:grid-cols-2 md:divide-x md:divide-neutral-200 max-md:divide-y max-md:divide-neutral-200">
+          {doors.map((door, i) => (
+            <Link
+              key={door.href}
+              href={door.href}
+              className={`group relative flex min-h-[26rem] flex-col py-12 transition-colors duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] hover:bg-[#F4F5F7] focus-visible:bg-[#F4F5F7] md:py-16 ${
+                i === 0 ? "md:pr-12 lg:pr-16" : "md:pl-12 lg:pl-16"
+              } max-md:-mx-4 max-md:px-4 sm:max-md:-mx-6 sm:max-md:px-6`}
+            >
+              <span className="type-telemetry text-neutral-500">{door.label}</span>
+              <span className="type-display-l mt-8 block max-w-[14ch] text-neutral-900">
+                {door.title}
+              </span>
+              <span className="type-body-l mt-6 block max-w-[46ch] text-neutral-600">
+                {door.body}
+              </span>
+              <span className="mt-auto flex items-center justify-between gap-6 pt-12">
+                <span className="type-body font-semibold text-neutral-900 underline decoration-transparent decoration-1 underline-offset-[6px] transition-[text-decoration-color] duration-[var(--motion-duration-ui)] group-hover:decoration-neutral-900">
+                  {door.link}
+                </span>
+                <ArrowUpRight
+                  aria-hidden="true"
+                  strokeWidth={1.5}
+                  className="h-7 w-7 shrink-0 text-neutral-900 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] group-hover:-translate-y-1 group-hover:translate-x-1"
+                />
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

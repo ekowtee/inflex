@@ -4,15 +4,12 @@
  * The shortest beat on the page: an eyebrow, one caption, and the seven
  * approved client logos. No copy beyond the caption — the logos are the copy.
  *
- * Reading the roster on Obsidian. The seven files are not a matched set:
- * ATC and CEIBS are dark artwork on transparency, and the other five are
- * dark marks baked onto an opaque white background. The brief's
- * `grayscale(1) brightness(1.6)` suits the first kind and turns the second
- * into five white boxes, so this uses the equivalent the brief allows:
- * grayscale, invert, and `mix-blend-mode: screen`. Inverting takes a white
- * plate to black and a dark mark to silver; screening drops the black plate
- * into the Obsidian behind it. Both kinds land at the same silver, and
- * nothing reads white.
+ * Reading the roster on Obsidian. The source files are not a matched set
+ * (five are dark marks on opaque white plates), so each has a single-colour
+ * silhouette in public/logos/silver/ with the alpha taken from inverted
+ * luminance: plates and counters drop out, the mark stays. They render
+ * black and are lifted to silver with one filter, over whatever is behind,
+ * the live Core included. No blend modes, so no backdrop boxes.
  *
  * Server-rendered. The slide is the spine's (§5.2): without it the row sits
  * at 0 and is fully visible, which is also what Tier C and reduced motion get.
@@ -21,13 +18,13 @@ import Image from "next/image";
 import Reveal from "@/motion/Reveal";
 
 const logos = [
-  { src: "/logos/ba.png", alt: "British Airways", width: 295, height: 63 },
-  { src: "/logos/CEIBS.png", alt: "CEIBS", width: 262, height: 70 },
-  { src: "/logos/atc.webp", alt: "ATC", width: 240, height: 120 },
-  { src: "/logos/blu.png", alt: "Blu Telecommunications", width: 164, height: 121 },
-  { src: "/logos/innovaddb.png", alt: "Innovaddb", width: 756, height: 279 },
-  { src: "/logos/ninani.png", alt: "Ninani", width: 159, height: 89 },
-  { src: "/logos/lifeforms1.png", alt: "Lifeforms", width: 272, height: 57 },
+  { src: "/logos/silver/ba.png", alt: "British Airways", width: 259, height: 40 },
+  { src: "/logos/silver/CEIBS.png", alt: "CEIBS", width: 261, height: 68 },
+  { src: "/logos/silver/atc.png", alt: "ATC", width: 240, height: 120 },
+  { src: "/logos/silver/blu.png", alt: "Blu Telecommunications", width: 135, height: 96 },
+  { src: "/logos/silver/innovaddb.png", alt: "Innovaddb", width: 700, height: 239 },
+  { src: "/logos/silver/ninani.png", alt: "Ninani", width: 135, height: 63 },
+  { src: "/logos/silver/lifeforms1.png", alt: "Lifeforms", width: 252, height: 42 },
 ] as const;
 
 /* Four then three below md. A twelve-column grid is the only way to get
@@ -62,12 +59,7 @@ export default function TrustedBy() {
           {logos.map((logo, i) => (
             <div
               key={logo.alt}
-              /* The cell carries the band colour because the screen blend
-                 needs an opaque backdrop inside its own group, and the row
-                 above it is a group of its own: will-change: transform makes
-                 a stacking context, which isolates blending from the section
-                 behind. Same colour as the band, so nothing shows. */
-              className={`${span(i)} flex h-10 items-center justify-center bg-obsidian-950 md:h-12 md:min-w-0 md:flex-1`}
+              className={`${span(i)} flex h-10 items-center justify-center md:h-12 md:min-w-0 md:flex-1`}
             >
               <Image
                 src={logo.src}
@@ -75,11 +67,7 @@ export default function TrustedBy() {
                 width={logo.width}
                 height={logo.height}
                 sizes="(min-width: 768px) 150px, 30vw"
-                /* brightness before invert clamps every plate to pure white
-                   first — two of the seven are 247, not 255, and would
-                   otherwise leave a faint box; brightness after it sets how
-                   bright the mark lands, which is silver, never white. */
-                className="h-auto max-h-full w-auto max-w-full object-contain mix-blend-screen [filter:grayscale(1)_brightness(1.1)_invert(1)_brightness(0.85)]"
+                className="h-auto max-h-full w-auto max-w-full object-contain [filter:invert(0.8)]"
               />
             </div>
           ))}

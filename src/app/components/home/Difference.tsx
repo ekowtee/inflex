@@ -33,7 +33,7 @@ export default function Difference() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal as="p" className="type-eyebrow text-neutral-500">
-          04 — Why Inflexions
+          Why Inflexions
         </Reveal>
         <SplitLines as="h2" className="type-h2 mt-6 max-w-[24ch] text-neutral-900" delay={80}>
           Not a reseller. Not a generalist. Not a lock-in.

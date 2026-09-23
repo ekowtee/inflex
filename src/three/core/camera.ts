@@ -92,5 +92,6 @@ export function breathing(time: number): { x: number; y: number } {
 export function touchDrift(time: number): { yaw: number; pitch: number } {
   const w = (Math.PI * 2) / 12;
   const rad = (4 * Math.PI) / 180;
-  return { yaw: Math.sin(time * w) * rad, pitch: Math.cos(time * w) * rad * 0.6 };
+  // 4° of yaw is the full pointer range, so the scene's truck moves with it.
+  return { yaw: Math.sin(time * w) * rad, pitch: Math.cos(time * w) * ((2.5 * Math.PI) / 180) * 0.8 };
 }

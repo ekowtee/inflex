@@ -102,7 +102,7 @@ export default function Pillars() {
             {/* Left column. The right is the Core's. */}
             <div>
               <Reveal as="p" className="type-eyebrow text-silver-500">
-                03 — Four Pillars. Zero Gaps.
+                Four Pillars. Zero Gaps.
               </Reveal>
 
               <div className="mt-10 lg:mt-12">
@@ -117,7 +117,7 @@ export default function Pillars() {
                         the per-formation captures. */}
                     <div
                       data-pillar-poster
-                      className="relative mb-6 h-[56vw] w-full overflow-hidden lg:hidden"
+                      className="relative mb-6 h-[56vw] w-full overflow-hidden lg:hidden [html[data-core-live]_&]:hidden"
                     >
                       <Image
                         src={posters.mobile.unlit.webp}
@@ -131,7 +131,7 @@ export default function Pillars() {
                     <div className="flex items-center gap-4">
                       <span
                         aria-hidden="true"
-                        className={`h-2 w-2 shrink-0 rounded-full bg-ember ${DOT_STATE[i]} transition-colors duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)]`}
+                        className={`h-2 w-2 shrink-0 rounded-full bg-graphite ${DOT_STATE[i]} transition-colors duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)]`}
                       />
                       <h3 className="type-h3 text-silver-100">
                         <Link

@@ -61,6 +61,10 @@ const WATCH_LIMIT_MS = 40;
 const ARRIVAL_LIGHT_MS = 1800;
 const CROSSFADE_MS = 900;
 
+/** Camera truck at full pointer deflection, world units. */
+const TRUCK_X = 0.32;
+const TRUCK_Y = 0.18;
+
 const expoOut = (t: number) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
 
 export class CoreScene {
@@ -76,6 +80,7 @@ export class CoreScene {
   private probe = { frames: 0, total: 0, done: true };
   private ready = { streak: 0, live: false, liveAt: 0 };
   private watch = { frames: 0, total: 0 };
+  private hiddenCleared = false;
   private lastFrame = performance.now();
   private startedAt = performance.now();
   private width = 1;
@@ -307,11 +312,22 @@ export class CoreScene {
       pitch = 0;
     }
 
+    // The orbit pivots on the look-at point, which lies on the sheet's own
+    // plane, so rotation alone barely moves a near-flat object (measured:
+    // 4 px of ember-line travel across the full pointer range). A truck of
+    // the camera and a smaller shift of the target give the parallax a
+    // visible, heavy drift while the tilt keeps the perspective change.
+    const truckX = (yaw / YAW_MAX) * TRUCK_X;
+    const truckY = (pitch / PITCH_MAX) * TRUCK_Y;
     this.offset.copy(key.position).sub(key.lookAt);
     this.offset.applyAxisAngle(this.up, yaw);
     this.offset.applyAxisAngle(this.right, -pitch);
     const cam = this.camera;
+    this.target.x -= truckX * 0.35;
+    this.target.y -= truckY * 0.35;
     cam.position.copy(key.lookAt).add(this.offset);
+    cam.position.x -= truckX;
+    cam.position.y -= truckY;
     if (!capture) {
       cam.position.x += breath.x;
       cam.position.y += breath.y;
@@ -343,7 +359,18 @@ export class CoreScene {
     // ─── render ───────────────────────────────────────────────────────────
     // Behind the Ivory beats the spine sets opacity 0: keep the loop alive
     // for the probe and the uniforms, skip the draw.
-    if (!capture && store.opacity <= 0.001) return;
+    // Clear once on the way out, or the last presented frame stays on the
+    // canvas and shows through the next Obsidian band before it fades in.
+    if (!capture && store.opacity <= 0.001) {
+      if (!this.hiddenCleared) {
+        this.renderer.setRenderTarget(null);
+        this.renderer.setClearColor(palette.obsidian900, 0);
+        this.renderer.clear();
+        this.hiddenCleared = true;
+      }
+      return;
+    }
+    this.hiddenCleared = false;
     const gl = this.renderer;
     if (this.post) {
       this.post.render(this.scene, cam, time, store.bloom, this.setEmberPass);

@@ -30,7 +30,7 @@ export default function TurningPoint() {
       <div className="mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center px-4 py-24 sm:px-6 lg:px-8">
         <div className="md:max-w-[52%] lg:max-w-[50%]">
           <Reveal as="p" className="type-eyebrow text-silver-500">
-            01 — The inflection point
+            The inflection point
           </Reveal>
 
           <SplitLines as="h2" className="type-h2 mt-6 text-silver-100" delay={80}>

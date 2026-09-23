@@ -103,12 +103,19 @@ export function virtualVh(scrollY: number, viewportHeight: number, beats: BeatRe
   return { vh: start + progress * length, beat: current.beat, progress };
 }
 
-/** §8.5 canvas column as node opacity. Hidden ranges are 0. */
+/**
+ * §8.5 canvas column as node opacity. Hidden ranges are 0.
+ *
+ * Beat 3 runs its cases and counters across the full width, over the
+ * object, so the Core steps back to 0.3 there rather than the narrative's
+ * 0.7: at 0.7 the ember line ran through the counter labels.
+ */
 export function opacityAt(vh: number): number {
   const lerp = (a: number, b: number, t: number) => a + (b - a) * Math.min(1, Math.max(0, t));
-  if (vh < 240) return 1;
-  if (vh < 340) return 0.7;
-  if (vh < 360) return lerp(0.7, 1, (vh - 340) / 20);
+  if (vh < 230) return 1;
+  if (vh < 250) return lerp(1, 0.3, (vh - 230) / 20);
+  if (vh < 340) return 0.3;
+  if (vh < 360) return lerp(0.3, 1, (vh - 340) / 20);
   if (vh < 680) return 1;
   if (vh < 710) return lerp(1, 0, (vh - 680) / 30);
   if (vh < 920) return 0;
@@ -154,7 +161,13 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
     const sample = sampleTimeline(scrollY, vh, beats);
 
     store.scrollVh = sample.vh;
-    store.opacity = sample.opacity;
+    // Below lg the copy runs full width over the object in every beat after
+    // the hero, so the Core recedes to a texture there.
+    const narrow = window.innerWidth < 1024;
+    store.opacity =
+      narrow && sample.vh > 60
+        ? sample.opacity * Math.max(0.35, 1 - (sample.vh - 60) / 60)
+        : sample.opacity;
     if (sample.vh > BEAT_START_VH[2]) store.scrolledPastArrival = true;
 
     if (pin && sample.pillar !== lastPillar) {

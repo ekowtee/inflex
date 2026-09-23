@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Reveal from "@/motion/Reveal";
-import Thread from "@/motion/Thread";
 
 /** 400 ms to draw the strike, then 120 ms before its answer — §8.4. */
 const STRIKE_MS = 400;
@@ -96,7 +95,7 @@ export default function Ledger() {
           </p>
           <Reveal
             as="p"
-            className="type-body-l border-l-2 border-primary-500 pl-5 text-neutral-900"
+            className="type-body-l text-neutral-900"
             delay={STRIKE_MS + AFTER_STRIKE_MS}
           >
             <strong className="font-semibold">{row.isLead}</strong> {row.is}
@@ -104,11 +103,6 @@ export default function Ledger() {
         </div>
       ))}
 
-      {/* The Ivory thread: the third answer's border carries on 48 px below
-          the ledger and hands the eye to the intelligence row. */}
-      <div data-thread-slot="5" className="thread-slot -mt-8 md:col-start-2 md:-mt-10">
-        <Thread tone="red" x="left" />
-      </div>
     </div>
   );
 }
