@@ -215,7 +215,8 @@ function formationLattice(nodes: SheetNode[], rand: () => number): Placement[] {
   for (let k = 0; k < nodes.length; k += 1) {
     index.set(`${(k >> 4) & 31},${k & 15},${k >> 9}`, slotToNode[k]);
   }
-  for (let walk = 0; walk < 26; walk += 1) {
+  // 16 walks: at 26 the lattice read as noise rather than traffic.
+  for (let walk = 0; walk < 16; walk += 1) {
     let gx = Math.floor(rand() * 32);
     let gy = Math.floor(rand() * 16);
     let gz = Math.floor(rand() * 32);

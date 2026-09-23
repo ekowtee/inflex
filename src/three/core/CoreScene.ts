@@ -33,6 +33,8 @@ import { PostStage } from "./PostStage";
 import { store } from "./store";
 import { pointer, stepPointer, attachPointer, YAW_MAX, PITCH_MAX } from "./pointer";
 import { sampleCamera, aspectAdjust, breathing, touchDrift } from "./camera";
+import { sceneStateAt } from "./formationTrack";
+import { BEAT_START_VH } from "./timeline";
 import { palette } from "./rig";
 
 export interface CoreSceneOptions {
@@ -83,6 +85,14 @@ export class CoreScene {
   private ready = { streak: 0, live: false, liveAt: 0 };
   private watch = { frames: 0, total: 0, slow: 0 };
   private hiddenCleared = false;
+  /** The scene's own, smoothed position on the virtual timeline (vh). */
+  private vh = Number.NaN;
+  /** The ask's entry, smoothed like vh. */
+  private entry = 0;
+  /** World points the two threads are born from (see store.thread2X). */
+  private anchor2 = new Vector3();
+  private anchor4 = new Vector3();
+  private projected = new Vector3();
   private lastFrame = performance.now();
   private startedAt = performance.now();
   private width = 1;
@@ -185,11 +195,44 @@ export class CoreScene {
     }
     this.compiled = true;
     this.handles = handles;
+    this.findAnchors();
 
     const remembered = sessionStorage.getItem("core-tier-demoted");
     this.probe = { frames: 0, total: 0, done: capture || remembered !== null };
     this.lastFrame = performance.now();
     this.frame = requestAnimationFrame(this.tick);
+  }
+
+  /**
+   * The foot of the sheet's ember line, and the cap of the plane's tallest
+   * ember column nearest the viewer's right: the points the Beat 2 and
+   * Beat 4 threads drop from.
+   */
+  private findAnchors(): void {
+    const p = this.options.data.positions;
+    const n = p.length / 4 / 6;
+    let best2 = Infinity;
+    let best4 = -Infinity;
+    for (let i = 0; i < n; i += 1) {
+      const o0 = i * 4;
+      if (p[o0 + 3] > 0.5 && p[o0 + 1] < best2) {
+        best2 = p[o0 + 1];
+        this.anchor2.set(p[o0], p[o0 + 1], p[o0 + 2]);
+      }
+      const o4 = (4 * n + i) * 4;
+      if (p[o4 + 3] > 0.5) {
+        const score = p[o4 + 1] * 4 + p[o4] - p[o4 + 2] * 0.5;
+        if (score > best4) {
+          best4 = score;
+          this.anchor4.set(p[o4], p[o4 + 1], p[o4 + 2]);
+        }
+      }
+    }
+  }
+
+  private screenX(world: Vector3): number {
+    this.projected.copy(world).project(this.camera);
+    return ((this.projected.x + 1) / 2) * this.width;
   }
 
   private onContextLost = (event: Event) => {
@@ -293,18 +336,60 @@ export class CoreScene {
       }
     }
 
-    // ─── the arrival light, after the crossfade ───────────────────────────
-    if (this.ready.live && !capture) {
-      if (store.scrolledPastArrival) store.heatGate = 1.3;
-      else {
-        const t = (now - this.ready.liveAt - CROSSFADE_MS) / ARRIVAL_LIGHT_MS;
-        store.heatGate = -0.3 + 1.6 * expoOut(Math.max(0, t));
-      }
+    // ─── position on the timeline, smoothed ───────────────────────────────
+    // The page reports where the reader is; the scene eases toward it with
+    // a 0.22 s time constant, the equivalent of a 0.8 s scrub, so a fast
+    // scroll reads as intent. Capture snaps.
+    const targetVh = store.scrollVh;
+    if (capture || !Number.isFinite(this.vh)) this.vh = targetVh;
+    else this.vh += (targetVh - this.vh) * (1 - Math.exp(-dt / 0.22));
+    const track = sceneStateAt(this.vh);
+    // The fabric gathers back into the line as the ask comes into view.
+    if (capture) this.entry = 0;
+    else this.entry += (store.askEntry - this.entry) * (1 - Math.exp(-dt / 0.22));
+    const e = this.entry * this.entry * (3 - 2 * this.entry);
+    const spread = track.spread * (1 - e);
+
+    // ─── the ember gate: the arrival light, then the page's own track ─────
+    let gate: number;
+    if (capture) gate = store.heatGate;
+    else if (!this.ready.live) gate = -0.3;
+    else {
+      const arrival = store.scrolledPastArrival
+        ? 1.3
+        : -0.3 + 1.6 * expoOut(Math.max(0, (now - this.ready.liveAt - CROSSFADE_MS) / ARRIVAL_LIGHT_MS));
+      gate = Math.min(arrival, track.gate);
     }
 
     // ─── camera ───────────────────────────────────────────────────────────
     const adjust = aspectAdjust(this.width / this.height);
-    const key = sampleCamera(store.scrollVh);
+    const key = sampleCamera(this.vh);
+    {
+      const b4 = BEAT_START_VH[4];
+      const b5 = BEAT_START_VH[5];
+      const inPillars = Math.min(
+        Math.min(1, Math.max(0, (this.vh - (b4 - 24)) / 40)),
+        Math.min(1, Math.max(0, (b5 + 30 - this.vh) / 10))
+      );
+      const aspect = this.width / this.height;
+      if (aspect < 1) {
+        // Portrait: the pillar keys push each formation right of the
+        // desktop copy column, which on a phone put it half off the
+        // screen. There the copy runs over or above the object, so the
+        // pillars are centred.
+        const shift = -key.lookAt.x * inPillars;
+        key.position.x += shift;
+        key.lookAt.x += shift;
+      } else if (aspect < 1.5 && inPillars > 0) {
+        // Narrow landscape (1024 × 768): the copy column is a larger share
+        // of the width, and at the desktop keys the lattice ran into it.
+        // Pull back and push the object further right.
+        const t = inPillars * Math.min(1, (1.5 - aspect) / 0.25);
+        this.offset.copy(key.position).sub(key.lookAt).multiplyScalar(1 + 0.2 * t);
+        key.lookAt.x -= 0.6 * t;
+        key.position.copy(key.lookAt).add(this.offset);
+      }
+    }
     const breath = breathing(time);
     this.target.copy(key.lookAt);
     this.target.y += adjust.yOffset;
@@ -349,22 +434,34 @@ export class CoreScene {
       cam.updateProjectionMatrix();
     }
     cam.lookAt(this.target);
+    cam.updateMatrixWorld();
+
+    // Where the threads are born, in viewport px, for the spine to place.
+    store.thread2X = this.screenX(this.anchor2);
+    store.thread4X = this.screenX(this.anchor4);
+    store.threadReady = this.ready.live && !capture;
 
     // ─── uniforms ─────────────────────────────────────────────────────────
+    // Points are sized in pixels with a shader clamp; on a tall viewport the
+    // same pixels are a smaller share of the frame and the formations thin
+    // out (2560 × 1440 read as dust). Scale with height above 900 px.
+    this.handles.nodeMaterial.uniforms.uDpr.value =
+      this.options.dpr * Math.min(1.6, Math.max(1, this.height / 900));
     for (const material of [this.handles.nodeMaterial, this.handles.edgeMaterial]) {
       const u = material.uniforms;
       u.uTime.value = capture ? 0 : time;
-      u.uFrom.value = store.from;
-      u.uTo.value = store.to;
-      u.uMix.value = store.mix;
-      u.uNoise.value = store.noise;
-      u.uHeatGate.value = store.heatGate;
+      u.uFrom.value = capture ? store.from : track.from;
+      u.uTo.value = capture ? store.to : track.to;
+      u.uMix.value = capture ? store.mix : track.mix;
+      u.uNoise.value = capture ? store.noise : track.noise;
+      u.uHeatGate.value = gate;
+      u.uSpread.value = capture ? 0 : spread;
       u.uOpacity.value = store.opacity;
       u.uIdle.value = capture ? 0 : 1;
       u.uProximity.value = pointer.active && !capture ? 1 : 0;
       u.uPointerWorld.value.set(pointer.worldX, pointer.worldY);
     }
-    this.ground.material.uniforms.uAlpha.value = store.ground;
+    this.ground.material.uniforms.uAlpha.value = capture ? store.ground : track.ground;
 
     // ─── render ───────────────────────────────────────────────────────────
     // Behind the Ivory beats the spine sets opacity 0: keep the loop alive

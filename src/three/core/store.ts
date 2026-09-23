@@ -39,6 +39,21 @@ export interface CoreStore {
   threadX: number;
   threadY: number;
   threadReady: boolean;
+  /**
+   * Viewport x, in CSS px, of the two points the threads are born from:
+   * the foot of the sheet's ember line (Beat 2) and the cap of the tallest
+   * ember column of the plane (Beat 4). Written by the scene every frame.
+   */
+  thread2X: number;
+  thread4X: number;
+  /**
+   * How far the ask chapter has come into view: 0 with its top at the
+   * viewport bottom, 1 with its top at the viewport top. The timeline holds
+   * still while a chapter enters (it keys off the chapter under the
+   * viewport top), so the one motion that must happen during an entry, the
+   * fabric gathering back into the line, is driven from this instead.
+   */
+  askEntry: number;
 }
 
 export const store: CoreStore = {
@@ -57,6 +72,9 @@ export const store: CoreStore = {
   threadX: 0,
   threadY: 0,
   threadReady: false,
+  thread2X: 0,
+  thread4X: 0,
+  askEntry: 0,
 };
 
 /** Reset to the arrival state. Used when the scene mounts and on route change. */

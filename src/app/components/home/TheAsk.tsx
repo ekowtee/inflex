@@ -10,8 +10,8 @@
  *
  * The pricing frame answers the three questions a buyer has before a call,
  * in their order: is it fixed, is it predictable, can I leave
- * (COPY_DECK.md §8). The word the frame must never contain is "free"; the
- * friction line says "no cost" once, quietly.
+ * (COPY_DECK.md §8). The word the frame must never contain is "free", and
+ * the review's cost is not promised either way (owner, 23 September 2026).
  *
  * Right half stays empty: the Core completes its morph into the mark there
  * in Phase 4.
@@ -74,7 +74,7 @@ export default function TheAsk() {
           </Reveal>
 
           <Reveal as="p" className="type-eyebrow mt-8 text-silver-500" delay={300}>
-            No cost. No obligation. One conversation.
+            No obligation. One conversation.
           </Reveal>
 
           <Reveal className="mt-8" delay={320}>

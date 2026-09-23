@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { CoreCanvas } from "@/three/core/loadCore";
 import { store } from "@/three/core/store";
 import { setCameraOverride } from "@/three/core/camera";
+import { pillarHoldVh } from "@/three/core/formationTrack";
 import { Vector3 } from "three";
 
 /**
@@ -44,23 +45,37 @@ export default function CaptureStage() {
     }
   }, [formation, light, params]);
 
+  // Hold the requested state every frame from mount. The canvas loads
+  // asynchronously and resets the store when it mounts, which is after this
+  // component's first effect, so a one-off write was lost and every capture
+  // came out as formation 0.
   useEffect(() => {
-    if (!ready) return;
-    // Hold the heat gate every frame in case the driver touches it.
     let raf = 0;
     const hold = () => {
+      store.from = formation as typeof store.from;
+      store.to = formation as typeof store.to;
+      store.mix = 0;
+      store.noise = 0;
+      store.opacity = 1;
+      store.ground = formation === 1 || formation === 4 ? 1 : 0;
+      store.scrolledPastArrival = true;
       store.heatGate = light === "lit" ? 1.3 : -0.3;
+      // The camera the page uses for this formation: the hero key for the
+      // sheet, the pillar key while a pillar formation holds.
+      store.scrollVh = formation >= 1 && formation <= 4 ? pillarHoldVh(formation) : 0;
       raf = requestAnimationFrame(hold);
     };
     hold();
+    return () => cancelAnimationFrame(raf);
+  }, [formation, light]);
+
+  useEffect(() => {
+    if (!ready) return;
     const t = setTimeout(() => {
       document.body.setAttribute("data-capture-ready", "1");
     }, 1500);
-    return () => {
-      cancelAnimationFrame(raf);
-      clearTimeout(t);
-    };
-  }, [ready, light]);
+    return () => clearTimeout(t);
+  }, [ready]);
 
   return (
     <main className="fixed inset-0 bg-obsidian-900">

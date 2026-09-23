@@ -124,7 +124,7 @@ export default function Receipt() {
           </div>
           <div>
             <p className="type-h2 text-silver-100">
-              <Counter value={50} suffix="+" />
+              <Counter value={30} suffix="+" />
             </p>
             <p className="type-telemetry mt-3 text-silver-500">Enterprise clients</p>
             <p className="type-body mt-2 text-silver-500">

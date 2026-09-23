@@ -186,7 +186,7 @@ For every beat the specification is the same five things: the question it answer
   - H2: **We have done this at national scale. Twice.** **(new)**
   - Card A, eyebrow `2014 · Delivered`: **Blu Telecommunications** — "Ghana's new broadband entrant needed a national 4G LTE core network and a Tier III data centre, under startup pressure and aggressive timelines. We led it from scoping and vendor evaluation to a live commercial pilot — at 50 Mbps per device, a national benchmark at launch." (condensed from `data.ts`, id 2)
   - Card B, eyebrow `2026 · In progress · Accra Digital Centre`: **MTN Ghana, Project UBIA** — "Lead independent ICT consultant for a Tier III data centre and Industry 5.0 innovation hub, for the Ministry of Communication, Digital Technology and Innovation. Architecture, data centre design, and delivery oversight — under way on site today." (condensed from `data.ts`, id 1; last clause **new**)
-  - Counters, Telemetry style: `2012` Founded in Accra · `80+` Years combined experience · `50+` Enterprise clients (approved figures)
+  - Counters, Telemetry style: `2012` Founded in Accra · `80+` Years combined experience · `30+` Enterprise clients (approved figures; 30+ from 23 September 2026)
 - **The copy beat that lands:** the H2. It is the only headline on the page that is a pure fact, and "twice" says the first one was not luck.
 - **The in-progress rule:** Card B's eyebrow always carries `In progress` until completion. The body never uses "delivered", "completed", or "built". "Under way on site today" is the strongest permitted phrasing. On completion, change the eyebrow to `2026 · Delivered` and the last clause to "delivered on site at Accra Digital Centre". Nothing else moves.
 - **Carry:** the two red borders draw at the same moment; the counters run; then the thread draws down from between the two cards into Beat 4. The Core, which has been sitting behind at 70% opacity, begins its morph from Inflection toward Lattice in the last 20 vh of this beat, so the pillars chapter arrives already in motion.
@@ -321,7 +321,7 @@ At a typical scroll pace the journey is 75 to 95 seconds. Total copy on the page
 | 3 | Card A footer | Scoping · Vendor evaluation · Core build · NOC and BSS/OSS · Commercial pilot | Fact |
 | 3 | Card B | MTN Ghana, Project UBIA, 2026 · In progress · Accra Digital Centre. Lead independent ICT consultant for a Tier III data centre and Industry 5.0 innovation hub, for the Ministry of Communication, Digital Technology and Innovation. Architecture, data centre design and delivery oversight — under way on site today. | Fact |
 | 3 | Card B footer | Architecture · Tier III design · Delivery oversight | Fact |
-| 3 | Counters | 2012 — Founded, Accra · 80+ — Years combined experience · 50+ — Enterprise clients · Cisco · Microsoft · AWS · CompTIA — Certified | Fact |
+| 3 | Counters | 2012 — Founded, Accra · 80+ — Years combined experience · 30+ — Enterprise clients · Cisco · Microsoft · AWS · CompTIA — Certified | Fact |
 | 3 | Counter captions | Founded in Accra. Headquartered here still. / Combined years in systems integration, not in sales. / Enterprise engagements since 2012. / Certified across Cisco, Microsoft, AWS and CompTIA. ISO 27001 principles in every delivery. | A |
 | 3 | Exit | Read both case studies → | A |
 | 4 | Eyebrow | 03 — Four Pillars. Zero Gaps. | Approved |
@@ -331,7 +331,7 @@ At a typical scroll pace the journey is 75 to 95 seconds. Total copy on the page
 | 5 | Eyebrow | 04 — Why Inflexions | A |
 | 5 | H2 | Not a reseller. Not a generalist. Not a lock-in. | Fact |
 | 5 | Ledger left | A reseller putting logos on boxes. / A generalist that outsources the real work. / A vendor that locks you in and layers on cost. | Approved (brand book 1.2) |
-| 5 | Ledger right | Engineering-led. 80+ years of combined integration experience, and the architects do the work. / Vendor-neutral. We recommend what works, not what pays us the highest margin. / Privately owned. Zero bureaucracy. Personal accountability. Faster than firms five times our size. | Fact |
+| 5 | Ledger right | Engineering-led. 80+ years of combined integration experience, and the architects do the work. / Vendor-neutral. The architecture serves your business, not a vendor's quota. / Privately owned. Zero bureaucracy. Personal accountability. Faster than firms five times our size. | Fact |
 | 5 | AI row | AI in every layer · Intelligence is not a feature. It is the fabric. · Predictive Analytics · Process Automation · Data Strategy & Architecture · AI Integration | A; terms existing |
 | 5 | Exit | Why enterprises choose us → | A |
 | 6 | Eyebrows | Infrastructure partners / Intelligence partners | A |
@@ -340,7 +340,7 @@ At a typical scroll pace the journey is 75 to 95 seconds. Total copy on the page
 | 8 | H2 | Stop Patching. Start Performing. | Approved |
 | 8 | Offer | Book a 30-minute architecture review. With a Solutions Architect, not a salesperson. No pitch. You leave with a written view of what to fix first. | Confirmed |
 | 8 | Pricing frame | Fixed-scope projects. Two-week discovery, then a milestone plan and a price before any work begins. Typical delivery 4 to 12 weeks. / SLA-backed managed retainers. Tiers set to your risk tolerance. 24/7 monitoring, monthly reporting, a named account manager. / No lock-in. Vendor-neutral by policy. Thirty-day hypercare after every go-live, and the documentation to leave if you ever want to. | A (documentation handover is now a live promise) |
-| 8 | Friction line | No cost. No obligation. One conversation. | A |
+| 8 | Friction line | No obligation. One conversation. | A (no-cost promise removed, 23 September 2026) |
 | 8 | Button | Book the review | Confirmed |
 | 8 | Telemetry | Accra, Ghana · +233 20 888 9270 · info@inflexions.tech | Existing |
 | 9 | Academy | Develop Your Edge. / The same engineers who build the systems teach them — AI, cybersecurity, cloud and digital strategy, for you or your whole team. / Explore programmes | Approved / B (approved 22 Sep 2026 for Academy surfaces) / existing |
@@ -355,7 +355,7 @@ At a typical scroll pace the journey is 75 to 95 seconds. Total copy on the page
 
 Writing rules that apply: active voice, second person for the client, first person plural for Inflexions, em dash as the momentum mark, British spelling, title case headings, no empty superlatives. Every line above follows them.
 
-**Operational promises now carried by the copy** (the team must be able to keep each one): a written view of what to fix first after every review; a reply within one working day of a form submission; full documentation handover on every engagement; the review at no cost and no obligation.
+**Operational promises now carried by the copy** (the team must be able to keep each one): a written view of what to fix first after every review; a reply within one working day of a form submission; full documentation handover on every engagement; the review at no obligation. The no-cost promise was removed on 23 September 2026.
 
 ---
 
@@ -428,9 +428,11 @@ The offer wording is not to be softened, split, or duplicated. No beat gets a se
 
 1. ~~The written follow-up promise in the offer.~~ **Decided 21 September 2026: confirmed.**
 2. ~~Client logo permissions for the seven existing clients.~~ **Decided 21 September 2026: approved, and live.**
-3. ~~MTN Ghana on the home page.~~ **Decided 21 September 2026: named in Beat 3 as work in progress; MTN logo is not added to the roster.** Still open: written confirmation that MTN and the Ministry may be named on the home page.
-4. **Testimonials.** Are there two real, attributable quotes with permission? If not, Beat 7 is omitted.
-5. **Partner column assignment** as proposed in Beat 6.
-6. **Counter values** 2012, 80+, 50+ reconfirmed.
+3. ~~MTN Ghana on the home page.~~ **Decided 21 September 2026: named in Beat 3 as work in progress; MTN logo is not added to the roster. Naming MTN and the Ministry confirmed by the owner, 23 September 2026.**
+4. ~~Testimonials.~~ **Decided 23 September 2026: Beat 7 stays out for now.**
+5. ~~Partner column assignment~~ **Decided 23 September 2026: as proposed in Beat 6.**
+6. ~~Counter values~~ **Decided 23 September 2026: 2012, 80+, 30+.**
 7. ~~New copy lines.~~ **Decided 22 September 2026: Variant A of `COPY_DECK.md` approved in full; Section 7 is now the baseline.**
 8. **Delivering the written follow-up.** Decide who writes it, the template, and the turnaround. The page does not promise a timeframe; do not add one unless the team will keep it.
+9. ~~Which ledger line.~~ **Decided 23 September 2026: "The architecture serves your business, not a vendor's quota." §6 and §7 now agree. Beat 6's infrastructure caption ("The architecture serves you, not a quota") now echoes it two beats later; a Phase 4 copy pass should vary one of them.**
+10. ~~The no-cost promise.~~ **Decided 23 September 2026: removed from the friction line; the review's cost is not stated.**

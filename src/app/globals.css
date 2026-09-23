@@ -417,11 +417,13 @@ html[data-core-live] [data-pillar-poster] {
   display: none;
 }
 
-/* A thread is born from the Core (Beats 2 and 4, Phase 3). Until the spine
-   has placed it at the detaching node an unplaced 48 px ember line reads as
-   a stray mark, so it does not draw. */
-.thread-slot:not([style*="--thread-x"]) > * {
-  visibility: hidden;
+/* A thread is born from the Core (Beats 2 and 4). Until the spine has
+   placed it at the node it drops from, it is collapsed; being placed is what
+   draws it, so the line visibly falls from the object rather than appearing.
+   Outside @layer so it overrides the drawn state the observer sets. */
+.thread-slot:not([style*="--thread-x"]) > .motion-thread {
+  transform: scaleY(0);
+  transition-duration: var(--motion-duration-micro);
 }
 
 /* Beat 4 is pinned with CSS: the section is one viewport plus 320 vh of
