@@ -192,3 +192,26 @@ Everything in §5, plus the two gaps in Section 6. In summary:
 - Nothing imports from `src/three/` except `posters` in `Pillars.tsx`, as permitted.
 
 The page is finished and readable with the spine absent: no pin, no scrub, native scrolling, first pillar row open. That is also what reduced-motion visitors and Tier C phones get.
+
+---
+
+## 10. The spine (added by the spine session, 23 September 2026)
+
+Built on `phase-2-spine` on top of this branch, then verified against the merged page.
+
+| Piece | Where | Note |
+|---|---|---|
+| Timeline | `src/three/core/timeline.ts` | Maps real scroll to the narrative's virtual timeline: each beat's nominal length in vh, progress measured through the real section. Writes `store.scrollVh` and `store.opacity` (the §8.5 canvas column), `data-active` and `aria-current` on the pinned chapter, and the trust strip's slide. Attached by `Arrival` for every tier. |
+| Pin | `globals.css` | CSS `position: sticky`: Beat 4 is one viewport plus 320 vh and the chapter sticks for its length. Works with keyboard, Lenis, Safari trackpads and reduced motion. No ScrollTrigger pin. Focusing a pillar link scrolls to its sub-range. |
+| Canvas | `CoreCanvas.tsx`, `globals.css` | Fixed again. While the scene is live the Obsidian chapters lose their background so the Core shows through; the Ivory chapters stay opaque. Every chapter is positioned so it paints above the hero's stacking context, which holds the canvas. The scene skips its draw at opacity 0. |
+| Header | `Header.tsx` | Dark whenever any `data-header-dark` chapter is under the bar. |
+| Gate | `.github/workflows/perf-gate.yml` | The observed Lighthouse pass is the one that can block; the simulated pass is advisory. |
+
+Verified on the real GPU at 1280 and 390 px, every beat: registers, band backgrounds, pin position, active row, `aria-current`, no console errors. Reduced motion: no canvas, poster visible, solid bands, nine beats. Keyboard: focusing a pillar link lands the pin on that row.
+
+**Resolved from Section 6:** `aria-current` now moves with `data-active`. Beat 3's thread DOM order is left as is; nothing in the spine reads it.
+
+**Deferred, by design:** the thread's `--thread-x` from the Core (Beats 2 and 4) waits for the ember detachment in Phase 3; the Obsidian-to-Ivory crossfade is a hard section edge for now, with the canvas fading over the last 30 vh of Beat 4; the noise-to-order resolve, the four morphs, the camera orbit and the mark are Phases 3 and 4. Beat 4's mobile posters are all the resting formation until Phase 3 captures the others.
+
+**Owner decisions still open:** partner columns (Beat 6), counter values (Beat 3), naming MTN and the Ministry, the operational promises the copy makes, and the two lines where `SCROLL_NARRATIVE.md` §6 and §7 disagree (§7 shipped).
+

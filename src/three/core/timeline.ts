@@ -201,11 +201,15 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
   // Focus on a pillar link scrolls the pin to that row's sub-range.
   const focusHandlers = pillarLinks.map((link, i) => {
     const handler = () => {
-      const b = beats.find((x) => x.beat === 4);
-      if (!b || window.innerWidth < 1024) return;
-      const extent = Math.max(b.height - window.innerHeight, 1);
-      const target = b.top + (extent * i) / 4 + 1;
-      if (Math.abs(window.scrollY - target) > 4) window.scrollTo({ top: target, behavior: "auto" });
+      // After the browser's own scroll-into-view for the focused link, which
+      // would otherwise land on top of ours.
+      requestAnimationFrame(() => {
+        const b = beats.find((x) => x.beat === 4);
+        if (!b || window.innerWidth < 1024) return;
+        const extent = Math.max(b.height - window.innerHeight, 1);
+        const target = b.top + (extent * i) / 4 + 1;
+        if (Math.abs(window.scrollY - target) > 4) window.scrollTo({ top: target, behavior: "auto" });
+      });
     };
     link.addEventListener("focus", handler);
     return handler;
