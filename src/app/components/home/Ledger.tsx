@@ -16,7 +16,7 @@ const rows = [
   {
     was: "A generalist that outsources the real work.",
     isLead: "Vendor-neutral.",
-    is: "We recommend what works, not what pays us the highest margin.",
+    is: "The architecture serves your business, not a vendor's quota.",
   },
   {
     was: "A vendor that locks you in and layers on cost.",
