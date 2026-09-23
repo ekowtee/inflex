@@ -196,6 +196,8 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
     const sample = sampleTimeline(scrollY, vh, beats);
 
     store.scrollVh = sample.vh;
+    const ask = beats.find((b) => b.beat === 8);
+    store.askEntry = ask ? Math.min(1, Math.max(0, 1 - (ask.top - scrollY) / vh)) : 0;
     // Below lg the copy runs full width over the object in every beat after
     // the hero, so the Core recedes to a texture there.
     const narrow = window.innerWidth < 1024;

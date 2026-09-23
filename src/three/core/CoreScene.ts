@@ -87,6 +87,8 @@ export class CoreScene {
   private hiddenCleared = false;
   /** The scene's own, smoothed position on the virtual timeline (vh). */
   private vh = Number.NaN;
+  /** The ask's entry, smoothed like vh. */
+  private entry = 0;
   /** World points the two threads are born from (see store.thread2X). */
   private anchor2 = new Vector3();
   private anchor4 = new Vector3();
@@ -342,6 +344,11 @@ export class CoreScene {
     if (capture || !Number.isFinite(this.vh)) this.vh = targetVh;
     else this.vh += (targetVh - this.vh) * (1 - Math.exp(-dt / 0.22));
     const track = sceneStateAt(this.vh);
+    // The fabric gathers back into the line as the ask comes into view.
+    if (capture) this.entry = 0;
+    else this.entry += (store.askEntry - this.entry) * (1 - Math.exp(-dt / 0.22));
+    const e = this.entry * this.entry * (3 - 2 * this.entry);
+    const spread = track.spread * (1 - e);
 
     // ─── the ember gate: the arrival light, then the page's own track ─────
     let gate: number;
@@ -448,7 +455,7 @@ export class CoreScene {
       u.uMix.value = capture ? store.mix : track.mix;
       u.uNoise.value = capture ? store.noise : track.noise;
       u.uHeatGate.value = gate;
-      u.uSpread.value = capture ? 0 : track.spread;
+      u.uSpread.value = capture ? 0 : spread;
       u.uOpacity.value = store.opacity;
       u.uIdle.value = capture ? 0 : 1;
       u.uProximity.value = pointer.active && !capture ? 1 : 0;
