@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import Reveal from "@/motion/Reveal";
 import ExitLink from "./home/ExitLink";
+import { entryGrid } from "./entryGrid";
 import { programmes, getDomain } from "../academy/data";
 
 /**
@@ -59,7 +60,7 @@ export default function RelatedTraining({
             </ExitLink>
           </div>
 
-          <ul className="mt-12 grid gap-x-12 gap-y-8 md:grid-cols-3">
+          <ul className={`mt-12 grid gap-x-12 gap-y-8 ${entryGrid(related.length)}`}>
             {related.map((programme) => (
               <li key={programme.slug} className="group relative border-t border-neutral-200 pt-6">
                 <p className="type-telemetry text-neutral-500">

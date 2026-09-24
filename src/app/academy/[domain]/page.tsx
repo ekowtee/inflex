@@ -7,6 +7,7 @@ import Link from "next/link";
 import AskBand from "../../components/AskBand";
 import PageHero from "../../components/PageHero";
 import ProgrammeCard from "../../components/ProgrammeCard";
+import { entryGrid } from "../../components/entryGrid";
 import ExitLink from "../../components/home/ExitLink";
 import { domains, getDomain, getProgrammesByDomain } from "../data";
 
@@ -142,7 +143,7 @@ export default async function DomainPage({
             </p>
           </div>
 
-          <div className="mt-16 grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+          <div className={`mt-16 grid gap-x-12 gap-y-16 ${entryGrid(domainProgrammes.length)}`}>
             {domainProgrammes.map((programme) => (
               <ProgrammeCard key={programme.slug} programme={programme} />
             ))}

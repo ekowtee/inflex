@@ -7,6 +7,7 @@ import { ArrowUpRight } from "lucide-react";
 import AskBand from "../../components/AskBand";
 import PageHero from "../../components/PageHero";
 import ExitLink from "../../components/home/ExitLink";
+import { entryGrid } from "../../components/entryGrid";
 import { caseStudies } from "../../data";
 
 /**
@@ -206,7 +207,7 @@ export default function CaseStudyDetailPage() {
             <div className="border-t border-neutral-200 pt-16">
               <h2 className="type-h2 text-neutral-900">Related Case Studies</h2>
 
-              <div className="mt-12 grid gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+              <div className={`mt-12 grid gap-x-12 gap-y-16 ${entryGrid(related.length)}`}>
                 {related.map((item) => (
                   <article key={item.id} className="group relative">
                     <div className="relative aspect-[16/9] overflow-hidden">

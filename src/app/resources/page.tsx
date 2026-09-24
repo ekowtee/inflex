@@ -5,6 +5,7 @@ import Reveal from "@/motion/Reveal";
 import AskBand from "../components/AskBand";
 import Blog from "../components/Blog";
 import PageHero from "../components/PageHero";
+import { entryGrid } from "../components/entryGrid";
 
 /**
  * /resources — PHASE5_BRIEF.md §4 Task 6.
@@ -98,7 +99,7 @@ export default function ResourcesPage() {
             In-Depth Guides &amp; Reports
           </h2>
 
-          <div className="mt-16 grid gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+          <div className={`mt-16 grid gap-x-12 gap-y-16 ${entryGrid(whitepapers.length)}`}>
             {whitepapers.map((item) => (
               <article key={item.id} className="group relative flex flex-col">
                 <div className="relative aspect-[16/10] overflow-hidden">

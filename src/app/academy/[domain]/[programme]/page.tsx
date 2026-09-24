@@ -7,6 +7,7 @@ import JsonLd from "../../../components/JsonLd";
 import PageHero from "../../../components/PageHero";
 import ProgrammeCard from "../../../components/ProgrammeCard";
 import ProgrammeDetailsSidebar from "../../../components/ProgrammeDetailsSidebar";
+import { entryGrid } from "../../../components/entryGrid";
 import {
   programmes,
   getDomain,
@@ -192,7 +193,7 @@ export default async function ProgrammeDetailPage({
             <h2 className="type-h2 text-neutral-900">
               Related Programmes in {domain.shortTitle}
             </h2>
-            <div className="mt-16 grid gap-x-12 gap-y-16 md:grid-cols-3">
+            <div className={`mt-16 grid gap-x-12 gap-y-16 ${entryGrid(related.length)}`}>
               {related.map((rel) => (
                 <ProgrammeCard key={rel.slug} programme={rel} />
               ))}

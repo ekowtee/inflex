@@ -26,6 +26,8 @@ All ten tasks are complete. No pull request opened, nothing merged.
 | Reduced motion: every page reads complete | **Yes.** Section 4. |
 | Screenshots at 1280 and 390 px | [docs/phase5/](docs/phase5/), 24 files. Index in Section 9. |
 
+Two routes this branch rewrote fall outside the brief's screenshot list and so were checked separately after the fact: `/resources` and `/case-studies/[id]`. Both pass every automated check above, and both turned up the grid problem recorded in Section 7.8.
+
 ---
 
 ## 2. Bundles
@@ -152,7 +154,9 @@ Note that `.gitignore:49` excludes `assets-src/unreferenced/`, by the project's 
 4. **The four pillar pages and the three service pages were each collapsed onto one shared layout** (`SolutionPage`, `ServicePage`). They were copies of one layout that had drifted apart in the details; as copies, the tokens would have had to be got right four and three times.
 5. **A dead status test was removed on the case-study detail page.** It compared `study.status` to a lower-case `"completed"` that `data.ts` never contains, so the delivered study rendered in the "in progress" amber. The pill went with the redesign; the bug went with it.
 6. **`/solutions`' photo strip was folded into the four domain entries.** The strip repeated the four domains that were already listed above it, as pictures with a red "Premium Solutions" label. Folding the photographs into the entries keeps every image and removes the duplication.
-7. **`PageHero` carries no scrim over the formation still.** The brief describes the still and the copy column overlapping. Measured across all five stills, the left 45% of the frame has a maximum luminance of 7 of 255, so the copy already has its contrast and a wash would only dim the object the band exists to show.
+7. **Five grids were made count-aware** (`components/entryGrid.ts`). Found by rendering `/resources` and `/case-studies/[id]`, which the brief's screenshot list did not cover and which nothing but tsc had seen. Several lists are shorter than the grid they sat in: there are two case studies, so "Related Case Studies" is always exactly one entry in three columns; two of the four Academy domains hold two programmes, so their catalogue and their "Related Programmes" under-fill too; and `/resources` has two whitepapers. Each left a row two-thirds empty, which reads as content that failed to load. The grid now stops where the entries do. Verified across fifteen routes: no grid anywhere has fewer children than columns.
+
+8. **`PageHero` carries no scrim over the formation still.** The brief describes the still and the copy column overlapping. Measured across all five stills, the left 45% of the frame has a maximum luminance of 7 of 255, so the copy already has its contrast and a wash would only dim the object the band exists to show.
 
 ---
 
