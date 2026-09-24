@@ -12,8 +12,8 @@
  *
  *   Beat 1        the sheet comes apart: noise rises, the ember line
  *                 goes out right to left.
- *   Beat 2        noise to order: the sheet resolves, bends deeper into its
- *                 S and the camera rises to see it in profile, the ember
+ *   Beat 2        noise to order: the sheet resolves, reshapes into y = x³
+ *                 and the camera rises to see it in profile, the ember
  *                 line relighting left to right at the inflection. Most important motion on the page,
  *                 spread across the whole beat so a fast scroller still sees
  *                 order arrive.
@@ -50,7 +50,7 @@ export interface SceneState {
   spread: number;
   /** Bloom intensity for the post stage. Rises only in the mark reveal. */
   bloom: number;
-  /** Beat 2: how much deeper the sheet bends into its S, 0 to 1 (z doubles at 1). */
+  /** Beat 2: how far the sheet has reshaped into y = x³, 0 to 1. */
   bend: number;
 }
 
