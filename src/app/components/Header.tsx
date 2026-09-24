@@ -81,10 +81,12 @@ export default function Header() {
   const pastDark = scrolled.path === pathname ? scrolled.past : false;
 
   // The dark register: only while a `data-header-dark` element is under the
-  // bar. The server can decide this for the home page, so there is no flash
-  // of a white bar over the hero on the first paint.
-  const [hasDark, setHasDark] = useState<{ path: string; value: boolean }>({ path: pathname, value: pathname === "/" });
-  const overDark = (hasDark.path === pathname ? hasDark.value : pathname === "/") && !pastDark;
+  // bar. Every marketing route opens on an Obsidian hero (the home arrival,
+  // PageHero on every interior page, the 404), so the server renders the
+  // dark bar and there is no white flash on the first paint. A page that
+  // ever opens light corrects it on mount.
+  const [hasDark, setHasDark] = useState<{ path: string; value: boolean }>({ path: pathname, value: true });
+  const overDark = (hasDark.path === pathname ? hasDark.value : true) && !pastDark;
 
   useEffect(() => {
     const darkElements = Array.from(document.querySelectorAll<HTMLElement>("[data-header-dark]"));
@@ -108,7 +110,7 @@ export default function Header() {
     window.addEventListener("resize", onScroll);
     onScroll();
     // Late-mounting pages: re-read whether a dark element exists.
-    if (Boolean(dark) !== (hasDark.path === pathname ? hasDark.value : pathname === "/")) {
+    if (Boolean(dark) !== (hasDark.path === pathname ? hasDark.value : true)) {
       requestAnimationFrame(() => setHasDark({ path: pathname, value: Boolean(dark) }));
     }
     return () => {
