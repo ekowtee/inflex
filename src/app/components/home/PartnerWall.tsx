@@ -19,7 +19,7 @@ import Reveal from "@/motion/Reveal";
 const columns = [
   {
     eyebrow: "Infrastructure partners",
-    caption: "Multi-vendor by design. The architecture serves you, not a quota.",
+    caption: "Multi-vendor by design. Fourteen infrastructure partners, and the choice is always the one that fits.",
     logos: [
       { src: "/assets/partners/cisco.svg", alt: "Cisco" },
       { src: "/assets/partners/huawei.svg", alt: "Huawei" },

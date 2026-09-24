@@ -9,12 +9,11 @@
  * world, and Obsidian is broken exactly once trust has been won:
  * 0-4 Obsidian, 5-6 Ivory, 8 Obsidian, 9 Ivory.
  *
- * The eight chapters that used to live here (StrategicPartnerSection,
- * ComprehensiveSolutions, InflexionsAdvantage, IntelligentAutomation,
- * AcademyPromo, MainPartners, CallToAction, and the Partners strip) are no
- * longer on the home page. Their files stay: Partners is still on /about and
- * /contact, MainPartners on /solutions, and Phase 4 removes the rest once the
- * owner has seen this page.
+ * The legacy home sections were retired in Phase 4 (24 September 2026):
+ * StrategicPartnerSection, ComprehensiveSolutions and its SwapGrid,
+ * InflexionsAdvantage, IntelligentAutomation, AcademyPromo and CallToAction
+ * are deleted, and their images moved to assets-src/unreferenced/.
+ * Partners stays for /about and /contact, MainPartners for /solutions.
  */
 import Arrival from "./components/home/Arrival";
 import TrustedBy from "./components/home/TrustedBy";

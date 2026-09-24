@@ -203,7 +203,7 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
     const narrow = window.innerWidth < 1024;
     store.opacity =
       narrow && sample.vh > 60
-        ? sample.opacity * Math.max(0.35, 1 - (sample.vh - 60) / 60)
+        ? sample.opacity * Math.max(0.35, 1 - (sample.vh - 60) / 60) * (1 - 0.4 * store.askEntry)
         : sample.opacity;
     if (sample.vh > BEAT_START_VH[2]) store.scrolledPastArrival = true;
 

@@ -12,10 +12,13 @@ const rubik = Rubik({
   variable: "--font-rubik",
   display: "swap",
   weight: ["400", "500", "600", "700"],
-  // Our own metric-matched "Rubik Metric" face follows the variable in
-  // every CSS stack (globals.css). It cannot be listed here: a family name
-  // with a space breaks the dev compiler's font query.
-  fallback: ["system-ui", "sans-serif"],
+  // No generic fallbacks here: they would end up inside --font-rubik ahead
+  // of our own metric-matched "Rubik Metric" face, which globals.css puts
+  // straight after the variable, and on machines without Arial (Linux,
+  // Android) the browser would stop at system-ui and never reach it. A
+  // family name with a space cannot be listed here either: it breaks the
+  // dev compiler's font query.
+  fallback: [],
   preload: true,
   adjustFontFallback: true,
 });
@@ -26,7 +29,7 @@ const krub = Krub({
   weight: ["500"],
   display: "swap",
   variable: "--font-krub",
-  fallback: ["system-ui", "sans-serif"],
+  fallback: [],
   preload: true,
   adjustFontFallback: true,
 });

@@ -18,6 +18,7 @@ export default function CaptureStage() {
   const params = useSearchParams();
   const formation = Math.min(5, Math.max(0, Number(params.get("formation") ?? 0)));
   const light = params.get("light") === "lit" ? "lit" : "unlit";
+  const bend = Math.min(1, Math.max(0, Number(params.get("bend") ?? 0)));
   const tier = params.get("tier") === "B" ? "B" : "A";
   const [ready, setReady] = useState(false);
 
@@ -60,6 +61,7 @@ export default function CaptureStage() {
       store.ground = formation === 1 || formation === 4 ? 1 : 0;
       store.scrolledPastArrival = true;
       store.heatGate = light === "lit" ? 1.3 : -0.3;
+      store.captureBend = bend;
       // The camera the page uses for this formation: the hero key for the
       // sheet, the pillar key while a pillar formation holds.
       store.scrollVh = formation >= 1 && formation <= 4 ? pillarHoldVh(formation) : 0;
@@ -67,7 +69,7 @@ export default function CaptureStage() {
     };
     hold();
     return () => cancelAnimationFrame(raf);
-  }, [formation, light]);
+  }, [formation, light, bend]);
 
   useEffect(() => {
     if (!ready) return;

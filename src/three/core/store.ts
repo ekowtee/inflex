@@ -54,6 +54,8 @@ export interface CoreStore {
    * fabric gathering back into the line, is driven from this instead.
    */
   askEntry: number;
+  /** Capture stage only: the Beat 2 bend to render (the page uses the track). */
+  captureBend: number;
 }
 
 export const store: CoreStore = {
@@ -75,6 +77,7 @@ export const store: CoreStore = {
   thread2X: 0,
   thread4X: 0,
   askEntry: 0,
+  captureBend: 0,
 };
 
 /** Reset to the arrival state. Used when the scene mounts and on route change. */

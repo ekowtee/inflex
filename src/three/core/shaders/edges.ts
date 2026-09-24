@@ -28,6 +28,7 @@ export const edgesVertex = stripGlsl(/* glsl */ `
   uniform float uNoise;
   uniform float uHeatGate;
   uniform float uSpread;
+  uniform float uBend;
   uniform float uIdle;
   uniform vec2 uPointerWorld;
   uniform float uProximity;
@@ -77,6 +78,8 @@ export const edgesVertex = stripGlsl(/* glsl */ `
     float m = smoothstep(0.0, 1.0, (uMix - seed * 0.35) / 0.65);
     vec3 pos = mix(from.xyz, to.xyz, m);
     float heat = mix(from.w, to.w, m);
+    // Identical to the node shader's bend.
+    if (uFrom == 0 && uTo == 0) pos.z *= 1.0 + uBend;
 
     float swirl = sin(m * 3.14159265) * 0.18;
     if (swirl > 0.0001) {
@@ -113,8 +116,13 @@ export const edgesVertex = stripGlsl(/* glsl */ `
     vHot = min(self.w, other.w);
     float key = dot(normalize(self.xyz + vec3(0.0001)), uKeyDir);
     vShade = 0.15 + 0.85 * smoothstep(-0.8, 0.9, key);
-    // Fade edges that a formation has stretched: 0.22 → 0.30 world units.
-    vStretch = 1.0 - smoothstep(0.22, 0.30, distance(self.xyz, other.xyz));
+    // Fade edges that a formation has stretched: 0.22 → 0.30 world units,
+    // tightening to 0.07 → 0.11 as the object becomes the mark, where any
+    // edge longer than the mesh spacing reads as a scratch across the logo.
+    float markness = uTo == 5 ? (uFrom == 5 ? 1.0 : uMix) : (uFrom == 5 ? 1.0 - uMix : 0.0);
+    float fadeFrom = mix(0.22, 0.07, markness);
+    float fadeTo = mix(0.30, 0.11, markness);
+    vStretch = 1.0 - smoothstep(fadeFrom, fadeTo, distance(self.xyz, other.xyz));
     vProx = 1.0 - smoothstep(0.35, 0.95, distance(self.xy, uPointerWorld));
     bool resting = uFrom == 0 && uTo == 0;
     vPresence = presence(self.xyz, resting);

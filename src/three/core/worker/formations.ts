@@ -19,6 +19,7 @@
  *     so the ember layer pass draws a prefix and never touches graphite;
  *   - edges with both ends in the first half come first, for the same reason.
  */
+import { MARK_H, MARK_MASK, MARK_W, MARK_HEAT } from "./markData";
 import { CORE_SEED, Simplex3, mulberry32 } from "./noise";
 
 export const NODE_COUNT = 16384;
@@ -367,6 +368,86 @@ function formationPlane(nodes: SheetNode[], noise: Simplex3): Placement[] {
   return placed.map(({ x, y, z, heat }) => ({ x, y, z, heat }));
 }
 
+// ─── formation 5: the mark ──────────────────────────────────────────────────
+
+function decodeBits(b64: string, length: number): Uint8Array {
+  const bin = typeof atob === "function" ? atob(b64) : Buffer.from(b64, "base64").toString("binary");
+  const out = new Uint8Array(length);
+  for (let i = 0; i < length; i += 1) out[i] = (bin.charCodeAt(i >> 3) >> (i & 7)) & 1;
+  return out;
+}
+
+function formationMark(nodes: SheetNode[], rand: () => number): Placement[] {
+  // The Inflexions mark, sampled from the traced logo (scripts/bake-mark.mjs):
+  // the grey X and the red figure's head, arm and stroke. The red parts carry
+  // the ember and stand a little proud of the grey. 2.6 units tall.
+  const mask = decodeBits(MARK_MASK, MARK_W * MARK_H);
+  const heatMap = decodeBits(MARK_HEAT, MARK_W * MARK_H);
+  const at = (grid: Uint8Array, x: number, y: number) => {
+    const gx = Math.min(MARK_W - 1, Math.max(0, Math.floor(x * MARK_W)));
+    const gy = Math.min(MARK_H - 1, Math.max(0, Math.floor(y * MARK_H)));
+    return grid[gy * MARK_W + gx] === 1;
+  };
+
+  // A hex grid over the unit square, spacing found by bisection so that at
+  // least NODE_COUNT points fall inside the mark; the surplus is thinned
+  // evenly. Deterministic: the jitter comes from the seeded generator.
+  const aspect = MARK_W / MARK_H;
+  const grid = (d: number) => {
+    const pts: Array<[number, number]> = [];
+    const dy = d * (Math.sqrt(3) / 2);
+    let row = 0;
+    for (let y = dy / 2; y < 1; y += dy, row += 1) {
+      for (let x = (row % 2 ? d / 2 : 0) + d / 4; x < 1; x += d / aspect) {
+        if (at(mask, x, y)) pts.push([x, y]);
+      }
+    }
+    return pts;
+  };
+  let lo = 0.0005;
+  let hi = 0.05;
+  for (let i = 0; i < 40; i += 1) {
+    const mid = (lo + hi) / 2;
+    if (grid(mid).length >= NODE_COUNT) lo = mid;
+    else hi = mid;
+  }
+  let pts = grid(lo);
+  const surplus = pts.length - NODE_COUNT;
+  if (surplus > 0) {
+    const step = pts.length / surplus;
+    const drop = new Set<number>();
+    for (let k = 0; k < surplus; k += 1) drop.add(Math.floor(k * step));
+    pts = pts.filter((_, i) => !drop.has(i));
+  }
+  pts = pts.slice(0, NODE_COUNT);
+
+  // Scanline assignment: sheet nodes and mark points both sorted by band,
+  // then across, so sheet neighbours land near each other on the mark.
+  const BANDS = 96;
+  const nodeOrder = nodes
+    .map((n, i) => ({ i, band: Math.min(BANDS - 1, Math.floor(((1 - n.y / SHEET_Y) / 2) * BANDS)), x: n.x }))
+    .sort((a, b) => a.band - b.band || a.x - b.x);
+  const ptOrder = pts
+    .map(([x, y], i) => ({ i, band: Math.min(BANDS - 1, Math.floor(y * BANDS)), x }))
+    .sort((a, b) => a.band - b.band || a.x - b.x);
+
+  const HEIGHT = 2.6;
+  const jitter = (0.35 / MARK_W) * HEIGHT;
+  const out: Placement[] = new Array(nodes.length);
+  nodeOrder.forEach((n, k) => {
+    const [mx, my] = pts[ptOrder[k].i];
+    const red = at(heatMap, mx, my);
+    out[n.i] = {
+      // 0.45 right of centre so the raised arm clears the copy column.
+      x: (mx - 0.5) * HEIGHT * aspect + 0.45 + (rand() - 0.5) * jitter,
+      y: (0.5 - my) * HEIGHT - 0.2 + (rand() - 0.5) * jitter,
+      z: (red ? 0.1 : 0) + (rand() - 0.5) * 0.03,
+      heat: red ? 1 : 0,
+    };
+  });
+  return out;
+}
+
 // ─── assembly with the ordering invariants ───────────────────────────────────
 
 export function generateCore(seed: number = CORE_SEED): CoreData {
@@ -384,7 +465,8 @@ export function generateCore(seed: number = CORE_SEED): CoreData {
   const f2 = formationShield(sheet);
   const f3 = formationNebula(sheet, rand, noise);
   const f4 = formationPlane(sheet, noise);
-  const formations = [f0, f1, f2, f3, f4];
+  const f5 = formationMark(sheet, rand);
+  const formations = [f0, f1, f2, f3, f4, f5];
 
   // Order: uniform halves (alternate by index), ember-capable first in each.
   // Ember-capable means able to glow ember: heat ≥ 0.5, the shaders' ember
@@ -409,16 +491,14 @@ export function generateCore(seed: number = CORE_SEED): CoreData {
 
   const positions = new Float32Array(NODE_COUNT * 4 * FORMATIONS);
   for (let f = 0; f < FORMATIONS; f += 1) {
-    // Formation 5 (the mark) is filled later by the silhouette sampler; until
-    // then it mirrors formation 0 so a premature morph is harmless.
-    const src = formations[Math.min(f, 4)];
+    const src = formations[f];
     for (let newIndex = 0; newIndex < NODE_COUNT; newIndex += 1) {
       const p = src[order[newIndex]];
       const o = (f * NODE_COUNT + newIndex) * 4;
       positions[o] = p.x;
       positions[o + 1] = p.y;
       positions[o + 2] = p.z;
-      positions[o + 3] = f === 5 ? 0 : p.heat;
+      positions[o + 3] = p.heat;
     }
   }
 

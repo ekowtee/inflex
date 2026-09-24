@@ -25,6 +25,7 @@ export const nodesVertex = stripGlsl(/* glsl */ `
   uniform float uNoise;
   uniform float uHeatGate;
   uniform float uSpread;
+  uniform float uBend;
   uniform float uIdle;
   uniform float uSize;
   uniform float uDpr;
@@ -41,6 +42,7 @@ export const nodesVertex = stripGlsl(/* glsl */ `
   out float vDepth;
   out float vPulse;
   out vec2 vPresence;
+  out float vMark;
 
   const float TAU = 6.28318530718;
   const int TEX_W = 128;
@@ -81,6 +83,9 @@ export const nodesVertex = stripGlsl(/* glsl */ `
     float m = smoothstep(0.0, 1.0, (uMix - aSeed * 0.35) / 0.65);
     vec3 pos = mix(from.xyz, to.xyz, m);
     float heat = mix(from.w, to.w, m);
+    // The turning point: the resting sheet bends deeper into its S-curve
+    // (z = 0.9 tanh 1.6x) so the inflection reads in profile.
+    if (uFrom == 0 && uTo == 0) pos.z *= 1.0 + uBend;
 
     // Swirl at mid-transition. A cheap sinusoidal curl-like field: three
     // orthogonal sines phase-shifted by time, scaled by sin(m·π) so it is
@@ -138,6 +143,7 @@ export const nodesVertex = stripGlsl(/* glsl */ `
     // scatter so it reads as embers rather than a marquee.
     vPulse = 0.85 + 0.15 * sin(uTime * 1.1 - from.y * 3.0 + aSeed * 1.2);
     vPresence = presence(mix(from.xyz, to.xyz, m), resting);
+    vMark = uTo == 5 ? (uFrom == 5 ? 1.0 : m) : (uFrom == 5 ? 1.0 - m : 0.0);
 
     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
     vDepth = -mvPosition.z;
@@ -160,6 +166,7 @@ export const nodesFragment = stripGlsl(/* glsl */ `
   in float vDepth;
   in float vPulse;
   in vec2 vPresence;
+  in float vMark;
 
   uniform vec3 uGraphite;
   uniform vec3 uSilver300;
@@ -213,7 +220,9 @@ export const nodesFragment = stripGlsl(/* glsl */ `
       if (uEmberHalo > 1.0) {
         // No bloom pass: a soft Gaussian halo, additive, stands in for it.
         // Many overlapping halos along the line sum into the glow.
-        float g = exp(-d * d * 18.0) * 0.16 * vPulse * uOpacity * vPresence.x;
+        // Tuned for a thin line: across the mark's broad red areas the halos
+        // pile up, so they fall away as the object becomes the mark.
+        float g = exp(-d * d * 18.0) * 0.16 * vPulse * uOpacity * vPresence.x * (1.0 - 0.8 * vMark);
         vec3 e = uEmber * g;
         if (uEncodeSRGB > 0.5) e = toSRGB(min(e, vec3(1.0)));
         fragColor = vec4(e, 0.0);
