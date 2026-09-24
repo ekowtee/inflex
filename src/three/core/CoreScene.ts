@@ -405,7 +405,13 @@ export class CoreScene {
             Math.min(1, Math.max(0, (b9 + 40 - this.vh) / 10))
           )
         );
-        const shift = -(key.lookAt.x - 0.45 * inAsk) * Math.max(inPillars, inAsk);
+        // The turning point's profile view sits right of the copy too.
+        const b2 = BEAT_START_VH[2];
+        const inTurn = Math.min(
+          Math.min(1, Math.max(0, (this.vh - b2) / 40)),
+          Math.min(1, Math.max(0, (b4 - 24 - this.vh) / 20))
+        );
+        const shift = -(key.lookAt.x - 0.45 * inAsk) * Math.max(inPillars, inAsk, inTurn);
         key.position.x += shift;
         key.lookAt.x += shift;
       } else if (aspect < 1.5 && inPillars > 0) {
@@ -484,6 +490,7 @@ export class CoreScene {
       u.uNoise.value = capture ? store.noise : track.noise;
       u.uHeatGate.value = gate;
       u.uSpread.value = capture ? 0 : spread;
+      u.uBend.value = capture ? store.captureBend : track.bend;
       u.uOpacity.value = store.opacity;
       u.uIdle.value = capture ? 0 : 1;
       u.uProximity.value = pointer.active && !capture ? 1 : 0;

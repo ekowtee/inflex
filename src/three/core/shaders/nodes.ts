@@ -25,6 +25,7 @@ export const nodesVertex = stripGlsl(/* glsl */ `
   uniform float uNoise;
   uniform float uHeatGate;
   uniform float uSpread;
+  uniform float uBend;
   uniform float uIdle;
   uniform float uSize;
   uniform float uDpr;
@@ -82,6 +83,9 @@ export const nodesVertex = stripGlsl(/* glsl */ `
     float m = smoothstep(0.0, 1.0, (uMix - aSeed * 0.35) / 0.65);
     vec3 pos = mix(from.xyz, to.xyz, m);
     float heat = mix(from.w, to.w, m);
+    // The turning point: the resting sheet bends deeper into its S-curve
+    // (z = 0.9 tanh 1.6x) so the inflection reads in profile.
+    if (uFrom == 0 && uTo == 0) pos.z *= 1.0 + uBend;
 
     // Swirl at mid-transition. A cheap sinusoidal curl-like field: three
     // orthogonal sines phase-shifted by time, scaled by sin(m·π) so it is

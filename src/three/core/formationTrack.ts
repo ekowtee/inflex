@@ -12,8 +12,9 @@
  *
  *   Beat 1        the sheet comes apart: noise rises, the ember line
  *                 goes out right to left.
- *   Beat 2        noise to order: the sheet resolves and the ember line
- *                 relights left to right. Most important motion on the page,
+ *   Beat 2        noise to order: the sheet resolves, bends deeper into its
+ *                 S and the camera rises to see it in profile, the ember
+ *                 line relighting left to right at the inflection. Most important motion on the page,
  *                 spread across the whole beat so a fast scroller still sees
  *                 order arrive.
  *   Beat 3        rest (the Core is at 0.3 behind the proof).
@@ -49,6 +50,8 @@ export interface SceneState {
   spread: number;
   /** Bloom intensity for the post stage. Rises only in the mark reveal. */
   bloom: number;
+  /** Beat 2: how much deeper the sheet bends into its S, 0 to 1 (z doubles at 1). */
+  bend: number;
 }
 
 /** Resting bloom, and its peak in the mark reveal (SCROLL_NARRATIVE.md §6 Beat 8). */
@@ -88,7 +91,7 @@ export function sceneStateAt(vh: number): SceneState {
   const b8 = BEAT_START_VH[8];
   const b9 = BEAT_START_VH[9];
 
-  const rest: SceneState = { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0, spread: 0, bloom: BLOOM_REST };
+  const rest: SceneState = { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0, spread: 0, bloom: BLOOM_REST, bend: 0 };
 
   // ─── Beats 0 to 3: the sheet, its unmaking and its resolve ─────────────
   if (vh < b3 - 20) {
@@ -101,11 +104,24 @@ export function sceneStateAt(vh: number): SceneState {
     // order, over its last two thirds.
     const span = b3 - 20 - b2;
     const t = (vh - b2) / span;
-    return { ...rest, noise: 0.35 * (1 - smooth(t / 0.8)), gate: lerp(-0.3, 1.3, smooth((t - 0.3) / 0.6)) };
+    return {
+      ...rest,
+      // The chapter's heading reaches the top of the screen about a fifth of
+      // the way through the beat, so order arrives by then: the tangle
+      // resolves as the heading rises, and the S and the relit line are
+      // there to read beside it.
+      noise: 0.35 * (1 - smooth(t / 0.25)),
+      gate: lerp(-0.3, 1.3, smooth((t - 0.08) / 0.27)),
+      bend: smooth((t - 0.04) / 0.26),
+    };
   }
 
   // ─── into and through the pillars ──────────────────────────────────────
   if (vh < b5 + 30) {
+    // The bend holds through the proof and relaxes before the lattice
+    // morph begins, where the resting sheet (and so the bend) ends.
+    const bend = 1 - smooth((vh - (b4 - 64)) / 38);
+    if (vh < b4 - 24) return { ...rest, bend };
     // Boundaries where formation k hands to k+1: the first sits 20 vh before
     // the pin so the lattice is already forming as the chapter arrives.
     const boundaries = [b4 - 4, b4 + PILLAR_VH, b4 + PILLAR_VH * 2, b4 + PILLAR_VH * 3];

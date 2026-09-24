@@ -335,7 +335,7 @@ At a typical scroll pace the journey is 75 to 95 seconds. Total copy on the page
 | 5 | AI row | AI in every layer · Intelligence is not a feature. It is the fabric. · Predictive Analytics · Process Automation · Data Strategy & Architecture · AI Integration | A; terms existing |
 | 5 | Exit | Why enterprises choose us → | A |
 | 6 | Eyebrows | Infrastructure partners / Intelligence partners | A |
-| 6 | Captions | Multi-vendor by design. The architecture serves you, not a quota. / Frontier AI labs alongside the infrastructure vendors. Few regional integrators can show both columns. | A |
+| 6 | Captions | Multi-vendor by design. Fourteen infrastructure partners, and the choice is always the one that fits. / Frontier AI labs alongside the infrastructure vendors. Few regional integrators can show both columns. | A |
 | 8 | Eyebrow | Every engagement is an inflection point. | Approved |
 | 8 | H2 | Stop Patching. Start Performing. | Approved |
 | 8 | Offer | Book a 30-minute architecture review. With a Solutions Architect, not a salesperson. No pitch. You leave with a written view of what to fix first. | Confirmed |

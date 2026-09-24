@@ -28,6 +28,7 @@ export const edgesVertex = stripGlsl(/* glsl */ `
   uniform float uNoise;
   uniform float uHeatGate;
   uniform float uSpread;
+  uniform float uBend;
   uniform float uIdle;
   uniform vec2 uPointerWorld;
   uniform float uProximity;
@@ -77,6 +78,8 @@ export const edgesVertex = stripGlsl(/* glsl */ `
     float m = smoothstep(0.0, 1.0, (uMix - seed * 0.35) / 0.65);
     vec3 pos = mix(from.xyz, to.xyz, m);
     float heat = mix(from.w, to.w, m);
+    // Identical to the node shader's bend.
+    if (uFrom == 0 && uTo == 0) pos.z *= 1.0 + uBend;
 
     float swirl = sin(m * 3.14159265) * 0.18;
     if (swirl > 0.0001) {

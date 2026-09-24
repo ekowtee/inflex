@@ -10,11 +10,13 @@
  * Two doors, not two cards. One band framed by a hairline above and below
  * and split by a single hairline between the halves; each half is one link
  * from edge to edge. No shadow, no accent border, no container inside a
- * container. The door answers the pointer as a surface: the half warms, the
+ * container. The frame draws itself open as the section comes into view
+ * (DoorFrame.tsx). The door answers the pointer as a surface: the half warms, the
  * link underlines and the arrow travels up and out.
  */
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import DoorFrame from "./DoorFrame";
 
 const doors = [
   {
@@ -43,36 +45,40 @@ export default function SideDoors() {
       aria-label="Academy and careers"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid border-y border-neutral-200 md:grid-cols-2 md:divide-x md:divide-neutral-200 max-md:divide-y max-md:divide-neutral-200">
-          {doors.map((door) => (
-            <Link
-              key={door.href}
-              href={door.href}
-              // Equal inset on every side of both doors, so the text sits
-              // the same distance from the frame, the divider and the hover
-              // surface.
-              className="group relative flex flex-col px-6 py-12 md:min-h-[21rem] transition-colors duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] hover:bg-[#F4F5F7] focus-visible:bg-[#F4F5F7] sm:px-10 md:py-16 lg:px-14"
-            >
-              <span className="type-telemetry text-neutral-500">{door.label}</span>
-              <span className="type-h2 mt-6 block max-w-[18ch] text-neutral-900">
-                {door.title}
-              </span>
-              <span className="type-body-l mt-6 block max-w-[46ch] text-neutral-600">
-                {door.body}
-              </span>
-              <span className="mt-auto flex items-center justify-between gap-6 pt-12">
-                <span className="type-body font-semibold text-neutral-900 underline decoration-transparent decoration-1 underline-offset-[6px] transition-[text-decoration-color] duration-[var(--motion-duration-ui)] group-hover:decoration-neutral-900">
-                  {door.link}
+        <DoorFrame>
+          <div className="grid md:grid-cols-2 max-md:divide-y max-md:divide-neutral-200">
+            {doors.map((door) => (
+              <Link
+                key={door.href}
+                href={door.href}
+                // Equal inset on every side of both doors, so the text sits
+                // the same distance from the frame, the divider and the hover
+                // surface.
+                className="group relative flex flex-col px-6 py-12 md:min-h-[21rem] transition-colors duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] hover:bg-[#F4F5F7] focus-visible:bg-[#F4F5F7] sm:px-10 md:py-16 lg:px-14"
+              >
+                <span className="type-telemetry text-neutral-500">
+                  {door.label}
                 </span>
-                <ArrowUpRight
-                  aria-hidden="true"
-                  strokeWidth={1.5}
-                  className="h-7 w-7 shrink-0 text-neutral-900 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] group-hover:-translate-y-1 group-hover:translate-x-1"
-                />
-              </span>
-            </Link>
-          ))}
-        </div>
+                <span className="type-h2 mt-6 block max-w-[18ch] text-neutral-900">
+                  {door.title}
+                </span>
+                <span className="type-body-l mt-6 block max-w-[46ch] text-neutral-600">
+                  {door.body}
+                </span>
+                <span className="mt-auto flex items-center justify-between gap-6 pt-12">
+                  <span className="type-body font-semibold text-neutral-900 underline decoration-transparent decoration-1 underline-offset-[6px] transition-[text-decoration-color] duration-[var(--motion-duration-ui)] group-hover:decoration-neutral-900">
+                    {door.link}
+                  </span>
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    strokeWidth={1.5}
+                    className="h-7 w-7 shrink-0 text-neutral-900 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] group-hover:-translate-y-1 group-hover:translate-x-1"
+                  />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </DoorFrame>
       </div>
     </section>
   );

@@ -4,15 +4,22 @@ import { sceneStateAt, pillarHoldVh, PILLAR_FORMATION, PILLAR_VH } from "../form
 import { BEAT_START_VH } from "../timeline";
 
 test("the hero is the resting sheet, lit, with no noise", () => {
-  assert.deepEqual(sceneStateAt(0), { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0, spread: 0, bloom: 0.55 });
+  assert.deepEqual(sceneStateAt(0), { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0, spread: 0, bloom: 0.55, bend: 0 });
 });
 
 test("Beat 1 unmakes the sheet and Beat 2 resolves it", () => {
   const start2 = sceneStateAt(BEAT_START_VH[2]);
   assert.ok(Math.abs(start2.noise - 0.35) < 1e-6, `noise at Beat 2 start ${start2.noise}`);
   assert.ok(start2.gate < -0.29, "ember is out at the start of the resolve");
-  const late2 = sceneStateAt(BEAT_START_VH[3] - 21);
-  assert.ok(late2.noise < 0.01 && late2.gate > 1.25, "resolved and relit before the proof");
+  const early2 = sceneStateAt(BEAT_START_VH[2] + 32);
+  assert.ok(early2.noise < 0.01 && early2.gate > 1.25 && early2.bend > 0.99, "resolved, bent and relit as the heading reaches the top");
+});
+
+test("the sheet bends into its S over the resolve and relaxes before the lattice", () => {
+  assert.equal(sceneStateAt(BEAT_START_VH[2]).bend, 0);
+  assert.ok(sceneStateAt(BEAT_START_VH[3] - 21).bend > 0.95);
+  assert.ok(sceneStateAt(BEAT_START_VH[3] + 40).bend > 0.99, "held through the proof");
+  assert.equal(sceneStateAt(BEAT_START_VH[4] - 24).bend, 0, "flat again before the morph");
 });
 
 test("each pillar formation holds, whole, with its ground", () => {
