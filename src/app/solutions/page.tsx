@@ -72,7 +72,7 @@ export default function SolutionsPage() {
       <PageHero
         title="Solutions Engineered for Uptime"
         lead="Accelerate your digital transformation with integrated infrastructure, cloud, security, and AI-powered data solutions."
-        coreSlot
+        formation={0}
       />
 
       {/* The opening statement, and the three photographs that used to sit

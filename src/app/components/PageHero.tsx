@@ -28,7 +28,8 @@ import type { ReactNode } from "react";
  */
 
 /** The formations captured by scripts/capture-posters.mjs. */
-export type Formation = 1 | 2 | 3 | 4 | 5 | "none";
+/** 0 is the resting sheet, the one structure the four pillars are made from. */
+export type Formation = 0 | 1 | 2 | 3 | 4 | 5 | "none";
 
 /* The intrinsic size of the mobile still, which is the <img> the sources
    fall back to; the desktop stills are 1920 x 1080. */
@@ -42,8 +43,6 @@ export interface PageHeroProps {
   formation?: Formation;
   /** Programme and case-study detail pages open shorter. */
   size?: "default" | "compact";
-  /** /solutions only: leaves the right half for the live Core. */
-  coreSlot?: boolean;
   /** Page-specific content under the lead, above the call to action. */
   children?: ReactNode;
 }
@@ -81,7 +80,6 @@ export default function PageHero({
   cta,
   formation = "none",
   size = "default",
-  coreSlot = false,
   children,
 }: PageHeroProps) {
   const height = size === "compact" ? "min-h-[56svh]" : "min-h-[80svh]";
@@ -92,11 +90,7 @@ export default function PageHero({
       data-header-dark=""
       className={`band-obsidian on-obsidian relative w-full overflow-hidden ${height}`}
     >
-      {coreSlot ? (
-        <div data-core-slot className="absolute inset-0" aria-hidden="true" />
-      ) : (
-        formation !== "none" && <FormationStill formation={formation} />
-      )}
+      {formation !== "none" && <FormationStill formation={formation} />}
 
       <div
         className={`relative z-[1] mx-auto flex ${height} max-w-7xl flex-col justify-end px-4 pb-16 pt-28 sm:px-6 md:justify-center md:pb-20 lg:px-8`}
