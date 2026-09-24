@@ -347,8 +347,23 @@ export class CoreScene {
     // The fabric gathers back into the line as the ask comes into view.
     if (capture) this.entry = 0;
     else this.entry += (store.askEntry - this.entry) * (1 - Math.exp(-dt / 0.22));
-    const e = this.entry * this.entry * (3 - 2 * this.entry);
+    const sm = (t: number) => {
+      const x = Math.min(1, Math.max(0, t));
+      return x * x * (3 - 2 * x);
+    };
+    // Below lg the ask is not pinned, so there is no scroll after its entry
+    // to morph over: both steps run on the entry, the gather over its first
+    // half and the line becoming the mark over its second.
+    const narrow = this.width < 1024;
+    const e = narrow ? sm(this.entry * 2) : sm(this.entry);
     const spread = track.spread * (1 - e);
+    if (narrow && !capture && this.entry > 0.5 && track.to !== 5) {
+      const t = sm((this.entry - 0.5) * 2);
+      track.from = 0;
+      track.to = 5;
+      track.mix = t;
+      track.bloom += (0.9 - track.bloom) * t;
+    }
 
     // ─── the ember gate: the arrival light, then the page's own track ─────
     let gate: number;
@@ -376,8 +391,21 @@ export class CoreScene {
         // Portrait: the pillar keys push each formation right of the
         // desktop copy column, which on a phone put it half off the
         // screen. There the copy runs over or above the object, so the
-        // pillars are centred.
-        const shift = -key.lookAt.x * inPillars;
+        // pillars are centred; so is the mark in the ask, which then sits
+        // behind the offer as a watermark at the phone's dimmed opacity.
+        const b8 = BEAT_START_VH[8];
+        const b9 = BEAT_START_VH[9];
+        // On a phone the ask is reached by its entry, not by the timeline,
+        // which holds on the chapter above until the ask's top arrives.
+        const byEntry = Math.min(1, Math.max(0, (this.entry - 0.45) * 4));
+        const inAsk = Math.max(
+          byEntry,
+          Math.min(
+            Math.min(1, Math.max(0, (this.vh - (b8 - 10)) / 10)),
+            Math.min(1, Math.max(0, (b9 + 40 - this.vh) / 10))
+          )
+        );
+        const shift = -(key.lookAt.x - 0.45 * inAsk) * Math.max(inPillars, inAsk);
         key.position.x += shift;
         key.lookAt.x += shift;
       } else if (aspect < 1.5 && inPillars > 0) {
@@ -480,7 +508,7 @@ export class CoreScene {
     this.hiddenCleared = false;
     const gl = this.renderer;
     if (this.post) {
-      this.post.render(this.scene, cam, time, store.bloom, this.setEmberPass);
+      this.post.render(this.scene, cam, time, capture ? store.bloom : track.bloom, this.setEmberPass);
     } else {
       gl.setRenderTarget(null);
       gl.setClearColor(palette.obsidian900, 1);

@@ -4,7 +4,7 @@ import { sceneStateAt, pillarHoldVh, PILLAR_FORMATION, PILLAR_VH } from "../form
 import { BEAT_START_VH } from "../timeline";
 
 test("the hero is the resting sheet, lit, with no noise", () => {
-  assert.deepEqual(sceneStateAt(0), { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0, spread: 0 });
+  assert.deepEqual(sceneStateAt(0), { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0, spread: 0, bloom: 0.55 });
 });
 
 test("Beat 1 unmakes the sheet and Beat 2 resolves it", () => {
@@ -48,18 +48,29 @@ test("warmth spreads through the sheet in the intelligence band only", () => {
   const mid = sceneStateAt(BEAT_START_VH[5.5]).spread;
   assert.ok(mid > 0.4 && mid < 0.8, `spread at the band's top is ${mid}`);
   assert.equal(sceneStateAt(BEAT_START_VH[5.5] + 40).spread, 1);
-  // Still spread through the ask on the track; the scene gathers it on the
-  // chapter's entry.
-  assert.equal(sceneStateAt(BEAT_START_VH[8]).spread, 1);
-  assert.equal(sceneStateAt(BEAT_START_VH[8] + 95).spread, 1);
-  assert.equal(sceneStateAt(BEAT_START_VH[9] + 5).spread, 0);
+  // Spread right up to the ask; the scene gathers it on the chapter's entry,
+  // and in the ask the object is no longer the resting sheet.
+  assert.equal(sceneStateAt(BEAT_START_VH[8] - 1).spread, 1);
+  assert.equal(sceneStateAt(BEAT_START_VH[8] + 5).spread, 0);
   assert.equal(sceneStateAt(BEAT_START_VH[4] + 50).spread, 0);
 });
 
-test("after the pillars the sheet is back for the intelligence band and the ask", () => {
-  for (const b of [5.5, 8]) {
-    const s = sceneStateAt(BEAT_START_VH[b] + 5);
-    assert.equal(s.from, 0);
-    assert.equal(s.to, 0);
+test("after the pillars the sheet is back for the intelligence band", () => {
+  const s = sceneStateAt(BEAT_START_VH[5.5] + 5);
+  assert.equal(s.from, 0);
+  assert.equal(s.to, 0);
+});
+
+test("the ask morphs the line into the mark and raises bloom to its peak", () => {
+  const start = sceneStateAt(BEAT_START_VH[8] + 2);
+  assert.equal(start.to, 5);
+  assert.ok(start.mix < 0.01 && Math.abs(start.bloom - 0.55) < 1e-6);
+  const done = sceneStateAt(BEAT_START_VH[8] + 75);
+  assert.ok(done.mix > 0.99 && Math.abs(done.bloom - 0.9) < 1e-6);
+  const doors = sceneStateAt(BEAT_START_VH[9] + 10);
+  assert.equal(doors.to, 5, "held through the doors while the Core fades");
+  for (let vh = 0; vh < BEAT_START_VH[9] + 60; vh += 1) {
+    const s = sceneStateAt(vh);
+    assert.ok(s.bloom <= 0.9 + 1e-6 && (s.bloom === 0.55 || s.to === 5), `bloom rises only in the reveal (${vh})`);
   }
 });

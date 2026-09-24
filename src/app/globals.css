@@ -439,6 +439,18 @@ html[data-core-live] [data-pillar-poster] {
     position: sticky;
     top: 0;
   }
+
+  /* The ask holds for one screen while the ember line becomes the mark
+     (formationTrack.ts). overflow must be visible or the section becomes
+     the sticky element's scroll container and nothing sticks. */
+  [data-beat="8"] {
+    min-height: 200svh;
+    overflow: visible;
+  }
+  [data-beat="8"] > div {
+    position: sticky;
+    top: 0;
+  }
 }
 
 /* The strike is a statement, not an animation: without motion it is simply

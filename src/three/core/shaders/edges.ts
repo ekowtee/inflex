@@ -113,8 +113,13 @@ export const edgesVertex = stripGlsl(/* glsl */ `
     vHot = min(self.w, other.w);
     float key = dot(normalize(self.xyz + vec3(0.0001)), uKeyDir);
     vShade = 0.15 + 0.85 * smoothstep(-0.8, 0.9, key);
-    // Fade edges that a formation has stretched: 0.22 → 0.30 world units.
-    vStretch = 1.0 - smoothstep(0.22, 0.30, distance(self.xyz, other.xyz));
+    // Fade edges that a formation has stretched: 0.22 → 0.30 world units,
+    // tightening to 0.07 → 0.11 as the object becomes the mark, where any
+    // edge longer than the mesh spacing reads as a scratch across the logo.
+    float markness = uTo == 5 ? (uFrom == 5 ? 1.0 : uMix) : (uFrom == 5 ? 1.0 - uMix : 0.0);
+    float fadeFrom = mix(0.22, 0.07, markness);
+    float fadeTo = mix(0.30, 0.11, markness);
+    vStretch = 1.0 - smoothstep(fadeFrom, fadeTo, distance(self.xyz, other.xyz));
     vProx = 1.0 - smoothstep(0.35, 0.95, distance(self.xy, uPointerWorld));
     bool resting = uFrom == 0 && uTo == 0;
     vPresence = presence(self.xyz, resting);

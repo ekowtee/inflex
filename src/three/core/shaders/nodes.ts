@@ -41,6 +41,7 @@ export const nodesVertex = stripGlsl(/* glsl */ `
   out float vDepth;
   out float vPulse;
   out vec2 vPresence;
+  out float vMark;
 
   const float TAU = 6.28318530718;
   const int TEX_W = 128;
@@ -138,6 +139,7 @@ export const nodesVertex = stripGlsl(/* glsl */ `
     // scatter so it reads as embers rather than a marquee.
     vPulse = 0.85 + 0.15 * sin(uTime * 1.1 - from.y * 3.0 + aSeed * 1.2);
     vPresence = presence(mix(from.xyz, to.xyz, m), resting);
+    vMark = uTo == 5 ? (uFrom == 5 ? 1.0 : m) : (uFrom == 5 ? 1.0 - m : 0.0);
 
     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
     vDepth = -mvPosition.z;
@@ -160,6 +162,7 @@ export const nodesFragment = stripGlsl(/* glsl */ `
   in float vDepth;
   in float vPulse;
   in vec2 vPresence;
+  in float vMark;
 
   uniform vec3 uGraphite;
   uniform vec3 uSilver300;
@@ -213,7 +216,9 @@ export const nodesFragment = stripGlsl(/* glsl */ `
       if (uEmberHalo > 1.0) {
         // No bloom pass: a soft Gaussian halo, additive, stands in for it.
         // Many overlapping halos along the line sum into the glow.
-        float g = exp(-d * d * 18.0) * 0.16 * vPulse * uOpacity * vPresence.x;
+        // Tuned for a thin line: across the mark's broad red areas the halos
+        // pile up, so they fall away as the object becomes the mark.
+        float g = exp(-d * d * 18.0) * 0.16 * vPulse * uOpacity * vPresence.x * (1.0 - 0.8 * vMark);
         vec3 e = uEmber * g;
         if (uEncodeSRGB > 0.5) e = toSRGB(min(e, vec3(1.0)));
         fragColor = vec4(e, 0.0);

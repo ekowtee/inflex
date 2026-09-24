@@ -29,8 +29,9 @@
  *                 line through the whole sheet ("it is the fabric"), rising
  *                 while the band comes up and holding until it leaves.
  *   Beat 8        the ask: the warmth gathers back into the line as the
- *                 chapter comes into view (store.askEntry), finished once
- *                 it fills the screen. The object's last motion on the page.
+ *                 chapter comes into view (store.askEntry), then, over the
+ *                 pinned chapter, the line becomes the Inflexions mark and
+ *                 bloom rises to its only peak. The page's visual full stop.
  */
 import { BEAT_START_VH } from "./timeline";
 
@@ -46,7 +47,13 @@ export interface SceneState {
   ground: number;
   /** Beat 5.5: how far warmth has spread from the line through the sheet, 0 to 1. */
   spread: number;
+  /** Bloom intensity for the post stage. Rises only in the mark reveal. */
+  bloom: number;
 }
+
+/** Resting bloom, and its peak in the mark reveal (SCROLL_NARRATIVE.md §6 Beat 8). */
+export const BLOOM_REST = 0.55;
+export const BLOOM_REVEAL = 0.9;
 
 /** Row i of the pinned chapter shows formation PILLAR_FORMATION[i]. */
 export const PILLAR_FORMATION: readonly FormationIndex[] = [1, 2, 3, 4];
@@ -78,9 +85,10 @@ export function sceneStateAt(vh: number): SceneState {
   const b4 = BEAT_START_VH[4];
   const b5 = BEAT_START_VH[5];
   const b55 = BEAT_START_VH[5.5];
+  const b8 = BEAT_START_VH[8];
   const b9 = BEAT_START_VH[9];
 
-  const rest: SceneState = { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0, spread: 0 };
+  const rest: SceneState = { from: 0, to: 0, mix: 0, noise: 0, gate: 1.3, ground: 0, spread: 0, bloom: BLOOM_REST };
 
   // ─── Beats 0 to 3: the sheet, its unmaking and its resolve ─────────────
   if (vh < b3 - 20) {
@@ -127,8 +135,18 @@ export function sceneStateAt(vh: number): SceneState {
   // gathering back into the line runs on the ask's entry (store.askEntry,
   // applied in the scene), not on the timeline, which holds still while a
   // chapter comes into view.
-  if (vh >= b55 - 40 && vh < b9) {
+  if (vh >= b55 - 40 && vh < b8) {
     return { ...rest, spread: smooth((vh - (b55 - 40)) / 70) };
+  }
+
+  // ─── the ask: the line becomes the mark ────────────────────────────────
+  // The chapter is pinned on desktop for one screen past its entry. The
+  // warmth has gathered back into the line on the way in (the scene, on
+  // store.askEntry); over the pin the line morphs into the mark and bloom
+  // rises to its one peak. Held through the doors while the Core fades.
+  if (vh >= b8 && vh < b9 + 40) {
+    const t = smooth((vh - (b8 + 6)) / 64);
+    return { ...rest, to: 5, mix: t, bloom: BLOOM_REST + (BLOOM_REVEAL - BLOOM_REST) * t };
   }
 
   // ─── otherwise: hidden, reset to the sheet ─────────────────────────────

@@ -54,7 +54,7 @@ test("formation-0 ember line is about six percent of nodes", () => {
 });
 
 test("every formation has some ember and stays within a sane bound", () => {
-  for (let f = 0; f < 5; f += 1) {
+  for (let f = 0; f < 6; f += 1) {
     let hot = 0;
     let far = 0;
     for (let i = 0; i < NODE_COUNT; i += 1) {
@@ -69,7 +69,7 @@ test("every formation has some ember and stays within a sane bound", () => {
 
 test("ember-capable nodes form a prefix of each half", () => {
   const capable = (i: number) => {
-    for (let f = 0; f < 5; f += 1) if (pos(f, i)[3] >= 0.5) return true;
+    for (let f = 0; f < 6; f += 1) if (pos(f, i)[3] >= 0.5) return true;
     return false;
   };
   for (let i = 0; i < HALF; i += 1) {
