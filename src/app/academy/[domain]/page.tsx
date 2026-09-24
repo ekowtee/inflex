@@ -4,7 +4,7 @@ import { CheckCircle, ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import AcademyHero from "../../components/AcademyHero";
 import ProgrammeCard from "../../components/ProgrammeCard";
-import Banner from "../../components/Banner";
+import AskBand from "../../components/AskBand";
 import Image from "next/image";
 import {
   domains,
@@ -173,7 +173,7 @@ export default async function DomainPage({
         </section>
       )}
 
-      <Banner />
+      <AskBand />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import AcademyHero from "../components/AcademyHero";
 import AudienceSwitcher from "../components/AudienceSwitcher";
 import DomainCard from "../components/DomainCard";
 import ProgrammeCard from "../components/ProgrammeCard";
-import Banner from "../components/Banner";
+import AskBand from "../components/AskBand";
 import {
   domains,
   getFeaturedProgrammes,
@@ -147,7 +147,7 @@ export default function AcademyLandingPage() {
         </div>
       </section>
 
-      <Banner />
+      <AskBand />
     </div>
   );
 }

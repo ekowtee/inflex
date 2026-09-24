@@ -1,5 +1,5 @@
 import Blog from "../components/Blog";
-import Banner from "../components/Banner";
+import AskBand from "../components/AskBand";
 import Reveal from "@/motion/Reveal";
 import Image from "next/image";
 
@@ -174,7 +174,7 @@ export default function ResourcesPage() {
       </div>
 
       <Blog />
-      <Banner />
+      <AskBand />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import AcademyHero from "../../../components/AcademyHero";
 import CurriculumAccordion from "../../../components/CurriculumAccordion";
 import ProgrammeDetailsSidebar from "../../../components/ProgrammeDetailsSidebar";
 import ProgrammeCard from "../../../components/ProgrammeCard";
-import Banner from "../../../components/Banner";
+import AskBand from "../../../components/AskBand";
 import JsonLd from "../../../components/JsonLd";
 import {
   programmes,
@@ -196,7 +196,7 @@ export default async function ProgrammeDetailPage({
         </section>
       )}
 
-      <Banner />
+      <AskBand />
     </div>
   );
 }

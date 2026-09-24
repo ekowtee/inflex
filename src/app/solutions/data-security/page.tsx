@@ -1,6 +1,6 @@
 "use client";
 
-import Banner from "../../components/Banner";
+import AskBand from "../../components/AskBand";
 import SolutionPartners from "../../components/SolutionPartners";
 import RelatedTraining from "../../components/RelatedTraining";
 import Link from "next/link";
@@ -150,8 +150,7 @@ export default function DataSecurityPage() {
       {/* Related Training */}
       <RelatedTraining solutionSlug="data-security" />
 
-      {/* CTA Banner */}
-      <Banner />
+      <AskBand />
     </div>
   );
 }

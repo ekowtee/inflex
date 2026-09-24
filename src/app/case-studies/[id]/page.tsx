@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { caseStudies } from "../../data";
-import Banner from "../../components/Banner";
+import AskBand from "../../components/AskBand";
 import Image from "next/image";
 
 export default function CaseStudyDetailPage() {
@@ -221,7 +221,7 @@ export default function CaseStudyDetailPage() {
         </section>
       )}
 
-      <Banner />
+      <AskBand />
     </>
   );
 }

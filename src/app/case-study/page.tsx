@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { caseStudies } from "../data";
-import Banner from "../components/Banner";
+import AskBand from "../components/AskBand";
 import Image from "next/image";
 
 export default function CaseStudyPage() {
@@ -97,7 +97,7 @@ export default function CaseStudyPage() {
         </div>
       </section>
 
-      <Banner />
+      <AskBand />
     </div>
   );
 }

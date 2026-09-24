@@ -1,5 +1,5 @@
 import MainPartners from "../components/MainPartners";
-import Banner from "../components/Banner";
+import AskBand from "../components/AskBand";
 import Reveal from "@/motion/Reveal";
 import Image from "next/image";
 
@@ -246,7 +246,7 @@ export default function SolutionsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <MainPartners />
       </div>
-      <Banner />
+      <AskBand />
     </div>
   );
 }

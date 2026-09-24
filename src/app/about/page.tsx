@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Partners from "../components/Partners";
-import Banner from "../components/Banner";
+import AskBand from "../components/AskBand";
 import Leaders from "../components/Leaders";
 import Reveal from "@/motion/Reveal";
 import Image from "next/image";
@@ -315,7 +315,7 @@ export default function AboutPage() {
             </span>
           </div>
         </div>
-        <Banner />
+        <AskBand />
       </section>
     </>
   );

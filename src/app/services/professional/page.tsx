@@ -1,6 +1,6 @@
 "use client";
 
-import Banner from "../../components/Banner";
+import AskBand from "../../components/AskBand";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 import Image from "next/image";
@@ -151,8 +151,7 @@ export default function ProfessionalServicesPage() {
         </div>
       </section>
 
-      {/* CTA Banner */}
-      <Banner />
+      <AskBand />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import Banner from "../components/Banner";
+import AskBand from "../components/AskBand";
 import Reveal from "@/motion/Reveal";
 import Image from "next/image";
 
@@ -232,7 +232,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <Banner />
+      <AskBand />
     </div>
   );
 }

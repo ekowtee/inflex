@@ -1,6 +1,6 @@
 "use client";
 
-import Banner from "../../components/Banner";
+import AskBand from "../../components/AskBand";
 import SolutionPartners from "../../components/SolutionPartners";
 import RelatedTraining from "../../components/RelatedTraining";
 import Link from "next/link";
@@ -153,8 +153,7 @@ export default function CloudServicesPage() {
       {/* Related Training */}
       <RelatedTraining solutionSlug="cloud-services" />
 
-      {/* CTA Banner */}
-      <Banner />
+      <AskBand />
     </div>
   );
 }

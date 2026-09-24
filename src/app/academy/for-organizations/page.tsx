@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import AcademyHero from "../../components/AcademyHero";
 import DomainCard from "../../components/DomainCard";
-import Banner from "../../components/Banner";
+import AskBand from "../../components/AskBand";
 import { domains } from "../data";
 
 export const metadata: Metadata = {
@@ -352,7 +352,7 @@ export default function ForOrganizationsPage() {
         </div>
       </section>
 
-      <Banner />
+      <AskBand />
     </div>
   );
 }
