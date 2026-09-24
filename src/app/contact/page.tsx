@@ -1,97 +1,34 @@
-"use client";
-
-import { useRef, useState } from "react";
-import Script from "next/script";
+/**
+ * /contact — PHASE5_BRIEF.md §4 Task 8.
+ *
+ * The page where the offer is either kept or broken, so its copy is the
+ * approved copy (SCROLL_NARRATIVE.md §7) and its form asks the one question
+ * the offer promises to come prepared for.
+ *
+ * What went: a stock photograph behind the H1, a solid red block holding the
+ * form with white-outlined inputs on red, and three red circles carrying an
+ * icon each. The telemetry they held is worth more as plain lines beside the
+ * form than as badges above it.
+ *
+ * A server component. Only the form is a client component, because only the
+ * form needs to be.
+ */
 import { Mail, Phone, Clock } from "lucide-react";
 import Partners from "../components/Partners";
 import Faq from "../components/Faq";
 import JsonLd from "../components/JsonLd";
-import Image from "next/image";
+import PageHero from "../components/PageHero";
+import ContactForm from "./ContactForm";
 
-const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
-
-const SUBJECT_OPTIONS = [
-  "General enquiry",
-  "Quote request",
-  "Solutions",
-  "Services",
-  "Academy / training",
-  "Partnership",
-  "Careers",
-  "Other",
-];
+const telemetry = [
+  { Icon: Mail, label: "Email", value: "info@inflexions.tech", href: "mailto:info@inflexions.tech" },
+  { Icon: Phone, label: "Phone", value: "+233 20 888 9270", href: "tel:+233208889270" },
+  { Icon: Clock, label: "Hours", value: "Monday to Saturday, 9.00 to 18.00. Sunday closed.", href: null },
+] as const;
 
 export default function ContactPage() {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [sending, setSending] = useState(false);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSending(true);
-    setMessage(null);
-
-    const form = e.currentTarget as HTMLFormElement;
-    const data = new FormData(form);
-    // Turnstile injects a hidden input named `cf-turnstile-response`.
-    const turnstileToken = String(data.get("cf-turnstile-response") ?? "");
-
-    if (TURNSTILE_SITE_KEY && !turnstileToken) {
-      setSending(false);
-      setMessage({
-        type: "error",
-        text: "Please complete the verification check above before sending.",
-      });
-      return;
-    }
-
-    const payload = {
-      name: String(data.get("user_name") ?? "").trim(),
-      email: String(data.get("user_email") ?? "").trim(),
-      phone: String(data.get("user_phone") ?? "").trim() || null,
-      company: String(data.get("user_company") ?? "").trim() || null,
-      subject: String(data.get("subject") ?? "General enquiry"),
-      message: String(data.get("message") ?? "").trim() || null,
-      hp: String(data.get("hp") ?? ""),
-      turnstileToken: turnstileToken || null,
-    };
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => null);
-        throw new Error(err?.error ?? `Failed (${res.status})`);
-      }
-      setMessage({
-        type: "success",
-        text: "Received. A Solutions Architect will reply within one working day to fix a time. If it is urgent, call +233 20 888 9270.",
-      });
-      formRef.current?.reset();
-      // Reset the Turnstile widget so a second submission gets a fresh token.
-      const turnstile = (window as unknown as { turnstile?: { reset: () => void } }).turnstile;
-      turnstile?.reset();
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : "Failed to send.";
-      setMessage({ type: "error", text: msg });
-    } finally {
-      setSending(false);
-    }
-  };
-
   return (
     <div>
-      {TURNSTILE_SITE_KEY && (
-        <Script
-          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-          strategy="afterInteractive"
-          async
-          defer
-        />
-      )}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -185,160 +122,43 @@ export default function ContactPage() {
           ],
         }}
       />
+      <PageHero
+        title="Book your architecture review."
+        lead="Thirty minutes, a Solutions Architect, no pitch. Tell us what you are running and what worries you, and we will come prepared."
+        formation="none"
+      />
 
-      {/* Hero */}
-      <div className="relative w-full h-[300px] md:h-[500px]">
-        <Image
-          src="/assets/contactbg.webp"
-          alt="Contact"
-          width={1504}
-          height={704}
-          className="w-full h-full object-cover"
-          sizes="100vw"
-          priority
-        />
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="md:w-2/3 text-white space-y-4">
-              <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
-                Book your architecture review.
-              </h1>
-              <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-2xl">
-                Thirty minutes, a Solutions Architect, no pitch. Tell us what
-                you are running and what worries you, and we will come prepared.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <section className="band-ivory w-full py-24 md:py-32" aria-label="Contact form">
+        <div className="mx-auto grid max-w-7xl gap-16 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-20 lg:px-8">
+          <ContactForm />
 
-      {/* Contact Form */}
-      <section className="bg-[#F4F4F4] py-12">
-        <div className="bg-[#BD2E25] max-w-[854px] mx-auto px-4 lg:px-[150px] py-10">
-          <h2 className="text-3xl font-semibold text-white text-center mb-4">
-            Start the Conversation
-          </h2>
-          <p className="text-white text-center mb-12">
-            Whether you need a second opinion on your IT strategy or a full infrastructure overhaul, our Solutions Architects are ready. No obligation. No jargon. Just clarity.
-          </p>
-
-          <div className="flex flex-row items-center justify-center gap-12 mb-16">
-            <div className="flex flex-col items-center">
-              <div className="bg-[#A02923] p-4 rounded-full mb-2">
-                <Mail className="text-white" size={24} />
-              </div>
-              <span className="text-white text-sm">info@inflexions.tech</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="bg-[#A02923] p-4 rounded-full mb-2">
-                <Phone className="text-white" size={24} />
-              </div>
-              <span className="text-white text-sm">(0) 208 889 270</span>
-            </div>
-            <div className="hidden md:flex flex-col items-center text-center">
-              <div className="bg-[#A02923] p-4 rounded-full mb-2">
-                <Clock className="text-white" size={24} />
-              </div>
-              <span className="text-white text-sm">
-                Mon &ndash; Sat 9.00 &ndash; 18.00
-                <br />
-                Sunday Closed
-              </span>
-            </div>
-          </div>
-
-          {message && (
-            <div className={`text-center mb-4 p-3 ${message.type === "success" ? "bg-[#E8F5E9] text-[#2E7D32]" : "bg-[#FFEBEE] text-[#C62828]"} rounded`}>
-              {message.text}
-            </div>
-          )}
-
-          <form ref={formRef} onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-6">
-            {/* Honeypot — visually hidden, no aria, no autofill hint. */}
-            <input
-              type="text"
-              name="hp"
-              tabIndex={-1}
-              autoComplete="off"
-              aria-hidden="true"
-              className="absolute -left-[9999px] w-px h-px opacity-0"
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                name="user_name"
-                placeholder="Your name*"
-                required
-                aria-label="Your name"
-                className="w-full border border-white bg-transparent text-white placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-white"
-              />
-              <input
-                type="text"
-                name="user_company"
-                placeholder="Company / organisation"
-                aria-label="Company or organisation"
-                className="w-full border border-white bg-transparent text-white placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-white"
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="email"
-                name="user_email"
-                placeholder="Work email*"
-                required
-                aria-label="Email address"
-                className="w-full border border-white bg-transparent text-white placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-white"
-              />
-              <input
-                type="tel"
-                name="user_phone"
-                placeholder="Phone number"
-                aria-label="Phone number"
-                className="w-full border border-white bg-transparent text-white placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-white"
-              />
-            </div>
-            <select
-              name="subject"
-              defaultValue="General enquiry"
-              aria-label="What can we help with?"
-              className="w-full border border-white bg-[#BD2E25] text-white p-3 focus:outline-none focus:ring-2 focus:ring-white appearance-none"
-            >
-              {SUBJECT_OPTIONS.map((s) => (
-                <option key={s} value={s} className="bg-white text-[#BD2E25]">
-                  {s}
-                </option>
+          {/* Not badges: three lines, each on its own hairline, which is how
+              the rest of the site lists things. */}
+          <div className="lg:pt-2">
+            <p className="type-eyebrow text-neutral-500">Or reach us directly</p>
+            <ul className="mt-8">
+              {telemetry.map(({ Icon, label, value, href }) => (
+                <li key={label} className="border-t border-neutral-200 py-5 first:border-t-0 first:pt-0">
+                  <p className="type-telemetry flex items-center gap-2 text-neutral-500">
+                    <Icon aria-hidden="true" strokeWidth={1.5} className="h-4 w-4" />
+                    {label}
+                  </p>
+                  <p className="type-body mt-3 text-neutral-900">
+                    {href ? (
+                      <a
+                        href={href}
+                        className="underline decoration-neutral-300 underline-offset-[4px] transition-colors duration-[var(--motion-duration-micro)] hover:decoration-neutral-900"
+                      >
+                        {value}
+                      </a>
+                    ) : (
+                      value
+                    )}
+                  </p>
+                </li>
               ))}
-            </select>
-            <textarea
-              name="message"
-              placeholder="What are you running, and what worries you?"
-              aria-label="Your message"
-              className="w-full h-40 border border-white bg-transparent text-white placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-white"
-            />
-
-            {/* Cloudflare Turnstile — invisible challenge most of the time. */}
-            {TURNSTILE_SITE_KEY && (
-              <div className="flex justify-center">
-                <div
-                  className="cf-turnstile"
-                  data-sitekey={TURNSTILE_SITE_KEY}
-                  data-theme="dark"
-                />
-              </div>
-            )}
-
-            <div className="text-center">
-              <button
-                type="submit"
-                disabled={sending}
-                className="bg-white text-[#BD2E25] font-medium py-2 px-6 rounded-[6px] hover:bg-[#F2F2F2] transition-colors duration-200 disabled:opacity-50"
-              >
-                {sending ? "Sending..." : "Request the review"}
-              </button>
-            </div>
-          </form>
+            </ul>
+          </div>
         </div>
       </section>
 
