@@ -1,5 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
+
+/**
+ * The open roles — PHASE5_BRIEF.md §4 Task 6.
+ *
+ * Three shadowed white cards become three entries. The photographs stay,
+ * graded; the shadow, the radius and the underlined text link do not.
+ */
 
 const featuredJobs = [
   {
@@ -26,40 +34,41 @@ const featuredJobs = [
       "Protect enterprise infrastructure with proactive threat monitoring, incident response, and compliance frameworks. Join our Security Operations Centre and defend what matters most.",
     link: "/careers",
   },
-];
+] as const;
 
 export default function FeaturedJobs() {
   return (
-    <section className="bg-[#F6F6F6]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-3xl font-semibold text-center mb-8">
-          Featured Jobs
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    <section className="band-ivory w-full py-24 md:py-32" aria-label="Featured jobs">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 className="type-h2 text-neutral-900">Featured Jobs</h2>
+
+        <div className="mt-16 grid gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
           {featuredJobs.map((job) => (
-            <div
-              key={job.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
-            >
-              <Image
-                src={job.image}
-                alt={job.title}
-                width={386}
-                height={218}
-                className="w-full h-48 object-cover"
-                sizes="(min-width: 1024px) 50vw, 100vw"
-              />
-              <div className="p-6 flex-1 flex flex-col">
-                <h3 className="text-xl font-semibold mb-2">{job.title}</h3>
-                <p className="text-[#41444B] flex-1">{job.description}</p>
+            <article key={job.id} className="group relative flex flex-col">
+              <div className="relative aspect-[16/10] overflow-hidden">
+                <Image
+                  src={job.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="photo-grade object-cover"
+                />
+              </div>
+              <h3 className="type-h3 mt-8 flex items-start justify-between gap-4 border-t border-neutral-200 pt-8 text-neutral-900">
                 <Link
                   href={job.link}
-                  className="mt-4 text-[#262626] hover:text-[#BD2E25] underline"
+                  className="underline decoration-transparent decoration-1 underline-offset-[6px] transition-[text-decoration-color] duration-[var(--motion-duration-ui)] after:absolute after:inset-0 after:content-[''] group-hover:decoration-neutral-900"
                 >
-                  See Opportunities
+                  {job.title}
                 </Link>
-              </div>
-            </div>
+                <ArrowUpRight
+                  aria-hidden="true"
+                  strokeWidth={1.5}
+                  className="mt-1 h-5 w-5 shrink-0 text-neutral-500 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] group-hover:-translate-y-1 group-hover:translate-x-1"
+                />
+              </h3>
+              <p className="type-body mt-4 text-neutral-600">{job.description}</p>
+            </article>
           ))}
         </div>
       </div>

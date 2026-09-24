@@ -1,11 +1,33 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { caseStudies } from "../../data";
-import AskBand from "../../components/AskBand";
 import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { ArrowUpRight } from "lucide-react";
+import AskBand from "../../components/AskBand";
+import PageHero from "../../components/PageHero";
+import ExitLink from "../../components/home/ExitLink";
+import { caseStudies } from "../../data";
+
+/**
+ * /case-studies/[id] — PHASE5_BRIEF.md §4 Task 6.
+ *
+ * A compact hero, because the reader arrived here to read. Below it the
+ * page is a document: facts on hairlines, then the story, set as prose.
+ *
+ * What went: a red pill over the hero photograph, a red "back" button
+ * styled as a primary action, a green-or-amber status pill from a palette
+ * that exists nowhere else on the site, a red circle holding an arrow
+ * beside every highlight, and a red wash that faded over related studies
+ * on hover.
+ *
+ * The status still comes from data.ts. The old comparison tested for a
+ * lower-case "completed" that the data never contained, so every study
+ * rendered amber, including the delivered one.
+ */
+
+/** data.ts stores DD/MM/YY. */
+const yearOf = (date: string) => `20${date.slice(-2)}`;
 
 export default function CaseStudyDetailPage() {
   const params = useParams();
@@ -19,209 +41,205 @@ export default function CaseStudyDetailPage() {
 
   if (!study) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-semibold mb-4">Case study not found</h2>
-        <Link href="/case-study" className="text-[#BD2E25] underline">
-          &larr; Back to all case studies
-        </Link>
+      <div className="band-ivory">
+        <div className="mx-auto max-w-7xl px-4 py-32 sm:px-6 lg:px-8">
+          <h1 className="type-display-l text-neutral-900">Case study not found</h1>
+          <div className="mt-10">
+            <ExitLink href="/case-study" className="text-neutral-900">
+              Back to all case studies
+            </ExitLink>
+          </div>
+        </div>
       </div>
     );
   }
 
   const paragraphs = study.details.split("\n\n");
+  const live = study.status.toLowerCase().includes("progress");
+
+  const facts = [
+    "client" in study ? { label: "Client", value: study.client } : null,
+    { label: "Category", value: study.category },
+    "location" in study ? { label: "Location", value: study.location } : null,
+    { label: "Status", value: study.status },
+  ].filter((f): f is { label: string; value: string } => f !== null);
 
   return (
-    <>
-      {/* Hero */}
-      <div className="relative w-full h-[300px] md:h-[500px]">
-        <Image
-          src={study.heroImage ?? study.image}
-          alt={study.title}
-          width={1376}
-          height={768}
-          className="w-full h-full object-cover"
-          sizes="100vw"
-          priority
-        />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="md:w-2/3 text-white space-y-3">
-              <span className="inline-block bg-[#BD2E25] text-white text-xs font-medium px-3 py-1 rounded-full uppercase tracking-wide">
-                {study.category}
-              </span>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                {study.title}
-              </h1>
+    <div>
+      <PageHero
+        eyebrow={study.category}
+        title={study.title}
+        formation="none"
+        size="compact"
+      />
+
+      <section className="band-ivory w-full py-24 md:py-32" aria-label="Project details">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="type-telemetry mb-12 text-neutral-500">
+            <Link
+              href="/case-study"
+              className="underline decoration-neutral-300 underline-offset-[4px] transition-colors duration-[var(--motion-duration-micro)] hover:decoration-neutral-900"
+            >
+              Case studies
+            </Link>
+            <span aria-hidden="true"> / </span>
+            <span aria-current="page">{study.title}</span>
+          </div>
+
+          <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-20">
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image
+                src={study.innerImage1}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="photo-grade object-cover"
+              />
+            </div>
+
+            <div>
+              <div className="flex items-baseline gap-5">
+                <p className="type-h2 tabular-nums text-neutral-900">{yearOf(study.date)}</p>
+                <p className="type-telemetry flex items-center gap-2 text-neutral-500">
+                  {live && (
+                    <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-primary-500" />
+                  )}
+                  {study.status}
+                </p>
+              </div>
+
+              <h2 className="type-h2 mt-8 text-neutral-900">Project Details</h2>
+              <dl className="mt-8 border-t border-neutral-200">
+                {facts.map((fact) => (
+                  <div key={fact.label} className="border-b border-neutral-200 py-5">
+                    <dt className="type-telemetry text-neutral-500">{fact.label}</dt>
+                    <dd className="type-body mt-3 text-neutral-900">{fact.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+
+          <div className="mt-20 border-t border-neutral-200 pt-16">
+            <p className="type-body-l max-w-[70ch] text-neutral-900">{study.summary}</p>
+
+            {"highlights" in study && study.highlights && (
+              <ul className="mt-12 max-w-[70ch] border-t border-neutral-200">
+                {study.highlights.map((text: string, i: number) => (
+                  <li
+                    key={i}
+                    className="type-body border-b border-neutral-200 py-4 text-neutral-600"
+                  >
+                    {text}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="band-ivory w-full pb-24 md:pb-32" aria-label="The full story">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="border-t border-neutral-200 pt-16">
+            <h2 className="type-h2 text-neutral-900">The Full Story</h2>
+
+            <div className="mt-10 max-w-[72ch]">
+              {paragraphs.map((p, i) => {
+                const isSubheading =
+                  (/^Phase \d/.test(p) ||
+                    /^(Executive Summary|The (Challenge|Solution|Results)[:\s])/.test(p)) &&
+                  p.length < 120;
+                const isBullet = p.startsWith("• ");
+
+                if (isSubheading) {
+                  return (
+                    <h3 key={i} className="type-h3 mt-12 text-neutral-900 first:mt-0">
+                      {p}
+                    </h3>
+                  );
+                }
+
+                if (isBullet) {
+                  const text = p.slice(2);
+                  const colonIdx = text.indexOf(":");
+                  return (
+                    <p key={i} className="type-body-l mt-5 text-neutral-600">
+                      {colonIdx > 0 && colonIdx < 40 ? (
+                        <>
+                          <strong className="font-semibold text-neutral-900">
+                            {text.slice(0, colonIdx)}:
+                          </strong>
+                          {text.slice(colonIdx + 1)}
+                        </>
+                      ) : (
+                        text
+                      )}
+                    </p>
+                  );
+                }
+
+                return (
+                  <p key={i} className="type-body-l mt-5 text-neutral-600 first:mt-0">
+                    {p}
+                  </p>
+                );
+              })}
+            </div>
+
+            <div className="relative mt-16 aspect-[16/9] w-full overflow-hidden">
+              <Image
+                src={study.storyImage ?? study.image}
+                alt=""
+                fill
+                sizes="100vw"
+                className="photo-grade object-cover"
+              />
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Back link + Project Details */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Link
-          href="/case-study"
-          className="inline-block bg-[#BD2E25] hover:bg-[#A02923] text-white font-medium py-2 px-6 rounded-[6px] shadow-md transition-colors duration-200 mb-8"
-        >
-          &larr; Back to case studies
-        </Link>
-
-        <div className="flex flex-col md:flex-row items-start gap-8">
-          <div className="w-full md:w-1/2">
-            <Image
-              src={study.innerImage1}
-              alt="Project overview"
-              width={1200}
-              height={896}
-              className="w-full h-auto object-cover shadow-lg rounded-lg"
-              sizes="(min-width: 1024px) 50vw, 100vw"
-            />
-          </div>
-          <div className="w-full md:w-1/2">
-            <h2 className="text-3xl font-semibold text-[#171A20] mb-6">Project Details</h2>
-            <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-4 text-base">
-              {"client" in study && (
-                <>
-                  <dt className="text-[#5C6280] font-medium">Client</dt>
-                  <dd className="text-[#171A20]">{study.client}</dd>
-                </>
-              )}
-              <dt className="text-[#5C6280] font-medium">Category</dt>
-              <dd className="text-[#171A20]">{study.category}</dd>
-              {"location" in study && (
-                <>
-                  <dt className="text-[#5C6280] font-medium">Location</dt>
-                  <dd className="text-[#171A20]">{study.location}</dd>
-                </>
-              )}
-              <dt className="text-[#5C6280] font-medium">Status</dt>
-              <dd className="text-[#171A20]">
-                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${
-                  study.status === "completed"
-                    ? "bg-green-50 text-green-700"
-                    : "bg-amber-50 text-amber-700"
-                }`}>
-                  <span className={`w-2 h-2 rounded-full ${
-                    study.status === "completed" ? "bg-green-500" : "bg-amber-500"
-                  }`} />
-                  {study.status === "completed" ? "Completed" : study.status}
-                </span>
-              </dd>
-            </dl>
-          </div>
-        </div>
       </section>
 
-      {/* Summary */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-3xl font-semibold text-[#171A20] mb-6">{study.title}</h2>
-        <p className="text-[#41444B] text-lg leading-relaxed">{study.summary}</p>
-
-        {/* Highlights */}
-        {"highlights" in study && study.highlights && (
-          <ul className="mt-8 space-y-4">
-            {study.highlights.map((text: string, i: number) => (
-              <li key={i} className="flex items-start gap-3">
-                <div className="flex-shrink-0 mt-1 bg-[#BD2E25] p-1 rounded-full">
-                  <ArrowRight size={14} className="text-white" />
-                </div>
-                <span className="text-[#41444B]">{text}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      {/* The Full Story */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-3xl font-semibold text-[#171A20] mb-6">The Full Story</h2>
-        <div className="space-y-6">
-          {paragraphs.map((p, i) => {
-            const isSubheading =
-              (/^Phase \d/.test(p) ||
-                /^(Executive Summary|The (Challenge|Solution|Results)[:\s])/.test(p)) &&
-              p.length < 120;
-            const isBullet = p.startsWith("\u2022 ");
-            if (isSubheading) {
-              return (
-                <h3 key={i} className="text-xl font-semibold text-[#171A20] mt-4">
-                  {p}
-                </h3>
-              );
-            }
-            if (isBullet) {
-              const text = p.slice(2);
-              const colonIdx = text.indexOf(":");
-              if (colonIdx > 0 && colonIdx < 40) {
-                return (
-                  <div key={i} className="flex items-start gap-3">
-                    <div className="flex-shrink-0 mt-1.5 w-2 h-2 rounded-full bg-[#BD2E25]" />
-                    <p className="text-[#41444B] leading-relaxed">
-                      <strong className="text-[#171A20]">{text.slice(0, colonIdx)}:</strong>
-                      {text.slice(colonIdx + 1)}
-                    </p>
-                  </div>
-                );
-              }
-              return (
-                <div key={i} className="flex items-start gap-3">
-                  <div className="flex-shrink-0 mt-1.5 w-2 h-2 rounded-full bg-[#BD2E25]" />
-                  <p className="text-[#41444B] leading-relaxed">{text}</p>
-                </div>
-              );
-            }
-            return (
-              <p key={i} className="text-[#41444B] leading-relaxed">
-                {p}
-              </p>
-            );
-          })}
-        </div>
-
-        <div className="relative w-full overflow-hidden rounded-lg shadow-lg mt-10">
-          <Image
-            src={study.storyImage ?? study.image}
-            alt={study.title}
-            width={1376}
-            height={768}
-            className="w-full lg:h-[500px] object-cover"
-            sizes="(min-width: 1024px) 50vw, 100vw"
-          />
-        </div>
-      </section>
-
-      {/* Related Case Studies */}
       {related.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h2 className="text-2xl md:text-3xl font-semibold text-[#171A20] mb-6">Related Case Studies</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {related.map((item) => (
-              <Link
-                key={item.id}
-                href={`/case-studies/${item.id}`}
-                className="relative group block overflow-hidden shadow-lg rounded-lg"
-              >
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  width={1312}
-                  height={816}
-                  className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-64 h-[220px] bg-[#BD2E25]/0 group-hover:bg-[#BD2E25]/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
-                    <ArrowUpRight size={48} className="text-white" />
-                  </div>
-                </div>
-              </Link>
-            ))}
+        <section className="band-ivory w-full pb-24 md:pb-32" aria-label="Related case studies">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="border-t border-neutral-200 pt-16">
+              <h2 className="type-h2 text-neutral-900">Related Case Studies</h2>
+
+              <div className="mt-12 grid gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+                {related.map((item) => (
+                  <article key={item.id} className="group relative">
+                    <div className="relative aspect-[16/9] overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt=""
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        className="photo-grade object-cover"
+                      />
+                    </div>
+                    <h3 className="type-h3 mt-8 flex items-start justify-between gap-4 border-t border-neutral-200 pt-8 text-neutral-900">
+                      <Link
+                        href={`/case-studies/${item.id}`}
+                        className="underline decoration-transparent decoration-1 underline-offset-[6px] transition-[text-decoration-color] duration-[var(--motion-duration-ui)] after:absolute after:inset-0 after:content-[''] group-hover:decoration-neutral-900"
+                      >
+                        {item.title}
+                      </Link>
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        strokeWidth={1.5}
+                        className="mt-1 h-5 w-5 shrink-0 text-neutral-500 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] group-hover:-translate-y-1 group-hover:translate-x-1"
+                      />
+                    </h3>
+                  </article>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
       )}
 
       <AskBand />
-    </>
+    </div>
   );
 }

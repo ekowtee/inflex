@@ -14,7 +14,7 @@
  * form needs to be.
  */
 import { Mail, Phone, Clock } from "lucide-react";
-import Partners from "../components/Partners";
+import ClientRoster from "../components/ClientRoster";
 import Faq from "../components/Faq";
 import JsonLd from "../components/JsonLd";
 import PageHero from "../components/PageHero";
@@ -162,7 +162,14 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <Partners />
+      <section className="band-ivory w-full pb-24 md:pb-32" aria-label="Clients">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="border-t border-neutral-200 pt-12">
+            <p className="type-eyebrow text-neutral-500">Our clients</p>
+            <ClientRoster register="ivory" className="mt-10 md:mt-12" />
+          </div>
+        </div>
+      </section>
 
       <Faq />
     </div>
