@@ -412,11 +412,17 @@ export class CoreScene {
           Math.min(1, Math.max(0, (b4 - 24 - this.vh) / 20))
         );
         const shift = -(key.lookAt.x - 0.45 * inAsk) * Math.max(inPillars, inAsk, inTurn);
+        // The pillar formations are wider than tall (the network fabric is
+        // 3.9 units across): on a portrait screen pull back so they fit.
+        if (inPillars > 0) {
+          this.offset.copy(key.position).sub(key.lookAt).multiplyScalar(1 + 0.35 * inPillars);
+          key.position.copy(key.lookAt).add(this.offset);
+        }
         key.position.x += shift;
         key.lookAt.x += shift;
       } else if (aspect < 1.5 && inPillars > 0) {
         // Narrow landscape (1024 × 768): the copy column is a larger share
-        // of the width, and at the desktop keys the lattice ran into it.
+        // of the width, and at the desktop keys the first formation ran into it.
         // Pull back and push the object further right.
         const t = inPillars * Math.min(1, (1.5 - aspect) / 0.25);
         this.offset.copy(key.position).sub(key.lookAt).multiplyScalar(1 + 0.2 * t);

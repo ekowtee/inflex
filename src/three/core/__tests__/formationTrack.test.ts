@@ -15,7 +15,7 @@ test("Beat 1 unmakes the sheet and Beat 2 resolves it", () => {
   assert.ok(early2.noise < 0.01 && early2.gate > 1.25 && early2.bend > 0.99, "resolved, bent and relit as the heading reaches the top");
 });
 
-test("the sheet bends into its S over the resolve and relaxes before the lattice", () => {
+test("the sheet bends into its S over the resolve and relaxes before the network fabric", () => {
   assert.equal(sceneStateAt(BEAT_START_VH[2]).bend, 0);
   assert.ok(sceneStateAt(BEAT_START_VH[3] - 21).bend > 0.95);
   assert.ok(sceneStateAt(BEAT_START_VH[3] + 40).bend > 0.99, "held through the proof");

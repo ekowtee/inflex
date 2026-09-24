@@ -33,7 +33,7 @@ const INFLECTION = { position: new Vector3(-2.4, 9.0, 2.8), lookAt: new Vector3(
 
 /**
  * The pillar formations are 3.5 to 4.4 units across, against the sheet's
- * 4.8 by 2.6 seen close: from the hero key the lattice and the plane ran
+ * 4.8 by 2.6 seen close: from the hero key the wide formations ran
  * into the copy column and off the right edge (capture, 23 September 2026).
  * So the pinned chapter pulls back and shifts the look-at left, which puts
  * the object's centre at about 72% of the width, and the camera orbits a
@@ -50,9 +50,9 @@ function orbit(azimuthDeg: number, elevationDeg: number, distance: number, lookA
   return { position: lookAt.clone().add(offset), lookAt };
 }
 
-/** One camera per pillar formation, lattice to plane. */
+/** One camera per pillar formation, network fabric to plane. */
 export const PILLAR_CAMERA = [
-  orbit(-20, 16, 9.2, new Vector3(-1.9, -0.1, 0)),
+  orbit(-20, 16, 9.2, new Vector3(-2.2, -0.1, 0)),
   orbit(-28, 14, 8.4, new Vector3(-1.9, 0, 0)),
   orbit(16, 12, 8.4, new Vector3(-1.8, 0, 0)),
   orbit(22, 28, 11.2, new Vector3(-2.0, -0.3, 0.2)),
@@ -67,7 +67,7 @@ const key = (at: number, k: { position: Vector3; lookAt: Vector3 }): CameraKey =
 function buildKeys(): CameraKey[] {
   const b = BEAT_START_VH;
   // The camera rises into the profile view as order arrives in Beat 2,
-  // holds it through the proof, and comes back down before the lattice.
+  // holds it through the proof, and comes back down before the network fabric.
   const out: CameraKey[] = [
     key(0, HERO),
     key(b[1], TRUST),

@@ -18,9 +18,9 @@
  *                 spread across the whole beat so a fast scroller still sees
  *                 order arrive.
  *   Beat 3        rest (the Core is at 0.3 behind the proof).
- *   end of 3      the morph to the lattice begins, so the pillars arrive
+ *   end of 3      the morph to the network fabric begins, so the pillars arrive
  *                 already in motion.
- *   Beat 4        four pillars, 80 vh each: lattice, shield, nebula,
+ *   Beat 4        four pillars, 80 vh each: network fabric, shield, nebula,
  *                 plane. Each morph straddles the boundary between two rows,
  *                 16 vh either side, so the first and last 20% of every
  *                 sub-range hold still.
@@ -65,7 +65,7 @@ export const PILLAR_FORMATION: readonly FormationIndex[] = [1, 2, 3, 4];
 export const PILLAR_VH = 80;
 export const MORPH_HALF_VH = 16;
 
-/** The ground grid shows under the lattice and the plane. */
+/** The ground grid shows under the network fabric and the plane. */
 const GROUND: Record<number, number> = { 0: 0, 1: 1, 2: 0, 3: 0, 4: 1, 5: 0 };
 
 const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
@@ -118,12 +118,12 @@ export function sceneStateAt(vh: number): SceneState {
 
   // ─── into and through the pillars ──────────────────────────────────────
   if (vh < b5 + 30) {
-    // The bend holds through the proof and relaxes before the lattice
+    // The bend holds through the proof and relaxes before the network fabric
     // morph begins, where the resting sheet (and so the bend) ends.
     const bend = 1 - smooth((vh - (b4 - 64)) / 38);
     if (vh < b4 - 24) return { ...rest, bend };
     // Boundaries where formation k hands to k+1: the first sits 20 vh before
-    // the pin so the lattice is already forming as the chapter arrives.
+    // the pin so the network fabric is already forming as the chapter arrives.
     const boundaries = [b4 - 4, b4 + PILLAR_VH, b4 + PILLAR_VH * 2, b4 + PILLAR_VH * 3];
     const seq: FormationIndex[] = [0, ...PILLAR_FORMATION];
     for (let k = 0; k < boundaries.length; k += 1) {
