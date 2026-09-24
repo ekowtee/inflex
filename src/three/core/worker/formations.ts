@@ -244,31 +244,95 @@ function sheetToDirection(n: SheetNode): [number, number, number] {
   return [c * Math.sin(lon), Math.sin(lat), c * Math.cos(lon)];
 }
 
+/** Half-width of the shield outline at height y (both in [−1, 1]). */
+function shieldHalfWidth(y: number): number {
+  const below = Math.max(0, -0.05 - y) / 0.95;
+  return 1 - Math.pow(below, 1.7);
+}
+
+/**
+ * The shield outline as a closed polyline with cumulative arc length, so a
+ * parameter s in [0, 1) walks once around it at even speed: along the top
+ * edge left to right, down the right side to the point, up the left side.
+ */
+const SHIELD_OUTLINE = (() => {
+  const pts: Array<[number, number]> = [];
+  const STEPS = 200;
+  for (let i = 0; i <= STEPS; i += 1) pts.push([-1 + (2 * i) / STEPS, 1]);
+  for (let i = 1; i <= STEPS; i += 1) {
+    const y = 1 - (2 * i) / STEPS;
+    pts.push([shieldHalfWidth(y), y]);
+  }
+  for (let i = STEPS - 1; i > 0; i -= 1) {
+    const y = 1 - (2 * i) / STEPS;
+    pts.push([-shieldHalfWidth(y), y]);
+  }
+  const cum = [0];
+  for (let i = 1; i <= pts.length; i += 1) {
+    const [x0, y0] = pts[i - 1];
+    const [x1, y1] = pts[i % pts.length];
+    cum.push(cum[i - 1] + Math.hypot(x1 - x0, y1 - y0));
+  }
+  return { pts, cum, total: cum[cum.length - 1] };
+})();
+
+function shieldOutlineAt(s: number): [number, number] {
+  const { pts, cum, total } = SHIELD_OUTLINE;
+  const d = (((s % 1) + 1) % 1) * total;
+  let lo = 0;
+  let hi = pts.length;
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    if (cum[mid] <= d) lo = mid;
+    else hi = mid;
+  }
+  const t = (d - cum[lo]) / Math.max(1e-6, cum[lo + 1] - cum[lo]);
+  const [x0, y0] = pts[lo];
+  const [x1, y1] = pts[(lo + 1) % pts.length];
+  return [x0 + (x1 - x0) * t, y0 + (y1 - y0) * t];
+}
+
 function formationShield(nodes: SheetNode[]): Placement[] {
-  // Formation 2, Data Security: a heraldic shield, not the double sphere
-  // (owner, 23 September 2026: "a button"). Sheet x → across, sheet y →
-  // down the shield, so every sheet neighbour stays a neighbour and the
-  // edges survive. Straight shoulders, sides falling to a point; a domed
-  // face; every fourth node on a flat backing plate for thickness. The
-  // ember is a chevron across the upper face.
-  const HALF_W = 1.6;
-  const HALF_H = 1.5;
+  // Formation 2, Data Security: a solid shield (owner, 24 September 2026:
+  // the first attempt, a curved sheet with a backing plate, read as a
+  // shell). Three parts from three bands of sheet rows:
+  //   front  (top 70%)  the shield face, domed, an even mesh
+  //   wall   (next 15%) a side wall running around the whole outline, so
+  //                     the thickness shows as an edge in perspective
+  //   back   (last 15%) a flat back plate
+  // Within each band sheet neighbours stay neighbours; edges that span two
+  // bands are long and fade out in the edge shader, so the parts read as
+  // one solid rather than being stitched by stray lines. The ember is a
+  // chevron standing proud of the front face.
+  const HALF_W = 1.1;
+  const HALF_H = 1.25;
+  const FRONT_RIM = 0.12;
+  const DOME = 0.3;
+  const BACK = -0.34;
   return nodes.map((n) => {
     const u = n.x / SHEET_X;
     const v = n.y / SHEET_Y;
-    // Half-width: full to the shoulder line, then narrowing to the point.
-    const below = Math.max(0, -0.05 - v) / 0.95;
-    const hw = 1 - Math.pow(below, 1.7);
-    const inner = (n.col + n.row) % 4 === 0;
-    const scale = inner ? 0.9 : 1;
-    const x = u * hw * HALF_W * scale;
-    const y = v * HALF_H * scale;
-    const dome = 0.34 * (1 - 0.55 * (u * u + v * v));
-    const z = inner ? -0.22 : dome;
-    // A chevron alone: with a spine as well the mark read as a peace sign.
-    const chevron = Math.abs(v - (0.3 - 0.6 * Math.abs(u))) < 0.06 && Math.abs(u) < 0.82;
-    const heat = !inner && chevron ? 1 : 0;
-    return { x, y, z, heat };
+    if (v > -0.4) {
+      const fv = ((v + 0.4) / 1.4) * 2 - 1;
+      const hw = shieldHalfWidth(fv);
+      const x = u * hw;
+      const z = FRONT_RIM + DOME * (1 - u * u) * (1 - fv * fv);
+      const chevron = Math.abs(fv - (0.25 - 0.62 * Math.abs(x))) < 0.075 && Math.abs(x) < 0.78;
+      // The front rim catches the light: silver warmth, below ember, along
+      // the outer edge of the face where it turns into the wall.
+      const rim = Math.abs(u) > 0.95 || fv > 0.95 || fv < -0.93;
+      const heat = chevron ? 1 : rim ? 0.42 : 0;
+      return { x: x * HALF_W, y: fv * HALF_H, z: z + (chevron ? 0.08 : 0), heat };
+    }
+    if (v > -0.7) {
+      const depth = (v + 0.7) / 0.3; // 0 at the back edge, 1 at the front rim
+      const [ox, oy] = shieldOutlineAt((u + 1) / 2);
+      // A slight bevel: the wall rounds in toward the front rim.
+      const inset = 1 - 0.05 * depth * depth;
+      return { x: ox * inset * HALF_W, y: oy * inset * HALF_H, z: BACK + (FRONT_RIM - BACK) * depth, heat: 0 };
+    }
+    const bv = ((v + 1) / 0.3) * 2 - 1;
+    return { x: u * shieldHalfWidth(bv) * HALF_W, y: bv * HALF_H, z: BACK, heat: 0 };
   });
 }
 
@@ -323,7 +387,10 @@ export function generateCore(seed: number = CORE_SEED): CoreData {
   const formations = [f0, f1, f2, f3, f4];
 
   // Order: uniform halves (alternate by index), ember-capable first in each.
-  const emberCapable = (i: number) => formations.some((f) => f[i].heat > 0);
+  // Ember-capable means able to glow ember: heat ≥ 0.5, the shaders' ember
+  // threshold. Lower heat is silver warmth (the shield's rim, the sheet's
+  // skirt) and never renders in the ember pass.
+  const emberCapable = (i: number) => formations.some((f) => f[i].heat >= 0.5);
   const halfA: number[] = [];
   const halfB: number[] = [];
   for (let i = 0; i < NODE_COUNT; i += 1) (i % 2 === 0 ? halfA : halfB).push(i);

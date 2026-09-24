@@ -47,7 +47,7 @@ function orbit(azimuthDeg: number, elevationDeg: number, distance: number, lookA
 /** One camera per pillar formation, lattice to plane. */
 export const PILLAR_CAMERA = [
   orbit(-20, 16, 9.2, new Vector3(-1.9, -0.1, 0)),
-  orbit(-14, 8, 8.8, new Vector3(-1.9, 0, 0)),
+  orbit(-28, 14, 8.4, new Vector3(-1.9, 0, 0)),
   orbit(16, 12, 8.4, new Vector3(-1.8, 0, 0)),
   orbit(22, 28, 11.2, new Vector3(-2.0, -0.3, 0.2)),
 ] as const;
