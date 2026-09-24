@@ -1,4 +1,15 @@
-import Image from "next/image";
+import Reveal from "@/motion/Reveal";
+import { PartnerLogo } from "./PartnerColumns";
+
+/**
+ * The partners behind one pillar — PHASE5_BRIEF.md §4 Task 3.
+ *
+ * The logos used to sit in 300 x 144 white cards with a drop shadow, a
+ * pointer cursor on something that was not a link, and a red tooltip on
+ * hover carrying the name the alt text already gave. They now use the same
+ * fixed box and greyscale-to-colour treatment as the partner wall, so a
+ * vendor logo looks the same everywhere on the site.
+ */
 const allPartners: Record<string, { src: string; alt: string }[]> = {
   "network-infrastructure": [
     { src: "/assets/partners/cisco.svg", alt: "Cisco" },
@@ -36,35 +47,20 @@ export default function SolutionPartners({ solution }: { solution: string }) {
   if (partners.length === 0) return null;
 
   return (
-    <section className="py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <span className="text-[#5C6280] text-sm font-medium uppercase tracking-wider">
-            Powered by Industry Leaders
-          </span>
-          <h3 className="text-2xl font-semibold text-[#171A20] mt-2">
-            Our Technology Partners
-          </h3>
-        </div>
-        <div className="flex flex-wrap items-center justify-center gap-6">
+    <section className="band-ivory w-full py-24 md:py-32" aria-label="Technology partners">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Reveal as="p" className="type-eyebrow text-neutral-500">
+          Powered by industry leaders
+        </Reveal>
+        <Reveal as="h2" className="type-h2 mt-6 text-neutral-900" delay={80}>
+          Our Technology Partners
+        </Reveal>
+
+        <ul className="mt-12 flex flex-wrap gap-x-4 gap-y-6">
           {partners.map((partner) => (
-            <div
-              key={partner.alt}
-              title={partner.alt}
-              className="relative group bg-white h-[144px] w-[300px] flex items-center justify-center rounded-[10px] shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-300"
-            >
-              {/* Sized box with a fill image: the logo keeps its aspect ratio
-                  inside the box, and the box may shrink on narrow screens without
-                  next/image warning that only one dimension changed. */}
-              <span className="relative block max-w-full w-[180px] h-[72px]">
-                <Image src={partner.src} alt={partner.alt} fill sizes="180px" className="object-contain" unoptimized />
-              </span>
-              <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#BD2E25] text-white text-xs font-medium px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-[#BD2E25]">
-                {partner.alt}
-              </span>
-            </div>
+            <PartnerLogo key={partner.alt} src={partner.src} alt={partner.alt} />
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
