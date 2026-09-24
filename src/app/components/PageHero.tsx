@@ -49,17 +49,22 @@ export interface PageHeroProps {
 
 function FormationStill({ formation }: { formation: Exclude<Formation, "none"> }) {
   const base = `/three/posters/f${formation}-lit`;
+  // The sheet's and the mark's phone stills are framed for the home page,
+  // with the object off to one side; interior heroes use centred captures.
+  const mobileSuffix = formation === 0 || formation === 5 ? "-centred" : "";
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 opacity-35 md:opacity-100"
+      // Starts below the fixed header (h-14, lg:h-16) so the object is
+      // never partly behind the bar.
+      className="pointer-events-none absolute inset-x-0 bottom-0 top-14 opacity-35 md:opacity-100 lg:top-16"
     >
       <picture>
         <source media="(min-width: 768px)" type="image/avif" srcSet={`${base}-desktop.avif`} />
         <source media="(min-width: 768px)" type="image/webp" srcSet={`${base}-desktop.webp`} />
-        <source type="image/avif" srcSet={`${base}-mobile.avif`} />
+        <source type="image/avif" srcSet={`${base}-mobile${mobileSuffix}.avif`} />
         <img
-          src={`${base}-mobile.webp`}
+          src={`${base}-mobile${mobileSuffix}.webp`}
           alt=""
           width={MOBILE.width}
           height={MOBILE.height}

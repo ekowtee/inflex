@@ -38,6 +38,7 @@ const SIZES = [
 const sizesArg = args.indexOf("--sizes");
 const lightsArg = args.indexOf("--lights");
 const LIGHTS = lightsArg > -1 ? args[lightsArg + 1].split(",") : ["unlit", "lit"];
+const CENTRED = args.includes("--centred");
 const SIZES_RUN = sizesArg > -1 ? SIZES.filter((s) => args[sizesArg + 1].split(",").includes(s.name)) : SIZES;
 const BUDGET = {
   desktop: { webp: 160 * 1024, avif: 110 * 1024 },
@@ -140,12 +141,12 @@ try {
         mobile: size.name === "mobile",
       });
       for (const light of LIGHTS) {
-        const url = `${base}/core-capture?formation=${formation}&light=${light}&tier=A`;
+        const url = `${base}/core-capture?formation=${formation}&light=${light}&tier=A${CENTRED ? "&centre=1" : ""}`;
         await send("Page.navigate", { url });
         await waitForReady(send);
         const { data } = await send("Page.captureScreenshot", { format: "png" });
         const png = Buffer.from(data, "base64");
-        const stem = `f${formation}-${light}-${size.name}`;
+        const stem = `f${formation}-${light}-${size.name}${CENTRED ? "-centred" : ""}`;
         const budget = BUDGET[size.name];
 
         // WebP at q80, stepping down if over budget; AVIF likewise.
@@ -170,7 +171,7 @@ try {
           `  ${stem.padEnd(22)} webp ${(webp.length / 1024).toFixed(0).padStart(4)} KB (q${q + 4})   avif ${(avif.length / 1024).toFixed(0).padStart(4)} KB (q${aq + 5})`
         );
 
-        if (formation === 0 && light === "unlit" && size.name === "desktop") {
+        if (formation === 0 && light === "unlit" && size.name === "desktop" && !CENTRED) {
           const lqip = await sharp(png).resize(24, 14, { fit: "cover" }).webp({ quality: 40 }).toBuffer();
           const dataUri = `data:image/webp;base64,${lqip.toString("base64")}`;
           const file = "src/three/core/posters.ts";
