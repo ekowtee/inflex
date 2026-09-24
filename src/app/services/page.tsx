@@ -13,7 +13,9 @@ import PageHero from "../components/PageHero";
  * number is set large and tabular the way Receipt.tsx sets a year — rather
  * than as a solid red square with a dashed line trailing out of it.
  *
- * Copy is unchanged, including each model's own call to action. Two things
+ * Copy is unchanged, including each model's own call to action. Each model's
+ * button opens its own page (owner, 24 September 2026); Digital
+ * Transformation Advisory has none yet, so its button stays on /contact. Two things
  * were dropped and both are in the report: the company logo in a bordered,
  * shadowed white box beside the opening copy, and the four red number
  * squares those numerals replace.
@@ -29,6 +31,7 @@ const models = [
       "Businesses needing expert help with digital transformation strategy, AI adoption, automation implementation, technology migrations, or strategic IT planning.",
     image: "/assets/services/Services2.webp",
     cta: "Explore This Model",
+    href: "/services/professional",
   },
   {
     number: "02",
@@ -38,6 +41,7 @@ const models = [
     idealFor: null,
     image: "/assets/services/Services3.webp",
     cta: "Get Your Custom Quote",
+    href: "/services/managed",
   },
   {
     number: "03",
@@ -47,6 +51,7 @@ const models = [
     idealFor: null,
     image: "/assets/services/Services4.webp",
     cta: "View Support Tiers",
+    href: "/services/support",
   },
   {
     number: "04",
@@ -56,6 +61,7 @@ const models = [
     idealFor: null,
     image: "/assets/services/Services1.webp",
     cta: "Start Your Transformation",
+    href: "/contact",
   },
 ] as const;
 
@@ -128,7 +134,7 @@ export default function ServicesPage() {
                 )}
                 <div className="mt-8">
                   <Link
-                    href="/contact"
+                    href={model.href}
                     className="inline-flex h-14 items-center rounded-[6px] border border-neutral-300 px-8 font-semibold text-neutral-900 transition-colors duration-[var(--motion-duration-micro)] hover:bg-neutral-50"
                   >
                     {model.cta}

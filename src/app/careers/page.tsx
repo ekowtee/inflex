@@ -14,9 +14,8 @@ import PageHero from "../components/PageHero";
  * photograph at the foot, which was the retired Banner's composition. Its
  * copy and both its links are kept, on Obsidian.
  *
- * The three links to /jobs and /internships are left exactly as they are.
- * Neither route exists — see the report; inventing them is not this
- * branch's call.
+ * The three links go to /jobs and /internships, built on the owner's
+ * decision of 24 September 2026.
  */
 export default function CareersPage() {
   return (

@@ -4,6 +4,7 @@ import Reveal from "@/motion/Reveal";
 import AskBand from "../../components/AskBand";
 import DomainCard from "../../components/DomainCard";
 import PageHero from "../../components/PageHero";
+import TrainingEnquiryForm from "./TrainingEnquiryForm";
 import { domains } from "../data";
 
 /**
@@ -18,8 +19,8 @@ import { domains } from "../data";
  * numeral the way Receipt.tsx sets a year, rather than as a watermark
  * behind a card with a navy icon tile on it.
  *
- * The form keeps its fields, its names and its mailto action; only the
- * surface is re-set.
+ * The form (TrainingEnquiryForm) keeps its fields and names, and posts
+ * through the contact system at /api/contact rather than a mailto action.
  */
 
 export const metadata: Metadata = {
@@ -72,10 +73,6 @@ const process = [
       "Post-programme assessment, capability reporting, and a follow-up plan to embed learning into day-to-day work.",
   },
 ] as const;
-
-const field =
-  "w-full rounded-[6px] border border-neutral-300 bg-white px-4 py-3 type-body text-neutral-900 transition-colors duration-[var(--motion-duration-micro)] hover:border-neutral-500";
-const labelClass = "type-telemetry block text-neutral-500";
 
 export default function ForOrganizationsPage() {
   return (
@@ -176,110 +173,7 @@ export default function ForOrganizationsPage() {
             </p>
           </div>
 
-          <form
-            action="mailto:sales@inflexions.tech"
-            method="post"
-            encType="text/plain"
-            className="mt-12 space-y-6"
-          >
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <div>
-                <label htmlFor="company" className={labelClass}>
-                  Organisation
-                </label>
-                <input id="company" name="company" type="text" required className={`${field} mt-3`} />
-              </div>
-              <div>
-                <label htmlFor="contact-name" className={labelClass}>
-                  Your name
-                </label>
-                <input
-                  id="contact-name"
-                  name="contactName"
-                  type="text"
-                  required
-                  className={`${field} mt-3`}
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className={labelClass}>
-                  Work email
-                </label>
-                <input id="email" name="email" type="email" required className={`${field} mt-3`} />
-              </div>
-              <div>
-                <label htmlFor="team-size" className={labelClass}>
-                  Team size
-                </label>
-                <select id="team-size" name="teamSize" className={`${field} mt-3`}>
-                  <option>1–10</option>
-                  <option>11–25</option>
-                  <option>26–50</option>
-                  <option>51–100</option>
-                  <option>100+</option>
-                </select>
-              </div>
-            </div>
-
-            <fieldset>
-              <legend className={labelClass}>Domains of interest</legend>
-              <div className="mt-3 grid grid-cols-1 md:grid-cols-2">
-                {domains.map((domain) => (
-                  <label
-                    key={domain.slug}
-                    className="type-body flex items-center gap-3 border-b border-neutral-200 py-3 text-neutral-900"
-                  >
-                    <input
-                      type="checkbox"
-                      name="domains"
-                      value={domain.slug}
-                      className="h-4 w-4 rounded-[2px] border-neutral-300 accent-primary-500"
-                    />
-                    {domain.title}
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <div>
-                <label htmlFor="format" className={labelClass}>
-                  Preferred format
-                </label>
-                <select id="format" name="format" className={`${field} mt-3`}>
-                  <option>On-site</option>
-                  <option>Virtual</option>
-                  <option>Hybrid</option>
-                  <option>Not sure yet</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="timeline" className={labelClass}>
-                  Timeline
-                </label>
-                <select id="timeline" name="timeline" className={`${field} mt-3`}>
-                  <option>Within 1 month</option>
-                  <option>1–3 months</option>
-                  <option>3–6 months</option>
-                  <option>Exploring only</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="notes" className={labelClass}>
-                Anything else we should know?
-              </label>
-              <textarea id="notes" name="notes" rows={5} className={`${field} mt-3 resize-y`} />
-            </div>
-
-            <button
-              type="submit"
-              className="inline-flex h-14 items-center rounded-[6px] bg-primary-500 px-8 font-semibold text-white transition-colors duration-[var(--motion-duration-micro)] hover:bg-primary-600"
-            >
-              Request Training Proposal
-            </button>
-          </form>
+          <TrainingEnquiryForm domains={domains.map((d) => ({ slug: d.slug, title: d.title }))} />
         </div>
       </section>
 

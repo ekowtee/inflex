@@ -121,6 +121,27 @@ Copy was kept verbatim everywhere except Tasks 8 and 10, which carry approved li
 
 **5. `Formation 5` is "the mark" for About.** The brief's mapping gives About formation 5. That is the formation the home page's Beat 8 morphs into as its full stop. Using it as a still on About is what the brief asks for; flagging it in case the mark is meant to stay unique to the ask.
 
+### Answers (owner, 24 September 2026)
+
+1. **Build them.** Done. `/jobs` lists the three roles from `src/app/careers/roles.ts`, which is now shared with Featured Jobs so the two cannot drift. Featured Jobs opens each role at `/jobs#{id}`. `/internships` says how to apply and names no programme details. Both are static and in the sitemap. Applications go by mailto to `info@inflexions.tech`, with the role in the subject, because an application needs a CV and the contact form takes no attachments.
+2. **The owner will supply the articles.** The placeholders are left as they are until then.
+3. **Yes.** Professional, Managed and Support now open their own pages. Digital Transformation Advisory has no page, so its button stays on `/contact`.
+4. **Yes.** `TrainingEnquiryForm.tsx` posts to `/api/contact` with the subject "Academy / training", with the honeypot and Turnstile. Organisation and name map across; team size, domains, format, timeline and notes are composed into the message. The fields and labels are unchanged.
+5. **Keep it there.** Unchanged.
+
+**New copy, awaiting sign-off.** The role descriptions are the approved ones. Everything below is new:
+
+- `/jobs` lead: "Apply by email with your CV. The role is already in the subject line, so it reaches the right team."
+- `/jobs` buttons: "Apply for this role", "Send an open application".
+- `/jobs` closing line: "Not your role? Send your CV to info@inflexions.tech and tell us the work you want to do."
+- `/internships` lead: "Early in your career and want to work on enterprise infrastructure? Tell us who you are and what you want to learn."
+- `/internships` body: "Email your CV to info@inflexions.tech with "Internship" in the subject line. Add a short note on what you are studying, the area you want to work in and when you are available."
+- `/internships` list "The work is in": Network engineering, Cloud, Cybersecurity. Link: "Qualified already? See the open roles."
+- Enquiry success: "Received. Our Academy team will be in touch within two working days to design your engagement." This reuses the page's own promise.
+- Enquiry failure: "… Nothing was sent. Try again, or email sales@inflexions.tech and we will pick it up from there."
+
+**Also needs you.** The Featured Jobs photographs, now also on `/jobs`, are Tesla material: a car-factory robot, battery cells, and a circuit board printed "TESLA". The same three were on `/careers` before this branch. They need replacing with the site's own images. Also confirm whether applications should go to a dedicated careers address rather than `info@`.
+
 ---
 
 ## 7. Deleted, moved, and changed beyond the brief

@@ -1,40 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
+import { roles } from "../careers/roles";
 
 /**
  * The open roles — PHASE5_BRIEF.md §4 Task 6.
  *
  * Three shadowed white cards become three entries. The photographs stay,
  * graded; the shadow, the radius and the underlined text link do not.
+ * Each entry opens its role on /jobs; the roles live in careers/roles.ts.
  */
-
-const featuredJobs = [
-  {
-    id: "network-engineer",
-    title: "Network Engineer",
-    image: "/assets/career/career2.png",
-    description:
-      "Design, deploy, and manage enterprise LAN, WAN, and SD-WAN solutions for clients across Ghana. Work with Cisco, Huawei, and next-gen wireless platforms at scale.",
-    link: "/careers",
-  },
-  {
-    id: "cloud-solutions-architect",
-    title: "Cloud Solutions Architect",
-    image: "/assets/career/career3.png",
-    description:
-      "Architect hybrid and multi-cloud environments across AWS, Azure, and Google Cloud. Lead migration strategies that deliver scalability, security, and measurable cost savings.",
-    link: "/careers",
-  },
-  {
-    id: "cybersecurity-analyst",
-    title: "Cybersecurity Analyst",
-    image: "/assets/career/career4.png",
-    description:
-      "Protect enterprise infrastructure with proactive threat monitoring, incident response, and compliance frameworks. Join our Security Operations Centre and defend what matters most.",
-    link: "/careers",
-  },
-] as const;
 
 export default function FeaturedJobs() {
   return (
@@ -43,7 +18,7 @@ export default function FeaturedJobs() {
         <h2 className="type-h2 text-neutral-900">Featured Jobs</h2>
 
         <div className="mt-16 grid gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredJobs.map((job) => (
+          {roles.map((job) => (
             <article key={job.id} className="group relative flex flex-col">
               <div className="relative aspect-[16/10] overflow-hidden">
                 <Image
@@ -56,7 +31,7 @@ export default function FeaturedJobs() {
               </div>
               <h3 className="type-h3 mt-8 flex items-start justify-between gap-4 border-t border-neutral-200 pt-8 text-neutral-900">
                 <Link
-                  href={job.link}
+                  href={`/jobs#${job.id}`}
                   className="underline decoration-transparent decoration-1 underline-offset-[6px] transition-[text-decoration-color] duration-[var(--motion-duration-ui)] after:absolute after:inset-0 after:content-[''] group-hover:decoration-neutral-900"
                 >
                   {job.title}
