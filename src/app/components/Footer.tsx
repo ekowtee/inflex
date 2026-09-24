@@ -1,212 +1,159 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, Phone, Instagram, Facebook, Twitter, Linkedin } from "lucide-react";
+import { Instagram, Facebook, Twitter, Linkedin } from "lucide-react";
+
+/**
+ * Site footer, on Obsidian — CREATIVE_DIRECTION_3D.md §9 Phase 4 item 6.
+ *
+ * The home page now ends dark ask, light doors, dark footer, and every other
+ * page gets the same closing register. Content is unchanged apart from the
+ * strap line, which is the copy sheet's approved footer line
+ * (SCROLL_NARRATIVE.md §7). The red circle badges and the red top bar are
+ * gone: a hairline and the type tiers carry the structure, and red is kept
+ * for the one action, Subscribe.
+ *
+ * It carries data-header-dark so the header takes its dark register when
+ * the footer is under it.
+ */
+
+const company = [
+  { label: "About Us", href: "/about" },
+  { label: "Solutions", href: "/solutions" },
+  { label: "Services", href: "/services" },
+  { label: "Academy", href: "/academy" },
+  { label: "Case Studies", href: "/case-study" },
+  { label: "Careers", href: "/careers" },
+];
+
+const resources = [
+  { label: "Blog", href: "/resources" },
+  { label: "Contact", href: "/contact" },
+  { label: "Privacy Policy", href: "/privacy" },
+];
+
+const social = [
+  { label: "Instagram", href: "https://instagram.com", Icon: Instagram },
+  { label: "Facebook", href: "https://facebook.com", Icon: Facebook },
+  { label: "Twitter", href: "https://twitter.com", Icon: Twitter },
+  { label: "LinkedIn", href: "https://linkedin.com", Icon: Linkedin },
+];
+
+const link =
+  "text-silver-300 transition-colors duration-[var(--motion-duration-micro)] hover:text-white";
 
 export default function Footer() {
   return (
-    <footer role="contentinfo" className="border-t-[3px] border-t-[#BD2E25] bg-[#F7F8FA] text-[#171A20]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* 1) Logo & Contact */}
+    <footer
+      role="contentinfo"
+      data-header-dark=""
+      className="on-obsidian relative border-t border-white/10 bg-obsidian-950 text-silver-100"
+    >
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.4fr]">
+          {/* Mark, strap, contact */}
           <div>
             <Image
-              src="/assets/logo.png"
+              src="/inflexlogo-light.png"
               alt="Inflexions-IT"
-              width={770}
-              height={150}
-              className="h-12 w-auto"
+              width={1408}
+              height={274}
+              className="h-9 w-auto"
             />
+            <p className="type-telemetry mt-6 text-silver-500">
+              Enterprise IT integration · Accra, Ghana · Since 2012
+            </p>
 
-            <div className="space-y-5 mt-8">
-              <div className="flex items-start">
-                <div className="bg-[#BD2E25] rounded-full p-2.5 mr-3 mt-0.5 flex-shrink-0">
-                  <Mail className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <p className="font-medium text-sm text-[#41444B] uppercase tracking-wide">
-                    Email
-                  </p>
-                  <a
-                    href="mailto:info@inflexions.tech"
-                    className="block text-[#171A20] hover:text-[#BD2E25] transition-colors"
-                  >
+            <dl className="mt-10 space-y-6">
+              <div>
+                <dt className="type-eyebrow text-silver-500">Email</dt>
+                <dd className="type-body mt-3 space-y-1">
+                  <a href="mailto:info@inflexions.tech" className={`block ${link}`}>
                     info@inflexions.tech
                   </a>
-                  <a
-                    href="mailto:sales@inflexions.tech"
-                    className="block text-[#171A20] hover:text-[#BD2E25] transition-colors"
-                  >
+                  <a href="mailto:sales@inflexions.tech" className={`block ${link}`}>
                     sales@inflexions.tech
                   </a>
-                </div>
+                </dd>
               </div>
-              <div className="flex items-start">
-                <div className="bg-[#BD2E25] rounded-full p-2.5 mr-3 mt-0.5 flex-shrink-0">
-                  <Phone className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <p className="font-medium text-sm text-[#41444B] uppercase tracking-wide">
-                    Call Us
-                  </p>
-                  <p className="text-[#171A20]">(0) 208 889 270</p>
-                  <p className="text-[#171A20]">(0) 205 179 937</p>
-                </div>
+              <div>
+                <dt className="type-eyebrow text-silver-500">Call us</dt>
+                <dd className="type-body mt-3 space-y-1 tabular-nums text-silver-300">
+                  <a href="tel:+233208889270" className={`block ${link}`}>
+                    (0) 208 889 270
+                  </a>
+                  <a href="tel:+233205179937" className={`block ${link}`}>
+                    (0) 205 179 937
+                  </a>
+                </dd>
               </div>
-            </div>
+            </dl>
           </div>
 
-          {/* 2) Company */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">Company</h3>
-            <ul className="space-y-3 text-[#41444B]">
-              <li>
-                <Link
-                  href="/about"
-                  className="hover:text-[#BD2E25] transition-colors"
-                >
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/solutions"
-                  className="hover:text-[#BD2E25] transition-colors"
-                >
-                  Solutions
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/services"
-                  className="hover:text-[#BD2E25] transition-colors"
-                >
-                  Services
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/academy"
-                  className="hover:text-[#BD2E25] transition-colors"
-                >
-                  Academy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/case-study"
-                  className="hover:text-[#BD2E25] transition-colors"
-                >
-                  Case Studies
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/careers"
-                  className="hover:text-[#BD2E25] transition-colors"
-                >
-                  Careers
-                </Link>
-              </li>
+          <nav aria-label="Company">
+            <h3 className="type-eyebrow text-silver-500">Company</h3>
+            <ul className="type-body mt-6 space-y-3">
+              {company.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className={link}>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
-          </div>
+          </nav>
 
-          {/* 3) Resources */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">Resources</h3>
-            <ul className="space-y-3 text-[#41444B]">
-              <li>
-                <Link
-                  href="/resources"
-                  className="hover:text-[#BD2E25] transition-colors"
-                >
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="hover:text-[#BD2E25] transition-colors"
-                >
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/privacy"
-                  className="hover:text-[#BD2E25] transition-colors"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
+          <nav aria-label="Resources">
+            <h3 className="type-eyebrow text-silver-500">Resources</h3>
+            <ul className="type-body mt-6 space-y-3">
+              {resources.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className={link}>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
-          </div>
+          </nav>
 
-          {/* 4) Newsletter */}
           <div>
-            <h3 className="text-lg font-semibold mb-6">Stay Updated</h3>
-            <p className="text-[#41444B] text-sm mb-4">
+            <h3 className="type-eyebrow text-silver-500">Stay updated</h3>
+            <p className="type-body mt-6 text-silver-300">
               Get the latest insights on IT strategy and digital transformation.
             </p>
-            <div className="flex">
+            <div className="mt-6 flex">
               <input
                 type="email"
                 placeholder="Your email address"
                 aria-label="Email address"
-                className="flex-1 min-w-0 bg-white border border-[#A6A6A6] rounded-l-[6px] px-4 py-2.5 text-sm text-[#171A20] placeholder:text-[#A6A6A6] focus:outline-none focus:ring-2 focus:ring-[#BD2E25] focus:border-transparent"
+                className="min-w-0 flex-1 rounded-l-[6px] border border-white/20 bg-obsidian-900 px-4 py-3 text-sm text-silver-100 placeholder:text-silver-500 focus:border-silver-300 focus:outline-none"
               />
-              <button className="bg-[#BD2E25] hover:bg-[#A02923] text-white text-sm font-medium px-5 py-2.5 rounded-r-[6px] transition-colors whitespace-nowrap">
+              <button className="whitespace-nowrap rounded-r-[6px] bg-primary-500 px-5 py-3 text-sm font-semibold text-white transition-colors duration-[var(--motion-duration-micro)] hover:bg-primary-600">
                 Subscribe
               </button>
             </div>
 
-            <div className="flex items-center space-x-4 mt-6">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="text-[#41444B] hover:text-[#BD2E25] transition-colors"
-              >
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="text-[#41444B] hover:text-[#BD2E25] transition-colors"
-              >
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter"
-                className="text-[#41444B] hover:text-[#BD2E25] transition-colors"
-              >
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="text-[#41444B] hover:text-[#BD2E25] transition-colors"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
+            <div className="mt-8 flex items-center gap-5">
+              {social.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="text-silver-500 transition-colors duration-[var(--motion-duration-micro)] hover:text-white"
+                >
+                  <Icon className="h-5 w-5" strokeWidth={1.5} />
+                </a>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Copyright bar */}
-      <div className="border-t border-[#E0E0E0]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-          <p className="text-center text-sm text-[#41444B]">
-            &copy; {new Date().getFullYear()} Inflexions I.T. Services Ltd. All
-            rights reserved.
+      <div className="border-t border-white/10">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <p className="type-telemetry text-silver-500">
+            &copy; {new Date().getFullYear()} Inflexions I.T. Services Ltd. All rights reserved.
           </p>
         </div>
       </div>
