@@ -1,84 +1,64 @@
 import Link from "next/link";
-import { Clock, Users, MapPin, Calendar } from "lucide-react";
 import type { Programme } from "../academy/data";
 import LevelBadge from "./LevelBadge";
 
+/**
+ * The facts about a programme, beside it — PHASE5_BRIEF.md §4 Task 5.
+ *
+ * Was a bordered white card holding four rows, each with a red icon. The
+ * icons said nothing the label did not, and four red marks in a column made
+ * a list of facts look like a set of alerts. Facts on hairlines now, with
+ * the two actions below them: one primary, one secondary on the Ivory
+ * outline rule.
+ */
 export default function ProgrammeDetailsSidebar({
   programme,
 }: {
   programme: Programme;
 }) {
+  const facts = [
+    { label: "Duration", value: programme.duration },
+    { label: "Formats", value: programme.formats.join(", ") },
+    { label: "Next cohort", value: "Contact us for dates" },
+    {
+      label: "Audience",
+      value: programme.audienceTypes
+        .map((a) => (a === "individual" ? "Individuals" : "Organisations"))
+        .join(" & "),
+    },
+  ];
+
   return (
-    <aside className="lg:sticky lg:top-24 bg-white border border-[#D0D0D0] rounded-lg p-6 space-y-6">
-      <div>
+    <aside className="lg:sticky lg:top-28">
+      <div className="text-neutral-500">
         <LevelBadge level={programme.level} />
       </div>
 
-      <dl className="space-y-4">
-        <div className="flex items-start gap-3">
-          <Clock className="w-5 h-5 text-[#BD2E25] mt-0.5 flex-shrink-0" />
-          <div>
-            <dt className="text-xs text-[#5C6280] uppercase tracking-wide font-medium">
-              Duration
-            </dt>
-            <dd className="text-sm text-[#171A20] font-medium">
-              {programme.duration}
-            </dd>
+      <dl className="mt-8 border-t border-neutral-200">
+        {facts.map((fact) => (
+          <div key={fact.label} className="border-b border-neutral-200 py-5">
+            <dt className="type-telemetry text-neutral-500">{fact.label}</dt>
+            <dd className="type-body mt-3 text-neutral-900">{fact.value}</dd>
           </div>
-        </div>
-        <div className="flex items-start gap-3">
-          <MapPin className="w-5 h-5 text-[#BD2E25] mt-0.5 flex-shrink-0" />
-          <div>
-            <dt className="text-xs text-[#5C6280] uppercase tracking-wide font-medium">
-              Formats
-            </dt>
-            <dd className="text-sm text-[#171A20] font-medium">
-              {programme.formats.join(", ")}
-            </dd>
-          </div>
-        </div>
-        <div className="flex items-start gap-3">
-          <Calendar className="w-5 h-5 text-[#BD2E25] mt-0.5 flex-shrink-0" />
-          <div>
-            <dt className="text-xs text-[#5C6280] uppercase tracking-wide font-medium">
-              Next Cohort
-            </dt>
-            <dd className="text-sm text-[#171A20] font-medium">
-              Contact us for dates
-            </dd>
-          </div>
-        </div>
-        <div className="flex items-start gap-3">
-          <Users className="w-5 h-5 text-[#BD2E25] mt-0.5 flex-shrink-0" />
-          <div>
-            <dt className="text-xs text-[#5C6280] uppercase tracking-wide font-medium">
-              Audience
-            </dt>
-            <dd className="text-sm text-[#171A20] font-medium">
-              {programme.audienceTypes
-                .map((a) => (a === "individual" ? "Individuals" : "Organisations"))
-                .join(" & ")}
-            </dd>
-          </div>
-        </div>
+        ))}
       </dl>
 
-      <div className="pt-4 border-t border-[#E6E6E6] space-y-3">
+      <div className="mt-8 flex flex-col gap-3">
         <Link
           href={`/contact?programme=${programme.slug}&type=individual`}
-          className="block w-full text-center bg-[#BD2E25] hover:bg-[#A02923] text-white font-semibold px-6 py-3 rounded-[6px] transition-colors"
+          className="inline-flex h-14 items-center justify-center rounded-[6px] bg-primary-500 px-8 font-semibold text-white transition-colors duration-[var(--motion-duration-micro)] hover:bg-primary-600"
         >
           Register as Individual
         </Link>
         <Link
           href={`/academy/for-organizations?programme=${programme.slug}`}
-          className="block w-full text-center border border-[#BD2E25] text-[#BD2E25] hover:bg-[#BD2E25] hover:text-white font-semibold px-6 py-3 rounded-[6px] transition-colors"
+          className="inline-flex h-14 items-center justify-center rounded-[6px] border border-neutral-300 px-8 font-semibold text-neutral-900 transition-colors duration-[var(--motion-duration-micro)] hover:bg-neutral-50"
         >
           Request Corporate Training
         </Link>
       </div>
 
-      <p className="text-xs text-[#5C6280] leading-relaxed">
+      <p className="type-body mt-6 text-neutral-500">
         Pricing varies by format and cohort size. Contact us for a tailored
         quote.
       </p>

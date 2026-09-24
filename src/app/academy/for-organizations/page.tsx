@@ -1,17 +1,26 @@
 import type { Metadata } from "next";
-import {
-  Layers,
-  MapPin,
-  BarChart3,
-  Search,
-  PenTool,
-  GraduationCap,
-  LineChart,
-} from "lucide-react";
-import AcademyHero from "../../components/AcademyHero";
-import DomainCard from "../../components/DomainCard";
+import Link from "next/link";
+import Reveal from "@/motion/Reveal";
 import AskBand from "../../components/AskBand";
+import DomainCard from "../../components/DomainCard";
+import PageHero from "../../components/PageHero";
 import { domains } from "../data";
+
+/**
+ * /academy/for-organizations — PHASE5_BRIEF.md §4 Task 5.
+ *
+ * The Academy's enterprise enquiry page, and the one page whose closing
+ * band points at itself: its form is the next step, so AskBand sends the
+ * reader down to #enquire rather than off to /contact.
+ *
+ * The four-step engagement is the one place on the site where a number may
+ * lead a block, because the sequence is the point. Set as a large tabular
+ * numeral the way Receipt.tsx sets a year, rather than as a watermark
+ * behind a card with a navy icon tile on it.
+ *
+ * The form keeps its fields, its names and its mailto action; only the
+ * surface is re-set.
+ */
 
 export const metadata: Metadata = {
   title: "Corporate & Enterprise Training",
@@ -21,158 +30,135 @@ export const metadata: Metadata = {
 
 const valueProps = [
   {
-    icon: Layers,
     title: "Custom Curricula",
     description:
       "Programmes adapted to your technology stack, team maturity, and commercial objectives — not off-the-shelf content.",
   },
   {
-    icon: MapPin,
     title: "On-Site Delivery",
     description:
       "We come to your offices, in Ghana and across the region. Minimise disruption, maximise team cohesion.",
   },
   {
-    icon: BarChart3,
     title: "Measurable ROI",
     description:
       "Pre- and post-programme assessments, competency mapping, and outcome reporting you can take to your CFO.",
   },
-];
+] as const;
 
 const process = [
   {
     number: "01",
-    icon: Search,
     title: "Assess",
     description:
       "We start by understanding your team, your current capability, and the commercial outcomes the training needs to drive.",
   },
   {
     number: "02",
-    icon: PenTool,
     title: "Design",
     description:
       "We tailor the curriculum to your context — selecting modules, adjusting depth, and incorporating your real-world scenarios.",
   },
   {
     number: "03",
-    icon: GraduationCap,
     title: "Deliver",
     description:
       "Practitioner-led delivery on-site, virtually, or hybrid. Hands-on where it matters, with flexibility for team schedules.",
   },
   {
     number: "04",
-    icon: LineChart,
     title: "Measure",
     description:
       "Post-programme assessment, capability reporting, and a follow-up plan to embed learning into day-to-day work.",
   },
-];
+] as const;
+
+const field =
+  "w-full rounded-[6px] border border-neutral-300 bg-white px-4 py-3 type-body text-neutral-900 transition-colors duration-[var(--motion-duration-micro)] hover:border-neutral-500";
+const labelClass = "type-telemetry block text-neutral-500";
 
 export default function ForOrganizationsPage() {
   return (
     <div>
-      <AcademyHero
+      <PageHero
         eyebrow="For Organisations"
         title="Transform your workforce. Transform your business."
-        subtitle="Custom training programmes built around your strategic priorities. Delivered on-site, virtually, or hybrid — measured against the outcomes that matter to your leadership team."
-        backgroundImage="/assets/services/Servicesbg.webp"
-        breadcrumbs={[
-          { label: "Academy", href: "/academy" },
-          { label: "For Organisations" },
-        ]}
+        lead="Custom training programmes built around your strategic priorities. Delivered on-site, virtually, or hybrid — measured against the outcomes that matter to your leadership team."
+        formation="none"
       />
 
-      <section className="py-16 lg:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="inline-block border-l-4 border-[#BD2E25] bg-[#F7F8FA] px-2 py-1 text-sm font-medium text-[#333333] mb-4">
-              Why Corporates Choose Us
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#171A20] mb-4">
-              Training that moves commercial outcomes.
-            </h2>
-            <p className="text-[#5C6280] text-lg max-w-2xl mx-auto">
-              Three reasons L&amp;D leaders and CIOs partner with Inflexions
-              Academy over generic training providers.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {valueProps.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={item.title}
-                  className="bg-white border border-[#D0D0D0] rounded-lg p-8 hover:shadow-lg transition-shadow"
-                >
-                  <div className="w-12 h-12 bg-[#BD2E25] rounded-[6px] flex items-center justify-center mb-6">
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-[#171A20] mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-[#41444B] leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-              );
-            })}
+      <section className="band-ivory w-full py-24 md:py-32" aria-label="Why corporates choose us">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <nav aria-label="Breadcrumb" className="type-telemetry mb-12 text-neutral-500">
+            <Link
+              href="/academy"
+              className="underline decoration-neutral-300 underline-offset-[4px] transition-colors duration-[var(--motion-duration-micro)] hover:decoration-neutral-900"
+            >
+              Academy
+            </Link>
+            <span aria-hidden="true"> / </span>
+            <span aria-current="page">For Organisations</span>
+          </nav>
+
+          <Reveal as="p" className="type-eyebrow text-neutral-500">
+            Why corporates choose us
+          </Reveal>
+          <Reveal as="h2" className="type-h2 mt-6 max-w-[22ch] text-neutral-900" delay={80}>
+            Training that moves commercial outcomes.
+          </Reveal>
+          <Reveal as="p" className="type-body-l mt-6 max-w-[58ch] text-neutral-600" delay={160}>
+            Three reasons L&amp;D leaders and CIOs partner with Inflexions Academy
+            over generic training providers.
+          </Reveal>
+
+          <div className="mt-16 grid gap-x-12 gap-y-10 md:grid-cols-3">
+            {valueProps.map((item) => (
+              <div key={item.title} className="border-t border-neutral-200 pt-8">
+                <h3 className="type-h3 text-neutral-900">{item.title}</h3>
+                <p className="type-body mt-4 text-neutral-600">{item.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="py-16 lg:py-20 bg-[#F7F8FA]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#171A20] mb-4">
-              A proven four-step engagement
-            </h2>
-            <p className="text-[#5C6280] text-lg max-w-2xl mx-auto">
-              Our engagement model is built for organisations that need
-              outcomes, not just attendance sheets.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {process.map((step) => {
-              const Icon = step.icon;
-              return (
-                <div
-                  key={step.number}
-                  className="relative bg-white border border-[#D0D0D0] rounded-lg p-6"
-                >
-                  <span className="absolute top-4 right-4 text-4xl font-bold text-[#F0E1DF]">
-                    {step.number}
-                  </span>
-                  <div className="w-12 h-12 bg-[#1B3764] rounded-[6px] flex items-center justify-center mb-5">
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-[#171A20] mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-sm text-[#41444B] leading-relaxed">
-                    {step.description}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
+      {/* The engagement, on Obsidian: four steps that read as one sequence. */}
+      <section
+        data-register="obsidian"
+        data-header-dark=""
+        className="band-obsidian on-obsidian w-full py-24 md:py-32"
+        aria-label="How the engagement runs"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal as="h2" className="type-h2 max-w-[20ch] text-silver-100">
+            A proven four-step engagement
+          </Reveal>
+          <Reveal as="p" className="type-body-l mt-6 max-w-[56ch] text-silver-300" delay={80}>
+            Our engagement model is built for organisations that need outcomes,
+            not just attendance sheets.
+          </Reveal>
+
+          <ol className="mt-16 grid gap-x-12 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
+            {process.map((step) => (
+              <li key={step.number} className="border-t border-white/15 pt-8">
+                <p className="type-h2 tabular-nums text-silver-500">{step.number}</p>
+                <h3 className="type-h3 mt-6 text-silver-100">{step.title}</h3>
+                <p className="type-body mt-4 text-silver-300">{step.description}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
-      <section className="py-16 lg:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#171A20] mb-4">
-              Four domains. One partner.
-            </h2>
-            <p className="text-[#5C6280] text-lg max-w-2xl">
-              Explore the domains most relevant to your team. Programmes can be
-              combined into multi-track learning journeys.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section className="band-ivory w-full py-24 md:py-32" aria-label="Domains">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="type-h2 text-neutral-900">Four domains. One partner.</h2>
+          <p className="type-body-l mt-4 max-w-[56ch] text-neutral-600">
+            Explore the domains most relevant to your team. Programmes can be
+            combined into multi-track learning journeys.
+          </p>
+
+          <div className="mt-16 grid gap-x-12 gap-y-12 md:grid-cols-2 lg:grid-cols-4">
             {domains.map((domain) => (
               <DomainCard key={domain.slug} domain={domain} />
             ))}
@@ -180,179 +166,129 @@ export default function ForOrganizationsPage() {
         </div>
       </section>
 
-      <section id="enquire" className="py-16 lg:py-20 bg-[#F7F8FA]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white border border-[#D0D0D0] rounded-lg p-8 lg:p-10">
-            <div className="mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-[#171A20] mb-3">
-                Tell us about your team
-              </h2>
-              <p className="text-[#5C6280]">
-                Share a few details and our Academy team will be in touch within
-                two working days to design your engagement.
-              </p>
-            </div>
-            <form
-              action="mailto:sales@inflexions.tech"
-              method="post"
-              encType="text/plain"
-              className="space-y-5"
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
-                  <label
-                    htmlFor="company"
-                    className="block text-sm font-medium text-[#171A20] mb-1.5"
-                  >
-                    Organisation
-                  </label>
-                  <input
-                    id="company"
-                    name="company"
-                    type="text"
-                    required
-                    className="w-full border border-[#D0D0D0] rounded-[6px] px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#BD2E25] focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="contact-name"
-                    className="block text-sm font-medium text-[#171A20] mb-1.5"
-                  >
-                    Your name
-                  </label>
-                  <input
-                    id="contact-name"
-                    name="contactName"
-                    type="text"
-                    required
-                    className="w-full border border-[#D0D0D0] rounded-[6px] px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#BD2E25] focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-[#171A20] mb-1.5"
-                  >
-                    Work email
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    className="w-full border border-[#D0D0D0] rounded-[6px] px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#BD2E25] focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="team-size"
-                    className="block text-sm font-medium text-[#171A20] mb-1.5"
-                  >
-                    Team size
-                  </label>
-                  <select
-                    id="team-size"
-                    name="teamSize"
-                    className="w-full border border-[#D0D0D0] rounded-[6px] px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#BD2E25] focus:border-transparent bg-white"
-                  >
-                    <option>1–10</option>
-                    <option>11–25</option>
-                    <option>26–50</option>
-                    <option>51–100</option>
-                    <option>100+</option>
-                  </select>
-                </div>
-              </div>
+      <section id="enquire" className="band-ivory w-full pb-24 md:pb-32" aria-label="Enquiry">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="border-t border-neutral-200 pt-12">
+            <h2 className="type-h2 text-neutral-900">Tell us about your team</h2>
+            <p className="type-body-l mt-4 text-neutral-600">
+              Share a few details and our Academy team will be in touch within two
+              working days to design your engagement.
+            </p>
+          </div>
 
+          <form
+            action="mailto:sales@inflexions.tech"
+            method="post"
+            encType="text/plain"
+            className="mt-12 space-y-6"
+          >
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-[#171A20] mb-2">
-                  Domains of interest
+                <label htmlFor="company" className={labelClass}>
+                  Organisation
                 </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {domains.map((domain) => (
-                    <label
-                      key={domain.slug}
-                      className="flex items-center gap-2 text-sm text-[#41444B]"
-                    >
-                      <input
-                        type="checkbox"
-                        name="domains"
-                        value={domain.slug}
-                        className="rounded border-[#D0D0D0] text-[#BD2E25] focus:ring-[#BD2E25]"
-                      />
-                      {domain.title}
-                    </label>
-                  ))}
-                </div>
+                <input id="company" name="company" type="text" required className={`${field} mt-3`} />
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
-                  <label
-                    htmlFor="format"
-                    className="block text-sm font-medium text-[#171A20] mb-1.5"
-                  >
-                    Preferred format
-                  </label>
-                  <select
-                    id="format"
-                    name="format"
-                    className="w-full border border-[#D0D0D0] rounded-[6px] px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#BD2E25] focus:border-transparent bg-white"
-                  >
-                    <option>On-site</option>
-                    <option>Virtual</option>
-                    <option>Hybrid</option>
-                    <option>Not sure yet</option>
-                  </select>
-                </div>
-                <div>
-                  <label
-                    htmlFor="timeline"
-                    className="block text-sm font-medium text-[#171A20] mb-1.5"
-                  >
-                    Timeline
-                  </label>
-                  <select
-                    id="timeline"
-                    name="timeline"
-                    className="w-full border border-[#D0D0D0] rounded-[6px] px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#BD2E25] focus:border-transparent bg-white"
-                  >
-                    <option>Within 1 month</option>
-                    <option>1–3 months</option>
-                    <option>3–6 months</option>
-                    <option>Exploring only</option>
-                  </select>
-                </div>
-              </div>
-
               <div>
-                <label
-                  htmlFor="notes"
-                  className="block text-sm font-medium text-[#171A20] mb-1.5"
-                >
-                  Anything else we should know?
+                <label htmlFor="contact-name" className={labelClass}>
+                  Your name
                 </label>
-                <textarea
-                  id="notes"
-                  name="notes"
-                  rows={4}
-                  className="w-full border border-[#D0D0D0] rounded-[6px] px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#BD2E25] focus:border-transparent resize-none"
+                <input
+                  id="contact-name"
+                  name="contactName"
+                  type="text"
+                  required
+                  className={`${field} mt-3`}
                 />
               </div>
+              <div>
+                <label htmlFor="email" className={labelClass}>
+                  Work email
+                </label>
+                <input id="email" name="email" type="email" required className={`${field} mt-3`} />
+              </div>
+              <div>
+                <label htmlFor="team-size" className={labelClass}>
+                  Team size
+                </label>
+                <select id="team-size" name="teamSize" className={`${field} mt-3`}>
+                  <option>1–10</option>
+                  <option>11–25</option>
+                  <option>26–50</option>
+                  <option>51–100</option>
+                  <option>100+</option>
+                </select>
+              </div>
+            </div>
 
-              <button
-                type="submit"
-                className="w-full md:w-auto bg-[#BD2E25] hover:bg-[#A02923] text-white font-semibold px-8 py-3 rounded-[6px] transition-colors"
-              >
-                Request Training Proposal
-              </button>
-            </form>
-          </div>
+            <fieldset>
+              <legend className={labelClass}>Domains of interest</legend>
+              <div className="mt-3 grid grid-cols-1 md:grid-cols-2">
+                {domains.map((domain) => (
+                  <label
+                    key={domain.slug}
+                    className="type-body flex items-center gap-3 border-b border-neutral-200 py-3 text-neutral-900"
+                  >
+                    <input
+                      type="checkbox"
+                      name="domains"
+                      value={domain.slug}
+                      className="h-4 w-4 rounded-[2px] border-neutral-300 accent-primary-500"
+                    />
+                    {domain.title}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div>
+                <label htmlFor="format" className={labelClass}>
+                  Preferred format
+                </label>
+                <select id="format" name="format" className={`${field} mt-3`}>
+                  <option>On-site</option>
+                  <option>Virtual</option>
+                  <option>Hybrid</option>
+                  <option>Not sure yet</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="timeline" className={labelClass}>
+                  Timeline
+                </label>
+                <select id="timeline" name="timeline" className={`${field} mt-3`}>
+                  <option>Within 1 month</option>
+                  <option>1–3 months</option>
+                  <option>3–6 months</option>
+                  <option>Exploring only</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="notes" className={labelClass}>
+                Anything else we should know?
+              </label>
+              <textarea id="notes" name="notes" rows={5} className={`${field} mt-3 resize-y`} />
+            </div>
+
+            <button
+              type="submit"
+              className="inline-flex h-14 items-center rounded-[6px] bg-primary-500 px-8 font-semibold text-white transition-colors duration-[var(--motion-duration-micro)] hover:bg-primary-600"
+            >
+              Request Training Proposal
+            </button>
+          </form>
         </div>
       </section>
 
-      <AskBand />
+      <AskBand
+        variant="academy"
+        line="Share a few details and our Academy team will be in touch within two working days to design your engagement."
+        label="Tell us about your team"
+        href="#enquire"
+      />
     </div>
   );
 }
