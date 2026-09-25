@@ -2,7 +2,7 @@
 
 **For:** the owner, to sign off or amend.
 **From:** the Phase 5 interior session, 24 September 2026.
-**Status:** **draft, not shipped.** The pages carry the current copy today. Nothing below is live, and nothing goes live until a line here is approved.
+**Status:** **approved in full by the owner on 25 September 2026, and shipped.** Every Variant B row below is live, including the practitioner-band replacement (Section 2, note). "Two working days" is kept on the For Organisations form.
 
 ---
 

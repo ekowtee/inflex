@@ -15,7 +15,7 @@ export default function FeaturedJobs() {
   return (
     <section className="band-ivory w-full py-24 md:py-32" aria-label="Featured jobs">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="type-h2 text-neutral-900">Featured Jobs</h2>
+        <h2 className="type-h2 text-neutral-900">Open now</h2>
 
         <div className="mt-16 grid gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
           {roles.map((job) => (

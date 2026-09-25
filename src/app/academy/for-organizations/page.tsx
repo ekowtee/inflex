@@ -79,9 +79,9 @@ export default function ForOrganizationsPage() {
     <div>
       <PageHero
         eyebrow="For Organisations"
-        title="Transform your workforce. Transform your business."
-        lead="Custom training programmes built around your strategic priorities. Delivered on-site, virtually, or hybrid — measured against the outcomes that matter to your leadership team."
-        formation={3}
+        title="Your team already knows the gap. We close it."
+        lead="We build the curriculum around your stack and your objectives, deliver it where your team already is, and measure it against something your CFO recognises."
+        formation="tower"
       />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="Why corporates choose us">
@@ -101,11 +101,11 @@ export default function ForOrganizationsPage() {
             Why corporates choose us
           </Reveal>
           <Reveal as="h2" className="type-h2 mt-6 max-w-[22ch] text-neutral-900" delay={80}>
-            Training that moves commercial outcomes.
+            Training your CFO will fund twice.
           </Reveal>
           <Reveal as="p" className="type-body-l mt-6 max-w-[58ch] text-neutral-600" delay={160}>
-            Three reasons L&amp;D leaders and CIOs partner with Inflexions Academy
-            over generic training providers.
+            Three reasons L&amp;D leaders and CIOs bring us in rather than a
+            training provider.
           </Reveal>
 
           <div className="mt-16 grid gap-x-12 gap-y-10 md:grid-cols-3">
@@ -128,11 +128,11 @@ export default function ForOrganizationsPage() {
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal as="h2" className="type-h2 max-w-[20ch] text-silver-100">
-            A proven four-step engagement
+            Four steps, and you see the measurement at the end of them
           </Reveal>
           <Reveal as="p" className="type-body-l mt-6 max-w-[56ch] text-silver-300" delay={80}>
-            Our engagement model is built for organisations that need outcomes,
-            not just attendance sheets.
+            Built for the organisations that have to show what the training
+            changed.
           </Reveal>
 
           <ol className="mt-16 grid gap-x-12 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
@@ -168,8 +168,8 @@ export default function ForOrganizationsPage() {
           <div className="border-t border-neutral-200 pt-12">
             <h2 className="type-h2 text-neutral-900">Tell us about your team</h2>
             <p className="type-body-l mt-4 text-neutral-600">
-              Share a few details and our Academy team will be in touch within two
-              working days to design your engagement.
+              Share a few details. We will come back within two working days with
+              a shape for the engagement, not a brochure.
             </p>
           </div>
 
@@ -179,7 +179,7 @@ export default function ForOrganizationsPage() {
 
       <AskBand
         variant="academy"
-        line="Share a few details and our Academy team will be in touch within two working days to design your engagement."
+        line="Share a few details. We will come back within two working days with a shape for the engagement, not a brochure."
         label="Tell us about your team"
         href="#enquire"
       />

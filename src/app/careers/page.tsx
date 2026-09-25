@@ -8,7 +8,9 @@ import PageHero from "../components/PageHero";
 /**
  * /careers — PHASE5_BRIEF.md §4 Task 6.
  *
- * Copy is unchanged. Two things were removed and both are recorded in
+ * The hero, section heading and body are the Variant B copy approved by the
+ * owner on 25 September 2026 (PHASE5_COPY.md). Two things were removed and
+ * both are recorded in
  * PHASE5_REPORT.md: the "Search Job" field, which had no state, no handler
  * and no form around it and searched nothing; and the navy wash over a
  * photograph at the foot, which was the retired Banner's composition. Its
@@ -21,12 +23,12 @@ export default function CareersPage() {
   return (
     <div>
       <PageHero
-        title="Build What Matters. With People Who Do."
-        lead="Join a team that turns ambitious ideas into real-world IT impact."
-        formation={0}
+        title="Build the thing the country runs on."
+        lead="If you want your work to be a data centre, a national network, or the system a ministry depends on — this is the room."
+        formation="staircase"
       />
 
-      <section className="band-ivory w-full py-24 md:py-32" aria-label="Working with us">
+      <section className="band-ivory w-full py-24 md:py-32" aria-label="What the work is">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
             <div className="relative aspect-[16/10] overflow-hidden">
@@ -41,17 +43,15 @@ export default function CareersPage() {
 
             <div>
               <Reveal as="h2" className="type-h2 max-w-[18ch] text-neutral-900">
-                Working with us
+                What the work is
               </Reveal>
               <Reveal as="p" className="type-body-l mt-6 max-w-[56ch] text-neutral-600" delay={80}>
-                If you thrive on solving problems that matter&mdash;for
-                enterprises that depend on you&mdash;Inflexions is where your
-                expertise becomes impact.
+                The systems you would work on are load-bearing. When they are
+                down, a bank is down, or a network is, or a ministry is.
               </Reveal>
               <Reveal as="p" className="type-body-l mt-6 max-w-[56ch] text-neutral-600" delay={160}>
-                We hire for mastery and curiosity. If you&apos;re ready to work on
-                high-stakes projects with a team that values precision over
-                politics, explore what&apos;s open.
+                We hire for mastery and curiosity, and we are small enough that
+                you will not be three layers from the decision.
               </Reveal>
 
               <Reveal className="mt-10" delay={240}>

@@ -10,8 +10,9 @@ import { domains, getFeaturedProgrammes, getDomain } from "./data";
 /**
  * /academy — PHASE5_BRIEF.md §4 Task 5.
  *
- * The Academy's own landing page. Copy is unchanged: the Variant B rewrite
- * is drafted in PHASE5_COPY.md for the owner and ships only once signed off.
+ * The Academy's own landing page. Its headlines, leads and calls to action
+ * are the Variant B copy approved by the owner on 25 September 2026
+ * (PHASE5_COPY.md).
  *
  * Its closing band is the academy variant of AskBand, because the next step
  * from here is training, not an architecture review.
@@ -47,9 +48,9 @@ export default function AcademyLandingPage() {
     <div>
       <PageHero
         eyebrow="Inflexions Academy"
-        title="Develop the capabilities that shape the next decade."
-        lead="Expert-led training in AI, cybersecurity, cloud, and digital strategy — for individuals advancing their careers and organisations building competitive teams."
-        formation={3}
+        title="Learn it from the people who are building it."
+        lead="The engineers who architect national networks and Tier III data centres teach what they do — AI, cybersecurity, cloud and digital strategy, for you or for your whole team."
+        formation="open-book"
       />
 
       <AudienceSwitcher />
@@ -60,7 +61,7 @@ export default function AcademyLandingPage() {
             Four competency domains
           </Reveal>
           <Reveal as="h2" className="type-h2 mt-6 max-w-[24ch] text-neutral-900" delay={80}>
-            Structured learning, built around how enterprises actually work.
+            Four domains, because that is how the work divides.
           </Reveal>
           <Reveal as="p" className="type-body-l mt-6 max-w-[62ch] text-neutral-600" delay={160}>
             Our catalogue spans four domains covering the disciplines that define
@@ -113,11 +114,11 @@ export default function AcademyLandingPage() {
         data-register="obsidian"
         data-header-dark=""
         className="band-obsidian on-obsidian w-full py-24 md:py-32"
-        aria-label="Why Inflexions Academy"
+        aria-label="Why learn it here"
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal as="h2" className="type-h2 text-silver-100">
-            Why Inflexions Academy
+            Why learn it here
           </Reveal>
           <Reveal as="p" className="type-body-l mt-6 max-w-[56ch] text-silver-300" delay={80}>
             Four reasons enterprises and individuals choose us over generic

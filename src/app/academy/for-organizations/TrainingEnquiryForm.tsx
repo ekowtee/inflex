@@ -214,7 +214,7 @@ export default function TrainingEnquiryForm({ domains }: { domains: ReadonlyArra
           disabled={sending}
           className="inline-flex h-14 items-center rounded-[6px] bg-primary-500 px-8 font-semibold text-white transition-colors duration-[var(--motion-duration-micro)] hover:bg-primary-600 disabled:opacity-50"
         >
-          {sending ? "Sending…" : "Request Training Proposal"}
+          {sending ? "Sending…" : "Request a proposal"}
         </button>
       </form>
     </>

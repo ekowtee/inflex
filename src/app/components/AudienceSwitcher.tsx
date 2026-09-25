@@ -10,7 +10,8 @@ import ExitLink from "./home/ExitLink";
  *
  * They are two doors now, in the shape SideDoors.tsx uses on the home page:
  * one band, one hairline between the halves, each half its own surface. The
- * copy is unchanged.
+ * heading, lead and link labels are the Variant B copy approved by the owner
+ * on 25 September 2026 (PHASE5_COPY.md).
  */
 
 const audiences = [
@@ -23,7 +24,7 @@ const audiences = [
       "Flexible scheduling with virtual and in-person options",
     ],
     href: "#domains",
-    link: "Browse Programmes",
+    link: "See what is running",
   },
   {
     label: "For Organisations",
@@ -34,7 +35,7 @@ const audiences = [
       "Measurable ROI with post-programme evaluation reporting",
     ],
     href: "/academy/for-organizations",
-    link: "Enterprise Training",
+    link: "Train your team",
   },
 ] as const;
 
@@ -43,12 +44,12 @@ export default function AudienceSwitcher() {
     <section className="band-ivory w-full py-24 md:py-32" aria-label="Who the Academy is for">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal as="h2" className="type-h2 max-w-[22ch] text-neutral-900">
-          Training That Meets You Where You Are
+          Two ways in. Same room.
         </Reveal>
         <Reveal as="p" className="type-body-l mt-6 max-w-[62ch] text-neutral-600" delay={80}>
-          Whether you&apos;re advancing your own career or upskilling a team,
-          Inflexions Academy delivers rigorous, practitioner-led programmes built
-          around your goals.
+          Whether you are moving your own career or your whole team&apos;s
+          capability, you get the same practitioners and the same curriculum —
+          sized to you.
         </Reveal>
 
         <div className="mt-16 grid border-t border-neutral-200 md:grid-cols-2 md:divide-x md:divide-neutral-200 max-md:divide-y max-md:divide-neutral-200">

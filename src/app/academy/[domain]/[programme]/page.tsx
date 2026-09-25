@@ -180,10 +180,9 @@ export default async function ProgrammeDetailPage({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="type-h3 text-silver-100">Delivered by certified practitioners</h2>
           <p className="type-body mt-4 max-w-[70ch] text-silver-300">
-            Our instructors hold relevant industry certifications and bring an
-            average of 10+ years of enterprise delivery experience across
-            banking, telecommunications, government, and technology
-            organisations.
+            Every programme is taught by a practitioner who is currently
+            delivering the work it covers, and who holds the certifications it
+            prepares you for.
           </p>
         </div>
       </section>
