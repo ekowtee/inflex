@@ -240,10 +240,19 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
     // Below lg the copy runs full width over the object in every beat after
     // the hero, so the Core recedes to a texture there.
     const narrow = window.innerWidth < 1024;
+    // Below lg, from the turning point to the end of the pillars, the beats
+    // carry the curve and the four objects as stills; the live Core fades out
+    // there rather than showing the same object twice behind the copy.
+    const stillsCarry =
+      narrow && sample.vh < BEAT_START_VH[5] + 30
+        ? Math.min(1, Math.max(0, (sample.vh - BEAT_START_VH[2]) / 20))
+        : 0;
     store.opacity =
       (narrow && sample.vh > 60
         ? sample.opacity * Math.max(0.35, 1 - (sample.vh - 60) / 60) * (1 - 0.4 * store.askEntry)
-        : sample.opacity) * leaving;
+        : sample.opacity) *
+      leaving *
+      (1 - stillsCarry);
     if (sample.vh > BEAT_START_VH[2]) store.scrolledPastArrival = true;
 
     // Below lg every row is open and none is active, so no link is

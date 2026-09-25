@@ -444,11 +444,9 @@ html[data-core-live] body {
   background: transparent;
 }
 
-/* Beat 4's phone posters stand in for the Core on Tier C. While the live
-   scene is behind the page they would show the same object twice. */
-html[data-core-live] [data-pillar-poster] {
-  display: none;
-}
+/* Beat 4's phone posters show whether or not the Core is live: below lg
+   the live scene is a faint texture behind the copy, so the posters are what
+   anchor each pillar (owner, 25 September 2026). They are lg:hidden. */
 
 /* A thread is born from the Core (Beats 2 and 4). Until the spine has
    placed it at the node it drops from, it is collapsed; being placed is what

@@ -17,7 +17,10 @@
  *
  * Below lg there is no pin and no active row: every row is open, the
  * attribute is ignored, and each is preceded by its formation poster. The
- * posters are captured from the real scene, one per formation.
+ * posters are captured from the real scene, one per formation, and show
+ * whether or not the Core is live: below lg the live Core is only a faint
+ * texture behind the copy, so the posters are what anchor each pillar
+ * (owner, 25 September 2026).
  */
 import Image from "next/image";
 import Link from "next/link";
@@ -118,7 +121,7 @@ export default function Pillars() {
                         (network fabric, shield, nebula, plane). */}
                     <div
                       data-pillar-poster
-                      className="relative mb-6 h-[56vw] w-full overflow-hidden lg:hidden [html[data-core-live]_&]:hidden"
+                      className="relative mb-6 h-[56vw] w-full overflow-hidden lg:hidden [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_100%)]"
                     >
                       <Image
                         src={`/three/posters/f${i + 1}-lit-mobile.webp`}

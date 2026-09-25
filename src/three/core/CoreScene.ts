@@ -68,6 +68,9 @@ const WATCH_LIMIT_MS = 40;
  * same machine unthrottled peaks at 0.2%. Phase 6, 25 September 2026.
  */
 const JANK_MS = 34;
+/** Structure lift (uStruct) for a formed pillar and for the fully bent curve. */
+const STRUCT_PILLAR = 2.2;
+const STRUCT_BEND = 2.2;
 const JANK_SHARE = 0.05;
 /** A frame longer than this is a pause (hidden tab, blocked thread), not a render. */
 const PAUSE_MS = 250;
@@ -514,6 +517,17 @@ export class CoreScene {
     // out (2560 × 1440 read as dust). Scale with height above 900 px.
     this.handles.nodeMaterial.uniforms.uDpr.value =
       this.options.dpr * Math.min(1.6, Math.max(1, this.height / 900));
+    // The formed objects carry their shape, not only their ember: the four
+    // pillars and the sheet bent into the curve lift their graphite
+    // structure (owner, 25 September 2026: "too faint"). The resting sheet
+    // and the mark keep the levels they were signed off at.
+    const sFrom = capture ? store.from : track.from;
+    const sTo = capture ? store.to : track.to;
+    const sMix = capture ? store.mix : track.mix;
+    const isPillar = (f: number) => (f >= 1 && f <= 4 ? 1 : 0);
+    const pillarWeight = isPillar(sFrom) * (1 - sMix) + isPillar(sTo) * sMix;
+    const bendWeight = sFrom === 0 && sTo === 0 ? (capture ? store.captureBend : track.bend) : 0;
+    const struct = 1 + (STRUCT_PILLAR - 1) * pillarWeight + (STRUCT_BEND - 1) * bendWeight;
     for (const material of [this.handles.nodeMaterial, this.handles.edgeMaterial]) {
       const u = material.uniforms;
       u.uTime.value = capture ? 0 : time;
@@ -525,6 +539,7 @@ export class CoreScene {
       u.uSpread.value = capture ? 0 : spread;
       u.uBend.value = capture ? store.captureBend : track.bend;
       u.uOpacity.value = store.opacity;
+      u.uStruct.value = struct;
       u.uIdle.value = capture ? 0 : 1;
       u.uProximity.value = pointer.active && !capture ? 1 : 0;
       u.uPointerWorld.value.set(pointer.worldX, pointer.worldY);

@@ -185,6 +185,7 @@ export const nodesFragment = stripGlsl(/* glsl */ `
   uniform float uEncodeSRGB;
   uniform float uEmberHalo;
   uniform float uGain;
+  uniform float uStruct;
 
   out vec4 fragColor;
 
@@ -212,6 +213,10 @@ export const nodesFragment = stripGlsl(/* glsl */ `
     lit += uSilver100 * vRim;
     vec3 ember = uEmber * 1.4 * vPulse;
     vec3 color = mix(lit, ember, smoothstep(0.5, 1.0, vHeat * vPulse));
+    // A formed object lifts its graphite structure toward silver so the
+    // shape carries, not only its ember (owner, 25 September 2026).
+    float structure = 1.0 - smoothstep(0.5, 1.0, vHeat * vPulse);
+    color *= mix(1.0, uStruct, structure);
 
     // Exponential-squared fog toward the clear colour.
     float fog = 1.0 - exp(-uFogDensity * uFogDensity * vDepth * vDepth);
@@ -221,6 +226,7 @@ export const nodesFragment = stripGlsl(/* glsl */ `
     // Ember keeps its presence: the line must not dissolve with the field.
     float keep = mix(vPresence.y, vPresence.x, smoothstep(0.5, 1.0, vHeat));
     float alpha = (core + halo) * depthCue * uOpacity * keep;
+    alpha = min(1.0, alpha * mix(1.0, 0.5 + 0.5 * uStruct, structure));
 
     if (uEmberPass > 0.5) {
       if (uEmberHalo > 1.0) {
