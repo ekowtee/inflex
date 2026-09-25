@@ -120,15 +120,40 @@ export default function Header() {
     };
   }, [pathname, hasDark]);
 
-  // The open panel locks page scroll.
+  // The open panel locks page scroll, and takes the page behind it out of
+  // the tab order and the accessibility tree (inert), so focus stays in the
+  // panel.
   useEffect(() => {
     if (!isMobileMenuOpen) return;
     const previous = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
+    const behind = Array.from(document.querySelectorAll<HTMLElement>("#main-content, footer"));
+    behind.forEach((el) => el.setAttribute("inert", ""));
     return () => {
       document.documentElement.style.overflow = previous;
+      behind.forEach((el) => el.removeAttribute("inert"));
     };
   }, [isMobileMenuOpen]);
+
+  // Escape closes the open panel, or else the open dropdown, and returns
+  // focus to the control that opened it.
+  useEffect(() => {
+    if (!isMobileMenuOpen && !openDropdown) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      if (isMobileMenuOpen) {
+        setOpenDropdown(null);
+        setIsMobileMenuOpen(false);
+        document.querySelector<HTMLElement>('[aria-controls="mobile-menu"]')?.focus();
+      } else if (openDropdown) {
+        const button = document.querySelector<HTMLElement>(`header nav[aria-label="Main"] [aria-expanded="true"]`);
+        setOpenDropdown(null);
+        button?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [isMobileMenuOpen, openDropdown]);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen((open) => !open);
   const closeAllDropdowns = useCallback(() => setOpenDropdown(null), []);
@@ -142,12 +167,12 @@ export default function Header() {
   // The bar is dark while over the arrival, and while the panel is open.
   const dark = overDark || isMobileMenuOpen;
   const linkClass = dark
-    ? "text-silver-300 hover:text-white focus:text-white"
+    ? "text-silver-300 hover:text-silver-100 focus:text-silver-100"
     : "text-gray-700 hover:text-red-600 focus:text-red-600";
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,box-shadow] duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,box-shadow] duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] ${
         dark
           ? // A light frost over the hero rather than full transparency: a
             // tint of Obsidian with a blur, and a hairline at 8% white.
@@ -163,6 +188,7 @@ export default function Header() {
         className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 hidden lg:block"
         style={{ left: "calc((100vw - 80rem) / 4 + 1rem)" }}
         onClick={closeAllDropdowns}
+        aria-label="Inflexions IT home"
       >
         <Image
           src={dark ? "/inflexlogo-light.png" : "/inflexlogo.png"}
@@ -181,7 +207,7 @@ export default function Header() {
               type="button"
               onClick={toggleMobileMenu}
               className={`inline-flex items-center justify-center -ml-2 h-10 w-10 rounded-[6px] focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 ${
-                dark ? "text-silver-100 hover:text-white" : "text-gray-600 hover:text-red-600"
+                dark ? "text-silver-100" : "text-gray-600 hover:text-red-600"
               }`}
               aria-controls="mobile-menu"
               aria-expanded={isMobileMenuOpen}
@@ -196,6 +222,7 @@ export default function Header() {
             href="/"
             className="lg:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center"
             onClick={closeMobileNavigation}
+            aria-label="Inflexions IT home"
           >
             <Image
               src={dark ? "/inflexlogo-light.png" : "/inflexlogo.png"}
@@ -207,7 +234,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop navigation, left of the container */}
-          <nav className="hidden lg:flex lg:items-center">
+          <nav className="hidden lg:flex lg:items-center" aria-label="Main">
             <div className="flex space-x-6 lg:space-x-8">
               {navLinks.map((link) => {
                 const isOpen = isDropdownOpen(link.name);
@@ -218,31 +245,34 @@ export default function Header() {
                         <button
                           type="button"
                           onClick={() => toggleDropdown(link.name)}
-                          className={`group inline-flex items-center text-sm font-medium transition duration-150 ease-in-out focus:outline-none ${
-                            isOpen ? (dark ? "text-white" : "text-red-600") : linkClass
+                          className={`group inline-flex items-center text-sm font-medium transition duration-[var(--motion-duration-micro)] ease-[var(--motion-ease-out)] focus:outline-none ${
+                            isOpen ? (dark ? "text-silver-100" : "text-red-600") : linkClass
                           }`}
                           aria-expanded={isOpen}
+                          aria-controls={`nav-panel-${link.name.toLowerCase()}`}
                         >
                           <span>{link.name}</span>
                           <ChevronDown
-                            className={`ml-1 h-4 w-4 transition-transform duration-150 ${isOpen ? "rotate-180" : ""}`}
+                            className={`ml-1 h-4 w-4 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] ${isOpen ? "rotate-180" : ""}`}
                             aria-hidden="true"
                           />
                         </button>
                         <div
-                          className={`absolute left-0 mt-2 w-60 rounded-[6px] shadow-lg bg-white ring-1 ring-black/5 focus:outline-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] origin-top-left ${
+                          className={`absolute left-0 mt-2 w-60 rounded-[6px] shadow-lg bg-white ring-1 ring-black/5 focus:outline-none transition-all duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] origin-top-left ${
                             isOpen ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-2 scale-95 invisible"
                           }`}
-                          role="menu"
-                          aria-orientation="vertical"
+                          // A disclosure, not role="menu": an ARIA menu promises
+                          // arrow-key navigation, and these are plain links.
+                          // White in both registers, so focus stays red.
+                          id={`nav-panel-${link.name.toLowerCase()}`}
+                          data-register="ivory"
                         >
-                          <div className="py-1" role="none">
+                          <div className="py-1">
                             {link.submenu?.map((subitem) => (
                               <Link
                                 key={subitem.name}
                                 href={subitem.href}
                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-600"
-                                role="menuitem"
                                 onClick={closeAllDropdowns}
                               >
                                 {subitem.name}
@@ -254,7 +284,7 @@ export default function Header() {
                     ) : (
                       <Link
                         href={link.href}
-                        className={`inline-flex items-center text-sm font-medium transition duration-150 ease-in-out ${linkClass}`}
+                        className={`inline-flex items-center text-sm font-medium transition duration-[var(--motion-duration-micro)] ease-[var(--motion-ease-out)] ${linkClass}`}
                         onClick={closeAllDropdowns}
                       >
                         {link.name}
@@ -275,10 +305,10 @@ export default function Header() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`transition-opacity ${dark ? "opacity-80 hover:opacity-100" : "text-gray-400 hover:text-red-600"}`}
+                  className={`transition-opacity duration-[var(--motion-duration-micro)] ease-[var(--motion-ease-out)] ${dark ? "opacity-80 hover:opacity-100" : "text-gray-400 hover:text-red-600"}`}
                   title={name}
                 >
-                  <span className="sr-only">{name}</span>
+                  <span className="sr-only">{name} (opens in a new tab)</span>
                   <Image
                     src={iconPath}
                     alt=""
@@ -294,7 +324,7 @@ export default function Header() {
             <Link
               href="/contact"
               onClick={closeMobileNavigation}
-              className="inline-flex items-center justify-center text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 transition-colors h-9 px-3.5 rounded-[6px] lg:px-6 lg:h-16 lg:rounded-none"
+              className="inline-flex items-center justify-center text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 transition-colors duration-[var(--motion-duration-micro)] ease-[var(--motion-ease-out)] h-9 px-3.5 rounded-[6px] lg:px-6 lg:h-16 lg:rounded-none"
             >
               Contact us
             </Link>
@@ -306,7 +336,7 @@ export default function Header() {
       <div
         id="mobile-menu"
         data-lenis-prevent=""
-        className={`lg:hidden fixed inset-x-0 top-14 bottom-0 bg-obsidian-950 text-silver-100 overflow-y-auto transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`lg:hidden fixed inset-x-0 top-14 bottom-0 bg-obsidian-950 text-silver-100 overflow-y-auto transition-[opacity,transform] duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] ${
           isMobileMenuOpen ? "opacity-100 translate-y-0 visible" : "opacity-0 -translate-y-2 invisible"
         }`}
         aria-hidden={!isMobileMenuOpen}
@@ -327,14 +357,14 @@ export default function Header() {
                       >
                         <span>{link.name}</span>
                         <ChevronDown
-                          className={`h-5 w-5 text-silver-500 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                          className={`h-5 w-5 text-silver-500 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] ${isOpen ? "rotate-180" : ""}`}
                           aria-hidden="true"
                         />
                       </button>
                       <div className={`${isOpen ? "grid" : "hidden"} pb-3 gap-1`}>
                         <Link
                           href={link.href}
-                          className="block py-2 text-base text-silver-300 hover:text-white"
+                          className="block py-2 text-base text-silver-300 hover:text-silver-100"
                           onClick={closeMobileNavigation}
                         >
                           All {link.name.toLowerCase()}
@@ -343,7 +373,7 @@ export default function Header() {
                           <Link
                             key={subitem.name}
                             href={subitem.href}
-                            className="block py-2 text-base text-silver-300 hover:text-white"
+                            className="block py-2 text-base text-silver-300 hover:text-silver-100"
                             onClick={closeMobileNavigation}
                           >
                             {subitem.name}
@@ -354,7 +384,7 @@ export default function Header() {
                   ) : (
                     <Link
                       href={link.href}
-                      className="block py-4 text-[22px] font-semibold tracking-[-0.01em] text-silver-100 hover:text-white"
+                      className="block py-4 text-[22px] font-semibold tracking-[-0.01em] text-silver-100"
                       onClick={closeMobileNavigation}
                     >
                       {link.name}
@@ -383,7 +413,7 @@ export default function Header() {
                   className="opacity-70 hover:opacity-100"
                   title={name}
                 >
-                  <span className="sr-only">{name}</span>
+                  <span className="sr-only">{name} (opens in a new tab)</span>
                   <Image src={iconPath} alt="" width={24} height={24} className="h-6 w-6 brightness-0 invert" />
                 </a>
               ))}

@@ -182,7 +182,10 @@ export default function Arrival() {
       <div className="absolute inset-0 z-[1]" aria-hidden="true">
         <Poster lit={false} visible={!posterHidden} ms={duration.scene} eager />
         {wantLit && (
-          <Poster lit visible={litLoaded && !posterHidden} ms={1800} eager={false} onLoad={onLitLoad} />
+          // The scene token, which tokens.ts names for poster crossfades. It
+          // was 1800 ms to echo the live arrival light (HERO_SCENE_SPEC §9),
+          // but §10.2 allows no DOM motion over 1 s outside the pinned chapter.
+          <Poster lit visible={litLoaded && !posterHidden} ms={duration.scene} eager={false} onLoad={onLitLoad} />
         )}
       </div>
 
@@ -210,7 +213,7 @@ export default function Arrival() {
             <Magnetic>
               <Link
                 href="/contact"
-                className="inline-flex h-14 items-center rounded-[6px] bg-primary-500 px-8 font-semibold text-white transition-colors duration-[120ms] hover:bg-primary-600"
+                className="inline-flex h-14 items-center rounded-[6px] bg-primary-500 px-8 font-semibold text-white transition-colors duration-[var(--motion-duration-micro)] hover:bg-primary-600"
               >
                 Book the review
               </Link>

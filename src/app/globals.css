@@ -65,6 +65,18 @@
   --color-graphite: #8F8D8D;
   --color-ember: #FF3B2F;
 
+  /* ─── Motion defaults ───
+     CREATIVE_DIRECTION_3D.md §10.2: no element uses an easing or duration
+     that is not in src/motion/tokens.ts. A bare `transition-colors` (or any
+     transition utility without its own duration-/ease-) falls back to these,
+     so Tailwind's stock 150 ms and cubic-bezier(0.4, 0, 0.2, 1) can never
+     reach the page. The named curves are remapped for the same reason. */
+  --default-transition-duration: var(--motion-duration-micro);
+  --default-transition-timing-function: var(--motion-ease-out);
+  --ease-out: var(--motion-ease-out);
+  --ease-in-out: var(--motion-ease-in-out);
+  --ease-in: var(--motion-ease-exit);
+
   /* ─── Font Families ─── */
   --font-sans: var(--font-rubik), "Rubik Metric", system-ui, sans-serif;
   --font-rubik: var(--font-rubik), "Rubik Metric", system-ui, sans-serif;
@@ -339,7 +351,9 @@
     background: #171A20;
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 400ms var(--motion-ease-out);
+    /* The reveal token, not the 400 ms the brief first named: §10.2 allows
+       no duration outside tokens.ts. Ledger.tsx times the answer off it. */
+    transition: transform var(--motion-duration-reveal) var(--motion-ease-out);
   }
 
   .strike[data-struck]::after {
@@ -496,6 +510,18 @@ html[data-core-live] [data-pillar-poster] {
 .on-obsidian :focus-visible,
 .on-obsidian:focus-visible {
   outline-color: #E6E7EA;
+}
+
+/* The header changes register with scroll and says so in data-register
+   rather than a class, so the frost over the hero and the open mobile panel
+   need the same light ring. Its dropdown panels are white in both registers
+   and keep the red one. */
+header[data-register="obsidian"] :focus-visible {
+  outline-color: #E6E7EA;
+}
+
+header [data-register="ivory"] :focus-visible {
+  outline-color: #BD2E25;
 }
 
 /* Respect reduced-motion preferences */

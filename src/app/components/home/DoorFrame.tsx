@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { prefersReducedMotion } from "@/motion/loadMotion";
+import { duration } from "@/motion/tokens";
 
 /**
  * The side doors' frame, drawn — owner, 24 September 2026.
@@ -18,6 +19,14 @@ import { prefersReducedMotion } from "@/motion/loadMotion";
 type Phase = "drawn" | "armed" | "drawing";
 
 const EASE = "var(--motion-ease-out)";
+
+/* Every stroke on the reveal token (§10.2: no duration outside tokens.ts).
+   The divider draws first; the hairlines leave its ends half-way through
+   it; the content follows as the divider lands. The whole gesture ends
+   inside one second. */
+const DRAW = duration.reveal;
+const HAIRLINE_DELAY = duration.ui;
+const CONTENT_DELAY = duration.reveal;
 
 export default function DoorFrame({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -54,25 +63,25 @@ export default function DoorFrame({ children }: { children: ReactNode }) {
       <span
         aria-hidden="true"
         className={`${line} inset-x-0 top-0 h-px`}
-        style={{ transform: open ? "scaleX(1)" : "scaleX(0)", transformOrigin: "50% 50%", transition: t(700, 280) }}
+        style={{ transform: open ? "scaleX(1)" : "scaleX(0)", transformOrigin: "50% 50%", transition: t(DRAW, HAIRLINE_DELAY) }}
       />
       <span
         aria-hidden="true"
         className={`${line} inset-x-0 bottom-0 h-px`}
-        style={{ transform: open ? "scaleX(1)" : "scaleX(0)", transformOrigin: "50% 50%", transition: t(700, 280) }}
+        style={{ transform: open ? "scaleX(1)" : "scaleX(0)", transformOrigin: "50% 50%", transition: t(DRAW, HAIRLINE_DELAY) }}
       />
       {/* The divider between the doors, from its middle. On phones the
           doors stack and the grid's own static divider sits between them. */}
       <span
         aria-hidden="true"
         className={`${line} left-1/2 top-0 hidden h-full w-px md:block`}
-        style={{ transform: open ? "scaleY(1)" : "scaleY(0)", transformOrigin: "50% 50%", transition: t(420, 0) }}
+        style={{ transform: open ? "scaleY(1)" : "scaleY(0)", transformOrigin: "50% 50%", transition: t(DRAW, 0) }}
       />
       <div
         style={{
           opacity: open ? 1 : 0,
           transform: open ? "none" : "translateY(12px)",
-          transition: t(480, 620),
+          transition: t(DRAW, CONTENT_DELAY),
         }}
       >
         {children}

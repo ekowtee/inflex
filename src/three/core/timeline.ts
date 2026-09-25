@@ -207,6 +207,7 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
   let beats = measureBeats();
   let frame = 0;
   let lastPillar = -1;
+  let lastNarrow: boolean | null = null;
   let lastBeat = -2;
 
   const pin = document.querySelector<HTMLElement>('[data-beat="4"] [data-pin]');
@@ -245,11 +246,15 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
         : sample.opacity) * leaving;
     if (sample.vh > BEAT_START_VH[2]) store.scrolledPastArrival = true;
 
-    if (pin && sample.pillar !== lastPillar) {
+    // Below lg every row is open and none is active, so no link is
+    // "current" there; a screen reader would otherwise hear a state the page
+    // does not show.
+    if (pin && (sample.pillar !== lastPillar || narrow !== lastNarrow)) {
       lastPillar = sample.pillar;
+      lastNarrow = narrow;
       pin.dataset.active = String(sample.pillar);
       pillarLinks.forEach((link, i) => {
-        if (i === sample.pillar) link.setAttribute("aria-current", "true");
+        if (!narrow && i === sample.pillar) link.setAttribute("aria-current", "true");
         else link.removeAttribute("aria-current");
       });
     }

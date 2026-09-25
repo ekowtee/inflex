@@ -67,12 +67,14 @@ export function PartnerLogo({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-export default function PartnerColumns() {
+/** `headingLevel`: each column's eyebrow is its heading. h2 where the wall
+ *  is a chapter of its own (home), h3 under a section heading (/solutions). */
+export default function PartnerColumns({ headingLevel = "h3" }: { headingLevel?: "h2" | "h3" }) {
   return (
     <div className="mx-auto grid max-w-7xl gap-16 px-4 sm:px-6 md:grid-cols-2 md:gap-12 lg:px-8">
       {partnerColumns.map((column) => (
         <div key={column.eyebrow}>
-          <Reveal as="p" className="type-eyebrow text-neutral-500">
+          <Reveal as={headingLevel} className="type-eyebrow text-neutral-500">
             {column.eyebrow}
           </Reveal>
           <Reveal as="p" className="type-body mt-4 max-w-[46ch] text-neutral-600" delay={80}>

@@ -24,7 +24,8 @@ export default function TrustedBy() {
       aria-label="Clients"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal as="p" className="type-eyebrow text-silver-500">
+        {/* The chapter's heading, set as an eyebrow. */}
+        <Reveal as="h2" className="type-eyebrow text-silver-500">
           Trusted by
         </Reveal>
         <Reveal as="p" className="type-body mt-4 max-w-[52ch] text-silver-300" delay={80}>

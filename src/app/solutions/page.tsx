@@ -93,8 +93,8 @@ export default function SolutionsPage() {
 
           <div className="mt-16 grid gap-4 sm:grid-cols-3">
             {[
-              { src: "/assets/solutions/sol2.webp", alt: "Team collaborating" },
-              { src: "/assets/solutions/sol1.webp", alt: "Professional working" },
+              { src: "/assets/solutions/sol2.webp", alt: "Engineers in a network operations room between server racks" },
+              { src: "/assets/solutions/sol1.webp", alt: "Data scientist reviewing a model beside its code" },
               { src: "/assets/solutions/sol3.webp", alt: "Data visualisation" },
             ].map((photo) => (
               <div key={photo.src} className="relative aspect-[4/3] overflow-hidden">

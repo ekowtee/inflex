@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import Reveal from "@/motion/Reveal";
+import { duration } from "@/motion/tokens";
 
-/** 400 ms to draw the strike, then 120 ms before its answer — §8.4. */
-const STRIKE_MS = 400;
-const AFTER_STRIKE_MS = 120;
+/** The strike draws on the reveal token, then 120 ms before its answer —
+ *  §8.4, with the draw moved onto a token per CREATIVE_DIRECTION_3D §10.2. */
+const STRIKE_MS = duration.reveal;
+const AFTER_STRIKE_MS = duration.micro;
 
 const rows = [
   {
@@ -37,7 +39,7 @@ const rows = [
  * a single gesture, and staggering them by visibility would make the second
  * and third fire at the reader's scroll speed instead of the page's tempo.
  *
- * The 400 ms draw itself lives in .strike / .strike[data-struck] in
+ * The draw itself lives in .strike / .strike[data-struck] in
  * globals.css, where reduced motion can show it already drawn. This file
  * only decides when the attribute lands.
  *

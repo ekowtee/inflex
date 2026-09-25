@@ -39,7 +39,7 @@ const social = [
 ];
 
 const link =
-  "text-silver-300 transition-colors duration-[var(--motion-duration-micro)] hover:text-white";
+  "text-silver-300 transition-colors duration-[var(--motion-duration-micro)] ease-[var(--motion-ease-out)] hover:text-silver-100";
 
 export default function Footer() {
   return (
@@ -139,8 +139,8 @@ export default function Footer() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={label}
-                  className="text-silver-500 transition-colors duration-[var(--motion-duration-micro)] hover:text-white"
+                  aria-label={`${label} (opens in a new tab)`}
+                  className="text-silver-500 transition-colors duration-[var(--motion-duration-micro)] ease-[var(--motion-ease-out)] hover:text-silver-100"
                 >
                   <Icon className="h-5 w-5" strokeWidth={1.5} />
                 </a>
