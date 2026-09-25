@@ -40,6 +40,7 @@ export default function JobsPage() {
         title="Open Roles"
         lead="Apply by email with your CV. The role is already in the subject line, so it reaches the right team."
         size="compact"
+        formation={0}
       />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="Open roles">

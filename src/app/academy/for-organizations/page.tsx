@@ -81,7 +81,7 @@ export default function ForOrganizationsPage() {
         eyebrow="For Organisations"
         title="Transform your workforce. Transform your business."
         lead="Custom training programmes built around your strategic priorities. Delivered on-site, virtually, or hybrid — measured against the outcomes that matter to your leadership team."
-        formation="none"
+        formation={3}
       />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="Why corporates choose us">

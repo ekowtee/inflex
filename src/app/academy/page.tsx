@@ -49,7 +49,7 @@ export default function AcademyLandingPage() {
         eyebrow="Inflexions Academy"
         title="Develop the capabilities that shape the next decade."
         lead="Expert-led training in AI, cybersecurity, cloud, and digital strategy — for individuals advancing their careers and organisations building competitive teams."
-        formation="none"
+        formation={3}
       />
 
       <AudienceSwitcher />

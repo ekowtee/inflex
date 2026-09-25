@@ -7,6 +7,10 @@
  *   node scripts/capture-posters.mjs --formations 0,1,2,3,4
  *   node scripts/capture-posters.mjs --formations 1,2,3,4 --sizes mobile --lights lit
  *                                (the pillar posters for phones and Tier C)
+ *   node scripts/capture-posters.mjs --formations 0 --variant bend --lights lit
+ *                                (the sheet as the y = x³ curve: f0-bend-*)
+ *   --amount 0..1                how far the variant goes (default 1)
+ *   --cam px,py,pz,lx,ly,lz      a camera for the whole run
  *
  * Screenshots /core-capture with headless Chrome over CDP at the desktop and
  * portrait sizes, both light states, then writes WebP and AVIF at the
@@ -39,6 +43,13 @@ const sizesArg = args.indexOf("--sizes");
 const lightsArg = args.indexOf("--lights");
 const LIGHTS = lightsArg > -1 ? args[lightsArg + 1].split(",") : ["unlit", "lit"];
 const CENTRED = args.includes("--centred");
+const variantArg = args.indexOf("--variant");
+const VARIANT = variantArg > -1 ? args[variantArg + 1] : "";
+if (VARIANT && VARIANT !== "bend") throw new Error(`unknown --variant ${VARIANT}`);
+const amountArg = args.indexOf("--amount");
+const AMOUNT = amountArg > -1 ? Number(args[amountArg + 1]) : 1;
+const camArg = args.indexOf("--cam");
+const CAM = camArg > -1 ? args[camArg + 1] : "";
 const SIZES_RUN = sizesArg > -1 ? SIZES.filter((s) => args[sizesArg + 1].split(",").includes(s.name)) : SIZES;
 const BUDGET = {
   desktop: { webp: 160 * 1024, avif: 110 * 1024 },
@@ -141,12 +152,18 @@ try {
         mobile: size.name === "mobile",
       });
       for (const light of LIGHTS) {
-        const url = `${base}/core-capture?formation=${formation}&light=${light}&tier=A${CENTRED ? "&centre=1" : ""}`;
+        const url =
+          `${base}/core-capture?formation=${formation}&light=${light}&tier=A` +
+          (CENTRED ? "&centre=1" : "") +
+          (VARIANT ? `&${VARIANT}=${AMOUNT}` : "") +
+          (CAM ? `&cam=${CAM}` : "");
         await send("Page.navigate", { url });
         await waitForReady(send);
+        // Against a dev server, Next.js draws its indicator badge in a corner.
+        await send("Runtime.evaluate", { expression: "document.querySelectorAll('nextjs-portal').forEach((e) => e.remove())" });
         const { data } = await send("Page.captureScreenshot", { format: "png" });
         const png = Buffer.from(data, "base64");
-        const stem = `f${formation}-${light}-${size.name}${CENTRED ? "-centred" : ""}`;
+        const stem = `f${formation}${VARIANT ? `-${VARIANT}` : ""}-${light}-${size.name}${CENTRED ? "-centred" : ""}`;
         const budget = BUDGET[size.name];
 
         // WebP at q80, stepping down if over budget; AVIF likewise.
@@ -171,7 +188,7 @@ try {
           `  ${stem.padEnd(22)} webp ${(webp.length / 1024).toFixed(0).padStart(4)} KB (q${q + 4})   avif ${(avif.length / 1024).toFixed(0).padStart(4)} KB (q${aq + 5})`
         );
 
-        if (formation === 0 && light === "unlit" && size.name === "desktop" && !CENTRED) {
+        if (formation === 0 && light === "unlit" && size.name === "desktop" && !CENTRED && !VARIANT && !CAM) {
           const lqip = await sharp(png).resize(24, 14, { fit: "cover" }).webp({ quality: 40 }).toBuffer();
           const dataUri = `data:image/webp;base64,${lqip.toString("base64")}`;
           const file = "src/three/core/posters.ts";

@@ -5,6 +5,7 @@ import AskBand from "../../../components/AskBand";
 import CurriculumAccordion from "../../../components/CurriculumAccordion";
 import JsonLd from "../../../components/JsonLd";
 import PageHero from "../../../components/PageHero";
+import { domainFormation } from "../../heroFormation";
 import ProgrammeCard from "../../../components/ProgrammeCard";
 import ProgrammeDetailsSidebar from "../../../components/ProgrammeDetailsSidebar";
 import { entryGrid } from "../../../components/entryGrid";
@@ -87,7 +88,7 @@ export default async function ProgrammeDetailPage({
         eyebrow={programme.level}
         title={programme.title}
         lead={programme.subtitle}
-        formation="none"
+        formation={domainFormation(programme.domainSlug)}
         size="compact"
       />
 

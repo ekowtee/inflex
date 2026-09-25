@@ -70,7 +70,7 @@ export default function CaseStudyDetailPage() {
       <PageHero
         eyebrow={study.category}
         title={study.title}
-        formation="none"
+        formation={4}
         size="compact"
       />
 

@@ -6,8 +6,8 @@
  * entries separated by hairlines, which is how the home page lists things
  * and the only treatment the redesign allows.
  *
- * The hero leaves a slot for the live Core. Until the spine session mounts
- * it the band is plain Obsidian, which is correct rather than unfinished.
+ * The hero carries a still of the resting sheet, the structure the four
+ * pillars are made from (owner, 23 September 2026), not a live Core.
  *
  * Copy is the page's existing copy, verbatim. The only line that moved is
  * the heading: the hero's line was an h2 above an h1 further down the page,

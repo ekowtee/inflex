@@ -37,6 +37,7 @@ export default function InternshipsPage() {
         title="Internships"
         lead="Early in your career and want to work on enterprise infrastructure? Tell us who you are and what you want to learn."
         size="compact"
+        formation={0}
       />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="How to apply">

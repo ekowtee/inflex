@@ -16,8 +16,9 @@ import PageHero from "./PageHero";
  * square. Everything else — the included list, the ideal-for note — becomes
  * entries on hairlines.
  *
- * Services take no formation still. The four formations belong to the four
- * things we build; how we engage is not one of them.
+ * The hero carries the curve, the sheet as Beat 2's turning point: the four
+ * pillar shapes belong to the things we build, and how we engage is the
+ * inflection point we engineer.
  */
 
 export interface ServicePageProps {
@@ -47,7 +48,7 @@ export default function ServicePage({
 }: ServicePageProps) {
   return (
     <div>
-      <PageHero title={title} lead={lead} formation="none" />
+      <PageHero title={title} lead={lead} formation="curve" />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="Overview">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

@@ -68,7 +68,7 @@ const models = [
 export default function ServicesPage() {
   return (
     <div>
-      <PageHero title="Your Operations. Our Obsession." formation="none" />
+      <PageHero title="Your Operations. Our Obsession." formation="curve" />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="Service models">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

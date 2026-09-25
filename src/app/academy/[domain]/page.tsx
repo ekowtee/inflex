@@ -10,6 +10,7 @@ import ProgrammeCard from "../../components/ProgrammeCard";
 import { entryGrid } from "../../components/entryGrid";
 import ExitLink from "../../components/home/ExitLink";
 import { domains, getDomain, getProgrammesByDomain } from "../data";
+import { domainFormation } from "../heroFormation";
 
 /**
  * /academy/[domain] — PHASE5_BRIEF.md §4 Task 5.
@@ -70,7 +71,7 @@ export default async function DomainPage({
 
   return (
     <div>
-      <PageHero eyebrow="Academy domain" title={domain.title} lead={domain.tagline} formation="none" />
+      <PageHero eyebrow="Academy domain" title={domain.title} lead={domain.tagline} formation={domainFormation(domain.slug)} />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="Overview">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

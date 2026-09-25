@@ -10,7 +10,8 @@ import { BEAT_START_VH } from "@/three/core/timeline";
 import { Vector3 } from "three";
 
 /**
- * Query: ?formation=0..5&light=unlit|lit&tier=A|B
+ * Query: ?formation=0..5&light=unlit|lit&tier=A|B, plus bend=0..1 (the
+ * Beat 2 curve), centre=1 and cam=px,py,pz,lx,ly,lz.
  * Sets the store to the requested state, disables idle motion and pointer
  * influence so the frame is still, and flags `data-capture-ready` on the
  * body once the readiness contract has fired.

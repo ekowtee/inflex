@@ -23,7 +23,7 @@ export default function CareersPage() {
       <PageHero
         title="Build What Matters. With People Who Do."
         lead="Join a team that turns ambitious ideas into real-world IT impact."
-        formation="none"
+        formation={0}
       />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="Working with us">

@@ -8,7 +8,8 @@ import type { ReactNode } from "react";
  * The home page earns a live Core. The interior pages carry a still of one
  * formation instead: the same object, the same light, no engine. Which
  * formation is not decoration — it is the page's subject, so the four pillar
- * pages each open on their own shape and About opens on the mark.
+ * pages each open on their own shape and About opens on the mark (the full
+ * map is on the Formation type below).
  *
  * A server component with no client JavaScript of its own. The button is the
  * one exception and brings its own (Magnetic, the primary CTA only).
@@ -27,9 +28,19 @@ import type { ReactNode } from "react";
  * phones the object crosses the copy, so there the still is dimmed instead.
  */
 
-/** The formations captured by scripts/capture-posters.mjs. */
-/** 0 is the resting sheet, the one structure the four pillars are made from. */
-export type Formation = 0 | 1 | 2 | 3 | 4 | 5 | "none";
+/**
+ * The stills captured by scripts/capture-posters.mjs. 0 is the resting
+ * sheet, the one structure the four pillars are made from; "curve" is the
+ * sheet as Beat 2's y = x³ turning point.
+ *
+ * Which page carries which (owner, 25 September 2026): Solutions 0, the four
+ * pillars 1 to 4, About 5; Services "curve" (we engineer the inflection
+ * point); Academy 3, its domains the shape of their subject (AI 3,
+ * Infrastructure & Cloud 1, Cybersecurity 2, Digital Strategy "curve");
+ * Case studies 4 (measured outcomes); Careers and Resources 0; Contact 5
+ * (the home page's ask ends on the mark).
+ */
+export type Formation = 0 | 1 | 2 | 3 | 4 | 5 | "curve" | "none";
 
 /* The intrinsic size of the mobile still, which is the <img> the sources
    fall back to; the desktop stills are 1920 x 1080. */
@@ -48,10 +59,10 @@ export interface PageHeroProps {
 }
 
 function FormationStill({ formation }: { formation: Exclude<Formation, "none"> }) {
-  const base = `/three/posters/f${formation}-lit`;
+  const base = formation === "curve" ? "/three/posters/f0-bend-lit" : `/three/posters/f${formation}-lit`;
   // The sheet's and the mark's phone stills are framed for the home page,
   // with the object off to one side; interior heroes use centred captures.
-  const mobileSuffix = formation === 0 || formation === 5 ? "-centred" : "";
+  const mobileSuffix = formation === 1 || formation === 2 || formation === 3 || formation === 4 ? "" : "-centred";
   return (
     <div
       aria-hidden="true"
