@@ -18,21 +18,25 @@
  *                 spread across the whole beat so a fast scroller still sees
  *                 order arrive.
  *   Beat 3        rest (the Core is at 0.3 behind the proof).
- *   end of 3      the morph to the network fabric begins, so the pillars arrive
- *                 already in motion.
+ *   end of 3      the sheet becomes the network fabric over the proof's last
+ *                 40 vh, so the fabric is whole as the pillars come up.
  *   Beat 4        four pillars, 80 vh each: network fabric, shield, nebula,
- *                 plane. Each morph straddles the boundary between two rows,
- *                 16 vh either side, so the first and last 20% of every
- *                 sub-range hold still.
+ *                 plane. Each morph runs over the last 28 vh of the row
+ *                 before, ending on the boundary (owner, 25 September 2026:
+ *                 an object forms before its section, not after): a
+ *                 formation is whole the moment its row becomes active, and
+ *                 comes apart as the reader leaves the row.
  *   after 4       the Core fades out, and while hidden it resets to the
  *                 sheet for the intelligence band and the ask.
  *   Beat 5.5      the intelligence band: warmth spreads from the ember
  *                 line through the whole sheet ("it is the fabric"), rising
  *                 while the band comes up and holding until it leaves.
- *   Beat 8        the ask: the warmth gathers back into the line as the
- *                 chapter comes into view (store.askEntry), then, over the
- *                 pinned chapter, the line becomes the Inflexions mark and
- *                 bloom rises to its only peak. The page's visual full stop.
+ *   Beat 8        the ask: the Inflexions mark, bloom at its only peak. The
+ *                 page's visual full stop. The track only says "the mark";
+ *                 the scene forms it as the chapter comes into view
+ *                 (store.askEntry) and dissolves it as the chapter leaves
+ *                 (store.askExit), because the timeline holds still while a
+ *                 chapter enters and while the next one does.
  */
 import { BEAT_START_VH } from "./timeline";
 
@@ -61,9 +65,12 @@ export const BLOOM_REVEAL = 0.9;
 /** Row i of the pinned chapter shows formation PILLAR_FORMATION[i]. */
 export const PILLAR_FORMATION: readonly FormationIndex[] = [1, 2, 3, 4];
 
-/** Sub-range length and morph half-width inside Beat 4, in vh. */
+/** Sub-range length inside Beat 4, in vh. */
 export const PILLAR_VH = 80;
-export const MORPH_HALF_VH = 16;
+/** Each pillar-to-pillar morph: the last MORPH_VH of the outgoing row. */
+export const MORPH_VH = 28;
+/** The sheet to network fabric morph: the last FIRST_MORPH_VH of Beat 3. */
+export const FIRST_MORPH_VH = 40;
 
 /** The ground grid shows under the network fabric and the plane. */
 const GROUND: Record<number, number> = { 0: 0, 1: 1, 2: 0, 3: 0, 4: 1, 5: 0 };
@@ -75,10 +82,10 @@ const smooth = (t: number) => {
 };
 const lerp = (a: number, b: number, t: number) => a + (b - a) * clamp01(t);
 
-/** Virtual vh at which formation `f` (1 to 4) is fully formed and holding. */
+/** Virtual vh at which formation `f` (1 to 4) is whole: its row's start. */
 export function pillarHoldVh(f: number): number {
   const i = PILLAR_FORMATION.indexOf(f as FormationIndex);
-  return BEAT_START_VH[4] + PILLAR_VH * Math.max(0, i) + MORPH_HALF_VH;
+  return BEAT_START_VH[4] + PILLAR_VH * Math.max(0, i);
 }
 
 export function sceneStateAt(vh: number): SceneState {
@@ -118,23 +125,22 @@ export function sceneStateAt(vh: number): SceneState {
 
   // ─── into and through the pillars ──────────────────────────────────────
   if (vh < b5 + 30) {
-    // The bend holds through the proof and relaxes before the network fabric
+    // The bend holds into the proof and relaxes before the network fabric
     // morph begins, where the resting sheet (and so the bend) ends.
-    const bend = 1 - smooth((vh - (b4 - 64)) / 38);
-    if (vh < b4 - 24) return { ...rest, bend };
-    // Boundaries where formation k hands to k+1: the first sits 20 vh before
-    // the pin so the network fabric is already forming as the chapter arrives.
-    const boundaries = [b4 - 4, b4 + PILLAR_VH, b4 + PILLAR_VH * 2, b4 + PILLAR_VH * 3];
+    const bend = 1 - smooth((vh - (b4 - FIRST_MORPH_VH - 44)) / 38);
+    if (vh < b4 - FIRST_MORPH_VH) return { ...rest, bend };
+    // Row k starts at b4 + 80k, and formation k is whole there; the morph
+    // into it runs over the stretch just before.
     const seq: FormationIndex[] = [0, ...PILLAR_FORMATION];
-    for (let k = 0; k < boundaries.length; k += 1) {
-      const c = boundaries[k];
-      const half = k === 0 ? 20 : MORPH_HALF_VH;
-      if (vh < c + half) {
-        if (vh <= c - half) {
+    for (let k = 0; k < PILLAR_FORMATION.length; k += 1) {
+      const c = b4 + PILLAR_VH * k;
+      const w = k === 0 ? FIRST_MORPH_VH : MORPH_VH;
+      if (vh < c) {
+        if (vh <= c - w) {
           const f = seq[k];
           return { ...rest, from: f, to: f, ground: GROUND[f] };
         }
-        const t = smooth((vh - (c - half)) / (2 * half));
+        const t = smooth((vh - (c - w)) / w);
         const from = seq[k];
         const to = seq[k + 1];
         return { ...rest, from, to, mix: t, ground: lerp(GROUND[from], GROUND[to], t) };
@@ -155,14 +161,15 @@ export function sceneStateAt(vh: number): SceneState {
     return { ...rest, spread: smooth((vh - (b55 - 40)) / 70) };
   }
 
-  // ─── the ask: the line becomes the mark ────────────────────────────────
-  // The chapter is pinned on desktop for one screen past its entry. The
-  // warmth has gathered back into the line on the way in (the scene, on
-  // store.askEntry); over the pin the line morphs into the mark and bloom
-  // rises to its one peak. Held through the doors while the Core fades.
+  // ─── the ask: the mark ─────────────────────────────────────────────────
+  // Whole across the chapter. The scene scales the mix and the bloom by the
+  // chapter's entry and exit, which the timeline cannot see: it holds on the
+  // partner wall's end while the ask comes up, and on the ask's end while
+  // the doors do; the scene also takes over from the partner wall's range
+  // once the ask is in view. The warmth carries in, and the scene gathers
+  // it on the entry.
   if (vh >= b8 && vh < b9 + 40) {
-    const t = smooth((vh - (b8 + 6)) / 64);
-    return { ...rest, to: 5, mix: t, bloom: BLOOM_REST + (BLOOM_REVEAL - BLOOM_REST) * t };
+    return { ...rest, to: 5, mix: 1, bloom: BLOOM_REVEAL, spread: 1 };
   }
 
   // ─── otherwise: hidden, reset to the sheet ─────────────────────────────

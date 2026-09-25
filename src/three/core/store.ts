@@ -54,6 +54,12 @@ export interface CoreStore {
    * fabric gathering back into the line, is driven from this instead.
    */
   askEntry: number;
+  /**
+   * How far the ask has left: 0 with the doors' top at the viewport bottom,
+   * 1 with it at the viewport top. The timeline holds on the ask's end
+   * while the doors come up, so the mark's dissolve runs on this.
+   */
+  askExit: number;
   /** Capture stage only: the Beat 2 bend to render (the page uses the track). */
   captureBend: number;
 }
@@ -77,6 +83,7 @@ export const store: CoreStore = {
   thread2X: 0,
   thread4X: 0,
   askEntry: 0,
+  askExit: 0,
   captureBend: 0,
 };
 

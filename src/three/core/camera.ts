@@ -7,7 +7,7 @@
  */
 import { Vector3 } from "three";
 import { BEAT_START_VH } from "./timeline";
-import { MORPH_HALF_VH, PILLAR_FORMATION, PILLAR_VH, pillarHoldVh } from "./formationTrack";
+import { FIRST_MORPH_VH, MORPH_VH, PILLAR_FORMATION, PILLAR_VH, pillarHoldVh } from "./formationTrack";
 
 export const FOV = 32;
 
@@ -73,15 +73,17 @@ function buildKeys(): CameraKey[] {
     key(b[1], TRUST),
     key(b[2], RESOLVE),
     key(b[2] + 27, INFLECTION),
-    key(b[4] - 44, INFLECTION),
-    key(b[4] - 24, RESOLVE),
+    // Down from the profile view while the bend relaxes, then on to the
+    // first pillar's key over the network fabric morph.
+    key(b[4] - FIRST_MORPH_VH - 44, INFLECTION),
+    key(b[4] - FIRST_MORPH_VH - 6, RESOLVE),
   ];
   // Each formation's camera holds for the formation's hold and moves only
   // while the morph runs, so the object never drifts while a row is read.
   PILLAR_FORMATION.forEach((f, i) => {
     const hold = pillarHoldVh(f);
     out.push(key(hold, PILLAR_CAMERA[i]));
-    out.push(key(hold + PILLAR_VH - 2 * MORPH_HALF_VH, PILLAR_CAMERA[i]));
+    out.push(key(hold + PILLAR_VH - MORPH_VH, PILLAR_CAMERA[i]));
   });
   // Hidden from the end of Beat 4's fade: back to the hero composition for
   // the intelligence band and the ask. The jump happens while opacity is 0.

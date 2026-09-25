@@ -166,8 +166,8 @@ export interface TimelineOptions {
 }
 
 /**
- * Attach the driver. Writes `store.scrollVh`, `store.opacity` and
- * `store.scrolledPastArrival`; writes `data-active` and `aria-current` on
+ * Attach the driver. Writes `store.scrollVh`, `store.opacity`,
+ * `store.askEntry`, `store.askExit` and `store.scrolledPastArrival`; writes `data-active` and `aria-current` on
  * the pinned chapter; slides the trust strip's row in as it enters.
  * Returns a disposer.
  */
@@ -198,13 +198,19 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
     store.scrollVh = sample.vh;
     const ask = beats.find((b) => b.beat === 8);
     store.askEntry = ask ? Math.min(1, Math.max(0, 1 - (ask.top - scrollY) / vh)) : 0;
+    const doors = beats.find((b) => b.beat === 9);
+    store.askExit = doors ? Math.min(1, Math.max(0, 1 - (doors.top - scrollY) / vh)) : 0;
+    // The mark dissolves as the ask leaves: gone by the time the doors are
+    // under half way up, rather than after they reach the top.
+    const exitT = Math.min(1, Math.max(0, (store.askExit - 0.05) / 0.4));
+    const leaving = sample.beat >= 8 ? 1 - exitT * exitT * (3 - 2 * exitT) : 1;
     // Below lg the copy runs full width over the object in every beat after
     // the hero, so the Core recedes to a texture there.
     const narrow = window.innerWidth < 1024;
     store.opacity =
-      narrow && sample.vh > 60
+      (narrow && sample.vh > 60
         ? sample.opacity * Math.max(0.35, 1 - (sample.vh - 60) / 60) * (1 - 0.4 * store.askEntry)
-        : sample.opacity;
+        : sample.opacity) * leaving;
     if (sample.vh > BEAT_START_VH[2]) store.scrolledPastArrival = true;
 
     if (pin && sample.pillar !== lastPillar) {

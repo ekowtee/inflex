@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { sceneStateAt, pillarHoldVh, PILLAR_FORMATION, PILLAR_VH } from "../formationTrack";
+import { sceneStateAt, pillarHoldVh, FIRST_MORPH_VH, MORPH_VH, PILLAR_FORMATION, PILLAR_VH } from "../formationTrack";
 import { BEAT_START_VH } from "../timeline";
 
 test("the hero is the resting sheet, lit, with no noise", () => {
@@ -18,8 +18,8 @@ test("Beat 1 unmakes the sheet and Beat 2 resolves it", () => {
 test("the sheet bends into its S over the resolve and relaxes before the network fabric", () => {
   assert.equal(sceneStateAt(BEAT_START_VH[2]).bend, 0);
   assert.ok(sceneStateAt(BEAT_START_VH[3] - 21).bend > 0.95);
-  assert.ok(sceneStateAt(BEAT_START_VH[3] + 40).bend > 0.99, "held through the proof");
-  assert.equal(sceneStateAt(BEAT_START_VH[4] - 24).bend, 0, "flat again before the morph");
+  assert.ok(sceneStateAt(BEAT_START_VH[3] + 30).bend > 0.99, "held into the proof");
+  assert.equal(sceneStateAt(BEAT_START_VH[4] - FIRST_MORPH_VH).bend, 0, "flat again before the morph");
 });
 
 test("each pillar formation holds, whole, with its ground", () => {
@@ -31,12 +31,19 @@ test("each pillar formation holds, whole, with its ground", () => {
   });
 });
 
-test("morphs straddle the row boundaries and move one formation at a time", () => {
-  for (let k = 1; k < 4; k += 1) {
+test("each formation is whole when its row starts, and morphs one at a time before it", () => {
+  // Row k starts at b4 + 80k, which is also where a pillar link jumps to.
+  PILLAR_FORMATION.forEach((f, k) => {
     const s = sceneStateAt(BEAT_START_VH[4] + PILLAR_VH * k);
-    assert.equal(s.to - s.from, 1, `boundary ${k}`);
-    assert.ok(s.mix > 0.45 && s.mix < 0.55, `mix at boundary ${k} is ${s.mix}`);
-  }
+    assert.equal(s.from, f, `row ${k} start`);
+    assert.equal(s.to, f, `row ${k} start`);
+    const w = k === 0 ? FIRST_MORPH_VH : MORPH_VH;
+    const mid = sceneStateAt(BEAT_START_VH[4] + PILLAR_VH * k - w / 2);
+    assert.equal(mid.to - mid.from, 1, `morph into row ${k}`);
+    assert.ok(mid.mix > 0.45 && mid.mix < 0.55, `mix halfway into row ${k} is ${mid.mix}`);
+  });
+  // The fabric is whole before the pillars' top reaches the viewport top.
+  assert.equal(sceneStateAt(BEAT_START_VH[4] - 0.01).mix > 0.99, true);
 });
 
 test("mix is continuous across the whole pinned chapter", () => {
@@ -58,7 +65,7 @@ test("warmth spreads through the sheet in the intelligence band only", () => {
   // Spread right up to the ask; the scene gathers it on the chapter's entry,
   // and in the ask the object is no longer the resting sheet.
   assert.equal(sceneStateAt(BEAT_START_VH[8] - 1).spread, 1);
-  assert.equal(sceneStateAt(BEAT_START_VH[8] + 5).spread, 0);
+  assert.equal(sceneStateAt(BEAT_START_VH[8] + 5).spread, 1, "carried into the ask");
   assert.equal(sceneStateAt(BEAT_START_VH[4] + 50).spread, 0);
 });
 
@@ -68,14 +75,14 @@ test("after the pillars the sheet is back for the intelligence band", () => {
   assert.equal(s.to, 0);
 });
 
-test("the ask morphs the line into the mark and raises bloom to its peak", () => {
-  const start = sceneStateAt(BEAT_START_VH[8] + 2);
-  assert.equal(start.to, 5);
-  assert.ok(start.mix < 0.01 && Math.abs(start.bloom - 0.55) < 1e-6);
-  const done = sceneStateAt(BEAT_START_VH[8] + 75);
-  assert.ok(done.mix > 0.99 && Math.abs(done.bloom - 0.9) < 1e-6);
-  const doors = sceneStateAt(BEAT_START_VH[9] + 10);
-  assert.equal(doors.to, 5, "held through the doors while the Core fades");
+test("the ask's track is the mark, whole, at the bloom peak", () => {
+  // The scene forms it on the chapter's entry and dissolves it on its exit
+  // (store.askEntry, store.askExit); the track only names the object.
+  for (const vh of [BEAT_START_VH[8], BEAT_START_VH[8] + 40, BEAT_START_VH[9]]) {
+    const s = sceneStateAt(vh);
+    assert.equal(s.to, 5);
+    assert.ok(s.mix > 0.99 && Math.abs(s.bloom - 0.9) < 1e-6, `at ${vh}`);
+  }
   for (let vh = 0; vh < BEAT_START_VH[9] + 60; vh += 1) {
     const s = sceneStateAt(vh);
     assert.ok(s.bloom <= 0.9 + 1e-6 && (s.bloom === 0.55 || s.to === 5), `bloom rises only in the reveal (${vh})`);
