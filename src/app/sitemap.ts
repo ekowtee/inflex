@@ -20,6 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/academy",
     "/academy/for-organizations",
     "/careers",
+    "/jobs",
+    "/internships",
     "/contact",
     "/case-study",
     "/resources",

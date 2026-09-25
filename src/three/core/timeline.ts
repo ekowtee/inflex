@@ -43,6 +43,16 @@ export const BEAT_LENGTH_VH: Record<number, number> = {
   9: 60,
 };
 
+/**
+ * Beats whose entry is part of the timeline: the beat above hands the last
+ * ENTRY_LEAD_VH[b] of its virtual length to the stretch where beat b rises
+ * from the viewport bottom to the top, instead of finishing early and holding
+ * while b comes up. Beat 4: the network fabric forms as the pillars come up,
+ * from a third of the way up to the pin (owner, 25 September 2026), which
+ * is formationTrack's [b4 − 40, b4] on a 60 vh lead.
+ */
+export const ENTRY_LEAD_VH: Record<number, number> = { 4: 60 };
+
 /** Cumulative start of each beat on the virtual timeline. */
 export const BEAT_START_VH: Record<number, number> = (() => {
   const out: Record<number, number> = {};
@@ -94,17 +104,39 @@ export interface TimelineSample {
  * scrollable extent is its height minus one viewport (so a 100 svh beat
  * is a point and a 420 svh pinned beat scrolls for 320), with a floor of
  * one viewport so short beats still take a full nominal stride to pass.
+ * A beat followed by one in ENTRY_LEAD_VH maps its scroll up to that beat's
+ * top instead, with no hold.
  */
 export function virtualVh(scrollY: number, viewportHeight: number, beats: BeatRect[]): { vh: number; beat: number; progress: number } {
   if (!beats.length) return { vh: (scrollY / viewportHeight) * 100, beat: 0, progress: 0 };
-  let current = beats[0];
-  for (const b of beats) {
-    if (scrollY >= b.top) current = b;
+  let index = 0;
+  beats.forEach((b, i) => {
+    if (scrollY >= b.top) index = i;
+  });
+  const current = beats[index];
+  const length = BEAT_LENGTH_VH[current.beat] ?? 100;
+  const start = BEAT_START_VH[current.beat] ?? 0;
+  const next = beats[index + 1];
+  const lead = next && scrollY >= current.top ? ENTRY_LEAD_VH[next.beat] : undefined;
+  if (lead !== undefined) {
+    // Up to the next beat's top reaching the viewport bottom, this beat's
+    // own scroll covers its length less the lead; the entry covers the lead.
+    const span = next.top - current.top;
+    const into = scrollY - current.top;
+    const own = span - viewportHeight;
+    if (own <= 0) {
+      const progress = Math.min(1, into / span);
+      return { vh: start + progress * length, beat: current.beat, progress };
+    }
+    if (into < own) {
+      const progress = into / own;
+      return { vh: start + progress * (length - lead), beat: current.beat, progress };
+    }
+    const entry = Math.min(1, (into - own) / viewportHeight);
+    return { vh: start + length - lead + entry * lead, beat: current.beat, progress: 1 };
   }
   const extent = Math.max(current.height - viewportHeight, viewportHeight * 0.5);
   const progress = Math.min(1, Math.max(0, (scrollY - current.top) / extent));
-  const length = BEAT_LENGTH_VH[current.beat] ?? 100;
-  const start = BEAT_START_VH[current.beat] ?? 0;
   // Between the end of a beat's scroll extent and the next beat's top the
   // timeline holds at the beat's end.
   return { vh: start + progress * length, beat: current.beat, progress };
@@ -166,8 +198,8 @@ export interface TimelineOptions {
 }
 
 /**
- * Attach the driver. Writes `store.scrollVh`, `store.opacity` and
- * `store.scrolledPastArrival`; writes `data-active` and `aria-current` on
+ * Attach the driver. Writes `store.scrollVh`, `store.opacity`,
+ * `store.askEntry`, `store.askExit` and `store.scrolledPastArrival`; writes `data-active` and `aria-current` on
  * the pinned chapter; slides the trust strip's row in as it enters.
  * Returns a disposer.
  */
@@ -198,13 +230,19 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
     store.scrollVh = sample.vh;
     const ask = beats.find((b) => b.beat === 8);
     store.askEntry = ask ? Math.min(1, Math.max(0, 1 - (ask.top - scrollY) / vh)) : 0;
+    const doors = beats.find((b) => b.beat === 9);
+    store.askExit = doors ? Math.min(1, Math.max(0, 1 - (doors.top - scrollY) / vh)) : 0;
+    // The mark dissolves as the ask leaves: gone by the time the doors are
+    // under half way up, rather than after they reach the top.
+    const exitT = Math.min(1, Math.max(0, (store.askExit - 0.05) / 0.4));
+    const leaving = sample.beat >= 8 ? 1 - exitT * exitT * (3 - 2 * exitT) : 1;
     // Below lg the copy runs full width over the object in every beat after
     // the hero, so the Core recedes to a texture there.
     const narrow = window.innerWidth < 1024;
     store.opacity =
-      narrow && sample.vh > 60
+      (narrow && sample.vh > 60
         ? sample.opacity * Math.max(0.35, 1 - (sample.vh - 60) / 60) * (1 - 0.4 * store.askEntry)
-        : sample.opacity;
+        : sample.opacity) * leaving;
     if (sample.vh > BEAT_START_VH[2]) store.scrolledPastArrival = true;
 
     if (pin && sample.pillar !== lastPillar) {

@@ -1,6 +1,21 @@
 import Link from "next/link";
-import { GraduationCap, ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import Reveal from "@/motion/Reveal";
+import ExitLink from "./home/ExitLink";
+import { entryGrid } from "./entryGrid";
 import { programmes, getDomain } from "../academy/data";
+
+/**
+ * The cross-link from a pillar page into the Academy — CLAUDE.md, Academy
+ * data; re-set for PHASE5_BRIEF.md §4 Task 3.
+ *
+ * It used to be a card inside a card inside a section: a grey panel with a
+ * border and a radius, holding three white bordered cards, with a red icon
+ * tile on the heading. Now it is a band with three entries on hairlines,
+ * like every other list on the site.
+ *
+ * The programmes are read from academy/data.ts, which is untouched.
+ */
 
 const solutionToDomain: Record<string, string> = {
   "cloud-services": "infrastructure-cloud",
@@ -20,63 +35,53 @@ export default function RelatedTraining({
   const domain = getDomain(domainSlug);
   if (!domain) return null;
 
-  const related = programmes
-    .filter((p) => p.domainSlug === domainSlug)
-    .slice(0, 3);
-
+  const related = programmes.filter((p) => p.domainSlug === domainSlug).slice(0, 3);
   if (related.length === 0) return null;
 
   return (
-    <section className="py-16 lg:py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#F7F8FA] border border-[#D0D0D0] rounded-lg p-8 lg:p-10">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-[#BD2E25] rounded-[6px] flex items-center justify-center flex-shrink-0">
-                <GraduationCap className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <span className="inline-block text-xs font-semibold uppercase tracking-wide text-[#BD2E25] mb-1">
-                  Inflexions Academy
-                </span>
-                <h3 className="text-2xl font-bold text-[#171A20] mb-1">
-                  Train your team in {domain.shortTitle}
-                </h3>
-                <p className="text-[#5C6280]">
-                  The same practitioners who deploy these solutions teach these
-                  programmes.
-                </p>
-              </div>
+    <section className="band-ivory w-full pb-24 md:pb-32" aria-label="Related training">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="border-t border-neutral-200 pt-12">
+          <Reveal as="p" className="type-eyebrow text-neutral-500">
+            Inflexions Academy
+          </Reveal>
+          <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <h2 className="type-h2 text-neutral-900">
+                Train your team in {domain.shortTitle}
+              </h2>
+              <p className="type-body-l mt-4 max-w-[52ch] text-neutral-600">
+                The same practitioners who deploy these solutions teach these
+                programmes.
+              </p>
             </div>
-            <Link
-              href={`/academy/${domain.slug}`}
-              className="inline-flex items-center text-sm font-medium text-[#BD2E25] hover:text-[#A02923] whitespace-nowrap"
-            >
+            <ExitLink href={`/academy/${domain.slug}`} className="text-neutral-900">
               View all programmes
-              <ArrowRight className="w-4 h-4 ml-1" />
-            </Link>
+            </ExitLink>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <ul className={`mt-12 grid gap-x-12 gap-y-8 ${entryGrid(related.length)}`}>
             {related.map((programme) => (
-              <Link
-                key={programme.slug}
-                href={`/academy/${programme.domainSlug}/${programme.slug}`}
-                className="group bg-white border border-[#D0D0D0] rounded-lg p-5 hover:shadow-md hover:border-[#BD2E25] transition-all"
-              >
-                <h4 className="text-base font-semibold text-[#171A20] mb-2 group-hover:text-[#BD2E25] transition-colors">
-                  {programme.title}
-                </h4>
-                <p className="text-xs text-[#5C6280] mb-3">
+              <li key={programme.slug} className="group relative border-t border-neutral-200 pt-6">
+                <p className="type-telemetry text-neutral-500">
                   {programme.level} · {programme.duration}
                 </p>
-                <span className="inline-flex items-center text-sm text-[#BD2E25] font-medium">
-                  View programme
-                  <ArrowRight className="w-3.5 h-3.5 ml-1 group-hover:translate-x-0.5 transition-transform" />
-                </span>
-              </Link>
+                <h3 className="type-h3 mt-4 flex items-start justify-between gap-4 text-neutral-900">
+                  <Link
+                    href={`/academy/${programme.domainSlug}/${programme.slug}`}
+                    className="underline decoration-transparent decoration-1 underline-offset-[6px] transition-[text-decoration-color] duration-[var(--motion-duration-ui)] after:absolute after:inset-0 after:content-[''] group-hover:decoration-neutral-900"
+                  >
+                    {programme.title}
+                  </Link>
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    strokeWidth={1.5}
+                    className="mt-1 h-5 w-5 shrink-0 text-neutral-500 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] group-hover:-translate-y-1 group-hover:translate-x-1"
+                  />
+                </h3>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
     </section>

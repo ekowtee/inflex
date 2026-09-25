@@ -33,7 +33,7 @@ import { PostStage } from "./PostStage";
 import { store } from "./store";
 import { pointer, stepPointer, attachPointer, YAW_MAX, PITCH_MAX } from "./pointer";
 import { sampleCamera, aspectAdjust, breathing, touchDrift } from "./camera";
-import { sceneStateAt } from "./formationTrack";
+import { BLOOM_REST, BLOOM_REVEAL, FIRST_MORPH_VH, sceneStateAt } from "./formationTrack";
 import { BEAT_START_VH } from "./timeline";
 import { palette } from "./rig";
 
@@ -87,8 +87,9 @@ export class CoreScene {
   private hiddenCleared = false;
   /** The scene's own, smoothed position on the virtual timeline (vh). */
   private vh = Number.NaN;
-  /** The ask's entry, smoothed like vh. */
+  /** The ask's entry and exit, smoothed like vh. */
   private entry = 0;
+  private exit = 0;
   /** World points the two threads are born from (see store.thread2X). */
   private anchor2 = new Vector3();
   private anchor4 = new Vector3();
@@ -344,25 +345,38 @@ export class CoreScene {
     if (capture || !Number.isFinite(this.vh)) this.vh = targetVh;
     else this.vh += (targetVh - this.vh) * (1 - Math.exp(-dt / 0.22));
     const track = sceneStateAt(this.vh);
-    // The fabric gathers back into the line as the ask comes into view.
-    if (capture) this.entry = 0;
-    else this.entry += (store.askEntry - this.entry) * (1 - Math.exp(-dt / 0.22));
+    // The ask's entry and exit, smoothed like the timeline. Capture snaps
+    // to the requested state and uses the store's own mix and bloom.
+    if (capture) {
+      this.entry = 0;
+      this.exit = 0;
+    } else {
+      this.entry += (store.askEntry - this.entry) * (1 - Math.exp(-dt / 0.22));
+      this.exit += (store.askExit - this.exit) * (1 - Math.exp(-dt / 0.22));
+    }
     const sm = (t: number) => {
       const x = Math.min(1, Math.max(0, t));
       return x * x * (3 - 2 * x);
     };
-    // Below lg the ask is not pinned, so there is no scroll after its entry
-    // to morph over: both steps run on the entry, the gather over its first
-    // half and the line becoming the mark over its second.
-    const narrow = this.width < 1024;
-    const e = narrow ? sm(this.entry * 2) : sm(this.entry);
-    const spread = track.spread * (1 - e);
-    if (narrow && !capture && this.entry > 0.5 && track.to !== 5) {
-      const t = sm((this.entry - 0.5) * 2);
+    // The warmth gathers back into the line over the first part of the ask's
+    // entry.
+    const spread = track.spread * (1 - sm(this.entry / 0.4));
+    // The mark forms as the ask comes up, on the chapter's own entry rather
+    // than the timeline, which is still on the partner wall until the ask
+    // is a third of the way up (a short beat's scroll extent has a floor).
+    // Whole by the time the chapter's top is a sixth of the way from the
+    // viewport top, so it is there while the offer is read. It comes apart
+    // as the chapter leaves: the nodes scatter while the timeline fades
+    // them (store.askExit), so it is gone well before the doors reach the
+    // top. Owner, 25 September 2026.
+    if (track.to === 5 || (this.vh > BEAT_START_VH[5] + 30 && this.entry > 0.001)) {
+      const formed = sm((this.entry - 0.1) / 0.75);
+      const leaving = sm((this.exit - 0.05) / 0.4);
       track.from = 0;
       track.to = 5;
-      track.mix = t;
-      track.bloom += (0.9 - track.bloom) * t;
+      track.mix = formed;
+      track.bloom = BLOOM_REST + (BLOOM_REVEAL - BLOOM_REST) * formed * (1 - leaving);
+      track.noise = Math.max(track.noise, 0.3 * sm((this.exit - 0.05) / 0.35));
     }
 
     // ─── the ember gate: the arrival light, then the page's own track ─────
@@ -383,7 +397,7 @@ export class CoreScene {
       const b4 = BEAT_START_VH[4];
       const b5 = BEAT_START_VH[5];
       const inPillars = Math.min(
-        Math.min(1, Math.max(0, (this.vh - (b4 - 24)) / 40)),
+        Math.min(1, Math.max(0, (this.vh - (b4 - FIRST_MORPH_VH)) / FIRST_MORPH_VH)),
         Math.min(1, Math.max(0, (b5 + 30 - this.vh) / 10))
       );
       const aspect = this.width / this.height;
@@ -409,14 +423,20 @@ export class CoreScene {
         const b2 = BEAT_START_VH[2];
         const inTurn = Math.min(
           Math.min(1, Math.max(0, (this.vh - b2) / 40)),
-          Math.min(1, Math.max(0, (b4 - 24 - this.vh) / 20))
+          Math.min(1, Math.max(0, (b4 - FIRST_MORPH_VH - this.vh) / 20))
         );
         const shift = -(key.lookAt.x - 0.45 * inAsk) * Math.max(inPillars, inAsk, inTurn);
+        // The pillar formations are wider than tall (the network fabric is
+        // 3.9 units across): on a portrait screen pull back so they fit.
+        if (inPillars > 0) {
+          this.offset.copy(key.position).sub(key.lookAt).multiplyScalar(1 + 0.35 * inPillars);
+          key.position.copy(key.lookAt).add(this.offset);
+        }
         key.position.x += shift;
         key.lookAt.x += shift;
       } else if (aspect < 1.5 && inPillars > 0) {
         // Narrow landscape (1024 × 768): the copy column is a larger share
-        // of the width, and at the desktop keys the lattice ran into it.
+        // of the width, and at the desktop keys the first formation ran into it.
         // Pull back and push the object further right.
         const t = inPillars * Math.min(1, (1.5 - aspect) / 0.25);
         this.offset.copy(key.position).sub(key.lookAt).multiplyScalar(1 + 0.2 * t);

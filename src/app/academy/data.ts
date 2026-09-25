@@ -53,7 +53,7 @@ export const domains: AcademyDomain[] = [
     slug: "ai-intelligent-systems",
     title: "AI & Intelligent Systems",
     shortTitle: "AI & Intelligent Systems",
-    tagline: "Build fluency in the technology reshaping every industry.",
+    tagline: "Stop being briefed on AI. Start building with it.",
     description:
       "From foundational literacy to advanced LLM engineering, our AI programmes equip teams and individuals to lead confidently in the AI era.",
     overview:
@@ -84,7 +84,7 @@ export const domains: AcademyDomain[] = [
     slug: "infrastructure-cloud",
     title: "Infrastructure & Cloud",
     shortTitle: "Infrastructure & Cloud",
-    tagline: "Master the systems that power modern enterprise.",
+    tagline: "Learn the stack from the people who run it at national scale.",
     description:
       "Hands-on programmes covering cloud platforms, network architecture, virtualisation, and enterprise operating systems.",
     overview:
@@ -115,7 +115,7 @@ export const domains: AcademyDomain[] = [
     slug: "cybersecurity-compliance",
     title: "Cybersecurity & Compliance",
     shortTitle: "Cybersecurity & Compliance",
-    tagline: "Defend, govern, and certify — at every level of the stack.",
+    tagline: "Defend it, govern it, and prove it — with the certificate to show for it.",
     description:
       "From information security fundamentals to ISO 27001 implementation, CISA, and CISM exam preparation.",
     overview:
@@ -146,7 +146,7 @@ export const domains: AcademyDomain[] = [
     slug: "digital-strategy",
     title: "Digital Strategy & Transformation",
     shortTitle: "Digital Strategy",
-    tagline: "Translate technology capability into commercial advantage.",
+    tagline: "Turn what your technology can do into what your business earns.",
     description:
       "Programmes for leaders, founders, and marketers shaping digital-first organisations.",
     overview:

@@ -1,7 +1,24 @@
-import Blog from "../components/Blog";
-import Banner from "../components/Banner";
-import Reveal from "@/motion/Reveal";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import Reveal from "@/motion/Reveal";
+import AskBand from "../components/AskBand";
+import Blog from "../components/Blog";
+import PageHero from "../components/PageHero";
+import { entryGrid } from "../components/entryGrid";
+
+/**
+ * /resources — PHASE5_BRIEF.md §4 Task 6.
+ *
+ * The page carried two headings for one thought: "Insights That Sharpen
+ * Your Edge" as an h2 over the photograph and "Expert Intelligence for IT
+ * Leaders" as the h1 below it. The first is the hero's line now and the
+ * second keeps its place as the section heading; both kept verbatim.
+ *
+ * Whitepaper and webinar cards become entries. The red pill buttons on the
+ * webinars become exit links: a resource is somewhere to go, not an action
+ * to take, and the page's one primary action is the closing band's.
+ */
 
 const whitepapers = [
   {
@@ -20,7 +37,7 @@ const whitepapers = [
     coverUrl: "/assets/blog/webinar3.webp",
     downloadLink: "/resources/whitepapers/itsm-roi",
   },
-];
+] as const;
 
 const webinars = [
   {
@@ -30,7 +47,8 @@ const webinars = [
       "On-demand webinar diving into the capabilities and benefits of SD-WAN for modern networks.",
     date: "April 28, 2025",
     imageUrl: "/assets/blog/webinar1.webp",
-    recordingLink: "/webinars/sd-wan-explained",
+    href: "/webinars/sd-wan-explained",
+    label: "Watch Recording",
   },
   {
     id: 2,
@@ -39,142 +57,130 @@ const webinars = [
       "Live session on best practices to secure remote workforces in 2025 and beyond.",
     date: "May 15, 2025",
     imageUrl: "/assets/blog/webinar2.webp",
-    registerLink: "/contact",
+    href: "/contact",
+    label: "Register Now",
   },
-];
+] as const;
 
 export default function ResourcesPage() {
   return (
     <div>
-      {/* Hero */}
-      <div className="relative w-full h-[300px] md:h-[500px]">
-        <Image
-          src="/assets/career/careerbg.webp"
-          alt="Resources"
-          width={1920}
-          height={652}
-          className="w-full h-full object-cover"
-          sizes="100vw"
-          priority
-        />
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="w-full text-white space-y-4">
-              <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-snug md:leading-[76px]">
-                Insights That Sharpen Your Edge
-              </h2>
+      <PageHero title="Insights That Sharpen Your Edge" formation="lightbulb" />
+
+      <section className="band-ivory w-full py-24 md:py-32" aria-label="Insights and resources">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image
+                src="/assets/blog/blogger.webp"
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="photo-grade object-cover"
+              />
+            </div>
+            <div>
+              <Reveal as="h2" className="type-h2 max-w-[18ch] text-neutral-900">
+                Expert Intelligence for IT Leaders
+              </Reveal>
+              <Reveal as="p" className="type-body-l mt-6 max-w-[58ch] text-neutral-600" delay={80}>
+                Deep dives into the trends, frameworks, and strategies that
+                matter most to technology leaders. Cut through the noise with
+                insights built on real-world implementation experience.
+              </Reveal>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Page Header */}
-        <header className="mb-12">
-          <div className="flex flex-col md:flex-row items-center py-8">
-            <div className="flex-shrink-0 mb-6 md:mb-0">
-              <Image
-                src="/assets/blog/blogger.webp"
-                alt="Insights & Resources"
-                width={1024}
-                height={1024}
-                className="w-full h-full lg:w-[400px] md:h-[300px] rounded-lg object-cover"
-                sizes="100vw"
-              />
-            </div>
-            <div className="md:ml-8 text-left">
-              <Reveal as="h1" className="text-4xl font-bold mb-4 text-black">
-                Expert Intelligence for IT Leaders
-              </Reveal>
-              <Reveal as="p" delay={100} className="text-lg text-[#262626] max-w-2xl">
-                Deep dives into the trends, frameworks, and strategies that matter most to technology leaders. Cut through the noise with insights built on real-world implementation experience.
-              </Reveal>
-            </div>
-          </div>
-        </header>
-
-        {/* Whitepapers */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-semibold mb-6">
+      <section className="band-ivory w-full pb-24 md:pb-32" aria-label="Guides and reports">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="type-h2 border-t border-neutral-200 pt-12 text-neutral-900">
             In-Depth Guides &amp; Reports
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+          <div className={`mt-16 grid gap-x-12 gap-y-16 ${entryGrid(whitepapers.length)}`}>
             {whitepapers.map((item) => (
-              <a
-                key={item.id}
-                href={item.downloadLink}
-                className="block border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
-              >
-                <Image
-                  src={item.coverUrl}
-                  alt={item.title}
-                  width={1500}
-                  height={1000}
-                  className="w-full h-48 object-cover"
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                />
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                  <p className="text-[#41444B] mb-4">{item.description}</p>
-                  <span className="text-[#BD2E25] font-medium">
-                    Download &rarr;
-                  </span>
+              <article key={item.id} className="group relative flex flex-col">
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <Image
+                    src={item.coverUrl}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="photo-grade object-cover"
+                  />
                 </div>
-              </a>
+                <h3 className="type-h3 mt-8 flex items-start justify-between gap-4 border-t border-neutral-200 pt-8 text-neutral-900">
+                  <Link
+                    href={item.downloadLink}
+                    className="underline decoration-transparent decoration-1 underline-offset-[6px] transition-[text-decoration-color] duration-[var(--motion-duration-ui)] after:absolute after:inset-0 after:content-[''] group-hover:decoration-neutral-900"
+                  >
+                    {item.title}
+                  </Link>
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    strokeWidth={1.5}
+                    className="mt-1 h-5 w-5 shrink-0 text-neutral-500 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] group-hover:-translate-y-1 group-hover:translate-x-1"
+                  />
+                </h3>
+                <p className="type-body mt-4 text-neutral-600">{item.description}</p>
+                <p className="type-telemetry mt-6 text-neutral-500">Download</p>
+              </article>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Webinars */}
-        <section>
-          <h2 className="text-3xl font-semibold mb-6">
+      <section className="band-ivory w-full pb-24 md:pb-32" aria-label="Webinars">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="type-h2 border-t border-neutral-200 pt-12 text-neutral-900">
             Learn from Our Experts
           </h2>
-          <div className="space-y-6">
+
+          <ul className="mt-16">
             {webinars.map((event) => (
-              <div
+              <li
                 key={event.id}
-                className="border rounded-lg p-6 flex flex-col md:flex-row justify-between items-start md:items-center hover:shadow-lg transition-shadow"
+                className="group relative grid gap-8 border-t border-neutral-200 py-10 md:grid-cols-[16rem_minmax(0,1fr)] md:gap-12"
               >
-                <Image
-                  src={event.imageUrl}
-                  alt={event.title}
-                  width={1024}
-                  height={1024}
-                  className="w-full md:w-48 h-32 object-cover rounded mb-4 md:mb-0 md:mr-6"
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                />
-                <div className="flex-1">
-                  <h3 className="text-2xl font-semibold mb-2">{event.title}</h3>
-                  <p className="text-[#41444B] mb-2">{event.description}</p>
-                  <p className="text-[#5C6280] text-sm">{event.date}</p>
+                <div className="relative aspect-[16/10] overflow-hidden md:aspect-[4/3]">
+                  <Image
+                    src={event.imageUrl}
+                    alt=""
+                    fill
+                    sizes="(min-width: 768px) 256px, 100vw"
+                    className="photo-grade object-cover"
+                  />
                 </div>
-                <div className="mt-4 md:mt-0">
-                  {event.recordingLink ? (
-                    <a
-                      href={event.recordingLink}
-                      className="inline-block bg-[#BD2E25] text-white px-5 py-2 rounded-full hover:bg-[#A02923] transition-colors"
+                <div>
+                  <p className="type-telemetry text-neutral-500">{event.date}</p>
+                  <h3 className="type-h3 mt-4 flex items-start justify-between gap-6 text-neutral-900">
+                    <Link
+                      href={event.href}
+                      className="underline decoration-transparent decoration-1 underline-offset-[6px] transition-[text-decoration-color] duration-[var(--motion-duration-ui)] after:absolute after:inset-0 after:content-[''] group-hover:decoration-neutral-900"
                     >
-                      Watch Recording
-                    </a>
-                  ) : (
-                    <a
-                      href={event.registerLink}
-                      className="inline-block bg-[#BD2E25] text-white px-5 py-2 rounded-full hover:bg-[#A02923] transition-colors"
-                    >
-                      Register Now
-                    </a>
-                  )}
+                      {event.title}
+                    </Link>
+                    <ArrowUpRight
+                      aria-hidden="true"
+                      strokeWidth={1.5}
+                      className="mt-1 h-6 w-6 shrink-0 text-neutral-500 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] group-hover:-translate-y-1 group-hover:translate-x-1"
+                    />
+                  </h3>
+                  <p className="type-body mt-4 max-w-[62ch] text-neutral-600">
+                    {event.description}
+                  </p>
+                  <p className="type-telemetry mt-6 text-neutral-500">{event.label}</p>
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
-        </section>
-      </div>
+          </ul>
+        </div>
+      </section>
 
       <Blog />
-      <Banner />
+      <AskBand />
     </div>
   );
 }

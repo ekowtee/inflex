@@ -83,9 +83,15 @@ export const nodesVertex = stripGlsl(/* glsl */ `
     float m = smoothstep(0.0, 1.0, (uMix - aSeed * 0.35) / 0.65);
     vec3 pos = mix(from.xyz, to.xyz, m);
     float heat = mix(from.w, to.w, m);
-    // The turning point: the resting sheet bends deeper into its S-curve
-    // (z = 0.9 tanh 1.6x) so the inflection reads in profile.
-    if (uFrom == 0 && uTo == 0) pos.z *= 1.0 + uBend;
+    // The turning point: the resting sheet (z = 0.9 tanh 1.6x) reshapes
+    // into y = x³, the textbook inflection, rising left to right as seen
+    // from the profile camera and flat exactly where the ember line lies.
+    // The per-node relief is kept by moving each node by the difference.
+    if (uFrom == 0 && uTo == 0 && uBend > 0.0) {
+      float u = clamp(from.x / 2.4, -1.0, 1.0);
+      float cubic = -1.9 * u * u * u;
+      pos.z += (cubic - 0.9 * tanh(1.6 * from.x)) * uBend;
+    }
 
     // Swirl at mid-transition. A cheap sinusoidal curl-like field: three
     // orthogonal sines phase-shifted by time, scaled by sin(m·π) so it is

@@ -21,6 +21,7 @@
  */
 import { MARK_H, MARK_MASK, MARK_W, MARK_HEAT } from "./markData";
 import { CORE_SEED, Simplex3, mulberry32 } from "./noise";
+import { SHAPES } from "./shapes";
 
 export const NODE_COUNT = 16384;
 export const HALF = NODE_COUNT / 2;
@@ -69,7 +70,7 @@ const smoothstep = (a: number, b: number, t: number) => {
   return x * x * (3 - 2 * x);
 };
 
-interface SheetNode {
+export interface SheetNode {
   col: number;
   row: number;
   x: number;
@@ -180,59 +181,83 @@ function buildEdges(nodes: SheetNode[]): Array<[number, number]> {
 
 // ─── formations 1 to 4 as maps of (col, row) ─────────────────────────────────
 
-type Placement = { x: number; y: number; z: number; heat: number };
+export type Placement = { x: number; y: number; z: number; heat: number };
 
-function formationLattice(nodes: SheetNode[], rand: () => number): Placement[] {
-  // 32 × 16 × 32 = 16384. Sheet columns fold into x and part of y, rows into
-  // z and the rest of y, so a sheet neighbour is at most one lattice step away
-  // in some axis.
-  const step = 0.11;
-  const shear = Math.tan((8 * Math.PI) / 180);
-  // Exact assignment: sort nodes by sheet cell (z-band, x-band, then
-  // position) and hand out lattice slots in that order. Every lattice point
-  // gets exactly one node, and sheet neighbours land in adjacent slots.
-  const ranked = nodes
-    .map((n, i) => {
-      const u = (n.x / SHEET_X + 1) / 2;
-      const v = (n.y / SHEET_Y + 1) / 2;
-      return { i, cz: Math.min(31, Math.floor(v * 32)), cx: Math.min(31, Math.floor(u * 32)), u, v };
-    })
-    .sort((p, q) => p.cz - q.cz || p.cx - q.cx || p.v - q.v || p.u - q.u);
-  const out: Placement[] = new Array(nodes.length);
-  const slotToNode = new Int32Array(nodes.length);
-  ranked.forEach((r, k) => {
-    const gz = k >> 9;
-    const gx = (k >> 4) & 31;
-    const gy = k & 15;
-    slotToNode[k] = r.i;
-    const x = (gx - 15.5) * step;
-    const y = (gy - 7.5) * step;
-    const z = (gz - 15.5) * step;
-    out[r.i] = { x: x + shear * y, y, z, heat: 0 };
-  });
-
-  // Traffic: ember paths walking along lattice lines.
-  const index = new Map<string, number>();
-  for (let k = 0; k < nodes.length; k += 1) {
-    index.set(`${(k >> 4) & 31},${k & 15},${k >> 9}`, slotToNode[k]);
-  }
-  // 16 walks: at 26 the lattice read as noise rather than traffic.
-  for (let walk = 0; walk < 16; walk += 1) {
-    let gx = Math.floor(rand() * 32);
-    let gy = Math.floor(rand() * 16);
-    let gz = Math.floor(rand() * 32);
-    const axis = Math.floor(rand() * 3);
-    for (let s = 0; s < 40; s += 1) {
-      const i = index.get(`${gx},${gy},${gz}`);
-      if (i !== undefined) out[i].heat = Math.max(out[i].heat, 0.85 + rand() * 0.15);
-      if (axis === 0) gx = (gx + 1) % 32;
-      else if (axis === 1) gz = (gz + 1) % 32;
-      else gy = (gy + 1) % 16;
-      if (rand() < 0.08) {
-        gy = Math.max(0, Math.min(15, gy + (rand() < 0.5 ? -1 : 1)));
-      }
+function formationFabric(nodes: SheetNode[]): Placement[] {
+  // Formation 1, Network Infrastructure: a spine-and-leaf fabric, the
+  // topology a modern data-centre network is built on (owner, 24 September
+  // 2026, replacing the lattice box). Four spine switches above, eight leaf
+  // switches below, every leaf linked to every spine: 12 hubs, 32 links.
+  // Hubs are dense balls of nodes on a Fibonacci sphere; links are thin
+  // strands of nodes; some links carry ember packets as traffic. Nodes are
+  // handed out in sheet order, so each hub and link takes a contiguous run
+  // of the sheet and the morph pulls whole regions into each element.
+  type Hub = { x: number; y: number; z: number; r: number };
+  const spines: Hub[] = [-1.35, -0.45, 0.45, 1.35].map((x) => ({ x, y: 0.95, z: 0, r: 0.2 }));
+  const leaves: Hub[] = Array.from({ length: 8 }, (_, i) => ({
+    x: -1.75 + i * 0.5,
+    y: -0.75,
+    z: i % 2 ? 0.32 : -0.32,
+    r: 0.14,
+  }));
+  const hubs = [...spines, ...leaves];
+  const links: Array<[Hub, Hub, boolean, number]> = [];
+  let k = 0;
+  for (const leaf of leaves) {
+    for (const spine of spines) {
+      // Traffic on a quarter of the links, spread across the fabric.
+      links.push([leaf, spine, k % 4 === 1, k * 0.37]);
+      k += 1;
     }
   }
+
+  const n = nodes.length;
+  const hubShare = 0.36;
+  const hubArea = hubs.reduce((t, h) => t + h.r * h.r, 0);
+  const counts: number[] = hubs.map((h) => Math.floor((n * hubShare * h.r * h.r) / hubArea));
+  const hubTotal = counts.reduce((t, c) => t + c, 0);
+  const perLink = Math.floor((n - hubTotal) / links.length);
+  links.forEach(() => counts.push(perLink));
+  counts[counts.length - 1] += n - counts.reduce((t, c) => t + c, 0);
+
+  const out: Placement[] = new Array(n);
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  let cursor = 0;
+  counts.forEach((count, e) => {
+    for (let j = 0; j < count; j += 1) {
+      const i = cursor + j;
+      if (e < hubs.length) {
+        const h = hubs[e];
+        const yy = 1 - (2 * (j + 0.5)) / count;
+        const rr = Math.sqrt(1 - yy * yy);
+        const th = golden * j;
+        const spine = e < spines.length;
+        out[i] = {
+          x: h.x + Math.cos(th) * rr * h.r,
+          y: h.y + yy * h.r,
+          z: h.z + Math.sin(th) * rr * h.r,
+          // Spine switches glow silver-warm; leaves stay graphite.
+          heat: spine ? 0.42 : 0,
+        };
+      } else {
+        const [a, bHub, traffic, phase] = links[e - hubs.length];
+        const t = (j + 0.5) / count;
+        // Run between the two hubs' surfaces, with a slight sag.
+        const x = a.x + (bHub.x - a.x) * t;
+        const y = a.y + (bHub.y - a.y) * t - 0.06 * Math.sin(Math.PI * t);
+        const z = a.z + (bHub.z - a.z) * t;
+        const wob = 0.012;
+        const packet = traffic && (t * 5 + phase) % 1 < 0.22;
+        out[i] = {
+          x: x + Math.cos(j * 2.4) * wob,
+          y: y + Math.sin(j * 2.4) * wob,
+          z: z + Math.sin(j * 1.7) * wob,
+          heat: packet ? 1 : 0,
+        };
+      }
+    }
+    cursor += count;
+  });
   return out;
 }
 
@@ -450,7 +475,11 @@ function formationMark(nodes: SheetNode[], rand: () => number): Placement[] {
 
 // ─── assembly with the ordering invariants ───────────────────────────────────
 
-export function generateCore(seed: number = CORE_SEED): CoreData {
+/**
+ * `shape` (capture stage only): put that capture-only shape (shapes.ts) in
+ * slot 5 instead of the mark. The live Core never passes one.
+ */
+export function generateCore(seed: number = CORE_SEED, shape?: string): CoreData {
   const rand = mulberry32(seed);
   const noise = new Simplex3(seed ^ 0x9e3779b9);
 
@@ -461,11 +490,11 @@ export function generateCore(seed: number = CORE_SEED): CoreData {
   const rawEdges = buildEdges(sheet);
 
   const f0: Placement[] = sheet.map((n) => ({ x: n.x, y: n.y, z: n.z, heat: heatF0(n.x) }));
-  const f1 = formationLattice(sheet, rand);
+  const f1 = formationFabric(sheet);
   const f2 = formationShield(sheet);
   const f3 = formationNebula(sheet, rand, noise);
   const f4 = formationPlane(sheet, noise);
-  const f5 = formationMark(sheet, rand);
+  const f5 = shape && SHAPES[shape] ? SHAPES[shape](sheet) : formationMark(sheet, rand);
   const formations = [f0, f1, f2, f3, f4, f5];
 
   // Order: uniform halves (alternate by index), ember-capable first in each.

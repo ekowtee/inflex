@@ -113,7 +113,7 @@ export default function Pillars() {
                   >
                     {/* Mobile only: the formation poster above the row copy.
                         Captured from the real scene, one per formation
-                        (lattice, shield, nebula, plane). */}
+                        (network fabric, shield, nebula, plane). */}
                     <div
                       data-pillar-poster
                       className="relative mb-6 h-[56vw] w-full overflow-hidden lg:hidden [html[data-core-live]_&]:hidden"

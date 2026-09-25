@@ -1,123 +1,98 @@
-"use client";
-
-import Link from "next/link";
-import { Search } from "lucide-react";
-import FeaturedJobs from "../components/FeaturedJobs";
 import Image from "next/image";
+import Link from "next/link";
+import Magnetic from "@/motion/Magnetic";
+import Reveal from "@/motion/Reveal";
+import FeaturedJobs from "../components/FeaturedJobs";
+import PageHero from "../components/PageHero";
 
+/**
+ * /careers — PHASE5_BRIEF.md §4 Task 6.
+ *
+ * The hero, section heading and body are the Variant B copy approved by the
+ * owner on 25 September 2026 (PHASE5_COPY.md). Two things were removed and
+ * both are recorded in
+ * PHASE5_REPORT.md: the "Search Job" field, which had no state, no handler
+ * and no form around it and searched nothing; and the navy wash over a
+ * photograph at the foot, which was the retired Banner's composition. Its
+ * copy and both its links are kept, on Obsidian.
+ *
+ * The three links go to /jobs and /internships, built on the owner's
+ * decision of 24 September 2026.
+ */
 export default function CareersPage() {
   return (
     <div>
-      {/* Hero */}
-      <div className="relative w-full h-[300px] md:h-[500px]">
-        <Image
-          src="/assets/career/careersbg.webp"
-          alt="Careers"
-          width={1504}
-          height={704}
-          className="w-full h-full object-cover"
-          sizes="100vw"
-          priority
-        />
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="absolute inset-0 flex items-end pb-10 md:pb-28 lg:pb-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="md:w-2/3 text-white space-y-4">
-              <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
-                Build What Matters. With People Who Do.
-              </h1>
-              <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-2xl">
-                Join a team that turns ambitious ideas into real-world IT impact.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHero
+        title="Build the thing the country runs on."
+        lead="If you want your work to be a data centre, a national network, or the system a ministry depends on — this is the room."
+        formation="staircase"
+      />
 
-      {/* Search */}
-      <section className="bg-[#F4F4F4]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="w-full md:w-1/2">
+      <section className="band-ivory w-full py-24 md:py-32" aria-label="What the work is">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+            <div className="relative aspect-[16/10] overflow-hidden">
               <Image
                 src="/assets/career/career1.webp"
                 alt="Team reviewing job roles"
-                width={642}
-                height={380}
-                className="w-full h-auto object-cover rounded-lg shadow-lg"
+                fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
+                className="photo-grade object-cover"
               />
             </div>
-            <div className="w-full md:w-1/2">
-              <h2 className="text-3xl font-semibold text-[#1B3764] mb-6">Search Job</h2>
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8C8C8C]" size={20} />
-                <input
-                  type="text"
-                  placeholder="Search by role or keyword"
-                  aria-label="Search jobs"
-                  className="w-full border border-[#A6A6A6] rounded-md py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-[#BD2E25] transition"
-                />
-              </div>
-              <p className="text-[#5C6280] leading-relaxed">
-                If you thrive on solving problems that matter&mdash;for enterprises that depend on you&mdash;Inflexions is where your expertise becomes impact.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Working with us */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          <p className="text-[#333333] leading-relaxed max-w-xl">
-            We hire for mastery and curiosity. If you&apos;re ready to work on high-stakes projects with a team that values precision over politics, explore what&apos;s open.
-          </p>
-          <div className="text-center md:text-right space-y-4">
-            <h3 className="text-[24px] font-semibold leading-[28px] text-[#171A20]">Working with us</h3>
-            <Link
-              href="/jobs"
-              className="inline-block border-2 border-black text-black font-medium py-2 px-12 rounded-md hover:bg-black hover:text-white transition-colors duration-200"
-            >
-              View Jobs
-            </Link>
+            <div>
+              <Reveal as="h2" className="type-h2 max-w-[18ch] text-neutral-900">
+                What the work is
+              </Reveal>
+              <Reveal as="p" className="type-body-l mt-6 max-w-[56ch] text-neutral-600" delay={80}>
+                The systems you would work on are load-bearing. When they are
+                down, a bank is down, or a network is, or a ministry is.
+              </Reveal>
+              <Reveal as="p" className="type-body-l mt-6 max-w-[56ch] text-neutral-600" delay={160}>
+                We hire for mastery and curiosity, and we are small enough that
+                you will not be three layers from the decision.
+              </Reveal>
+
+              <Reveal className="mt-10" delay={240}>
+                <Link
+                  href="/jobs"
+                  className="inline-flex h-14 items-center rounded-[6px] border border-neutral-300 px-8 font-semibold text-neutral-900 transition-colors duration-[var(--motion-duration-micro)] hover:bg-neutral-50"
+                >
+                  View Jobs
+                </Link>
+              </Reveal>
+            </div>
           </div>
         </div>
       </section>
 
       <FeaturedJobs />
 
-      {/* Join Us */}
-      <section className="relative w-full h-[300px] md:h-[400px] overflow-hidden">
-        <Image
-          src="/assets/vidmiin.webp"
-          alt="Join Us Hero"
-          width={1920}
-          height={499}
-          className="w-full h-full object-cover"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-[#1B3764]/80" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center px-4 max-w-2xl">
-            <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">Join Us</h2>
-            <p className="text-white/90 text-lg mb-8">
-              Shape the technology backbone of Africa&apos;s leading enterprises.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/jobs"
-                className="inline-block border-2 border-white text-white font-semibold px-8 py-3 rounded-[6px] hover:bg-white hover:text-[#1B3764] transition-colors duration-300"
-              >
-                View Jobs
-              </Link>
+      <section
+        data-register="obsidian"
+        data-header-dark=""
+        className="band-obsidian on-obsidian w-full py-24 md:py-32"
+        aria-label="Join us"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="type-h2 text-silver-100">Join Us</h2>
+          <p className="type-body-l mt-6 max-w-[52ch] text-silver-300">
+            Shape the technology backbone of Africa&apos;s leading enterprises.
+          </p>
+
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+            <Magnetic>
               <Link
                 href="/internships"
-                className="inline-block bg-[#BD2E25] hover:bg-[#A02923] text-white font-semibold px-8 py-3 rounded-[6px] transition-colors duration-300"
+                className="inline-flex h-14 items-center rounded-[6px] bg-primary-500 px-8 font-semibold text-white transition-colors duration-[var(--motion-duration-micro)] hover:bg-primary-600"
               >
                 View Internships
               </Link>
-            </div>
+            </Magnetic>
+            <Link href="/jobs" className="btn-secondary-obsidian text-silver-100">
+              View Jobs
+            </Link>
           </div>
         </div>
       </section>

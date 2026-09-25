@@ -7,7 +7,7 @@
  */
 import { Vector3 } from "three";
 import { BEAT_START_VH } from "./timeline";
-import { MORPH_HALF_VH, PILLAR_FORMATION, PILLAR_VH, pillarHoldVh } from "./formationTrack";
+import { FIRST_MORPH_VH, MORPH_VH, PILLAR_FORMATION, PILLAR_VH, pillarHoldVh } from "./formationTrack";
 
 export const FOV = 32;
 
@@ -25,7 +25,7 @@ const HERO = { position: new Vector3(-1.3, 1.3, 6.0), lookAt: new Vector3(-1.0, 
 const TRUST = { position: new Vector3(-1.1, 1.9, 6.8), lookAt: new Vector3(-0.9, -0.4, 0) };
 const RESOLVE = { position: new Vector3(-0.6, 0.9, 4.9), lookAt: new Vector3(-0.5, -0.05, 0) };
 /**
- * The turning point, looking down along the sheet: the S-curve reads in
+ * The turning point, looking down along the sheet: the y = x³ curve reads in
  * profile, with the ember line lit exactly where it turns, right of the
  * copy (capture, 24 September 2026).
  */
@@ -33,7 +33,7 @@ const INFLECTION = { position: new Vector3(-2.4, 9.0, 2.8), lookAt: new Vector3(
 
 /**
  * The pillar formations are 3.5 to 4.4 units across, against the sheet's
- * 4.8 by 2.6 seen close: from the hero key the lattice and the plane ran
+ * 4.8 by 2.6 seen close: from the hero key the wide formations ran
  * into the copy column and off the right edge (capture, 23 September 2026).
  * So the pinned chapter pulls back and shifts the look-at left, which puts
  * the object's centre at about 72% of the width, and the camera orbits a
@@ -50,9 +50,9 @@ function orbit(azimuthDeg: number, elevationDeg: number, distance: number, lookA
   return { position: lookAt.clone().add(offset), lookAt };
 }
 
-/** One camera per pillar formation, lattice to plane. */
+/** One camera per pillar formation, network fabric to plane. */
 export const PILLAR_CAMERA = [
-  orbit(-20, 16, 9.2, new Vector3(-1.9, -0.1, 0)),
+  orbit(-20, 16, 9.2, new Vector3(-2.2, -0.1, 0)),
   orbit(-28, 14, 8.4, new Vector3(-1.9, 0, 0)),
   orbit(16, 12, 8.4, new Vector3(-1.8, 0, 0)),
   orbit(22, 28, 11.2, new Vector3(-2.0, -0.3, 0.2)),
@@ -67,21 +67,23 @@ const key = (at: number, k: { position: Vector3; lookAt: Vector3 }): CameraKey =
 function buildKeys(): CameraKey[] {
   const b = BEAT_START_VH;
   // The camera rises into the profile view as order arrives in Beat 2,
-  // holds it through the proof, and comes back down before the lattice.
+  // holds it through the proof, and comes back down before the network fabric.
   const out: CameraKey[] = [
     key(0, HERO),
     key(b[1], TRUST),
     key(b[2], RESOLVE),
     key(b[2] + 27, INFLECTION),
-    key(b[4] - 44, INFLECTION),
-    key(b[4] - 24, RESOLVE),
+    // Down from the profile view while the bend relaxes, then on to the
+    // first pillar's key over the network fabric morph.
+    key(b[4] - FIRST_MORPH_VH - 44, INFLECTION),
+    key(b[4] - FIRST_MORPH_VH - 6, RESOLVE),
   ];
   // Each formation's camera holds for the formation's hold and moves only
   // while the morph runs, so the object never drifts while a row is read.
   PILLAR_FORMATION.forEach((f, i) => {
     const hold = pillarHoldVh(f);
     out.push(key(hold, PILLAR_CAMERA[i]));
-    out.push(key(hold + PILLAR_VH - 2 * MORPH_HALF_VH, PILLAR_CAMERA[i]));
+    out.push(key(hold + PILLAR_VH - MORPH_VH, PILLAR_CAMERA[i]));
   });
   // Hidden from the end of Beat 4's fade: back to the hero composition for
   // the intelligence band and the ask. The jump happens while opacity is 0.

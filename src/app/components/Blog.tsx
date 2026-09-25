@@ -1,4 +1,16 @@
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+
+/**
+ * Recent case studies on /resources — PHASE5_BRIEF.md §4 Task 6.
+ *
+ * Three grey cards with a radius and a shadow become three entries. Their
+ * links all point at "#", which is left as it is and recorded in
+ * PHASE5_REPORT.md: giving three placeholder articles real destinations is
+ * a content decision, not this branch's.
+ */
+
 const blog = [
   {
     id: 1,
@@ -24,45 +36,45 @@ const blog = [
       "Explore essential strategies and tools to secure your remote workforce, protect sensitive data, and maintain compliance in today\u2019s distributed workplace.",
     link: "#",
   },
-];
+] as const;
 
 export default function Blog() {
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white">
-      <h2 className="text-xl sm:text-2xl font-medium text-[#262626] text-center mb-12">
-        Recent Case studies
-      </h2>
+    <section className="band-ivory w-full py-24 md:py-32" aria-label="Recent case studies">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 className="type-h2 border-t border-neutral-200 pt-12 text-neutral-900">
+          Recent Case studies
+        </h2>
 
-      <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        {blog.map(({ id, image, title, description, link }) => (
-          <div
-            key={id}
-            className="bg-[#F6F6F6] rounded-2xl shadow-md overflow-hidden flex flex-col"
-          >
-            <Image
-              src={image}
-              alt={title}
-              width={299}
-              height={168}
-              className="w-full h-40 md:h-48 object-cover rounded-t-2xl"
-              sizes="(min-width: 1024px) 50vw, 100vw"
-            />
-            <div className="py-6 px-4 flex-1 flex flex-col">
-              <h3 className="text-base md:text-lg font-medium text-[#262626] mb-2">
-                {title}
+        <div className="mt-16 grid gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+          {blog.map(({ id, image, title, description, link }) => (
+            <article key={id} className="group relative flex flex-col">
+              <div className="relative aspect-[16/10] overflow-hidden">
+                <Image
+                  src={image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="photo-grade object-cover"
+                />
+              </div>
+              <h3 className="type-h3 mt-8 flex items-start justify-between gap-4 border-t border-neutral-200 pt-8 text-neutral-900">
+                <Link
+                  href={link}
+                  className="underline decoration-transparent decoration-1 underline-offset-[6px] transition-[text-decoration-color] duration-[var(--motion-duration-ui)] after:absolute after:inset-0 after:content-[''] group-hover:decoration-neutral-900"
+                >
+                  {title}
+                </Link>
+                <ArrowUpRight
+                  aria-hidden="true"
+                  strokeWidth={1.5}
+                  className="mt-1 h-5 w-5 shrink-0 text-neutral-500 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] group-hover:-translate-y-1 group-hover:translate-x-1"
+                />
               </h3>
-              <p className="text-sm md:text-base text-[#41444B] mb-4 flex-1 leading-relaxed">
-                {description}
-              </p>
-              <a
-                href={link}
-                className="mt-auto inline-flex items-center text-[#BD2E25] font-medium hover:underline"
-              >
-                READ MORE <span className="ml-1">&rarr;</span>
-              </a>
-            </div>
-          </div>
-        ))}
+              <p className="type-body mt-4 text-neutral-600">{description}</p>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -1,8 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight, Phone } from "lucide-react";
-import Image from "next/image";
+import { Plus } from "lucide-react";
+
+/**
+ * The questions on /contact — PHASE5_BRIEF.md §4 Task 7.
+ *
+ * Rows on hairlines with the answer opening on the 0fr to 1fr grid that
+ * Pillars.tsx uses, so there is no measured height and the closed panel
+ * stays in the page rather than being removed from and returned to it.
+ *
+ * What went with the cards: a red accent-bar pill reading "FAQ", and a
+ * photograph carrying a floating red box offering a "Free Consultation"
+ * with a phone icon in a circle. Free is the one word the pricing frame
+ * must never contain (COPY_DECK.md §8.3), the box duplicated the page's
+ * own contact details, and its button was a <button> that did nothing.
+ */
 
 const FAQ_ITEMS = [
   {
@@ -51,73 +64,49 @@ export default function Faq() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="bg-[#F6F6F6] py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        {/* Left: FAQ */}
-        <div className="w-full md:w-[500px]">
-          <span className="inline-block border-l-4 border-[#BD2E25] bg-white px-2 py-1 text-sm font-medium text-[#333333] mb-2">
-            FAQ
-          </span>
-          <h2 className="text-3xl font-semibold text-[#171A20] mb-6">
-            Frequently Asked <br /> Questions
-          </h2>
-          <ul className="space-y-4">
-            {FAQ_ITEMS.map((item, idx) => {
-              const isOpen = idx === openIndex;
-              return (
-                <li key={idx} className="border-b border-[#D0D0D0] pb-4">
-                  <button
-                    onClick={() => setOpenIndex(isOpen ? -1 : idx)}
-                    aria-expanded={isOpen}
-                    className="w-full flex justify-between items-center text-left text-[#262626] rounded-[6px]"
-                  >
-                    <span className="text-lg">{item.question}</span>
-                    <ChevronRight
-                      size={24}
-                      className={`transform transition-transform duration-200 ${
-                        isOpen ? "rotate-90" : ""
-                      }`}
-                    />
-                  </button>
-                  {isOpen && item.answer && (
-                    <p className="mt-2 text-[#41444B]">{item.answer}</p>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+    <section className="band-ivory w-full pb-24 md:pb-32" aria-label="Frequently asked questions">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="border-t border-neutral-200 pt-12">
+          <p className="type-eyebrow text-neutral-500">FAQ</p>
+          <h2 className="type-h2 mt-6 text-neutral-900">Frequently Asked Questions</h2>
         </div>
 
-        {/* Right: Hero image + consultation box */}
-        <div className="relative w-full md:hidden lg:block">
-          <Image
-            src="/assets/career/faq.webp"
-            alt="Consultation"
-            width={1024}
-            height={1024}
-            className="w-full h-auto object-cover"
-            sizes="(min-width: 1024px) 50vw, 100vw"
-          />
-          <div className="absolute top-[25%] left-0 right-0 lg:left-[-80px] flex md:justify-start justify-center items-center">
-            <div className="bg-[#BD2E25] text-white p-8 max-w-sm shadow-lg transform scale-50 md:scale-100">
-              <h3 className="text-xl font-semibold mb-4">
-                You Need Any Help? Get Free Consultation
-              </h3>
-              <div className="flex items-center mb-6">
-                <div className="bg-white/20 p-3 rounded-full mr-3">
-                  <Phone className="text-white" size={20} />
+        <ul className="mt-12 max-w-[80ch] border-t border-neutral-200">
+          {FAQ_ITEMS.map((item, idx) => {
+            const isOpen = idx === openIndex;
+            return (
+              <li key={idx} className="border-b border-neutral-200">
+                <button
+                  type="button"
+                  onClick={() => setOpenIndex(isOpen ? -1 : idx)}
+                  aria-expanded={isOpen}
+                  className="flex w-full items-start justify-between gap-6 py-6 text-left"
+                >
+                  <span className="type-h3 text-neutral-900">{item.question}</span>
+                  <Plus
+                    aria-hidden="true"
+                    strokeWidth={1.5}
+                    className={`mt-1 h-6 w-6 shrink-0 text-neutral-500 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] ${
+                      isOpen ? "rotate-45" : ""
+                    }`}
+                  />
+                </button>
+
+                <div
+                  className={`grid transition-[grid-template-rows] duration-[var(--motion-duration-reveal)] ease-[var(--motion-ease-out)] ${
+                    isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <p className="type-body-l max-w-[70ch] pb-8 text-neutral-600">
+                      {item.answer}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm">Have Any Questions</p>
-                  <p className="font-medium">(233) 208 889 270</p>
-                </div>
-              </div>
-              <button className="bg-white text-[#BD2E25] px-6 py-2 font-medium rounded-[6px] hover:bg-[#F2F2F2] transition">
-                Contact Us
-              </button>
-            </div>
-          </div>
-        </div>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );

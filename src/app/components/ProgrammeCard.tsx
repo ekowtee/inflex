@@ -1,9 +1,17 @@
 import Link from "next/link";
-import { Clock, ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 import type { Programme } from "../academy/data";
 import LevelBadge from "./LevelBadge";
-import Image from "next/image";
 
+/**
+ * One programme — PHASE5_BRIEF.md §4 Task 5.
+ *
+ * The image stays, because a catalogue of twenty programmes is hard to scan
+ * without one; the card around it does not. The photograph sits above a
+ * hairline with the entry below it, graded into the palette like every other
+ * photograph on the site, and it no longer grows on hover.
+ */
 export default function ProgrammeCard({
   programme,
   showDomainTag,
@@ -14,48 +22,43 @@ export default function ProgrammeCard({
   domainTitle?: string;
 }) {
   return (
-    <Link
-      href={`/academy/${programme.domainSlug}/${programme.slug}`}
-      className="group flex flex-col h-full bg-white border border-[#D0D0D0] rounded-lg overflow-hidden hover:shadow-lg hover:border-[#BD2E25] transition-all duration-300"
-    >
-      <div className="relative w-full h-48 overflow-hidden">
+    <article className="group relative flex h-full flex-col">
+      <div className="relative aspect-[16/10] overflow-hidden">
         <Image
           src={programme.heroImage}
           alt=""
-          width={1200}
-          height={896}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          sizes="100vw"
+          fill
+          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+          className="photo-grade object-cover"
         />
-        <div className="absolute top-3 left-3">
-          <LevelBadge level={programme.level} />
-        </div>
       </div>
-      <div className="flex flex-col flex-grow p-6">
+
+      <div className="mt-6 flex items-center justify-between gap-4 border-t border-neutral-200 pt-6 text-neutral-500">
+        <LevelBadge level={programme.level} />
         {showDomainTag && domainTitle && (
-          <span className="text-xs font-medium text-[#5C6280] uppercase tracking-wide mb-2">
-            {domainTitle}
-          </span>
+          <span className="type-telemetry text-right">{domainTitle}</span>
         )}
-        <h3 className="text-lg font-semibold text-[#171A20] mb-2 group-hover:text-[#BD2E25] transition-colors">
-          {programme.title}
-        </h3>
-        <p className="text-sm text-[#41444B] leading-relaxed mb-4 flex-grow line-clamp-3">
-          {programme.subtitle}
-        </p>
-        <div className="flex flex-wrap items-center gap-3 text-xs text-[#5C6280] mb-4">
-          <span className="inline-flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5" />
-            {programme.duration}
-          </span>
-          <span>·</span>
-          <span>{programme.formats.join(" / ")}</span>
-        </div>
-        <span className="inline-flex items-center text-sm font-medium text-[#BD2E25] mt-auto">
-          View programme
-          <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
-        </span>
       </div>
-    </Link>
+
+      <h3 className="type-h3 mt-5 flex items-start justify-between gap-4 text-neutral-900">
+        <Link
+          href={`/academy/${programme.domainSlug}/${programme.slug}`}
+          className="underline decoration-transparent decoration-1 underline-offset-[6px] transition-[text-decoration-color] duration-[var(--motion-duration-ui)] after:absolute after:inset-0 after:content-[''] group-hover:decoration-neutral-900"
+        >
+          {programme.title}
+        </Link>
+        <ArrowUpRight
+          aria-hidden="true"
+          strokeWidth={1.5}
+          className="mt-1 h-5 w-5 shrink-0 text-neutral-500 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] group-hover:-translate-y-1 group-hover:translate-x-1"
+        />
+      </h3>
+
+      <p className="type-body mt-4 flex-grow text-neutral-600">{programme.subtitle}</p>
+
+      <p className="type-telemetry mt-6 text-neutral-500">
+        {programme.duration} · {programme.formats.join(" / ")}
+      </p>
+    </article>
   );
 }

@@ -1,11 +1,16 @@
 {
-  "_comment": "Phase 0 performance gate thresholds. Source: PERFORMANCE_PLAN.md §9.1 and §2.2, approved by the owner on 22 September 2026. Times are milliseconds, sizes are gzipped bytes.",
+  "_comment": "Phase 0 performance gate thresholds. Source: PERFORMANCE_PLAN.md \u00a79.1 and \u00a72.2, approved by the owner on 22 September 2026. Times are milliseconds, sizes are gzipped bytes.",
   "routes": [
     "/",
     "/solutions",
     "/solutions/network-infrastructure",
     "/academy",
-    "/contact"
+    "/contact",
+    "/solutions/data-security",
+    "/services",
+    "/academy/ai-intelligent-systems",
+    "/case-study",
+    "/about"
   ],
   "lab": {
     "server-response-time": 600,

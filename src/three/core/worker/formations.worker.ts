@@ -18,10 +18,10 @@ export interface CoreWorkerResult {
   generateMs: number;
 }
 
-self.onmessage = (event: MessageEvent<{ type: "generate"; seed?: number }>) => {
+self.onmessage = (event: MessageEvent<{ type: "generate"; seed?: number; shape?: string }>) => {
   if (event.data?.type !== "generate") return;
   const started = performance.now();
-  const data = generateCore(event.data.seed);
+  const data = generateCore(event.data.seed, event.data.shape);
   const message: CoreWorkerResult = {
     type: "core",
     positions: data.positions,

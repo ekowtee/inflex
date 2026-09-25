@@ -1,9 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight, Clock } from "lucide-react";
+import { Plus } from "lucide-react";
 import type { CurriculumModule } from "../academy/data";
 
+/**
+ * A programme's modules — PHASE5_BRIEF.md §4 Task 5 and Task 7.
+ *
+ * Rows on hairlines rather than a stack of bordered white boxes, and the
+ * answer opens on the 0fr to 1fr grid that Pillars.tsx uses: no measured
+ * height, no JavaScript layout, and the closed panel is genuinely closed
+ * rather than removed and re-added, so the content is in the page for
+ * anything reading it.
+ *
+ * The chevron becomes a plus that turns into a minus, which is the one
+ * shape that says "there is more here" without pointing sideways at it.
+ */
 export default function CurriculumAccordion({
   modules,
 }: {
@@ -12,50 +24,47 @@ export default function CurriculumAccordion({
   const [openIndex, setOpenIndex] = useState<number>(0);
 
   return (
-    <ul className="space-y-3">
+    <ul className="border-t border-neutral-200">
       {modules.map((module, idx) => {
         const isOpen = idx === openIndex;
         return (
-          <li
-            key={idx}
-            className="border border-[#D0D0D0] rounded-lg overflow-hidden bg-white"
-          >
+          <li key={idx} className="border-b border-neutral-200">
             <button
+              type="button"
               onClick={() => setOpenIndex(isOpen ? -1 : idx)}
               aria-expanded={isOpen}
-              className="w-full flex justify-between items-center text-left p-5 rounded-[6px] hover:bg-[#F7F8FA] transition-colors"
+              className="flex w-full items-start justify-between gap-6 py-6 text-left"
             >
-              <div className="flex-1 min-w-0 pr-4">
-                <h4 className="text-base font-semibold text-[#171A20] mb-1">
-                  {module.title}
-                </h4>
-                <span className="inline-flex items-center gap-1 text-xs text-[#5C6280]">
-                  <Clock className="w-3.5 h-3.5" />
+              <span>
+                <span className="type-h3 block text-neutral-900">{module.title}</span>
+                <span className="type-telemetry mt-3 block text-neutral-500">
                   {module.duration}
                 </span>
-              </div>
-              <ChevronRight
-                size={20}
-                className={`flex-shrink-0 text-[#5C6280] transform transition-transform duration-200 ${
-                  isOpen ? "rotate-90" : ""
+              </span>
+              <Plus
+                aria-hidden="true"
+                strokeWidth={1.5}
+                className={`mt-1 h-6 w-6 shrink-0 text-neutral-500 transition-transform duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)] ${
+                  isOpen ? "rotate-45" : ""
                 }`}
               />
             </button>
-            {isOpen && (
-              <div className="px-5 pb-5 border-t border-[#E6E6E6] pt-4">
-                <ul className="space-y-2">
+
+            <div
+              className={`grid transition-[grid-template-rows] duration-[var(--motion-duration-reveal)] ease-[var(--motion-ease-out)] ${
+                isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <ul className="pb-8">
                   {module.topics.map((topic, tIdx) => (
-                    <li
-                      key={tIdx}
-                      className="flex items-start gap-2 text-sm text-[#41444B]"
-                    >
-                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#BD2E25] flex-shrink-0" />
-                      <span>{topic}</span>
+                    <li key={tIdx} className="type-body py-1.5 text-neutral-600">
+                      {topic}
                     </li>
                   ))}
                 </ul>
               </div>
-            )}
+            </div>
           </li>
         );
       })}

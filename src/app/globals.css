@@ -388,6 +388,25 @@
   }
 }
 
+/* Photography, graded into the palette — PHASE5_BRIEF.md §4 Task 7.
+   The stock library these pages draw on is saturated and warm, and beside
+   the Obsidian register it reads as somebody else's website. This pulls the
+   colour back toward the silver the rest of the site is set in and deepens
+   the darks a little so a photograph sits in the same room as the object.
+
+   Restrained on purpose: enough to belong, not so much that it announces a
+   treatment. Never on logos, posters or icons, which carry their own
+   colour rules.
+
+   Filters only, so it works on a bare <img> with no wrapper. A true tint of
+   the shadows toward obsidian would need a blend layer per image; the
+   brightness step below is the honest approximation of it. */
+@layer components {
+  .photo-grade {
+    filter: grayscale(0.4) saturate(0.85) contrast(1.04) brightness(0.96);
+  }
+}
+
 /* The scroll spine — src/three/core/timeline.ts.
    While the Core is live (Tier A and B, once the poster has crossfaded) the
    Obsidian chapters lose their background so the fixed canvas shows through

@@ -13,6 +13,8 @@
  *   MAIL_FROM       display "From" header e.g. `"Inflexions" <sales@inflexions.tech>`
  *                   (Gmail rewrites mismatched senders, so use the SMTP_USER address)
  *   MAIL_TO_SALES   where lead notifications go; defaults to SMTP_USER
+ *   MAIL_TO_CAREERS where careers applications (with the CV) go; defaults to
+ *                   info@inflexions.tech (see src/app/api/careers/apply)
  */
 import nodemailer, { type Transporter } from "nodemailer";
 
@@ -41,6 +43,8 @@ export interface SendMailInput {
   text: string;
   html?: string;
   replyTo?: string;
+  /** Files to attach, e.g. the CV on a careers application. */
+  attachments?: { filename: string; content: Buffer; contentType?: string }[];
 }
 
 export interface SendMailResult {
@@ -67,6 +71,7 @@ export async function sendMail(input: SendMailInput): Promise<SendMailResult> {
       text: input.text,
       html: input.html,
       replyTo: input.replyTo,
+      ...(input.attachments?.length ? { attachments: input.attachments } : {}),
     });
     return { ok: true };
   } catch (e) {

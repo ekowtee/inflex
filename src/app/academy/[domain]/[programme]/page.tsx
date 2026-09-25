@@ -1,18 +1,31 @@
 import { notFound } from "next/navigation";
-import { CheckCircle, Award } from "lucide-react";
+import Link from "next/link";
 import type { Metadata } from "next";
-import AcademyHero from "../../../components/AcademyHero";
+import AskBand from "../../../components/AskBand";
 import CurriculumAccordion from "../../../components/CurriculumAccordion";
-import ProgrammeDetailsSidebar from "../../../components/ProgrammeDetailsSidebar";
-import ProgrammeCard from "../../../components/ProgrammeCard";
-import Banner from "../../../components/Banner";
 import JsonLd from "../../../components/JsonLd";
+import PageHero from "../../../components/PageHero";
+import { domainFormation } from "../../heroFormation";
+import ProgrammeCard from "../../../components/ProgrammeCard";
+import ProgrammeDetailsSidebar from "../../../components/ProgrammeDetailsSidebar";
+import { entryGrid } from "../../../components/entryGrid";
 import {
   programmes,
   getDomain,
   getProgramme,
   getProgrammesByDomain,
 } from "../../data";
+
+/**
+ * /academy/[domain]/[programme] — PHASE5_BRIEF.md §4 Task 5.
+ *
+ * A compact hero, because a programme page is a document and its reader has
+ * already decided to read it. generateStaticParams and the route are
+ * untouched, and so is academy/data.ts.
+ *
+ * The programme stays person-independent: the practitioner band speaks for
+ * the group, and there is no profile, portrait or name anywhere on it.
+ */
 
 export function generateStaticParams() {
   return programmes.map((p) => ({
@@ -71,123 +84,116 @@ export default async function ProgrammeDetailPage({
         }}
       />
 
-      <AcademyHero
+      <PageHero
         eyebrow={programme.level}
         title={programme.title}
-        subtitle={programme.subtitle}
-        backgroundImage={programme.heroImage}
-        breadcrumbs={[
-          { label: "Academy", href: "/academy" },
-          { label: domain.shortTitle, href: `/academy/${domain.slug}` },
-          { label: programme.title },
-        ]}
+        lead={programme.subtitle}
+        formation={domainFormation(programme.domainSlug)}
+        size="compact"
       />
 
-      <section className="py-16 lg:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-2 space-y-12">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-[#1B3764] mb-4">
-                  Programme Overview
-                </h2>
-                <p className="text-[#41444B] text-lg leading-relaxed">
-                  {programme.description}
-                </p>
-              </div>
+      <section className="band-ivory w-full py-24 md:py-32" aria-label="Programme">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <nav aria-label="Breadcrumb" className="type-telemetry mb-12 text-neutral-500">
+            <Link
+              href="/academy"
+              className="underline decoration-neutral-300 underline-offset-[4px] transition-colors duration-[var(--motion-duration-micro)] hover:decoration-neutral-900"
+            >
+              Academy
+            </Link>
+            <span aria-hidden="true"> / </span>
+            <Link
+              href={`/academy/${domain.slug}`}
+              className="underline decoration-neutral-300 underline-offset-[4px] transition-colors duration-[var(--motion-duration-micro)] hover:decoration-neutral-900"
+            >
+              {domain.shortTitle}
+            </Link>
+            <span aria-hidden="true"> / </span>
+            <span aria-current="page">{programme.title}</span>
+          </nav>
 
-              <div>
-                <h3 className="text-xl font-bold text-[#171A20] mb-4">
-                  What You&apos;ll Learn
-                </h3>
-                <ul className="space-y-3">
-                  {programme.learningObjectives.map((obj) => (
-                    <li key={obj} className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-[#BD2E25] mt-0.5 flex-shrink-0" />
-                      <span className="text-[#41444B]">{obj}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          <div className="grid gap-16 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-20">
+            <div>
+              <h2 className="type-h2 text-neutral-900">Programme Overview</h2>
+              <p className="type-body-l mt-6 max-w-[68ch] text-neutral-600">
+                {programme.description}
+              </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-[#F7F8FA] border border-[#D0D0D0] rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-[#171A20] mb-3">
-                    Who It&apos;s For
-                  </h3>
-                  <ul className="space-y-2">
+              <h3 className="type-h3 mt-16 text-neutral-900">What You&apos;ll Learn</h3>
+              <ul className="mt-6 border-t border-neutral-200">
+                {programme.learningObjectives.map((obj) => (
+                  <li
+                    key={obj}
+                    className="type-body border-b border-neutral-200 py-4 text-neutral-900"
+                  >
+                    {obj}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-16 grid gap-12 md:grid-cols-2">
+                <div>
+                  <h3 className="type-h3 text-neutral-900">Who It&apos;s For</h3>
+                  <ul className="mt-6 border-t border-neutral-200">
                     {programme.targetAudience.map((audience) => (
                       <li
                         key={audience}
-                        className="flex items-start gap-2 text-sm text-[#41444B]"
+                        className="type-body border-b border-neutral-200 py-4 text-neutral-600"
                       >
-                        <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#BD2E25] flex-shrink-0" />
-                        <span>{audience}</span>
+                        {audience}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className="bg-[#F7F8FA] border border-[#D0D0D0] rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-[#171A20] mb-3">
-                    Prerequisites
-                  </h3>
-                  <ul className="space-y-2">
+                <div>
+                  <h3 className="type-h3 text-neutral-900">Prerequisites</h3>
+                  <ul className="mt-6 border-t border-neutral-200">
                     {programme.prerequisites.map((prereq) => (
                       <li
                         key={prereq}
-                        className="flex items-start gap-2 text-sm text-[#41444B]"
+                        className="type-body border-b border-neutral-200 py-4 text-neutral-600"
                       >
-                        <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#BD2E25] flex-shrink-0" />
-                        <span>{prereq}</span>
+                        {prereq}
                       </li>
                     ))}
                   </ul>
                 </div>
               </div>
 
-              <div>
-                <h3 className="text-xl font-bold text-[#171A20] mb-4">
-                  Curriculum
-                </h3>
+              <h3 className="type-h3 mt-16 text-neutral-900">Curriculum</h3>
+              <div className="mt-6">
                 <CurriculumAccordion modules={programme.curriculum} />
               </div>
             </div>
 
-            <div className="lg:col-span-1">
-              <ProgrammeDetailsSidebar programme={programme} />
-            </div>
+            <ProgrammeDetailsSidebar programme={programme} />
           </div>
         </div>
       </section>
 
-      <section className="py-12 bg-[#1B3764]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center gap-6 text-white">
-            <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
-              <Award className="w-8 h-8 text-white" />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-1">
-                Delivered by certified practitioners
-              </h3>
-              <p className="text-white/80 text-sm">
-                Our instructors hold relevant industry certifications and bring
-                an average of 10+ years of enterprise delivery experience across
-                banking, telecommunications, government, and technology
-                organisations.
-              </p>
-            </div>
-          </div>
+      <section
+        data-register="obsidian"
+        data-header-dark=""
+        className="band-obsidian on-obsidian w-full py-20"
+        aria-label="Who delivers this"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="type-h3 text-silver-100">Delivered by certified practitioners</h2>
+          <p className="type-body mt-4 max-w-[70ch] text-silver-300">
+            Every programme is taught by a practitioner who is currently
+            delivering the work it covers, and who holds the certifications it
+            prepares you for.
+          </p>
         </div>
       </section>
 
       {related.length > 0 && (
-        <section className="py-16 lg:py-20 bg-[#F7F8FA]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-[#171A20] mb-8">
+        <section className="band-ivory w-full py-24 md:py-32" aria-label="Related programmes">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="type-h2 text-neutral-900">
               Related Programmes in {domain.shortTitle}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className={`mt-16 grid gap-x-12 gap-y-16 ${entryGrid(related.length)}`}>
               {related.map((rel) => (
                 <ProgrammeCard key={rel.slug} programme={rel} />
               ))}
@@ -196,7 +202,12 @@ export default async function ProgrammeDetailPage({
         </section>
       )}
 
-      <Banner />
+      <AskBand
+        variant="academy"
+        line="Custom team training and enterprise programmes designed around your strategic priorities."
+        label="Train Your Team"
+        href="/academy/for-organizations"
+      />
     </div>
   );
 }
