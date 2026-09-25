@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { distance, duration, gsapEase, stagger } from "./tokens";
+import { useEffect, useRef, type ReactNode } from "react";
+import { duration, gsapEase, stagger } from "./tokens";
 import { loadMotion, prefersReducedMotion } from "./loadMotion";
-import Reveal from "./Reveal";
 
 type HeadingTag = "h1" | "h2" | "h3" | "p" | "div";
 
@@ -18,14 +17,21 @@ export interface SplitLinesProps {
 /**
  * Line-by-line heading entrance — CREATIVE_DIRECTION_3D.md §8.2.
  *
- * Splits into lines with GSAP SplitText, masks each line, and lifts them
- * 12 px with a 60 ms stagger. Never per letter.
+ * Splits into lines with GSAP SplitText, masks each line, and lifts them in
+ * with a 60 ms stagger. Never per letter.
  *
- * Waits for document.fonts.ready before splitting: measuring lines against
- * the fallback metrics and re-splitting when the webfont lands is visible
- * (PERFORMANCE_PLAN.md §5.2). Until then, and whenever SplitText or the
- * motion chunk is unavailable, it falls back to a plain Reveal, which is why
- * a heading above the fold never waits for JavaScript to become legible.
+ * One element, always. The heading renders as plain text, legible without
+ * JavaScript and under reduced motion. When it comes within half a viewport
+ * of the screen, SplitText splits it in place (after document.fonts.ready,
+ * so lines are measured against the real face) and the lines are parked
+ * below their masks; as its top crosses 80 % of the viewport they play in.
+ * Both steps are IntersectionObservers, so nothing is split or measured at
+ * load.
+ *
+ * Phase 6, 25 September 2026: the earlier version swapped from a Reveal
+ * wrapper to a plain heading once the split landed, which made React replace
+ * the element SplitText had just split, so the lines never showed; and it
+ * split every heading on the page at load, each with its own ScrollTrigger.
  */
 export default function SplitLines({
   children,
@@ -34,31 +40,31 @@ export default function SplitLines({
   delay = 0,
 }: SplitLinesProps) {
   const ref = useRef<HTMLElement>(null);
-  const [splitDone, setSplitDone] = useState(false);
 
   useEffect(() => {
     if (prefersReducedMotion()) return;
     const element = ref.current;
-    if (!element) return;
+    if (!element || typeof IntersectionObserver !== "function") return;
 
     let cancelled = false;
     let revert: (() => void) | undefined;
+    let play: IntersectionObserver | null = null;
 
-    const run = async () => {
+    const prepare = async () => {
       const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
       if (fonts?.ready) await fonts.ready;
       if (cancelled) return;
 
-      const { gsap, SplitText, ScrollTrigger } = await loadMotion();
-      if (cancelled || !SplitText || !ref.current) return;
+      const { gsap, SplitText } = await loadMotion();
+      if (cancelled || !SplitText) return;
 
-      const split = new SplitText(ref.current, {
+      const split = new SplitText(element, {
         type: "lines",
         linesClass: "motion-split-line",
         mask: "lines",
       });
-      setSplitDone(true);
-
+      // from() renders its start state at once: the lines wait under their
+      // masks until the play observer fires.
       const tween = gsap.from(split.lines, {
         yPercent: 110,
         opacity: 0,
@@ -66,50 +72,51 @@ export default function SplitLines({
         ease: gsapEase.out,
         stagger: stagger.lines / 1000,
         delay: delay / 1000,
-        scrollTrigger: {
-          trigger: ref.current,
-          start: "top 80%",
-          once: true,
-        },
+        paused: true,
       });
 
+      // Play as the heading's top crosses 80 % of the viewport, or at once if
+      // the reader is already past it.
+      play = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((e) => e.isIntersecting || e.boundingClientRect.top < 0)) return;
+          play?.disconnect();
+          play = null;
+          tween.play();
+        },
+        { rootMargin: "0px 0px -20% 0px" }
+      );
+      play.observe(element);
+
       revert = () => {
-        tween.scrollTrigger?.kill();
+        play?.disconnect();
         tween.kill();
         split.revert();
-        ScrollTrigger.refresh();
       };
     };
 
-    void run();
+    const near = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        near.disconnect();
+        void prepare();
+      },
+      { rootMargin: "0px 0px 50% 0px" }
+    );
+    near.observe(element);
 
     return () => {
       cancelled = true;
+      near.disconnect();
+      play?.disconnect();
       revert?.();
     };
   }, [delay]);
 
-  // Before the split lands, the heading behaves as an ordinary Reveal so it
-  // is legible and animated without the motion chunk. Once SplitText has
-  // run, the wrapper stops hiding it and GSAP owns the lines.
   const Tag = as;
-  if (splitDone) {
-    return (
-      <Tag
-        ref={ref as React.RefObject<HTMLHeadingElement>}
-        className={className}
-        style={{ ["--motion-distance-reveal" as string]: `${distance.line}px` }}
-      >
-        {children}
-      </Tag>
-    );
-  }
-
   return (
-    <Reveal as={as} className={className} delay={delay}>
-      <span ref={ref as React.RefObject<HTMLSpanElement>} className="block">
-        {children}
-      </span>
-    </Reveal>
+    <Tag ref={ref as React.RefObject<HTMLHeadingElement>} className={className}>
+      {children}
+    </Tag>
   );
 }

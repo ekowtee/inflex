@@ -3,7 +3,7 @@
 /**
  * The motion chunk — PERFORMANCE_PLAN.md §2.2 and §7 step 7.
  *
- * GSAP, ScrollTrigger, SplitText and Lenis are imported dynamically so they
+ * GSAP, SplitText and Lenis are imported dynamically so they
  * land in their own chunk and never sit on the path to the Largest
  * Contentful Paint. The import is scheduled after the LCP candidate has
  * painted, inside an idle callback, with a 2 s hard fallback.
@@ -14,6 +14,12 @@
  * is the LCP final, so it would delay motion indefinitely on a page nobody
  * touches. A PerformanceObserver on the largest-contentful-paint entry
  * fires as soon as a candidate paints, which is what "after LCP" means here.
+ *
+ * No ScrollTrigger (Phase 6, 25 September 2026). Its only user was
+ * SplitLines, as a start trigger, and its refresh — measuring every trigger
+ * on load, on resize and on the window's load event — was a long task on the
+ * home page. The scroll spine never used it (timeline.ts); SplitLines starts
+ * on an IntersectionObserver instead.
  */
 
 import type Lenis from "lenis";
@@ -21,7 +27,6 @@ import type { gsap as GsapNamespace } from "gsap";
 
 export interface MotionApi {
   gsap: typeof GsapNamespace;
-  ScrollTrigger: typeof import("gsap/ScrollTrigger").ScrollTrigger;
   SplitText: typeof import("gsap/SplitText").SplitText | null;
   Lenis: typeof Lenis;
 }
@@ -49,11 +54,7 @@ export function loadMotion(): Promise<MotionApi> {
   if (motionPromise) return motionPromise;
 
   motionPromise = (async () => {
-    const [gsapModule, scrollTriggerModule, lenisModule] = await Promise.all([
-      import("gsap"),
-      import("gsap/ScrollTrigger"),
-      import("lenis"),
-    ]);
+    const [gsapModule, lenisModule] = await Promise.all([import("gsap"), import("lenis")]);
 
     // SplitText ships with GSAP 3.13+. Tolerate its absence so a GSAP
     // upgrade that moves it cannot break the whole chunk.
@@ -65,15 +66,11 @@ export function loadMotion(): Promise<MotionApi> {
     }
 
     const gsap = gsapModule.gsap;
-    const { ScrollTrigger } = scrollTriggerModule;
-
-    gsap.registerPlugin(ScrollTrigger);
     if (SplitText) gsap.registerPlugin(SplitText);
 
     ready = true;
     return {
       gsap,
-      ScrollTrigger,
       SplitText,
       Lenis: lenisModule.default as typeof Lenis,
     };
