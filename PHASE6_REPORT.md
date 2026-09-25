@@ -40,6 +40,21 @@
   - Social links say they open a new tab.
   - Below lg, no pillar link is marked current.
 
+## 2a. Performance: the home page's blocking time
+
+The home page had sat at or over the 200 ms total blocking time limit since Phase 5. CI's blocking observed pass measured 231, 196, 204, 257, 242, 81 and 275 ms across commits.
+
+Lighthouse's long-task attribution pointed at `SplitLines`:
+- every split heading on the page split at load;
+- each registered a ScrollTrigger, whose refresh was its own long task.
+
+The same investigation found a bug. `SplitLines` swapped from a `Reveal` wrapper to a plain heading once SplitText had run, so React replaced the element that had just been split, and **the line animation had never shown**.
+
+`SplitLines` is now one stable element, legible as plain text. It splits in place within half a viewport of the screen, and plays as its top crosses 80 % of the viewport; both steps use IntersectionObservers. ScrollTrigger had no other user and is removed, taking the motion chunk from 49 to 32 KB gz.
+
+- **Checked:** nothing is split at load, and after a scroll all 12 lines in 5 headings are visible. The goldens are unchanged, and axe is still clean.
+- **CI** (`0eee03c`, blocking observed pass): home total blocking time **126 ms** (was 275), with every route passing. The largest contentful paint is 1.76–2.14 s on every route, and CLS is 0.
+
 ## 3. Accessibility findings
 
 - **Landmarks:** banner, `Main` navigation, main and contentinfo, with a region per beat. The skip link comes first.
