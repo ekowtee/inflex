@@ -22,12 +22,14 @@ export interface CoreCanvasProps {
   onFail: () => void;
   /** Poster capture mode: no probe, no deadline. */
   capture?: boolean;
+  /** Capture only: a shapes.ts shape to put in slot 5 instead of the mark. */
+  shape?: string;
 }
 
-async function generateInWorker(): Promise<CoreWorkerResult> {
+async function generateInWorker(shape?: string): Promise<CoreWorkerResult> {
   if (typeof Worker === "undefined") {
     const { generateCore, fingerprint } = await import("./worker/formations");
-    const data = generateCore();
+    const data = generateCore(undefined, shape);
     return { type: "core", ...data, fingerprint: fingerprint(data), generateMs: 0 };
   }
   return new Promise((resolve, reject) => {
@@ -41,11 +43,11 @@ async function generateInWorker(): Promise<CoreWorkerResult> {
       reject(error);
       worker.terminate();
     };
-    worker.postMessage({ type: "generate" });
+    worker.postMessage({ type: "generate", shape });
   });
 }
 
-export default function CoreCanvas({ tier: initialTier, onLive, onFail, capture = false }: CoreCanvasProps) {
+export default function CoreCanvas({ tier: initialTier, onLive, onFail, capture = false, shape }: CoreCanvasProps) {
   const [tier, setTier] = useState<"A" | "B">(initialTier);
   const [data, setData] = useState<CoreWorkerResult | null>(null);
   // Client-only component (loaded with ssr: false), so the window is safe to
@@ -59,7 +61,7 @@ export default function CoreCanvas({ tier: initialTier, onLive, onFail, capture 
     mountedAt.current = performance.now();
 
     let cancelled = false;
-    generateInWorker()
+    generateInWorker(capture ? shape : undefined)
       .then((result) => {
         if (!cancelled) setData(result);
       })
@@ -72,7 +74,7 @@ export default function CoreCanvas({ tier: initialTier, onLive, onFail, capture 
     return () => {
       cancelled = true;
     };
-  }, [onFail]);
+  }, [onFail, capture, shape]);
 
   const handleDemote = useCallback(
     (next: Tier) => {

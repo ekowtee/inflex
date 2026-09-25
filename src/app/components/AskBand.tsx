@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Magnetic from "@/motion/Magnetic";
+import { FormationStill } from "./PageHero";
 
 /**
  * The closing band on every interior page — PHASE5_BRIEF.md §4 Task 2.
@@ -10,6 +11,10 @@ import Magnetic from "@/motion/Magnetic";
  * the approved words (SCROLL_NARRATIVE.md §7), and carries no heading and no
  * photograph, because a page that has just made its case does not need to
  * raise its voice to close.
+ *
+ * The right of the band carries the resting sheet with its ember line, the
+ * thread the home page's ask turns into the mark (owner, 25 September 2026):
+ * every interior page closes on the same line, without repeating the mark.
  *
  * `variant="academy"` exists because the Academy's next step is not an
  * architecture review. There it carries the page's own enquiry line and
@@ -41,10 +46,11 @@ export default function AskBand({
     <section
       data-register="obsidian"
       data-header-dark=""
-      className="band-obsidian on-obsidian w-full py-24 md:py-32"
+      className="band-obsidian on-obsidian relative w-full overflow-hidden py-24 md:py-32"
       aria-label={academy ? "Train your team" : "Book the review"}
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <FormationStill formation={0} belowHeader={false} />
+      <div className="relative z-[1] mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="type-body-l max-w-[52ch] text-silver-100">{line ?? OFFER}</p>
 
         <div className="mt-10">

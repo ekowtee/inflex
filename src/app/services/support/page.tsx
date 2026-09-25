@@ -30,6 +30,7 @@ const steps = [
 export default function SupportServicesPage() {
   return (
     <ServicePage
+      formation="lifebuoy"
       title={"Support Services"}
       lead={"Fast, reliable technical support when it matters most."}
       overviewHeading={"Responsive Support. Minimal Disruption."}

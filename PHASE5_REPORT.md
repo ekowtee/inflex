@@ -213,3 +213,32 @@ a357a0b phase5(404): not on the network
 ```
 
 Tasks 1, 2 and 8 were done first as the brief's §8 orders, then 3, 5, 6, 4, 7, 9, 10; the commit order above is the order they landed.
+
+---
+
+## 11. Owner decisions, 24–25 September 2026 (after the first hand-back)
+
+**Heroes.** Every interior hero carries an object, and none repeats across sections. The map is on `Formation` in `src/app/components/PageHero.tsx`.
+- The Solutions index has the resting sheet, the four pillars 1 to 4, and About the mark.
+- Services has the y = x³ curve (`f0-bend`). The service pages have a gear, a radar scope and a lifebuoy.
+- The Academy has an open book, and For Organisations an office tower. The domains have a neural network, a server rack, a padlock and a chess pawn; programmes follow their domain.
+- Case studies have a check mark, Careers a staircase, Jobs a puzzle piece, Internships a sprout, Resources a lightbulb, and Contact a speech bubble.
+- The fifteen new objects exist only on the capture stage, so the live Core is unchanged. They come from `src/three/core/worker/shapes.ts`, which the capture page places in slot 5 via `/core-capture?formation=5&shape=…`. The posters are `public/three/posters/s-{name}-lit-{desktop,mobile}`.
+- The mark still was recaptured pulled back, so the hero's top-and-bottom crop never puts it under the header.
+- The closing band (`AskBand`) carries the resting sheet with its ember line on every interior page.
+
+**Timing on the home page.** Formations are whole when their section arrives and dissolve as it leaves.
+- Pillar morphs end on each row boundary, where the pillar links jump.
+- The fabric forms as the pillars come up, starting a third of the way up (`ENTRY_LEAD_VH`).
+- The mark forms on the ask's entry and scatters and fades on its exit (`store.askEntry` and `store.askExit`).
+
+**Copy.** `PHASE5_COPY.md` was approved in full and has shipped, including the practitioner-band replacement. The first `/jobs`, `/internships` and enquiry copy was approved. The move to an on-page form changed four lines, which need sign-off: the `/jobs` lead ("Apply here with your CV. Choose the role and your application reaches the right team."), the `/jobs` closing line ("Not your role? Send an open application with your CV and tell us the work you want to do."), the `/internships` line ("Send your CV below.") and the form's labels and button ("Send application").
+
+**Applications.** `/jobs` and `/internships` take applications through a form (`src/app/careers/ApplicationForm.tsx`) that posts to `POST /api/careers/apply`.
+- The CV must be a PDF or Word file of up to 5 MB, checked by magic bytes.
+- A Lead is created with the subject "Careers".
+- The CV is attached to the notification to `MAIL_TO_CAREERS`, which defaults to info@inflexions.tech. It is not stored.
+- There are no apply mailto links any more.
+- The Cybersecurity Analyst role now uses `/assets/services/Services3.webp`, analysts at a security operations wall. `career4.png` stays in place, unused by the role.
+
+**The For Organisations enquiry** posts to `/api/contact` with the subject "Academy / training", instead of `mailto:`.

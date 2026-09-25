@@ -125,7 +125,7 @@ export default function ContactPage() {
       <PageHero
         title="Book your architecture review."
         lead="Thirty minutes, a Solutions Architect, no pitch. Tell us what you are running and what worries you, and we will come prepared."
-        formation={5}
+        formation="speech-bubble"
       />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="Contact form">

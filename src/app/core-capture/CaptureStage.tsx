@@ -25,6 +25,8 @@ export default function CaptureStage() {
   // interior page heroes need (the home hero's own poster stays off-centre).
   const centre = params.get("centre") === "1";
   const tier = params.get("tier") === "B" ? "B" : "A";
+  // ?shape=padlock: a capture-only shape (worker/shapes.ts) in slot 5.
+  const shape = params.get("shape") ?? undefined;
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -93,6 +95,7 @@ export default function CaptureStage() {
       <CoreCanvas
         tier={tier}
         capture
+        shape={shape}
         onLive={() => setReady(true)}
         onFail={() => document.body.setAttribute("data-capture-failed", "1")}
       />

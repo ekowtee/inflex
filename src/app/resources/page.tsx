@@ -65,7 +65,7 @@ const webinars = [
 export default function ResourcesPage() {
   return (
     <div>
-      <PageHero title="Insights That Sharpen Your Edge" formation={0} />
+      <PageHero title="Insights That Sharpen Your Edge" formation="lightbulb" />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="Insights and resources">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

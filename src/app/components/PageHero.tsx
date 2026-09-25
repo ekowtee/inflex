@@ -33,14 +33,40 @@ import type { ReactNode } from "react";
  * sheet, the one structure the four pillars are made from; "curve" is the
  * sheet as Beat 2's y = x³ turning point.
  *
- * Which page carries which (owner, 25 September 2026): Solutions 0, the four
- * pillars 1 to 4, About 5; Services "curve" (we engineer the inflection
- * point); Academy 3, its domains the shape of their subject (AI 3,
- * Infrastructure & Cloud 1, Cybersecurity 2, Digital Strategy "curve");
- * Case studies 4 (measured outcomes); Careers and Resources 0; Contact 5
- * (the home page's ask ends on the mark).
+ * Which page carries which (owner, 25 September 2026: no object repeats
+ * across sections, and each stays on its page's subject):
+ *   Solutions 0 (the sheet the pillars are made from); the four pillars 1 to
+ *   4; About 5 (the mark); Services "curve" (the inflection point), with
+ *   Professional "gear", Managed "radar", Support "lifebuoy"; Academy
+ *   "open-book", For Organisations "tower", its domains in
+ *   academy/heroFormation.ts (programmes follow their domain); Case studies
+ *   "checkmark"; Careers "staircase", Jobs "puzzle", Internships "sprout";
+ *   Resources "lightbulb"; Contact "speech-bubble". The closing band on every
+ *   interior page (AskBand) carries the sheet.
  */
-export type Formation = 0 | 1 | 2 | 3 | 4 | 5 | "curve" | "none";
+/**
+ * Capture-only shapes (src/three/core/worker/shapes.ts), one per interior
+ * page that had repeated another section's formation (owner, 25 September
+ * 2026). Posters at /three/posters/s-{name}-lit-{desktop,mobile}.
+ */
+export type Shape =
+  | "gear"
+  | "radar"
+  | "lifebuoy"
+  | "speech-bubble"
+  | "open-book"
+  | "tower"
+  | "neural-net"
+  | "rack"
+  | "padlock"
+  | "pawn"
+  | "checkmark"
+  | "staircase"
+  | "puzzle"
+  | "sprout"
+  | "lightbulb";
+
+export type Formation = 0 | 1 | 2 | 3 | 4 | 5 | "curve" | Shape | "none";
 
 /* The intrinsic size of the mobile still, which is the <img> the sources
    fall back to; the desktop stills are 1920 x 1080. */
@@ -58,17 +84,34 @@ export interface PageHeroProps {
   children?: ReactNode;
 }
 
-function FormationStill({ formation }: { formation: Exclude<Formation, "none"> }) {
-  const base = formation === "curve" ? "/three/posters/f0-bend-lit" : `/three/posters/f${formation}-lit`;
+/**
+ * A formation still filling its positioned parent. `belowHeader` starts it
+ * under the fixed header, for a band at the top of the page; AskBand, lower
+ * down, fills its whole band.
+ */
+export function FormationStill({
+  formation,
+  belowHeader = true,
+}: {
+  formation: Exclude<Formation, "none">;
+  belowHeader?: boolean;
+}) {
+  const shape = typeof formation === "string" && formation !== "curve";
+  const base = shape
+    ? `/three/posters/s-${formation}-lit`
+    : formation === "curve"
+      ? "/three/posters/f0-bend-lit"
+      : `/three/posters/f${formation}-lit`;
   // The sheet's and the mark's phone stills are framed for the home page,
   // with the object off to one side; interior heroes use centred captures.
-  const mobileSuffix = formation === 1 || formation === 2 || formation === 3 || formation === 4 ? "" : "-centred";
+  // The shapes' phone stills are captured centred under their own name.
+  const mobileSuffix = shape || formation === 1 || formation === 2 || formation === 3 || formation === 4 ? "" : "-centred";
   return (
     <div
       aria-hidden="true"
       // Starts below the fixed header (h-14, lg:h-16) so the object is
       // never partly behind the bar.
-      className="pointer-events-none absolute inset-x-0 bottom-0 top-14 opacity-35 md:opacity-100 lg:top-16"
+      className={`pointer-events-none absolute inset-x-0 bottom-0 opacity-35 md:opacity-100 ${belowHeader ? "top-14 lg:top-16" : "top-0"}`}
     >
       <picture>
         <source media="(min-width: 768px)" type="image/avif" srcSet={`${base}-desktop.avif`} />

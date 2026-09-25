@@ -3,7 +3,7 @@ import Link from "next/link";
 import Magnetic from "@/motion/Magnetic";
 import Reveal from "@/motion/Reveal";
 import AskBand from "./AskBand";
-import PageHero from "./PageHero";
+import PageHero, { type Formation } from "./PageHero";
 
 /**
  * The shared shape of the three service pages — PHASE5_BRIEF.md §4 Task 4.
@@ -16,9 +16,9 @@ import PageHero from "./PageHero";
  * square. Everything else — the included list, the ideal-for note — becomes
  * entries on hairlines.
  *
- * The hero carries the curve, the sheet as Beat 2's turning point: the four
- * pillar shapes belong to the things we build, and how we engage is the
- * inflection point we engineer.
+ * Each service opens on its own object (owner, 25 September 2026): a gear
+ * for Professional, a radar scope for Managed, a lifebuoy for Support. The
+ * index keeps the curve, the inflection point every engagement is for.
  */
 
 export interface ServicePageProps {
@@ -32,9 +32,12 @@ export interface ServicePageProps {
   image: string;
   stepsHeading: string;
   steps: readonly { title: string; description: string }[];
+  /** The hero's object: each service has its own (PageHero's Formation map). */
+  formation: Formation;
 }
 
 export default function ServicePage({
+  formation,
   title,
   lead,
   overviewHeading,
@@ -48,7 +51,7 @@ export default function ServicePage({
 }: ServicePageProps) {
   return (
     <div>
-      <PageHero title={title} lead={lead} formation="curve" />
+      <PageHero title={title} lead={lead} formation={formation} />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="Overview">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

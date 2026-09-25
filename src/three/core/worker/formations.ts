@@ -21,6 +21,7 @@
  */
 import { MARK_H, MARK_MASK, MARK_W, MARK_HEAT } from "./markData";
 import { CORE_SEED, Simplex3, mulberry32 } from "./noise";
+import { SHAPES } from "./shapes";
 
 export const NODE_COUNT = 16384;
 export const HALF = NODE_COUNT / 2;
@@ -69,7 +70,7 @@ const smoothstep = (a: number, b: number, t: number) => {
   return x * x * (3 - 2 * x);
 };
 
-interface SheetNode {
+export interface SheetNode {
   col: number;
   row: number;
   x: number;
@@ -180,7 +181,7 @@ function buildEdges(nodes: SheetNode[]): Array<[number, number]> {
 
 // ─── formations 1 to 4 as maps of (col, row) ─────────────────────────────────
 
-type Placement = { x: number; y: number; z: number; heat: number };
+export type Placement = { x: number; y: number; z: number; heat: number };
 
 function formationFabric(nodes: SheetNode[]): Placement[] {
   // Formation 1, Network Infrastructure: a spine-and-leaf fabric, the
@@ -474,7 +475,11 @@ function formationMark(nodes: SheetNode[], rand: () => number): Placement[] {
 
 // ─── assembly with the ordering invariants ───────────────────────────────────
 
-export function generateCore(seed: number = CORE_SEED): CoreData {
+/**
+ * `shape` (capture stage only): put that capture-only shape (shapes.ts) in
+ * slot 5 instead of the mark. The live Core never passes one.
+ */
+export function generateCore(seed: number = CORE_SEED, shape?: string): CoreData {
   const rand = mulberry32(seed);
   const noise = new Simplex3(seed ^ 0x9e3779b9);
 
@@ -489,7 +494,7 @@ export function generateCore(seed: number = CORE_SEED): CoreData {
   const f2 = formationShield(sheet);
   const f3 = formationNebula(sheet, rand, noise);
   const f4 = formationPlane(sheet, noise);
-  const f5 = formationMark(sheet, rand);
+  const f5 = shape && SHAPES[shape] ? SHAPES[shape](sheet) : formationMark(sheet, rand);
   const formations = [f0, f1, f2, f3, f4, f5];
 
   // Order: uniform halves (alternate by index), ember-capable first in each.

@@ -30,7 +30,7 @@ export default function CaseStudyPage() {
       <PageHero
         title="Proof Over Promises"
         lead="Real results from real engagements across industries."
-        formation={4}
+        formation="checkmark"
       />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="Overview">

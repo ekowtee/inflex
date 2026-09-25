@@ -30,6 +30,7 @@ const steps = [
 export default function ManagedServicesPage() {
   return (
     <ServicePage
+      formation="radar"
       title={"Managed Services"}
       lead={"Proactive management. Predictable costs. Peace of mind."}
       overviewHeading={"Your IT Operations, Our Obsession."}

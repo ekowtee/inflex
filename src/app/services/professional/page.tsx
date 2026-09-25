@@ -30,6 +30,7 @@ const steps = [
 export default function ProfessionalServicesPage() {
   return (
     <ServicePage
+      formation="gear"
       title={"Professional Services"}
       lead={"Expert guidance for high-stakes IT initiatives and digital transformation."}
       overviewHeading={"Strategic Consulting. Flawless Execution."}
