@@ -15,9 +15,9 @@ import Image from "next/image";
 const leaders = [
   {
     name: "Ekow M. Thompson",
-    role: "Director, Business Development",
+    role: "Executive Director",
     image: "/assets/about/ekowmain1.webp",
-    bio: "Ekow Thompson is a visionary business leader with over 18 years of executive experience in technology, media, and telecommunications across Africa. As Managing Director of Inflexions, he brings a proven track record of driving digital transformation and substantial growth. His strategic leadership was instrumental in transforming Interactive Digital into one of Ghana’s most respected digital agencies (achieving 750% revenue growth) and co-founding Blu Telecommunications, Ghana’s innovative 4G network. Ekow excels at aligning technological capabilities with business objectives, ensuring clients receive solutions that create lasting competitive advantage. He holds a Bachelor’s degree in Electrical / Electronic Engineering and is dedicated to continuous learning in leadership and digital innovation.",
+    bio: "Ekow Thompson is Executive Director of Inflexions. He has spent twenty years building, running and turning around technology businesses across Africa. He co-founded Blu Telecommunications and, as Managing Director, took a greenfield 4G LTE operator from spectrum and licensing to commercial pilot. Before that he was Chief Technology Officer of iWayAfrica across eight African markets, and Managing Director of Africa Online Ghana, which he returned to profitability within a year. He also leads Interactive Digital, the full-service agency within Ninani Group, which he has taken since 2018 into the front rank of Ghana’s firms in brand, performance and digital products. An electrical engineer by training from KNUST, he completed MIT’s programme in Artificial Intelligence, Data Science and Machine Learning in 2024.",
   },
   {
     name: "Anthony Getor",
