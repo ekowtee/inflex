@@ -43,6 +43,16 @@ export const BEAT_LENGTH_VH: Record<number, number> = {
   9: 60,
 };
 
+/**
+ * Beats whose entry is part of the timeline: the beat above hands the last
+ * ENTRY_LEAD_VH[b] of its virtual length to the stretch where beat b rises
+ * from the viewport bottom to the top, instead of finishing early and holding
+ * while b comes up. Beat 4: the network fabric forms as the pillars come up,
+ * from a third of the way up to the pin (owner, 25 September 2026), which
+ * is formationTrack's [b4 − 40, b4] on a 60 vh lead.
+ */
+export const ENTRY_LEAD_VH: Record<number, number> = { 4: 60 };
+
 /** Cumulative start of each beat on the virtual timeline. */
 export const BEAT_START_VH: Record<number, number> = (() => {
   const out: Record<number, number> = {};
@@ -94,17 +104,39 @@ export interface TimelineSample {
  * scrollable extent is its height minus one viewport (so a 100 svh beat
  * is a point and a 420 svh pinned beat scrolls for 320), with a floor of
  * one viewport so short beats still take a full nominal stride to pass.
+ * A beat followed by one in ENTRY_LEAD_VH maps its scroll up to that beat's
+ * top instead, with no hold.
  */
 export function virtualVh(scrollY: number, viewportHeight: number, beats: BeatRect[]): { vh: number; beat: number; progress: number } {
   if (!beats.length) return { vh: (scrollY / viewportHeight) * 100, beat: 0, progress: 0 };
-  let current = beats[0];
-  for (const b of beats) {
-    if (scrollY >= b.top) current = b;
+  let index = 0;
+  beats.forEach((b, i) => {
+    if (scrollY >= b.top) index = i;
+  });
+  const current = beats[index];
+  const length = BEAT_LENGTH_VH[current.beat] ?? 100;
+  const start = BEAT_START_VH[current.beat] ?? 0;
+  const next = beats[index + 1];
+  const lead = next && scrollY >= current.top ? ENTRY_LEAD_VH[next.beat] : undefined;
+  if (lead !== undefined) {
+    // Up to the next beat's top reaching the viewport bottom, this beat's
+    // own scroll covers its length less the lead; the entry covers the lead.
+    const span = next.top - current.top;
+    const into = scrollY - current.top;
+    const own = span - viewportHeight;
+    if (own <= 0) {
+      const progress = Math.min(1, into / span);
+      return { vh: start + progress * length, beat: current.beat, progress };
+    }
+    if (into < own) {
+      const progress = into / own;
+      return { vh: start + progress * (length - lead), beat: current.beat, progress };
+    }
+    const entry = Math.min(1, (into - own) / viewportHeight);
+    return { vh: start + length - lead + entry * lead, beat: current.beat, progress: 1 };
   }
   const extent = Math.max(current.height - viewportHeight, viewportHeight * 0.5);
   const progress = Math.min(1, Math.max(0, (scrollY - current.top) / extent));
-  const length = BEAT_LENGTH_VH[current.beat] ?? 100;
-  const start = BEAT_START_VH[current.beat] ?? 0;
   // Between the end of a beat's scroll extent and the next beat's top the
   // timeline holds at the beat's end.
   return { vh: start + progress * length, beat: current.beat, progress };
