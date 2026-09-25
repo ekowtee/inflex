@@ -31,14 +31,26 @@ Three peer top-level offerings. Do not confuse them or fold one into another:
 - **CREATIVE_DIRECTION_3D.md**: Creative direction and phased build order for the premium 3D redesign (the "Core" object, Obsidian/Ivory registers, motion tokens, performance gates). Consult before any front-end redesign work.
 - **SCROLL_NARRATIVE.md**: Home page narrative spec (beat order, visitor question ladder, copy sheet, thread motif). Supersedes Section 7 of CREATIVE_DIRECTION_3D.md for the home page.
 - **HERO_SCENE_SPEC.md**: Hero 3D scene spec (palette in linear space, device tiers, loading budget, camera keyframes, shader lighting rig, geometry limits, cursor interaction, poster fallback). Authoritative for the hero; revises parts of CREATIVE_DIRECTION_3D.md Section 6.
-- **COPY_DECK.md**: Full home page text layer in two tonal variants (A Precision, B Momentum) with offer, objection and proof analysis, pricing frame and CTA. SCROLL_NARRATIVE.md copy sheet stays the baseline until the owner picks a variant.
-- **PERFORMANCE_PLAN.md**: Measured baseline, corrected chunk budgets (shell 205 / motion 60 / environment 190 KB gz), render cost per scene, image compression plan, lazy-load order, first-paint targets and gates. Overrides the budget numbers in CREATIVE_DIRECTION_3D.md and HERO_SCENE_SPEC.md.
+- **COPY_DECK.md**: Full home page text layer in two tonal variants (A Precision, B Momentum) with offer, objection and proof analysis, pricing frame and CTA. The home page ships Variant A; the Academy and Careers pages ship Variant B (PHASE5_COPY.md, approved 25 September 2026).
+- **PHASE5_COPY.md**: The approved Variant B copy for the Academy and Careers pages, with the fact behind every line.
+- **PERFORMANCE_PLAN.md**: Measured baseline, corrected chunk budgets (shell 205 / motion 60 / environment 190 KB gz), render cost per scene, image compression plan, lazy-load order, first-paint targets and gates. Overrides the budget numbers in CREATIVE_DIRECTION_3D.md and HERO_SCENE_SPEC.md. The CI Linux runner's observed (DevTools-throttled) pass is the blocking gate; the simulated pass and local Windows runs read high.
+- **DESIGN_SYSTEM.md**: Part A (v3.0) is the redesign's tokens, registers, motion and primitives, taken from the code; Part B is the superseded v2.0 kept for history.
+- **PHASE0–5 briefs and reports**: How each phase was built and what the owner decided along the way. PHASE5_REPORT.md §11 has the interior hero object map and the on-site applications.
+- **archive/README.md**: Images retired from `public/` (moved, never deleted) and why.
+
+## Hero objects (owner, 25 September 2026)
+- Every interior hero carries a still of the Core in an object of its own subject; no object repeats across sections. The map lives on the `Formation` type in `src/app/components/PageHero.tsx`.
+- Pillars and the mark are formations of the live Core; the interior-only objects are capture-only shapes in `src/three/core/worker/shapes.ts`, rendered with `scripts/capture-posters.mjs --formations 5 --shape <name>`. The live Core never loads them.
+- Stills sit right of the copy on desktop (left 45 % of the frame dark) and inside the band that survives the hero's top-and-bottom crop (roughly 24–76 % of the frame height), so the header never covers them.
+
+## Quality checks
+- `npm test`, `npm run perf` (bundles + Lighthouse), `npm run a11y` (axe on every route), `npm run tier` (Tier A holds at 1×, steps down to C at 6× CPU), `npm run goldens` (visual regression; `-- --update` after an intended change).
 
 ## Known Issue: `.next` cache corruption
 On Windows, the `.next` build cache frequently corrupts when files change while the dev server is running, producing `ENOENT: no such file or directory` errors for `app-build-manifest.json` or `_buildManifest.js.tmp`. Fix: `rm -rf .next` and restart the dev server.
 
 ## Tech Stack
-- Next.js 15 (App Router) + React 19 + TypeScript
+- Next.js 16 (App Router) + React 19 + TypeScript
 - Tailwind CSS v4 (CSS-first config via `@theme` in globals.css, NO tailwind.config.js)
 - Fonts: Rubik (headings), Krub (body)
-- Brand color: `--color-primary: #D0281F`
+- Brand red: `--color-primary-500: #BD2E25` (hover `--color-primary-600: #A02923`), for actions only

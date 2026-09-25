@@ -19,6 +19,11 @@
  *   key so the whole mark survives the hero's top-and-bottom crop:
  *   --formations 5 --lights lit --sizes desktop --cam -1.72,1.88,8.4,-1.3,-0.15,0
  *
+ *   The capture-only shapes use the same desktop camera, and for phones a
+ *   centred one (written as s-{name}-lit-mobile):
+ *   --formations 5 --shape <name> --lights lit --sizes desktop --cam -1.72,1.88,8.4,-1.3,-0.15,0
+ *   --formations 5 --shape <name> --lights lit --sizes mobile --cam 0.45,1.6,12.5,0.45,-0.2,0
+ *
  * Screenshots /core-capture with headless Chrome over CDP at the desktop and
  * portrait sizes, both light states, then writes WebP and AVIF at the
  * budgets in PERFORMANCE_PLAN.md §2.4 plus a 24 px LQIP inlined into

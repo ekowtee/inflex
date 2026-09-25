@@ -29,7 +29,8 @@ export const roles = [
     id: "cybersecurity-analyst",
     title: "Cybersecurity Analyst",
     // Analysts at a security operations wall (also the Support services
-    // image). career4.png, a circuit board, read as a network card.
+    // image). career4.png, a circuit board, read as a network card; it is
+    // now in archive/public-assets/career/.
     image: "/assets/services/Services3.webp",
     description:
       "Protect enterprise infrastructure with proactive threat monitoring, incident response, and compliance frameworks. Join our Security Operations Centre and defend what matters most.",
