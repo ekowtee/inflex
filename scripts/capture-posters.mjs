@@ -12,6 +12,10 @@
  *   --amount 0..1                how far the variant goes (default 1)
  *   --cam px,py,pz,lx,ly,lz      a camera for the whole run
  *
+ *   The interior heroes' mark (f5-lit-desktop) is pulled back from the hero
+ *   key so the whole mark survives the hero's top-and-bottom crop:
+ *   --formations 5 --lights lit --sizes desktop --cam -1.72,1.88,8.4,-1.3,-0.15,0
+ *
  * Screenshots /core-capture with headless Chrome over CDP at the desktop and
  * portrait sizes, both light states, then writes WebP and AVIF at the
  * budgets in PERFORMANCE_PLAN.md §2.4 plus a 24 px LQIP inlined into
