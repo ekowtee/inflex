@@ -58,7 +58,7 @@ export default function Receipt() {
             Proof
           </Reveal>
           <SplitLines as="h2" className="type-display-l mt-8 max-w-[16ch] text-silver-100" delay={80}>
-            We have done this at national scale. Twice.
+            Trusted with national infrastructure.
           </SplitLines>
         </div>
 

@@ -81,13 +81,11 @@ The same investigation found a bug. `SplitLines` swapped from a `Reveal` wrapper
    | `blog/webinar2.webp` | Resources | Misspelt baked-in text ("NE AGE") | `blog/blog2.png` |
 
    Borderline: `solutions/sol8.webp` (the hooded "hacker"), `case/inner7.webp` (neon robot arm), and `about/Implementation.webp` (Gemini watermark).
-2. **Six home-page lines marked (new)**, all live today. Please confirm them:
+2. **Home-page lines marked (new).** Two were replaced on 25 September 2026: the Proof heading is now "Trusted with national infrastructure." and the Why Inflexions heading is now "What you get when you hire engineers instead of a sales team." Four are live and still to confirm:
    - "Book a 30-minute architecture review. With a Solutions Architect, not a salesperson. No pitch."
    - "Book the review"
    - "See the work ↓"
-   - "We have done this at national scale. Twice."
    - "Intelligence is not a feature. It is the fabric."
-   - "Not a reseller. Not a generalist. Not a lock-in."
 3. **The scroll cue** loops every 2.4 s, as SCROLL_NARRATIVE.md specifies, but a loop that long breaks the 1 s rule. Choose one: keep it as a documented exception, or make it a one-shot cue.
 4. **Retimed choreography.** The counter, the poster crossfade and the door hairlines now finish within 1 s (§2). Say if any now feels rushed.
 5. **The Intelligence links over the Core** (Beat 5½). At 1280 px and above, the lattice runs behind "Process Automation" and "AI Integration". The median contrast is 10–16:1, but the brightest 5 % of pixels drop to about 3:1. Choose one: frame the lattice further right, or add a scrim.

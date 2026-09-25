@@ -194,8 +194,8 @@ Word count: A 44, B 60.
 
 **Subhead**
 
-- A: **We have done this at national scale. Twice.** — Fact
-- B: **We have done this at national scale. Twice.** — Fact
+- Shipped (both, owner, 25 September 2026): **Trusted with national infrastructure.** — Fact
+- Retired: ~~We have done this at national scale. Twice.~~ "Done" and "twice" claimed two finished projects; Project UBIA is in progress, and the in-progress rule forbids that.
 
 **Card A, Blu Telecommunications**
 
@@ -241,8 +241,8 @@ Row leads are New. Word count per row, either variant: under 30.
 
 **Subhead**
 
-- A: **Not a reseller. Not a generalist. Not a lock-in.** — Fact (brand book 1.2)
-- B: **What you get when you hire engineers instead of a sales team.** — New
+- A (retired, owner, 25 September 2026): ~~Not a reseller. Not a generalist. Not a lock-in.~~ It repeated the struck-through ledger beneath it and defined the company only by what it is not.
+- B: **What you get when you hire engineers instead of a sales team.** — New. **Shipped on the home page, approved 25 September 2026.**
 
 **Ledger, left column, struck through as it enters** (both, Approved from brand book 1.2):
 - "A reseller putting logos on boxes."
@@ -403,7 +403,7 @@ Ship **A** on the home page. Three reasons:
 
 1. **The environment is already the drama.** A dark, breathing, sixteen-thousand-node object supplies all the momentum the page needs. Copy that also pushes reads as trying. Copy that stays still reads as certain.
 2. **The buyer's register is A.** CTOs and IT directors evaluating for a tender write in fragments and numbers. Meeting them there says "we are your kind of people" without saying it.
-3. **A is harder to imitate.** Any competitor can adopt warmth. None of them can adopt "We have done this at national scale. Twice." because they do not have the projects.
+3. **A is harder to imitate.** Any competitor can adopt warmth. None of them can adopt "Trusted with national infrastructure." (the Beat 3 line, approved 25 September 2026) because they do not have the projects.
 
 Use **B** where the reader is choosing to be moved: the Academy pages, the Careers page, LinkedIn, and any campaign landing page. B's Careers line ("Build the thing the country runs on") is better than A's and should be used regardless of the home page choice.
 

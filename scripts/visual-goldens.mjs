@@ -111,7 +111,8 @@ async function capture(page, route, width, mode) {
     await document.fonts.ready;
     document.querySelectorAll("nextjs-portal").forEach((e) => e.remove());
     const style = document.createElement("style");
-    style.textContent = "*{caret-color:transparent!important}";
+    // Third-party frames (the Google map) load differently every visit.
+    style.textContent = "*{caret-color:transparent!important}iframe{visibility:hidden!important}";
     document.head.appendChild(style);
   });
   const total = await page.evaluate(() => document.documentElement.scrollHeight);
