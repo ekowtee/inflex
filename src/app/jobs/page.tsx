@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import Magnetic from "@/motion/Magnetic";
 import PageHero from "../components/PageHero";
-import { APPLY_EMAIL, applyHref, roles } from "../careers/roles";
+import ApplicationForm from "../careers/ApplicationForm";
+import { applicationRoles, roles } from "../careers/roles";
 
 /**
  * /jobs — built on the owner's decision of 24 September 2026, so the two
@@ -12,9 +13,15 @@ import { APPLY_EMAIL, applyHref, roles } from "../careers/roles";
  * The same three roles as Featured Jobs, from careers/roles.ts, laid out as
  * the services list is: one entry per row on a hairline, the photograph
  * alternating sides. Each row carries its own anchor so Featured Jobs can
- * open it directly, and its own apply link, a mailto with the role in the
- * subject, because an application needs a CV and the contact form takes no
- * attachments.
+ * open it directly.
+ *
+ * Applications are made on the page (owner, 25 September 2026), not by
+ * mailto: each role's "Apply for this role", and the open-application
+ * button, link to /jobs?role={id}#apply, where the Apply form preselects
+ * that role from the query and posts the fields and the CV to
+ * /api/careers/apply, which emails them to info@inflexions.tech and records
+ * a Lead. The page itself stays static; only the form's role menu reads the
+ * query.
  *
  * The hero lead, the open-application line and the button labels are new
  * copy, awaiting the owner's sign-off (PHASE5_REPORT.md). The role
@@ -38,9 +45,9 @@ export default function JobsPage() {
     <div>
       <PageHero
         title="Open Roles"
-        lead="Apply by email with your CV. The role is already in the subject line, so it reaches the right team."
+        lead="Apply here with your CV. Choose the role and your application reaches the right team."
         size="compact"
-        formation={0}
+        formation="puzzle"
       />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="Open roles">
@@ -55,12 +62,12 @@ export default function JobsPage() {
                 <h2 className="type-h2 text-neutral-900">{role.title}</h2>
                 <p className="type-body-l mt-6 max-w-[56ch] text-neutral-600">{role.description}</p>
                 <div className="mt-10">
-                  <a
-                    href={applyHref(`Application: ${role.title}`)}
+                  <Link
+                    href={`/jobs?role=${role.id}#apply`}
                     className="inline-flex h-14 items-center rounded-[6px] border border-neutral-300 px-8 font-semibold text-neutral-900 transition-colors duration-[var(--motion-duration-micro)] hover:bg-neutral-50"
                   >
                     Apply for this role
-                  </a>
+                  </Link>
                 </div>
               </div>
 
@@ -81,6 +88,17 @@ export default function JobsPage() {
         </ol>
       </section>
 
+      <section id="apply" className="band-ivory w-full scroll-mt-16 pb-24 md:pb-32" aria-labelledby="apply-heading">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 border-t border-neutral-200 pt-16 lg:grid-cols-2 lg:gap-20">
+            <h2 id="apply-heading" className="type-h2 text-neutral-900">
+              Apply
+            </h2>
+            <ApplicationForm roles={applicationRoles} roleFromQuery />
+          </div>
+        </div>
+      </section>
+
       <section
         data-register="obsidian"
         data-header-dark=""
@@ -89,17 +107,17 @@ export default function JobsPage() {
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="type-body-l max-w-[52ch] text-silver-100">
-            Not your role? Send your CV to {APPLY_EMAIL} and tell us the work you want to do.
+            Not your role? Send an open application with your CV and tell us the work you want to do.
           </p>
 
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <Magnetic>
-              <a
-                href={applyHref("Open application")}
+              <Link
+                href="/jobs?role=open-application#apply"
                 className="inline-flex h-14 items-center rounded-[6px] bg-primary-500 px-8 font-semibold text-white transition-colors duration-[var(--motion-duration-micro)] hover:bg-primary-600"
               >
                 Send an open application
-              </a>
+              </Link>
             </Magnetic>
             <Link href="/internships" className="btn-secondary-obsidian text-silver-100">
               View Internships

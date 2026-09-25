@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { APPLICATION_ROLE_IDS } from "../app/careers/roles";
 
 export const CONTACT_SUBJECTS = [
   "General enquiry",
@@ -27,6 +28,58 @@ export const publicContactSchema = z.object({
   // configured. The route enforces it whenever TURNSTILE_SECRET_KEY is set.
   turnstileToken: z.string().max(2000).optional().nullable(),
 });
+
+// ---------- Careers application (/api/careers/apply) ----------
+// The text fields of the multipart form; the CV file is checked by
+// src/lib/cv.ts. Empty optional fields arrive as "" from FormData and are
+// treated as absent.
+
+const blankToUndefined = (v: unknown) =>
+  typeof v === "string" && v.trim() === "" ? undefined : v;
+
+/** http(s) only, with a real host. "linkedin.com/in/x" gets https:// added. */
+const profileLink = z.preprocess(
+  (v) => {
+    if (typeof v !== "string") return v;
+    const t = v.trim();
+    if (!t) return undefined;
+    return /^[a-z][a-z0-9+.-]*:\/\//i.test(t) ? t : `https://${t}`;
+  },
+  z
+    .string()
+    .max(500, "That link is too long.")
+    .refine((v) => {
+      try {
+        const u = new URL(v);
+        return (u.protocol === "https:" || u.protocol === "http:") && u.hostname.includes(".");
+      } catch {
+        return false;
+      }
+    }, "Enter a full web address for your link, e.g. https://www.linkedin.com/in/yourname.")
+    .optional()
+);
+
+export const applicationSchema = z.object({
+  name: z.string({ message: "Your name is required." }).trim().min(1, "Your name is required.").max(200),
+  email: z
+    .string({ message: "Enter a valid email address." })
+    .trim()
+    .email("Enter a valid email address.")
+    .max(200),
+  phone: z.preprocess(blankToUndefined, z.string().trim().max(50).optional()),
+  role: z.enum(APPLICATION_ROLE_IDS, { message: "Choose the role you are applying for." }),
+  link: profileLink,
+  note: z.preprocess(
+    blankToUndefined,
+    z.string().trim().max(4000, "Your note is longer than 4,000 characters.").optional()
+  ),
+  // Honeypot; the route pretend-succeeds before parsing if it is filled.
+  hp: z.string().max(0).optional(),
+  // Cloudflare Turnstile token; the route enforces it when TURNSTILE_SECRET_KEY is set.
+  turnstileToken: z.preprocess(blankToUndefined, z.string().max(2000).optional()),
+});
+
+export type ApplicationInput = z.infer<typeof applicationSchema>;
 
 export const USER_KINDS = ["INTERNAL", "EXTERNAL"] as const;
 

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Magnetic from "@/motion/Magnetic";
 import Reveal from "@/motion/Reveal";
 import PageHero from "../components/PageHero";
-import { APPLY_EMAIL, applyHref } from "../careers/roles";
+import ApplicationForm from "../careers/ApplicationForm";
+import { applicationRoles } from "../careers/roles";
 
 /**
  * /internships — built on the owner's decision of 24 September 2026, so the
@@ -14,6 +14,12 @@ import { APPLY_EMAIL, applyHref } from "../careers/roles";
  * which disciplines the work is in (the three open roles' fields), and
  * nothing it would have to invent. All of its copy is new and awaits the
  * owner's sign-off (PHASE5_REPORT.md).
+ *
+ * Applying happens on the page (owner, 25 September 2026): the form sends
+ * the details and the CV to /api/careers/apply with the role fixed as
+ * "internship", which emails them to info@inflexions.tech and records a
+ * Lead. It replaces the mailto button, which opened a mail client on the
+ * visitor's machine.
  */
 
 export const metadata: Metadata = {
@@ -37,7 +43,7 @@ export default function InternshipsPage() {
         title="Internships"
         lead="Early in your career and want to work on enterprise infrastructure? Tell us who you are and what you want to learn."
         size="compact"
-        formation={0}
+        formation="sprout"
       />
 
       <section className="band-ivory w-full py-24 md:py-32" aria-label="How to apply">
@@ -47,20 +53,16 @@ export default function InternshipsPage() {
               How to apply
             </Reveal>
             <Reveal as="p" className="type-body-l mt-6 max-w-[56ch] text-neutral-600" delay={80}>
-              Email your CV to {APPLY_EMAIL}{" "}
-              with &ldquo;Internship&rdquo; in the
-              subject line. Add a short note on what you are studying, the
-              area you want to work in and when you are available.
+              Send your CV below. Add a short note on what you are studying,
+              the area you want to work in and when you are available.
             </Reveal>
             <Reveal className="mt-10" delay={160}>
-              <Magnetic>
-                <a
-                  href={applyHref("Internship application")}
-                  className="inline-flex h-14 items-center rounded-[6px] bg-primary-500 px-8 font-semibold text-white transition-colors duration-[var(--motion-duration-micro)] hover:bg-primary-600"
-                >
-                  Email your application
-                </a>
-              </Magnetic>
+              <ApplicationForm
+                roles={applicationRoles}
+                defaultRole="internship"
+                lockRole
+                noteLabel="What you are studying, the area you want to work in, and when you are available"
+              />
             </Reveal>
           </div>
 

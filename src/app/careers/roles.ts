@@ -3,11 +3,12 @@
  * so the two cannot drift. Descriptions are the approved copy, verbatim.
  */
 
-/** Where applications go. A mailto, not the contact form, so a CV can travel with it. */
+/**
+ * Where applications go. The application form on /jobs and /internships
+ * posts to /api/careers/apply, which emails the CV here (overridable with
+ * MAIL_TO_CAREERS) and names it as the fallback if the form fails.
+ */
 export const APPLY_EMAIL = "info@inflexions.tech";
-
-export const applyHref = (subject: string) =>
-  `mailto:${APPLY_EMAIL}?subject=${encodeURIComponent(subject)}`;
 
 export const roles = [
   {
@@ -27,8 +28,30 @@ export const roles = [
   {
     id: "cybersecurity-analyst",
     title: "Cybersecurity Analyst",
-    image: "/assets/career/career4.png",
+    // Analysts at a security operations wall (also the Support services
+    // image). career4.png, a circuit board, read as a network card.
+    image: "/assets/services/Services3.webp",
     description:
       "Protect enterprise infrastructure with proactive threat monitoring, incident response, and compliance frameworks. Join our Security Operations Centre and defend what matters most.",
   },
 ] as const;
+
+export type RoleId = (typeof roles)[number]["id"];
+
+/** What an application can be for: an open role, an internship, or neither. */
+export type ApplicationRoleId = RoleId | "internship" | "open-application";
+
+export const applicationRoles: ReadonlyArray<{ id: ApplicationRoleId; label: string }> = [
+  ...roles.map((r) => ({ id: r.id, label: r.title })),
+  { id: "internship", label: "Internship" },
+  { id: "open-application", label: "Open application" },
+];
+
+export const APPLICATION_ROLE_IDS = applicationRoles.map((r) => r.id) as [
+  ApplicationRoleId,
+  ...ApplicationRoleId[],
+];
+
+export function applicationRoleLabel(id: string): string {
+  return applicationRoles.find((r) => r.id === id)?.label ?? id;
+}

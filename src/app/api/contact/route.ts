@@ -7,33 +7,14 @@ import {
   sendMail,
   wrapHtml,
 } from "@/lib/email";
+import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-
-const cleanupInterval = setInterval(() => {
-  const now = Date.now();
-  for (const [key, record] of rateLimitMap.entries()) {
-    if (now > record.resetTime) {
-      rateLimitMap.delete(key);
-    }
-  }
-}, 10 * 60 * 1000);
-
-if (cleanupInterval && typeof cleanupInterval.unref === "function") {
-  cleanupInterval.unref();
-}
-
-function getClientIp(req: NextRequest): string {
-  return (
-    req.headers.get("cf-connecting-ip") ||
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("x-real-ip") ||
-    "127.0.0.1"
-  );
-}
+// 5 submissions per IP per 10 minutes.
+const rateLimit = createRateLimiter({ limit: 5, windowMs: 10 * 60 * 1000 });
 
 /**
  * Public lead capture. Anyone can POST. Writes to the Lead table — not
@@ -48,30 +29,18 @@ function getClientIp(req: NextRequest): string {
  */
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
-  const now = Date.now();
-  const limit = 5;
-  const windowMs = 10 * 60 * 1000;
-
-  const record = rateLimitMap.get(ip);
-  if (record) {
-    if (now > record.resetTime) {
-      rateLimitMap.set(ip, { count: 1, resetTime: now + windowMs });
-    } else if (record.count >= limit) {
-      const retryAfter = Math.ceil((record.resetTime - now) / 1000);
-      return NextResponse.json(
-        { error: `Too many requests from this IP. Please try again after ${retryAfter} seconds.` },
-        {
-          status: 429,
-          headers: {
-            "Retry-After": String(retryAfter),
-          },
-        }
-      );
-    } else {
-      record.count += 1;
-    }
-  } else {
-    rateLimitMap.set(ip, { count: 1, resetTime: now + windowMs });
+  const limited = rateLimit(ip);
+  if (!limited.ok) {
+    const { retryAfter } = limited;
+    return NextResponse.json(
+      { error: `Too many requests from this IP. Please try again after ${retryAfter} seconds.` },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(retryAfter),
+        },
+      }
+    );
   }
 
   let body: unknown;
@@ -104,7 +73,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    const ok = await verifyTurnstile(d.turnstileToken, turnstileSecret, req);
+    const ok = await verifyTurnstile(d.turnstileToken, turnstileSecret, ip);
     if (!ok) {
       return NextResponse.json(
         { error: "Verification failed. Please reload and try again." },
@@ -226,30 +195,6 @@ export async function POST(req: NextRequest) {
       { error: "Could not save your message. Please email us directly at sales@inflexions.tech." },
       { status: 500 }
     );
-  }
-}
-
-async function verifyTurnstile(
-  token: string,
-  secret: string,
-  req: NextRequest
-): Promise<boolean> {
-  try {
-    const body = new URLSearchParams();
-    body.set("secret", secret);
-    body.set("response", token);
-    const remoteIp = getClientIp(req);
-    if (remoteIp) body.set("remoteip", remoteIp);
-    const res = await fetch(
-      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-      { method: "POST", body }
-    );
-    if (!res.ok) return false;
-    const data = (await res.json()) as { success?: boolean };
-    return Boolean(data.success);
-  } catch (e) {
-    console.error("Turnstile verification error:", e);
-    return false;
   }
 }
 
