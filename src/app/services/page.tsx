@@ -98,7 +98,7 @@ export default function ServicesPage() {
             <div className="relative aspect-[16/9] overflow-hidden">
               <Image
                 src="/assets/services/Services1.webp"
-                alt="Service banner"
+                alt="Consultant presenting a technology roadmap to a client team"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 className="photo-grade object-cover"
@@ -118,7 +118,12 @@ export default function ServicesPage() {
             >
               {/* Alternating, so four long entries do not read as a column. */}
               <div className={i % 2 === 1 ? "lg:order-2" : undefined}>
-                <p className="type-h2 tabular-nums text-neutral-300">{model.number}</p>
+                {/* The <ol> already numbers the models for a screen reader.
+                    neutral-400: neutral-300 was 2.43:1 on white; this is
+                    3.4:1, past the 3:1 large-text floor. */}
+                <p aria-hidden="true" className="type-h2 tabular-nums text-neutral-400">
+                  {model.number}
+                </p>
                 <h3 className="type-h3 mt-6 text-neutral-900">
                   {model.title}
                   <span className="type-body-l mt-3 block font-normal text-neutral-600">

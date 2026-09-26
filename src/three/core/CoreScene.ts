@@ -60,6 +60,18 @@ const LIVE_DEADLINE_MS = 8000;
 /** Watchdog while live: demote when this many consecutive frames average over the limit. */
 const WATCH_FRAMES = 90;
 const WATCH_LIMIT_MS = 40;
+/**
+ * …or when more than JANK_SHARE of them take longer than JANK_MS (two missed
+ * vsyncs at 60 Hz). Averages hide jank: at 6× CPU throttling on the desktop
+ * reference (Iris Xe, 1920 × 1080) Tier B averaged 18 ms a frame while one in
+ * a hundred took 67 ms and 8% of a full scroll's frames ran over 34 ms. The
+ * same machine unthrottled peaks at 0.2%. Phase 6, 25 September 2026.
+ */
+const JANK_MS = 34;
+/** Structure lift (uStruct) for a formed pillar and for the fully bent curve. */
+const STRUCT_PILLAR = 2.2;
+const STRUCT_BEND = 2.2;
+const JANK_SHARE = 0.05;
 /** A frame longer than this is a pause (hidden tab, blocked thread), not a render. */
 const PAUSE_MS = 250;
 const ARRIVAL_LIGHT_MS = 1800;
@@ -83,7 +95,7 @@ export class CoreScene {
   private compiled = false;
   private probe = { frames: 0, total: 0, done: true };
   private ready = { streak: 0, live: false, liveAt: 0 };
-  private watch = { frames: 0, total: 0, slow: 0 };
+  private watch = { frames: 0, total: 0, long: 0, slow: 0 };
   private hiddenCleared = false;
   /** The scene's own, smoothed position on the virtual timeline (vh). */
   private vh = Number.NaN;
@@ -303,17 +315,21 @@ export class CoreScene {
 
     // ─── watchdog: a live scene that cannot hold its frame time steps down ──
     // The probe judges the first 90 frames; this judges every 90 after
-    // going live, for devices that start well and then saturate.
+    // going live, for devices that start well and then saturate, on the
+    // average and on the share of long frames.
     // Two consecutive slow windows, not one, so a short burst of work
     // elsewhere on the page cannot end the scene.
     if (this.ready.live && !capture && !paused) {
       this.watch.frames += 1;
       this.watch.total += frameMs;
+      if (frameMs > JANK_MS) this.watch.long += 1;
       if (this.watch.frames >= WATCH_FRAMES) {
         const avg = this.watch.total / this.watch.frames;
+        const janky = this.watch.long / this.watch.frames > JANK_SHARE;
         this.watch.frames = 0;
         this.watch.total = 0;
-        this.watch.slow = avg > WATCH_LIMIT_MS ? this.watch.slow + 1 : 0;
+        this.watch.long = 0;
+        this.watch.slow = avg > WATCH_LIMIT_MS || janky ? this.watch.slow + 1 : 0;
         if (this.watch.slow >= 2) {
           sessionStorage.setItem("core-tier-demoted", tier === "A" ? "B" : "C");
           onDemote(tier === "A" ? "B" : "C");
@@ -501,6 +517,17 @@ export class CoreScene {
     // out (2560 × 1440 read as dust). Scale with height above 900 px.
     this.handles.nodeMaterial.uniforms.uDpr.value =
       this.options.dpr * Math.min(1.6, Math.max(1, this.height / 900));
+    // The formed objects carry their shape, not only their ember: the four
+    // pillars and the sheet bent into the curve lift their graphite
+    // structure (owner, 25 September 2026: "too faint"). The resting sheet
+    // and the mark keep the levels they were signed off at.
+    const sFrom = capture ? store.from : track.from;
+    const sTo = capture ? store.to : track.to;
+    const sMix = capture ? store.mix : track.mix;
+    const isPillar = (f: number) => (f >= 1 && f <= 4 ? 1 : 0);
+    const pillarWeight = isPillar(sFrom) * (1 - sMix) + isPillar(sTo) * sMix;
+    const bendWeight = sFrom === 0 && sTo === 0 ? (capture ? store.captureBend : track.bend) : 0;
+    const struct = 1 + (STRUCT_PILLAR - 1) * pillarWeight + (STRUCT_BEND - 1) * bendWeight;
     for (const material of [this.handles.nodeMaterial, this.handles.edgeMaterial]) {
       const u = material.uniforms;
       u.uTime.value = capture ? 0 : time;
@@ -512,6 +539,7 @@ export class CoreScene {
       u.uSpread.value = capture ? 0 : spread;
       u.uBend.value = capture ? store.captureBend : track.bend;
       u.uOpacity.value = store.opacity;
+      u.uStruct.value = struct;
       u.uIdle.value = capture ? 0 : 1;
       u.uProximity.value = pointer.active && !capture ? 1 : 0;
       u.uPointerWorld.value.set(pointer.worldX, pointer.worldY);

@@ -9,9 +9,14 @@
  * noise to the clean inflection sheet there and the spine places it; nothing
  * in this file may fill that space.
  *
+ * Below lg the Core is a faint texture behind full-width copy, so the curve
+ * itself cannot be read there; the beat carries its still instead, as the
+ * pillars do (owner, 25 September 2026: the curve was too faint).
+ *
  * Choreography, CREATIVE_DIRECTION_3D.md §8.4: heading lines × 60 ms + 80 ms
  * to the body, +120 ms to the exit. 320 ms end to end, inside the 600 ms cap.
  */
+import Image from "next/image";
 import Reveal from "@/motion/Reveal";
 import SplitLines from "@/motion/SplitLines";
 import Thread from "@/motion/Thread";
@@ -49,6 +54,18 @@ export default function TurningPoint() {
               How we integrate
             </ExitLink>
           </Reveal>
+        </div>
+
+        {/* Phones and tablets: the y = x³ curve as a still, captured from the
+            real scene (f0-bend), tall enough for the whole S. */}
+        <div aria-hidden="true" className="relative mt-12 h-[72vw] w-full overflow-hidden lg:hidden [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_100%)]">
+          <Image
+            src="/three/posters/f0-bend-lit-mobile-centred.webp"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
         </div>
 
         {/* The carry. In Beat 2 the thread is born from the Core: the ember

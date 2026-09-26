@@ -19,6 +19,9 @@
     "db:seed:prod": "node scripts/prisma-prod.mjs db seed",
     "test": "tsx --test src/lib/__tests__/*.test.ts src/motion/__tests__/*.test.ts src/three/core/__tests__/*.test.ts",
     "perf": "node scripts/perf-gate.mjs",
+    "tier": "node scripts/tier-check.mjs",
+    "goldens": "node scripts/visual-goldens.mjs",
+    "a11y": "node scripts/a11y-audit.mjs",
     "images:inventory": "node scripts/image-inventory.mjs"
   },
   "prisma": {

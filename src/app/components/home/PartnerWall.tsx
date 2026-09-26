@@ -20,7 +20,7 @@ export default function PartnerWall() {
       className="band-ivory w-full py-24 md:py-32"
       aria-label="Partners"
     >
-      <PartnerColumns />
+      <PartnerColumns headingLevel="h2" />
     </section>
   );
 }

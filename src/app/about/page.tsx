@@ -258,7 +258,7 @@ export default function AboutPage() {
               <div className="relative aspect-[16/9] overflow-hidden">
                 <Image
                   src="/assets/about/vvvvv.webp"
-                  alt="Virtual reality experience"
+                  alt="Engineer working at a laptop"
                   fill
                   sizes="(min-width: 1024px) 50vw, 100vw"
                   className="photo-grade object-cover"

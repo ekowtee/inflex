@@ -29,7 +29,10 @@ export default function ProgrammeDetailsSidebar({
   ];
 
   return (
-    <aside className="lg:sticky lg:top-28">
+    // A named region, not <aside>: a complementary landmark may not sit
+    // inside <main> (axe landmark-complementary-is-top-level), and these
+    // facts are part of the programme, not a tangent to it.
+    <section aria-label="Programme details" className="lg:sticky lg:top-28">
       <div className="text-neutral-500">
         <LevelBadge level={programme.level} />
       </div>
@@ -62,6 +65,6 @@ export default function ProgrammeDetailsSidebar({
         Pricing varies by format and cohort size. Contact us for a tailored
         quote.
       </p>
-    </aside>
+    </section>
   );
 }

@@ -1,3 +1,529 @@
+# Inflexions I.T. Services — Design System v3.0
+
+**The Obsidian/Ivory redesign — 25 September 2026**
+
+**Version:** 3.0.0
+**Last updated:** 2026-09-25
+**Sources of truth:** `src/app/globals.css` (tokens and utility classes), `src/motion/tokens.ts` (motion), the components named below, `scripts/budgets.json` (performance). Direction: `CREATIVE_DIRECTION_3D.md` §5 and §8, `HERO_SCENE_SPEC.md`, `PERFORMANCE_PLAN.md`, `PHASE5_BRIEF.md` §2.
+
+> **How to read this file.** **Part A** (new) documents the redesign as built and is authoritative. **Part B** is the v2.0 system of February 2026, kept below unchanged for history. Wherever the two conflict, Part A wins. Part B section headings that conflict carry a "(superseded by Part A §n)" marker.
+>
+> **Superseded v2.0 content, by name:**
+> - **Colour:** the Navy palette (1.3) and every navy alias; the surface overlays and `surface-dark` (1.5); the Semantic Aliases (1.7), which put navy on headings and white on dark; the Dark Mode Palette (1.8). There is no `prefers-color-scheme` dark mode: the dark register is Obsidian.
+> - **Typography:** Font Families weights (2.1), the 9-level Composite Text Styles (2.2), Responsive Typography (2.3) and Text Colour Pairing (2.4). They are replaced by the `type-*` classes.
+> - **Spacing:** Section Spacing (3.3).
+> - **Icon rules:** red as the icon accent (4.4).
+> - **Components:** Navbar and Mobile Menu (01, 02); Home Hero Banner, Inner Page Hero and Call-to-Action Banner (04–06); all four v2 buttons (07–10); every card style (11–17); the text, dark, textarea and subscribe inputs (18, 19, 21, 22); the Floating Badge, Testimonial Dot, Consultation Box, Badge/Tag and Alert Banner (25, 26, 28, 30, 31); Image Hover Zoom, Swap Grid, Partner Logo Marquee, Testimonial Slider and Footer (35–39).
+> - **Layout:** the Common Layout Templates (7.3), which include the full-bleed hero with a black overlay.
+> - **Motion:** all of section 8. Its easings, durations, stagger and the 600 ms ceiling are replaced by the tokens and rules in Part A §5.
+> - **Accessibility:** the Colour Contrast table (9.2, navy pairs) and the single red focus ring (9.3).
+> - **Tokens:** the Design Tokens JSON (10), the CSS Custom Properties (11) and the Figma guide (12). `globals.css` and `tokens.ts` are now the only token sources.
+
+---
+
+# Part A — v3.0 (authoritative)
+
+## A1. Registers
+
+The site has two registers. Every full-width section is one or the other. There is nothing in between.
+
+| Register | Role | Class | Background / text | Marker attributes |
+|---|---|---|---|---|
+| **Obsidian** | The environment: arrivals, the object, proof, closing bands, footer | `band-obsidian on-obsidian` | `--color-obsidian-950` `#07080B` / `--color-silver-100` `#E6E7EA` | `data-register="obsidian"` **and** `data-header-dark=""` |
+| **Ivory** | The reading room: detail, lists, forms, photography | `band-ivory` | `#FFFFFF` / `#171A20` | `data-register="ivory"` (optional) |
+| Ivory soft | Defined for Beat 9's white panels. **No current consumer:** SideDoors now uses `band-ivory`. | `band-ivory-soft` | `#F7F8FA` / `#171A20` | — |
+
+**The contract.**
+- `band-obsidian` is always paired with `on-obsidian`, so the dark focus ring applies (§8.3).
+- `data-header-dark` drives the header. It is **functional**: the header goes dark while any element carrying it overlaps the bar (`top < headerPx && bottom > headerPx × 0.5`, with headerPx 56 on phones and 64 from `lg`).
+- `data-register` is a **descriptive marker** for audits and briefs. No code reads it on sections. The header writes its own `data-register` (`obsidian` or `ivory`) to reflect its current state.
+- The footer is Obsidian (`on-obsidian bg-obsidian-950`, `data-header-dark`) on every page. It uses `bg-obsidian-950` rather than `band-obsidian`, so it stays opaque when the Core is live.
+
+**The header's two registers** (`Header.tsx`, partly locked: read CLAUDE.md "Navbar" before touching it).
+
+| State | When | Bar | Logo | Links |
+|---|---|---|---|---|
+| Dark | A `data-header-dark` element is under the bar, or the mobile menu is open | `bg-obsidian-950/45 backdrop-blur-md border-b border-white/[0.08]`, and `bg-obsidian-950/35` where backdrop-filter is supported. The open mobile menu forces `!bg-obsidian-950`. | `/inflexlogo-light.png` | `text-silver-300`, hover and focus `text-silver-100` |
+| Light | Otherwise | `bg-white border-b border-[#E6E6E6]` | `/inflexlogo.png` | `text-gray-700`, hover `text-red-600` (the header's own reds; new components use `primary-*`) |
+
+The server renders the dark bar, because every marketing route opens on an Obsidian band. A page that opens light corrects it on mount. The register change transitions at `--motion-duration-ui` with `--motion-ease-out`. Heights are `h-14` and `lg:h-16`, fixed, `z-50`. Anything placed at the top of a page must start below the bar: `top-14 lg:top-16`, or `pt-28` for content.
+
+**`html[data-core-live]`.** `Arrival.tsx` sets this attribute on the root while the live Core is on screen (Tier A or B, after the poster crossfade). Tier C never sets it. While it is present:
+- `.band-obsidian` and `section[data-beat="0"]` go `background: transparent`, so the fixed canvas shows through them.
+- `html` takes `--color-obsidian-950` and `body` goes transparent.
+- Ivory bands and the footer keep their own backgrounds and cover the canvas.
+- `[data-pillar-poster]` (Beat 4's phone posters) is hidden.
+
+Consequence: a dark section on the home page must use `band-obsidian`, not a raw `bg-obsidian-*`, or it will hide the Core.
+
+---
+
+## A2. Colour
+
+### A2.1 Tokens defined in `@theme`
+
+| Group | Token | Value | Use |
+|---|---|---|---|
+| **Obsidian** | `--color-obsidian-950` | `#07080B` | Obsidian band and footer background; root colour while the Core is live |
+| | `--color-obsidian-900` | `#0A0C10` | Scene clear colour; the footer's input field |
+| | `--color-obsidian-800` | `#10131A` | Raised surface on dark (sparingly) |
+| | `--color-obsidian-700` | `#181C25` | Border on dark (usually written as `white/10`–`white/15` instead) |
+| **Silver** (text on dark) | `--color-silver-100` | `#E6E7EA` | Headings and display text on Obsidian; also the dark focus ring |
+| | `--color-silver-300` | `#C9CBD1` | Body text on Obsidian |
+| | `--color-silver-500` | `#A9ADB8` | Eyebrows, telemetry and muted text on Obsidian |
+| | `--color-graphite` | `#8F8D8D` | Logo grey; the Core's node base colour |
+| **Ember** | `--color-ember` | `#FF3B2F` | Emissive red for the 3D scene. Outside the scene: the ember Thread and the one live-status dot only. Never text, never UI. |
+| **Primary red** | `--color-primary-500` | `#BD2E25` | Primary action fill; the Ivory focus ring; the red Thread |
+| | `--color-primary-600` | `#A02923` | Primary hover; form error text |
+| | `--color-primary-50` … `-900` | `#FDE8E7` … `#52110D` | The full scale is still defined (unchanged from v2) |
+| **Neutral** (text on Ivory) | `--color-neutral-900` | `#171A20` | Headings and strong text on Ivory; outline-button text |
+| | `--color-neutral-600` | `#41444B` | Lead paragraphs on Ivory |
+| | `--color-neutral-500` | `#5C6280` | Labels, telemetry, struck ledger lines, helper text |
+| | `--color-neutral-400` | `#8C8C8C` | Placeholders only |
+| | `--color-neutral-300` | `#A6A6A6` | Field and outline-button borders |
+| | `--color-neutral-200` | `#D0D0D0` | Hairlines on Ivory (entries, DoorFrame) |
+| | `--color-neutral-50` | `#F2F2F2` | Outline-button hover fill |
+| Surface, semantic, navy | `--color-surface-*`, `--color-{success,warning,error,info}-*`, `--color-navy-*` | as in v2 | Still defined, for the admin area and legacy code. **Not for new marketing components.** |
+
+Values used as literals: header hairline `#E6E6E6`; door hover surface `#F4F5F7` (SideDoors); `band-ivory-soft` `#F7F8FA`.
+
+Hairlines on Obsidian are white at low alpha: `border-white/15` above entries, `border-white/10` for dividers and the footer, `border-white/20` for the secondary button and the footer input, `white/[0.08]` for the header hairline and the secondary button's hover fill.
+
+The brand red in code is `--color-primary-500` `#BD2E25`. CLAUDE.md's `--color-primary: #D0281F` is not a defined token. `#D0281F` survives only as `--color-error-border`.
+
+### A2.2 Rules
+
+| Rule | Detail |
+|---|---|
+| **Red is for actions** | Red means primary buttons, the Ivory focus ring and the red Thread. Outside those, the only red is the one live-status dot: an ember `h-1.5 w-1.5 rounded-full bg-ember` in `Receipt.tsx`, beside "In progress". No red icon badges, tiles, bars, rules or ticks. |
+| **No pure white text on Obsidian** | Use `silver-100` for headings, `silver-300` for body and `silver-500` for muted text, because pure white halates on near-black. The one exception is `text-white` on a red button. |
+| **Red on dark is large-only** | `primary-500` on `obsidian-900` is 3.9:1, so on dark it is for large text and icons only, never body copy. (Measured in CREATIVE_DIRECTION_3D.md §5.2: `silver-300` 12.9:1, `silver-500` 8.6:1.) |
+| **No navy** in any new component | This includes navy washes over photographs. |
+| **Cards** | No near-white card on a white section. No card inside a card. No accent-bar cards: no coloured `border-left` or `border-right` over 1 px on any card, list item or callout. Where a page lists things, use hairline entries (§6.6). |
+| **Shadows** | Nothing on Obsidian has a shadow. On Ivory there is one shadow, `.shadow-ivory` (`0 1px 2px rgb(23 26 32 / 0.06), 0 8px 24px rgb(23 26 32 / 0.06)`), and only where a surface genuinely lifts. Use a border or a shadow, never both. (The class is defined but currently unused.) |
+| **Grid lines** | Only in the 3D scene's ground plane. Never in the reading room. |
+
+---
+
+## A3. Typography
+
+**Faces** (`next/font/google` in `layout.tsx`, `display: swap`, preloaded):
+
+| Face | Variable | Weights loaded | Stack | Role |
+|---|---|---|---|---|
+| Rubik | `--font-rubik` (also `--font-sans`) | 400, 500, 600, 700 | `var(--font-rubik), "Rubik Metric", system-ui, sans-serif` | Everything except eyebrow and telemetry |
+| Krub | `--font-krub` | 500 only | `var(--font-krub), "Krub Metric", system-ui, sans-serif` | `type-eyebrow`, `type-telemetry` |
+
+**Metric fallback faces** (PERFORMANCE_PLAN.md §5.4) are `@font-face` rules over `local("Arial")`, Liberation Sans, Roboto and Helvetica. Their size and ascent/descent overrides are measured against the web fonts, so the font swap moves nothing:
+
+| Face | Weight | size-adjust | ascent / descent |
+|---|---|---|---|
+| Rubik Metric | 400 | 104.41% | 89.55% / 23.94% |
+| Rubik Metric | 500 | 108.24% | 86.38% / 23.10% |
+| Rubik Metric | 600 | 102.31% | 91.39% / 24.44% |
+| Rubik Metric | 700 | 104.13% | 89.79% / 24.01% |
+| Krub Metric | 500 | 106.53% | 94.53% / 27.50% |
+
+**Type tiers** (`@layer components` in `globals.css`). Each class sets size, weight, tracking and line height only. Colour, max-width and margin belong to the component, so a tier works in either register.
+
+| Class | Face | Size | Weight | Tracking | Line height | Extras | Where |
+|---|---|---|---|---|---|---|---|
+| `type-display-xl` | Rubik | `clamp(2.125rem, 4.6vw, 4.75rem)` | 700 | −0.035em | 0.98 | `text-wrap: balance` | Home H1 only |
+| `type-display-l` | Rubik | `clamp(2rem, 4.5vw, 4rem)` | 700 | −0.03em | 1 | balance | **Every interior H1** (Phase 5 gate); home chapter headings |
+| `type-h2` | Rubik | `clamp(1.75rem, 3vw, 2.5rem)` | 700 | −0.02em | 1.1 | balance | Section titles; large tabular figures (years, step numbers) |
+| `type-h3` | Rubik | `1.5rem` | 600 | −0.01em | 1.25 | — | Entry titles |
+| `type-body-l` | Rubik | `clamp(1rem, 0.9rem + 0.35vw, 1.125rem)` | 400 | 0 | 1.6 | — | Leads, offer lines (about `max-w-[56ch]`–`[60ch]`) |
+| `type-body` | Rubik | `clamp(0.9375rem, 0.88rem + 0.2vw, 1rem)` | 400 | 0 | 1.6 | — | Everything else; form fields |
+| `type-eyebrow` | Krub | `0.75rem` | 500 | +0.18em | 1 | uppercase | Section labels, ExitLink, dt labels |
+| `type-telemetry` | Krub | `0.6875rem` | 500 | +0.12em | 1 | uppercase, `tabular-nums` | Status lines, form labels, footnotes, counter labels |
+
+**Colour by register.**
+- Obsidian: display and headings `text-silver-100`, body `text-silver-300`, eyebrow and telemetry `text-silver-500`.
+- Ivory: headings `text-neutral-900`, leads `text-neutral-600`, labels and telemetry `text-neutral-500`.
+
+**Rules.**
+- H1 is `type-display-l`, H2 is `type-h2`, H3 is `type-h3`.
+- No "01 —" section numbering on eyebrows; short labels are fine.
+- Animate lines only, never letters.
+- Numbers use `tabular-nums`.
+
+---
+
+## A4. Spacing and layout
+
+| Item | Value |
+|---|---|
+| Container | `mx-auto max-w-7xl px-4 sm:px-6 lg:px-8` (80rem; matches the header) |
+| Reading-room band | `py-24 md:py-32`, on both Ivory and Obsidian content bands and on AskBand |
+| Home chapters | `min-h-[100svh]` in the environment; content bands as above. SideDoors: `py-20 md:py-28` |
+| PageHero | `min-h-[80svh]` (default) or `min-h-[56svh]` (compact); copy `pt-28 pb-16 md:pb-20`, bottom-aligned on phones and centred from `md` |
+| Copy column over an object | `max-w-2xl lg:max-w-[52%]` (PageHero); `md:max-w-[52%] lg:max-w-[50%]` (home). The object sits centre-right. |
+| Two-column content | `grid gap-12 lg:grid-cols-2 lg:gap-20` |
+| Entry grids | `mt-16 grid gap-x-12 gap-y-10 md:grid-cols-3`. Entry `pt-8` under its hairline. Short lists: `entryGrid()` (§6.6) |
+| Vertical rhythm | H2 → lead `mt-6`; lead → list `mt-10`; → CTA `mt-10`; → entry grid `mt-16` |
+| Radii | Buttons and fields `rounded-[6px]`; checkboxes `rounded-[2px]`; photographs in the shared templates are square-cornered |
+| Footer | `py-16 md:py-20`, grid `lg:grid-cols-[1.4fr_1fr_1fr_1.4fr]` |
+
+Breakpoints are Tailwind's defaults (as in Part B §7.1). `lg` (1024 px) is also the Tier A/B viewport threshold and the header's desktop switch.
+
+---
+
+## A5. Motion
+
+### A5.1 Tokens (`src/motion/tokens.ts`)
+
+| Group | Token | Value | CSS variable | Use |
+|---|---|---|---|---|
+| duration | `micro` | 120 ms | `--motion-duration-micro` | Colour and opacity on hover |
+| | `ui` | 240 ms | `--motion-duration-ui` | Dropdowns, toggles, tabs, header register, Magnetic return |
+| | `reveal` | 480 ms | `--motion-duration-reveal` | Text and entry entrances, Thread, strike, DoorFrame strokes |
+| | `scene` | 900 ms | `--motion-duration-scene` | Poster crossfade, register changes, Counter default |
+| | `morph` | 1600 ms | — (TS only) | Core formation change when not scrubbed (canvas only) |
+| ease | `out` | `cubic-bezier(0.16, 1, 0.3, 1)` · GSAP `expo.out` | `--motion-ease-out` | Entrances, hovers |
+| | `inOut` | `cubic-bezier(0.76, 0, 0.24, 1)` · GSAP `power4.inOut` | `--motion-ease-in-out` | Scrubs, morphs |
+| | `exit` | `cubic-bezier(0.7, 0, 0.84, 0)` · GSAP `expo.in` | `--motion-ease-exit` | Exits only |
+| stagger | `lines` / `rows` / `cards` / `max` | 60 / 40 / 60 / 600 ms | — | `max` caps any delay and any block's choreography |
+| distance | `reveal` / `line` / `parallaxMax` | 16 / 12 / 40 px | `--motion-distance-reveal`, `--motion-distance-line` (parallax is TS only) | |
+
+`src/motion/__tests__/tokens.test.ts` fails if the CSS variables drift from `tokens.ts`, or if `globals.css` contains `bounce`, `elastic` or `back(`.
+
+**Tailwind defaults are remapped** in `@theme`:
+- `--default-transition-duration: var(--motion-duration-micro)`
+- `--default-transition-timing-function: var(--motion-ease-out)`
+- `--ease-out` → the `out` token, `--ease-in-out` → `inOut`, `--ease-in` → `exit`
+
+So a bare `transition-colors` runs at 120 ms expo-out, and Tailwind's stock 150 ms `cubic-bezier(0.4, 0, 0.2, 1)` can never reach the page. When a class needs a specific token, write it as `duration-[var(--motion-duration-ui)] ease-[var(--motion-ease-out)]`.
+
+### A5.2 Rules
+
+- No component writes its own duration or easing. Every value comes from the tokens.
+- No bounce, elastic, back or overshoot easing.
+- No per-letter animation.
+- Nothing moves its layout on hover. Hover shifts are transforms on a child (for example the ExitLink arrow's `translate-x-1`). Buttons change colour only: no scale, no shadow.
+- **The 1 s ceiling.** No DOM motion runs longer than 1 s outside the pinned chapter (CREATIVE_DIRECTION_3D.md §10.2). Where older specs named longer values, the code moved them onto tokens: Counter counts over `scene` (900 ms) instead of 1.2 s, the lit poster crossfade uses `scene` instead of 1800 ms, and the strike and DoorFrame use `reveal`. **Documented exceptions:**
+  1. Scroll-scrubbed motion has no duration of its own: Core morphs, camera and bloom, and the pinned Beat 4.
+  2. Inside the canvas: `duration.morph` (1600 ms) and the scene's arrival light (`ARRIVAL_LIGHT_MS` 1800 in `CoreScene.ts`).
+  3. The hero scroll cue (`.motion-scroll-cue`), an ambient 2.4 s loop that stops once `[data-scrolled]` is set.
+- Choreography: heading lines stagger at 60 ms. Body follows the heading, CTA last. The whole block takes 600 ms or less (`stagger.max`).
+
+### A5.3 Reduced motion
+
+`prefers-reduced-motion: reduce` has these effects:
+- Tier C, so there is no canvas.
+- The global rule collapses every animation and transition to 0.01 ms, with one iteration.
+- `Reveal` content simply appears.
+- `SplitLines` does not split.
+- `Counter` prints the final value.
+- `Magnetic` is off.
+- `LenisProvider` does not start, so scrolling is native.
+- The `.strike` is already drawn, and `DoorFrame` stays drawn.
+- Pins keep working, because they are CSS `position: sticky`.
+
+### A5.4 Tiers and the frame-time guard
+
+`decideTier()` in `src/motion/tier.ts` runs these checks in order; the first match wins:
+
+1. Reduced motion → **C**
+2. `saveData` or `prefers-reduced-data` → **C**
+3. No WebGL 2 → **C**
+4. Software GL (SwiftShader, llvmpipe and similar) → **C**
+5. `deviceMemory` below 4 → **C**
+6. `hardwareConcurrency` below 4 → **B** at ≥ 1024 px, otherwise **C**
+7. Viewport below 1024 px, or a coarse pointer → **B**
+8. Otherwise → **A**
+
+`useMotionTier()` returns `"C"` on the server and on the first paint. It re-evaluates only when the reduced-motion preference changes.
+
+| Tier | Gets |
+|---|---|
+| **A** | Full Core with the hand-written post stage (bloom, vignette, dither), pointer parallax |
+| **B** | Half node and edge counts, no post stage, touch drift |
+| **C** | Posters only. The environment chunk is never downloaded. A first-class design, not a failure state. |
+
+The guard lives in `CoreScene.ts`:
+- **Probe.** It measures the first 90 frames (`PROBE_FRAMES`). If their mean is above 24 ms (`PROBE_LIMIT_MS`), the scene demotes one step (A → B, B → C).
+- **Readiness.** The poster may fade only when the shaders have compiled and 3 consecutive frames have run under 20 ms, within 8 s of mount. Otherwise the scene goes to **C**. The crossfade takes 900 ms.
+- **Watchdog.** While live, it judges each window of 90 frames. A window is slow if its average is above 40 ms (`WATCH_LIMIT_MS`), or if more than 5% of its frames (`JANK_SHARE`) took over 34 ms (`JANK_MS`). Two consecutive slow windows demote the scene.
+- **Pauses.** Frames over 250 ms, or with the tab hidden, count toward neither the probe nor the watchdog.
+- **Persistence.** A demotion is stored in `sessionStorage` under `core-tier-demoted`, so it does not repeat on every route.
+
+---
+
+## A6. Page primitives
+
+### A6.1 `PageHero` (`src/app/components/PageHero.tsx`)
+
+This is the Obsidian arrival band every interior page opens on. It is a server component; the only client JavaScript is `Magnetic` on the CTA.
+
+| Prop | Type | Default | Notes |
+|---|---|---|---|
+| `title` | `string` | required | Renders as `<h1 class="type-display-l text-silver-100">` |
+| `eyebrow` | `string` | — | `type-eyebrow text-silver-500` |
+| `lead` | `string` | — | `type-body-l text-silver-300 max-w-[58ch]` |
+| `cta` | `{ label, href }` | — | Primary button inside `Magnetic` |
+| `formation` | `Formation` | `"none"` | The page's own object (§6.3) |
+| `size` | `"default" \| "compact"` | `"default"` | `min-h-[80svh]`, or `min-h-[56svh]` for programme pages, case-study detail, `/jobs` and `/internships` |
+| `children` | `ReactNode` | — | Page-specific content under the lead, above the CTA |
+
+It renders `section.band-obsidian.on-obsidian` with `data-register="obsidian"` and `data-header-dark`. The H1, not the image, is the LCP candidate, so the still is never `priority`.
+
+### A6.2 `FormationStill`
+
+This component fills its positioned parent with a formation poster. It is `aria-hidden` and `pointer-events-none`.
+
+| Prop | Type | Default | Notes |
+|---|---|---|---|
+| `formation` | `Exclude<Formation, "none">` | required | |
+| `belowHeader` | `boolean` | `true` | Starts at `top-14 lg:top-16`, clear of the bar. `false` fills the whole band (AskBand). |
+
+- It uses a plain `<picture>` with AVIF and WebP sources, not `next/image`, because the desktop still (1920×1080, from 768 px) and the mobile still (780×1688) have different aspect ratios.
+- Opacity is `opacity-35` on phones, where the object crosses the copy, and `md:opacity-100` from `md`.
+- Paths:
+  - Numbered formations: `/three/posters/f{n}-lit-{desktop|mobile}`. Formations 0 and 5 use `-mobile-centred`.
+  - `"curve"`: `f0-bend-lit-*`.
+  - Shapes: `s-{name}-lit-{desktop|mobile}`.
+- No scrim is needed on desktop: the left 45% of every still is black.
+
+### A6.3 The formation map: which page carries which object
+
+`Formation = 0 | 1 | 2 | 3 | 4 | 5 | "curve" | Shape | "none"`. The owner's rule (25 September 2026): each object stays on its page's subject, and no object repeats another section's.
+
+| Route | Formation |
+|---|---|
+| `/` | The live Core (`Arrival.tsx`); Tier C gets posters |
+| `/solutions` | `0`, the sheet the pillars are made from |
+| `/solutions/network-infrastructure` · `data-security` · `cloud-services` · `data-centric-solutions` | `1` lattice · `2` enclosure · `3` nebula · `4` plane |
+| `/about` | `5`, the mark |
+| `/services` | `"curve"`, the inflection point |
+| `/services/professional` · `managed` · `support` | `"gear"` · `"radar"` · `"lifebuoy"` |
+| `/academy` | `"open-book"` |
+| `/academy/for-organizations` | `"tower"` |
+| `/academy/[domain]` and its programmes (compact) | Mapped in `src/app/academy/heroFormation.ts`: `ai-intelligent-systems` → `"neural-net"`, `infrastructure-cloud` → `"rack"`, `cybersecurity-compliance` → `"padlock"`, `digital-strategy` → `"pawn"`, otherwise `"open-book"` |
+| `/case-study`, `/case-studies/[id]` (compact) | `"checkmark"` |
+| `/careers` · `/jobs` (compact) · `/internships` (compact) | `"staircase"` · `"puzzle"` · `"sprout"` |
+| `/resources` | `"lightbulb"` |
+| `/contact` | `"speech-bubble"` |
+| AskBand, on every interior page | `0`, the resting sheet with its ember line |
+| 404 | An Obsidian band with no still |
+
+### A6.4 `AskBand` (`src/app/components/AskBand.tsx`)
+
+This is the closing Obsidian band on every interior page, and the last section before the footer. It carries no heading and no photograph: one line, one button.
+
+| Prop | Type | Default |
+|---|---|---|
+| `variant` | `"default" \| "academy"` | `"default"` |
+| `line` | `string` | The approved offer: "Book a 30-minute architecture review. With a Solutions Architect, not a salesperson. No pitch." |
+| `label` | `string` | "Book the review" |
+| `href` | `string` | `/contact` |
+
+- **Default** adds the friction line "No obligation. One conversation." in `type-eyebrow text-silver-500`, and is labelled `aria-label="Book the review"`.
+- **`academy`** carries the page's own enquiry line and target verbatim, drops the friction line, and is labelled "Train your team". It is used on `/academy`, domain, programme and For Organisations pages.
+
+Layout: `py-24 md:py-32`, with `FormationStill formation={0} belowHeader={false}`.
+
+### A6.5 `ServicePage` and `SolutionPage`
+
+These are the shared layouts. The content lives in each page file.
+
+| Template | Props | Sections, in order |
+|---|---|---|
+| `ServicePage` | `formation, title, lead, overviewHeading, overviewBody, included[], idealFor, cta, image, stepsHeading, steps[{title, description}]` | 1. PageHero. 2. Ivory overview: H2, lead, a "What's Included" hairline list and a primary CTA to `/contact`; beside it, an "Ideal For" telemetry label and a `photo-grade` 4:3 photograph. 3. Obsidian steps: numbered `01`, `02`… in `type-h2 tabular-nums text-silver-500`, as entries. 4. AskBand. |
+| `SolutionPage` | `slug, formation, title, lead, overviewHeading, overviewBody, overviewImage, imageSide ("left"\|"right"), capabilities[], cta, benefitsHeading, benefitsLead, benefits[{title, description}]` | 1. PageHero. 2. Ivory overview with the capability hairline list, CTA and photograph. `imageSide` follows CLAUDE.md: Network and Cloud put the image right, Security and Data-centric put it left. 3. Obsidian benefits as three entries. 4. `SolutionPartners`. 5. `RelatedTraining`. 6. AskBand. |
+
+Capability lists carry no ticks. Steps keep their numbers because they are a sequence.
+
+### A6.6 Hairline entries and `entryGrid`
+
+Entries replace cards everywhere. Reference implementations: `Receipt.tsx`, `SideDoors.tsx`, `ServicePage`, `SolutionPage`.
+
+| Pattern | Ivory | Obsidian |
+|---|---|---|
+| List | `<ul class="border-t border-neutral-200">`, with each item `type-body border-b border-neutral-200 py-4 text-neutral-900` | — |
+| Entry | `border-t border-neutral-200 pt-8` | `border-t border-white/15 pt-8` |
+| Anatomy | Optional telemetry or large tabular figure, then a `type-h3` title, then `type-body` text | Same, in silver |
+| Whole entry as link | The title's `<Link>` stretches with `after:absolute after:inset-0 after:content-['']` on a `group relative` entry. The title takes the focus ring. It underlines on hover (`underline-offset-[6px]`), and a Lucide `ArrowUpRight` moves `-translate-y-1 translate-x-1` at the `ui` token. | Same |
+
+`entryGrid(count)` (`src/app/components/entryGrid.ts`) sizes a grid to a short list, so one or two entries never sit in a mostly empty three-column row. Use it as `` `grid gap-x-12 gap-y-16 ${entryGrid(n)}` ``.
+
+| Count | Returns |
+|---|---|
+| 3 or more | `"sm:grid-cols-2 lg:grid-cols-3"` |
+| 2 | `"sm:grid-cols-2 lg:max-w-3xl"` |
+| 1 | `"max-w-sm"` |
+
+### A6.7 `DoorFrame` (`components/home/DoorFrame.tsx`)
+
+This is a hairline frame that draws itself open for links used as surfaces (the side doors). It takes `children` only.
+
+Drawing order:
+1. The centre divider draws out from its middle over `reveal`.
+2. The top and bottom `neutral-200` hairlines extend outward, delayed by `ui`.
+3. The content lifts 12 px and fades in, delayed by `reveal`.
+
+The whole gesture stays inside 1 s. The frame collapses only if it is below the fold at mount (IntersectionObserver threshold 0.35). Under reduced motion it stays drawn.
+
+Surfaces inside the frame warm on hover and focus (`hover:bg-[#F4F5F7]` at `ui`), with no shadow and no border.
+
+### A6.8 `ExitLink` (`components/home/ExitLink.tsx`)
+
+This is the one way out of a section: a `type-eyebrow` link with a Lucide `ArrowRight` (`h-3.5 w-3.5`, `strokeWidth={1.75}`) that shifts `translate-x-1` on hover at `micro`.
+
+Props: `href`, `children: string`, `className` (sets the colour, for example `text-silver-100`). A section carries one exit, never two. The four pillar rows are the documented exception. Draw the arrow as the icon, never the `→` glyph.
+
+---
+
+## A7. Motion primitives (`src/motion/`)
+
+| Primitive | Props | Behaviour | Use for |
+|---|---|---|---|
+| `Reveal` | `children`, `delay` (ms, capped at 600), `as` (`div`, `section`, `article`, `span`, `p`, `li`, `h1`–`h4`), `className` | CSS-driven (`.motion-reveal` → `.motion-reveal-in`): fades and lifts 16 px over `reveal` with ease-out, once. One IntersectionObserver is shared by every instance (threshold 0.2). Content is visible in the server HTML, and only elements below 90% of the viewport at mount are hidden, so above-the-fold copy never waits for JavaScript. | Body, eyebrows, blocks, single headings |
+| `SplitLines` | `children`, `as` (`h1`, `h2` (default), `h3`, `p`, `div`), `className`, `delay` | Waits for `document.fonts.ready`, then uses GSAP SplitText to split the heading into masked lines. Each line rises from `yPercent: 110` with an opacity fade over `reveal`, `expo.out`, staggered at 60 ms, starting at `"top 80%"`, once. Until then, or without the motion chunk, it behaves as a `Reveal`. | Display and H2 headings |
+| `Counter` | `value`, `prefix`, `suffix`, `duration` (default `scene`, 900 ms), `decimals`, `className` | Uses requestAnimationFrame rather than GSAP, with expo-out, tabular numerals, starting at 40% visibility, once. | Proof figures |
+| `Magnetic` | `children`, `strength` (capped at 6 px), `className` | Moves the button up to 6 px toward the pointer and returns at `ui` with ease-out, using transform only. It is off on coarse pointers and under reduced motion. | **Primary CTAs only.** Not form submits. |
+| `Thread` | `tone` (`"ember"` on Obsidian (default), `"red"` on Ivory), `x` (`left`, `center`, `right`), `height` (48), `className` | A 1 px hairline that draws downward (`scaleY`) over `reveal` at 90% visibility. `aria-hidden`. Sits in a 48 px `.thread-slot`. The home spine may place it with `--thread-x`, so it drops from the Core. | The carry between home beats |
+| `LenisProvider` | — | Mounted once in `MarketingChrome`. Starts after the motion chunk loads, with `lerp: 0.09`, `wheelMultiplier: 1` and `syncTouch: false`, and bridges to ScrollTrigger. In-page `#` anchors go through `lenis.scrollTo` (offset −80). There is no `scroll-behavior: smooth`. | — |
+| `useMotionTier` / `tier.ts` | — | See §5.4 | Gate anything heavier than a poster |
+
+Other CSS motion classes:
+- `.strike` with `[data-struck]`: the ledger strike-through, drawn over `reveal`.
+- `.motion-scroll-cue`: the hero scroll cue.
+
+---
+
+## A8. Buttons, forms, focus, photography
+
+### A8.1 Buttons
+
+| Button | Class (verbatim) | Where |
+|---|---|---|
+| **Primary** | `inline-flex h-14 items-center rounded-[6px] bg-primary-500 px-8 font-semibold text-white transition-colors duration-[var(--motion-duration-micro)] hover:bg-primary-600`. Submits add `disabled:opacity-50`. | Either register. Wrap the page's primary CTA in `<Magnetic>`. |
+| **Outline** (secondary on Ivory) | `inline-flex h-14 items-center rounded-[6px] border border-neutral-300 px-8 font-semibold text-neutral-900 transition-colors duration-[var(--motion-duration-micro)] hover:bg-neutral-50` | Ivory, beside a primary (`/services`, `/careers`, `/jobs`) |
+| **Secondary on Obsidian** | `btn-secondary-obsidian text-silver-100`. The class sets `height: 3.5rem`, `padding-inline: 2rem`, `1px solid rgb(255 255 255 / 0.2)`, `6px` radius, and a `rgb(255 255 255 / 0.08)` hover fill at `micro`. | Obsidian, beside a primary (`/careers`, `/jobs`) |
+| **Tertiary** | `ExitLink` (§6.8) | Either |
+
+Buttons have one primary per view, no icon-only red circles, no scale and no shadow.
+
+### A8.2 Forms
+
+Forms live on Ivory. The pattern below is shared by `careers/ApplicationForm.tsx`, `academy/for-organizations/TrainingEnquiryForm.tsx` and `contact/ContactForm.tsx`.
+
+| Part | Spec |
+|---|---|
+| Field | `w-full rounded-[6px] border border-neutral-300 bg-white px-4 py-3 type-body text-neutral-900 transition-colors duration-[var(--motion-duration-micro)] placeholder:text-neutral-400 hover:border-neutral-500`, placed `mt-3` under its label. The same class serves `select` and `textarea` (`resize-y`). |
+| File field | The field class plus `file:mr-4 file:cursor-pointer file:rounded-[6px] file:border-0 file:bg-neutral-900 file:px-4 file:py-2 file:font-semibold file:text-white` |
+| Label | `type-telemetry block text-neutral-500`, above the field, with `htmlFor` set. Optional fields say "(optional)" in the label. |
+| Checkbox | `h-4 w-4 rounded-[2px] border-neutral-300 accent-primary-500` |
+| Helper text | `type-body mt-2 text-neutral-500`, linked with `aria-describedby` |
+| Layout | Form `space-y-6`; field grid `grid grid-cols-1 gap-6 md:grid-cols-2` |
+| Honeypot | `<input type="text" name="hp" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute -left-[9999px] h-px w-px opacity-0">`. If it is filled, the API pretends success and drops the submission. |
+| Turnstile | Only when `NEXT_PUBLIC_TURNSTILE_SITE_KEY` is set. The script is `https://challenges.cloudflare.com/turnstile/v0/api.js` via `next/script` `afterInteractive`, with a `<div class="cf-turnstile" data-sitekey>` in place. The token is checked before sending, and the widget is `turnstile.reset()` after every send and failure. |
+| Status line | `<p role="status" aria-live="polite" class="type-body max-w-[60ch]">`. Success is `text-neutral-900`, error is `text-primary-600`. Copy says plainly what happened. A failure says "Nothing was sent" and gives an email fallback. |
+| Submit | The primary button, disabled while sending, with the label "Sending…". Not wrapped in Magnetic. |
+
+The admin area (`src/app/admin/`) keeps its own dark form set and is outside this system.
+
+### A8.3 Focus rings
+
+```css
+:focus-visible { outline: 2px solid #BD2E25; outline-offset: 2px; }             /* Ivory */
+.on-obsidian :focus-visible, .on-obsidian:focus-visible { outline-color: #E6E7EA; } /* Obsidian */
+```
+
+Every dark surface carries `.on-obsidian`, or the red ring disappears on it. Never remove an outline without an equal replacement. The skip link ("Skip to main content", in `layout.tsx`) is the first focusable element.
+
+### A8.4 Photography
+
+- **`.photo-grade`** is `filter: grayscale(0.4) saturate(0.85) contrast(1.04) brightness(0.96)`. Put it on every photograph and never on logos, posters or icons.
+- Photographs live in the reading room, for example `relative aspect-[4/3] overflow-hidden` holding a `next/image` `fill` with `photo-grade object-cover`, and `alt=""` when decorative.
+- No hero photography, holograms, circuits or glowing globes. Heroes carry objects (§6.3).
+- No colour overlays or washes on photographs.
+
+---
+
+## A9. Iconography
+
+- **Lucide React only.** No other icon library.
+- In use: `ArrowRight` (ExitLink, `strokeWidth 1.75`), `ArrowUpRight` (entry links, `strokeWidth 1.5`, `h-6 w-6`), `Menu`, `X`, `ChevronDown` (header), and `Instagram`, `Facebook`, `Twitter`, `Linkedin` (footer, `h-5 w-5`, `strokeWidth 1.5`, `silver-500` → `silver-100`).
+- The header's social icons are PNGs in `/icons/`. They are header-owned, so leave them.
+- Icons inherit their text colour. No red icon tiles, badges or ticks.
+- Decorative icons are `aria-hidden`. Icon-only links carry an `aria-label`.
+
+---
+
+## A10. Performance budgets
+
+These are enforced by `scripts/perf-gate.mjs`, which reads `scripts/budgets.json` (from PERFORMANCE_PLAN.md §2.2 and §9.1, approved 22 September 2026). Run `npm run perf`, or `npm run perf -- --bundles` for budgets only.
+
+| Budget | Limit | Loads |
+|---|---|---|
+| Route shell JS | **205 KB** gz (209,920 B) | Immediately |
+| Motion chunk (GSAP, ScrollTrigger, SplitText, Lenis) | **60 KB** gz (61,440 B) | After LCP, every tier except reduced motion |
+| Environment chunk (three, the Core, shaders, post stage, worker) | **190 KB** gz (194,560 B) | After the motion chunk, home page only, Tier A and B only |
+| Preloaded fonts | 48 KB (49,152 B) | With the page |
+| Any served raster image | 250 KB (256,000 B) | — |
+| `public/` total | 15 MB (15,728,640 B) | — |
+| Posters (enforced by `capture-posters.mjs`) | Desktop ≤ 160 KB WebP and ≤ 110 KB AVIF; mobile ≤ 90 KB WebP and ≤ 65 KB AVIF | — |
+
+**Lab thresholds** (Lighthouse, mobile emulation):
+- Server response 600 ms
+- FCP 1.8 s
+- **LCP 2.5 s**
+- **CLS 0.02**
+- **TBT 200 ms**
+- Speed Index 3.0 s
+
+They are checked on `/`, `/solutions`, `/solutions/network-infrastructure`, `/academy`, `/contact`, `/solutions/data-security`, `/services`, `/academy/ai-intelligent-systems`, `/case-study` and `/about`.
+
+No interior page loads the environment chunk.
+
+Other gates:
+- `npm test` covers the token sync and the tier decision.
+- `npm run goldens` runs the visual goldens.
+- `npm run a11y` runs the axe audit.
+
+---
+
+## A11. Where to extend
+
+### A11.1 A new interior page
+
+1. **`PageHero`** with the page's own on-topic object: `formation={…}`, a `type-display-l` title (automatic), an optional eyebrow, lead and one CTA. Use `size="compact"` for detail pages. If no existing object fits, make one (§11.2). Never borrow another section's.
+2. **Ivory sections** (`band-ivory w-full py-24 md:py-32` with the standard container). Write the H2 through `Reveal` or `SplitLines`, then the lead, then **hairline entries or lists**, never cards. Use `entryGrid()` for short lists and `photo-grade` on any photograph. An Obsidian content band in between is allowed (`band-obsidian on-obsidian` with `data-register="obsidian" data-header-dark=""`).
+3. **`AskBand`** last. Use `variant="academy"` on Academy pages.
+4. Check the page against these rules:
+   - one primary CTA per view, in `Magnetic`
+   - no navy
+   - no red outside actions
+   - no pure white on Obsidian
+   - no accent bars and no card-in-card
+   - only token durations
+   - Lucide only
+5. Run `npm run perf`, `npm run a11y` and `npm run goldens`.
+6. Add the route to `budgets.json` if it is a new top-level page.
+
+### A11.2 A new hero object
+
+1. Add a builder to `src/three/core/worker/shapes.ts` and register it in the `SHAPES` map. Build it about the origin, roughly 2.5 units tall, and `place()` it where the mark sits (0.45 right of centre), so one camera frames every shape. It must be a map of the Inflection sheet, as the existing shapes are: parametric parts or hex-filled regions. Shapes are capture-only and never reach the live Core.
+2. Add the name to the `Shape` union in `PageHero.tsx`.
+3. Capture the lit stills into slot 5 with `--shape`, desktop and mobile in separate runs, because `--cam` applies to a whole run:
+   ```
+   NEXT_PUBLIC_CORE_CAPTURE=1 npx next build
+   node scripts/capture-posters.mjs --formations 5 --shape <name> --lights lit --sizes desktop --cam -1.72,1.88,8.4,-1.3,-0.15,0
+   node scripts/capture-posters.mjs --formations 5 --shape <name> --lights lit --sizes mobile  --cam 0.45,1.6,12.5,0.45,-0.2,0
+   ```
+   This writes `public/three/posters/s-<name>-lit-{desktop,mobile}.{webp,avif}` within the poster budgets. Use `--port 3000` against a running server instead of building.
+4. Use it: `<PageHero formation="<name>" … />`. For an Academy domain, add it to `heroFormation.ts`.
+5. Review the still at 390, 768, 1280 and 1920 px. The object must stay right of the copy on desktop and read at 35% opacity on phones.
+
+---
+---
+
+# Part B — Design System v2.0 (February 2026, kept for history)
+
+> Superseded by Part A wherever the two conflict. Kept unchanged apart from the "(superseded by Part A §n)" markers on conflicting headings.
+
+
 # Inflexions I.T. Services — Design System v2.0
 
 **Version:** 2.0.0
@@ -23,7 +549,7 @@ Five principles that govern every design decision. When in conflict, the higher-
 
 ## 1. Color System
 
-### 1.1 Three-Tier Token Architecture
+### 1.1 Three-Tier Token Architecture (superseded by Part A §2)
 
 Colors are organized in three layers. Designers and developers should **only use Semantic or Component tokens** — never raw Global values directly in markup.
 
@@ -57,7 +583,7 @@ Changing the brand from red to blue = **one alias edit**, not a find-and-replace
 | `red-800` | `#6E1812` | 110, 24, 18 | 10.8:1 |
 | `red-900` | `#52110D` | 82, 17, 13 | 13.6:1 |
 
-### 1.3 Global Palette — Navy (Consolidated from 5 → 3)
+### 1.3 Global Palette — Navy (Consolidated from 5 → 3) (superseded by Part A §2)
 
 Previously: `#16213E`, `#1B3764`, `#1D3C6D`, `#1E3161`, `#265982` — five near-identical values creating drift. **Consolidated:**
 
@@ -87,7 +613,7 @@ Previously: `#16213E`, `#1B3764`, `#1D3C6D`, `#1E3161`, `#265982` — five near-
 
 > **Breaking change (P0):** `neutral-500` changed from `#666C89` (4.6:1 — marginal AA) to `#5C6280` (5.5:1 — safe AA). This eliminates the contrast risk on the site's most-used body text color.
 
-### 1.5 Global Palette — Surface
+### 1.5 Global Palette — Surface (superseded by Part A §2)
 
 | Token | Hex | Usage |
 |-------|-----|-------|
@@ -112,7 +638,7 @@ Each semantic color now ships with **background**, **text**, and **border** vari
 | **Error** | `#FFEBEE` | `#C62828` | `#D0281F` | `#D0281F` |
 | **Info** | `#E3F2FD` | `#1565C0` | `#42A5F5` | `#42A5F5` |
 
-### 1.7 Semantic Aliases
+### 1.7 Semantic Aliases (superseded by Part A §2)
 
 These are the tokens designers and developers should reference. They decouple **intent** from **value**:
 
@@ -152,7 +678,7 @@ These are the tokens designers and developers should reference. They decouple **
 --color-focus-ring:       var(--red-500)         /* #BD2E25 */
 ```
 
-### 1.8 Dark Mode Palette
+### 1.8 Dark Mode Palette (superseded by Part A §1 and §2)
 
 | Semantic Token | Light Value | Dark Value |
 |----------------|------------|------------|
@@ -170,7 +696,7 @@ These are the tokens designers and developers should reference. They decouple **
 
 ## 2. Typography
 
-### 2.1 Font Families
+### 2.1 Font Families (superseded by Part A §3)
 
 | Token | Family | Weights | Usage |
 |-------|--------|---------|-------|
@@ -178,7 +704,7 @@ These are the tokens designers and developers should reference. They decouple **
 | `font-krub` | Krub | 400, 500, 600 | Secondary — accents, labels, badges |
 | `font-system` | system-ui, sans-serif | — | Fallback stack |
 
-### 2.2 Composite Text Styles (9 Levels)
+### 2.2 Composite Text Styles (9 Levels) (superseded by Part A §3)
 
 Each style is a **composite token** — size, weight, line-height, and tracking shipped as one unit. Developers apply the full style, never mix-and-match individual properties.
 
@@ -203,7 +729,7 @@ Built on a **1.250 Major Third** modular scale, base 16px. Line-heights adjusted
 > - Line-heights recalculated so every computed value divides by 4
 > - Letter-spacing added at Display (-0.5px) and Caption (+0.25px)
 
-### 2.3 Responsive Typography
+### 2.3 Responsive Typography (superseded by Part A §3)
 
 | Style | Mobile (<768px) | Tablet (768px+) | Desktop (1024px+) |
 |-------|-----------------|-----------------|-------------------|
@@ -216,7 +742,7 @@ Built on a **1.250 Major Third** modular scale, base 16px. Line-heights adjusted
 | Body | 15px / 24px LH | 16px / 24px LH | 16px / 24px LH |
 | Body SM | 13px / 20px LH | 14px / 20px LH | 14px / 20px LH |
 
-### 2.4 Text Color Pairing Rules
+### 2.4 Text Color Pairing Rules (superseded by Part A §2 and §3)
 
 | Context | Color Token | Never Use |
 |---------|-------------|-----------|
@@ -260,7 +786,7 @@ Built on a **1.250 Major Third** modular scale, base 16px. Line-heights adjusted
 
 **Standard container class:** `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
 
-### 3.3 Section Spacing
+### 3.3 Section Spacing (superseded by Part A §4)
 
 | Context | Mobile | Tablet | Desktop |
 |---------|--------|--------|---------|
@@ -289,7 +815,7 @@ Three density configurations for different contexts. Default is **Comfortable** 
 
 > **Action item:** Remove `react-icons/fi` dependency. Replace `FiMail`, `FiPhone`, `FiClock` in [contact/page.tsx](src/app/contact/page.tsx) with Lucide equivalents (`Mail`, `Phone`, `Clock`).
 
-### 4.2 Current Icon Inventory
+### 4.2 Current Icon Inventory (superseded by Part A §9)
 
 | Icon | Import | Used In |
 |------|--------|---------|
@@ -318,7 +844,7 @@ Three density configurations for different contexts. Default is **Comfortable** 
 | `icon-xl` | 32px | 2px | Feature icons, hero elements |
 | `icon-2xl` | 48px | 2px | Play button overlays |
 
-### 4.4 Icon Rules
+### 4.4 Icon Rules (superseded by Part A §9)
 
 - **Color:** Inherit parent `text-color` by default. Use `red-500` for interactive/accent.
 - **Icon + text pairing:** 8px gap (`gap-2`), vertically centered (`items-center`)
@@ -345,7 +871,7 @@ Every component carries a maturity label:
 
 ### 5.2 Navigation
 
-#### Component 01: Navbar `Stable`
+#### Component 01: Navbar `Stable` (superseded by Part A §1)
 - **Height:** 60px
 - **Background:** white / `bg-white`
 - **Shadow:** none (clean edge)
@@ -363,7 +889,7 @@ Every component carries a maturity label:
 - **Keyboard:** Tab through links, Enter/Space opens dropdowns, Escape closes them
 - **ARIA:** `role="navigation"`, `aria-label="Main navigation"`, `aria-expanded` on dropdown triggers
 
-#### Component 02: Mobile Menu `Stable`
+#### Component 02: Mobile Menu `Stable` (superseded by Part A §1)
 - **Trigger:** Menu icon (24px), swaps to X icon when open
 - **Panel:** Full-width dropdown, `bg-white shadow-lg`
 - **Links:** `py-3 px-4 text-base`, stacked vertically
@@ -382,9 +908,9 @@ Every component carries a maturity label:
 
 ---
 
-### 5.3 Heroes & Banners
+### 5.3 Heroes & Banners (superseded by Part A §6)
 
-#### Component 04: Home Hero Banner `Stable`
+#### Component 04: Home Hero Banner `Stable` (superseded by Part A §6)
 - **Height:** 300px (mobile) / 500px (md+)
 - **Image:** Full-bleed, `object-cover`
 - **Overlay:** `surface-overlay-light` (`bg-black/30`)
@@ -393,13 +919,13 @@ Every component carries a maturity label:
 - **Subtitle:** Body SM, `white/90` opacity
 - **CTA:** Primary Button (Component 07)
 
-#### Component 05: Inner Page Hero `Stable`
+#### Component 05: Inner Page Hero `Stable` (superseded by Part A §6)
 - **Height:** 300px (mobile) / 500px (md+)
 - **Overlay:** `surface-overlay-dark` (`bg-black/50`)
 - **Title:** Display style, `--color-body-inverse`
 - **Content:** Centered vertically, left-aligned within container
 
-#### Component 06: Call-to-Action Banner `Stable`
+#### Component 06: Call-to-Action Banner `Stable` (superseded by Part A §6)
 - **Height:** 300-440px responsive
 - **Image:** Full-bleed, `object-cover`
 - **Overlay:** `surface-overlay-medium` (`bg-black/40`)
@@ -409,9 +935,9 @@ Every component carries a maturity label:
 
 ---
 
-### 5.4 Buttons
+### 5.4 Buttons (superseded by Part A §8)
 
-#### Component 07: Primary Button `Stable`
+#### Component 07: Primary Button `Stable` (superseded by Part A §8)
 - **Min width:** 120px
 - **Height:** 48-56px (padding-based)
 - **Background:** `--color-action-primary`
@@ -434,7 +960,7 @@ Every component carries a maturity label:
 - **Keyboard:** Enter/Space to activate
 - **ARIA:** `aria-disabled="true"` when disabled, `aria-busy="true"` when loading
 
-#### Component 08: Secondary Button (Outline) `Stable`
+#### Component 08: Secondary Button (Outline) `Stable` (superseded by Part A §8)
 - **Border:** `2px solid --color-action-secondary`
 - **Text:** `--color-action-secondary`, `font-medium`
 - **Border-radius:** 6px
@@ -446,7 +972,7 @@ Every component carries a maturity label:
   | Active | `neutral-800` | white | `2px solid neutral-800` |
   | Focus | transparent | black | `ring-2 ring-neutral-500 ring-offset-2` |
 
-#### Component 09: Ghost Button (White) `Stable`
+#### Component 09: Ghost Button (White) `Stable` (superseded by Part A §8)
 - **Background:** White
 - **Text:** `red-500`, `font-semibold`
 - **Used on:** Dark backgrounds (CTA sections, hero overlays)
@@ -458,7 +984,7 @@ Every component carries a maturity label:
   | Active | `neutral-100` | `red-700` |
   | Focus | white | `red-500` + `ring-2 ring-white ring-offset-2 ring-offset-black` |
 
-#### Component 10: Icon Button `Stable`
+#### Component 10: Icon Button `Stable` (superseded by Part A §2 and §8)
 - **Size:** 44x44px minimum (WCAG touch target)
 - **Visual size:** 40x40px circle with 2px padding for touch area
 - **Border:** `1px solid red-500`
@@ -473,9 +999,9 @@ Every component carries a maturity label:
 
 ---
 
-### 5.5 Cards
+### 5.5 Cards (superseded by Part A §2 and §6)
 
-#### Component 11: Blog Card `Stable`
+#### Component 11: Blog Card `Stable` (superseded by Part A §6)
 - **Background:** `--color-bg-tertiary` (`surface-muted`)
 - **Border-radius:** 16px (`rounded-2xl`)
 - **Shadow:** `shadow-md`
@@ -489,7 +1015,7 @@ Every component carries a maturity label:
   - Hover: `shadow-lg`, subtle lift (`translate-y-[-2px]`, 200ms)
   - Focus-within: `ring-2 ring-red-500 ring-offset-2`
 
-#### Component 12: Featured Job Card `Stable`
+#### Component 12: Featured Job Card `Stable` (superseded by Part A §6)
 - **Background:** White
 - **Border-radius:** 8px (`rounded-lg`)
 - **Shadow:** `shadow-md`
@@ -499,7 +1025,7 @@ Every component carries a maturity label:
 - **Link:** Underline, `--color-body hover:text-red-500`
 - **States:** Same hover/focus pattern as Blog Card
 
-#### Component 13: Solution Card (Image Overlay) `Stable`
+#### Component 13: Solution Card (Image Overlay) `Stable` (superseded by Part A §6)
 - **Dimensions:** `w-[260px]` desktop, full-width mobile
 - **Shadow:** `shadow-md`
 - **Image:** Full card, `object-cover`
@@ -508,7 +1034,7 @@ Every component carries a maturity label:
 - **Hover:** `scale(1.05)`, 300ms ease-out
 - **Focus:** `ring-2 ring-red-500 ring-offset-2`
 
-#### Component 14: Info Card (Border-left) `Stable`
+#### Component 14: Info Card (Border-left) `Stable` (superseded by Part A §2 and §6)
 - **Border-left:** `2px solid neutral-200`
 - **Padding-left:** 24px (`pl-6`)
 - **Title:** H4, `--color-heading`
@@ -516,14 +1042,14 @@ Every component carries a maturity label:
 - **Description:** Body SM, `--color-body-muted`
 - **Animation:** Fade-up on scroll, staggered
 
-#### Component 15: Service Number Card `Stable`
+#### Component 15: Service Number Card `Stable` (superseded by Part A §6)
 - **Number badge:** `bg-red-500 text-white font-bold text-[28px]`, 48x56px
 - **Dashed connector:** `border-l-2 border-dashed neutral-300`, h-16
 - **Title:** H3, `--color-subheading`
 - **Subtitle:** Body, `--color-body`
 - **Description:** Body, `--color-body-muted`
 
-#### Component 16: Advantage Card (Hover Reveal) `Stable`
+#### Component 16: Advantage Card (Hover Reveal) `Stable` (superseded by Part A §6)
 - **Image:** Full card, `object-cover`
 - **Hover overlay:** `from-red-500/70` gradient
 - **Hover text:** Title + description fade-slide in
@@ -531,7 +1057,7 @@ Every component carries a maturity label:
 - **Keyboard:** Focusable, shows overlay on focus
 - **ARIA:** `role="article"`, content visible to screen readers regardless of hover state
 
-#### Component 17: Leader Card `Stable`
+#### Component 17: Leader Card `Stable` (superseded by Part A §6)
 - **Dimensions:** 300x400px
 - **Background:** Black (image container)
 - **Image:** Full cover, fades to 0 on hover
@@ -545,9 +1071,9 @@ Every component carries a maturity label:
 
 ---
 
-### 5.6 Form Elements
+### 5.6 Form Elements (superseded by Part A §8)
 
-#### Component 18: Text Input `Stable`
+#### Component 18: Text Input `Stable` (superseded by Part A §8)
 - **Height:** Auto (padding-based)
 - **Padding:** `p-3` (12px)
 - **Border:** `1px solid neutral-200`
@@ -570,7 +1096,7 @@ Every component carries a maturity label:
 - **ARIA:** `aria-describedby` for helper/error, `aria-invalid="true"` on error, `aria-required="true"` when required
 - **Keyboard:** Standard input behavior
 
-#### Component 19: Dark Input (Contact Form) `Stable`
+#### Component 19: Dark Input (Contact Form) `Stable` (superseded by Part A §8)
 - **Background:** Transparent
 - **Border:** `1px solid white`
 - **Text:** White
@@ -587,12 +1113,12 @@ Every component carries a maturity label:
 - **No results:** "No results found" message below input
 - **ARIA:** `role="search"`, `aria-label="Search"`
 
-#### Component 21: Textarea `Stable`
+#### Component 21: Textarea `Stable` (superseded by Part A §8)
 - **Height:** `h-40` (160px), resizable vertically
 - **Same styling as Text Input (light) or Dark Input per context**
 - **Character count recommended for forms**
 
-#### Component 22: Subscribe Input (Footer) `Stable`
+#### Component 22: Subscribe Input (Footer) `Stable` (superseded by Part A §1 and §8)
 - **Width:** Full on desktop, constrained by footer column
 - **Border:** `1px solid neutral-200`
 - **Border-radius:** 4px
@@ -628,7 +1154,7 @@ Every component carries a maturity label:
 - **Keyboard:** Escape to close, Tab cycles within dialog
 - **ARIA:** `role="dialog"`, `aria-modal="true"`, `aria-labelledby` → header
 
-#### Component 25: Floating Badge (Pill) `Stable`
+#### Component 25: Floating Badge (Pill) `Stable` (superseded by Part A §2)
 - **Dimensions:** `w-[262px] py-1`
 - **Border:** `1px solid red-500`
 - **Border-radius:** `49px` (pill)
@@ -637,7 +1163,7 @@ Every component carries a maturity label:
 - **Text:** Body (16px), `--color-subheading`
 - **Animation:** Slide-in from right, stagger base 400ms + 100ms per item
 
-#### Component 26: Testimonial Dot `Stable`
+#### Component 26: Testimonial Dot `Stable` (superseded by Part A §2 and §5)
 - **Container:** 44x44px touch target (transparent)
 - **Visual dot — Inactive:** 12x12px, `red-200`, `rounded-full`
 - **Visual dot — Active:** 20x20px, `red-500`, `rounded-full`
@@ -658,7 +1184,7 @@ Every component carries a maturity label:
   - End: Last item
 - **ARIA:** Button has `aria-expanded`, `aria-controls` → panel id. Panel has `role="region"`, `aria-labelledby` → button id
 
-#### Component 28: Consultation Box (Floating) `Stable`
+#### Component 28: Consultation Box (Floating) `Stable` (superseded by Part A §2)
 - **Background:** `red-500`
 - **Padding:** `p-8`
 - **Shadow:** `shadow-lg`
@@ -676,7 +1202,7 @@ Every component carries a maturity label:
 - **Keyboard:** Standard tab navigation
 - **ARIA:** `nav` with `aria-label="Pagination"`, current has `aria-current="page"`
 
-#### Component 30: Badge / Tag `Planned`
+#### Component 30: Badge / Tag `Planned` (superseded by Part A §2)
 - **Sizes:** SM (20px height), MD (24px height), LG (28px height)
 - **Variants:**
   - Filled: `bg-red-50 text-red-700`, `bg-navy-50 text-navy-700`
@@ -685,7 +1211,7 @@ Every component carries a maturity label:
 - **Padding:** `px-3 py-0.5`
 - **Usage:** Job categories, blog tags, case study filters
 
-#### Component 31: Alert Banner `Planned`
+#### Component 31: Alert Banner `Planned` (superseded by Part A §2)
 - **Full-width or contained**
 - **Variants:** Success, Warning, Error, Info — uses semantic color triad (bg/text/border)
 - **Layout:** Icon (left) + Message + optional action (right) + optional dismiss (X)
@@ -719,20 +1245,20 @@ Every component carries a maturity label:
 
 ### 5.8 Media & Layout
 
-#### Component 35: Image with Hover Zoom `Stable`
+#### Component 35: Image with Hover Zoom `Stable` (superseded by Part A §5 and §8)
 - **Container:** `overflow-hidden rounded-lg`
 - **Image:** `object-cover w-full h-full`
 - **Hover:** `scale(1.05)`, 300ms ease-out
 - **Focus:** Same scale as hover (for keyboard users on linked images)
 
-#### Component 36: Swap Grid `Stable`
+#### Component 36: Swap Grid `Stable` (superseded by Part A §5)
 - **Layout:** 3 rows — full-width / 2-col split / full-width
 - **Heights:** 200px (full rows), 130px (split row)
 - **Split ratio:** `flex-[2]` / `flex-1`
 - **Gap:** 16px (`gap-4`)
 - **Interaction:** 1-second hover timer swaps image to top position
 
-#### Component 37: Partner Logo Marquee `Stable`
+#### Component 37: Partner Logo Marquee `Stable` (superseded by Part A §5)
 - **Container:** `h-[50px]`, masked edges (gradient fade)
 - **Items:** `w-[120px] h-[50px]`, absolutely positioned
 - **Animation:** `scrollLeft` keyframe, 30s linear infinite
@@ -740,7 +1266,7 @@ Every component carries a maturity label:
 - **Reduced motion:** Static grid fallback, no animation
 - **ARIA:** `aria-label="Our Partners"`, individual logos have `alt` text
 
-#### Component 38: Testimonial Slider `Stable`
+#### Component 38: Testimonial Slider `Stable` (superseded by Part A §5)
 - **Engine:** react-slick
 - **Layout:** 2-column (image | content) on desktop, stacked on mobile
 - **Image:** Circular on mobile (150x150), full-height on desktop
@@ -751,7 +1277,7 @@ Every component carries a maturity label:
 - **ARIA:** `role="region"`, `aria-label="Client testimonials"`, `aria-live="polite"` for auto-advance
 - **Reduced motion:** Autoplay disabled, instant transitions
 
-#### Component 39: Footer `Stable`
+#### Component 39: Footer `Stable` (superseded by Part A §1)
 - **Background:** White
 - **Layout:** 4-column grid on desktop, stacked on mobile
 - **Columns:** Logo/Contact | Pages | Access | Subscribe
@@ -843,7 +1369,7 @@ Standardized verb hierarchy for buttons:
 | Info Cards | 1-col | 2-col | 2-col (in 2/3) | Solutions |
 | Leader Cards | 1-col | 2-col | 3-col | Leadership |
 
-### 7.3 Common Layout Templates
+### 7.3 Common Layout Templates (superseded by Part A §4 and §11)
 
 ```
 Full-bleed hero:
@@ -867,9 +1393,9 @@ Alternating content (image left/right):
 
 ---
 
-## 8. Animation & Motion
+## 8. Animation & Motion (superseded by Part A §5)
 
-### 8.1 Easing Curves
+### 8.1 Easing Curves (superseded by Part A §5)
 
 | Token | Value | Usage |
 |-------|-------|-------|
@@ -878,7 +1404,7 @@ Alternating content (image left/right):
 | `ease-enter` | `cubic-bezier(0, 0, 0.3, 1)` | Elements appearing (modals, toasts, dropdowns) |
 | `ease-exit` | `cubic-bezier(0.4, 0, 1, 1)` | Elements leaving (modal close, toast dismiss) |
 
-### 8.2 Duration Scale
+### 8.2 Duration Scale (superseded by Part A §5)
 
 | Token | Value | Usage |
 |-------|-------|-------|
@@ -889,7 +1415,7 @@ Alternating content (image left/right):
 | `duration-slow` | 450ms | Scroll-reveal entrance |
 | `duration-slower` | 600ms | Hero/page-level reveals |
 
-### 8.3 Scroll-Reveal System
+### 8.3 Scroll-Reveal System (superseded by Part A §5)
 
 Uses custom `useInView` hook (IntersectionObserver, threshold 0.1):
 
@@ -900,7 +1426,7 @@ Uses custom `useInView` hook (IntersectionObserver, threshold 0.1):
 
 > **Change from v1.0:** Translate distance reduced from 50px to **30px** for subtlety. Large translate distances feel sluggish.
 
-### 8.4 Stagger Pattern (Revised)
+### 8.4 Stagger Pattern (Revised) (superseded by Part A §5)
 
 v1.0 used 800ms-2200ms delays (users wait 2.2s for last element). **Revised to industry-standard timing:**
 
@@ -918,7 +1444,7 @@ v1.0 used 800ms-2200ms delays (users wait 2.2s for last element). **Revised to i
 **Stagger increment:** 100ms between siblings
 **Max total choreography:** 800ms (no user should wait longer than this for all content to appear)
 
-### 8.5 Interaction Animations
+### 8.5 Interaction Animations (superseded by Part A §5)
 
 | Interaction | Property | Duration | Easing | Enter | Exit |
 |-------------|----------|----------|--------|-------|------|
@@ -933,7 +1459,7 @@ v1.0 used 800ms-2200ms delays (users wait 2.2s for last element). **Revised to i
 | Toast enter | `translateY(100%)→0` | 300ms | `ease-enter` | — | Fade out 200ms |
 | Marquee | `translateX` | 30s | `linear infinite` | — | — |
 
-### 8.6 Motion Principles
+### 8.6 Motion Principles (superseded by Part A §5)
 
 1. **Enter from bottom or right.** Never from top (feels like falling) or left (fights reading direction).
 2. **Exit by fading.** Elements leave by fading out, not sliding out. Simpler, less distracting.
@@ -942,7 +1468,7 @@ v1.0 used 800ms-2200ms delays (users wait 2.2s for last element). **Revised to i
 5. **One motion per element.** Don't combine scale + translate + rotate. Pick one transform.
 6. **Respect `prefers-reduced-motion`.** Disable transforms entirely. Keep opacity fades but make them instant.
 
-### 8.7 Reduced Motion
+### 8.7 Reduced Motion (superseded by Part A §5)
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -966,7 +1492,7 @@ v1.0 used 800ms-2200ms delays (users wait 2.2s for last element). **Revised to i
 - **Testing tools:** axe-core, Lighthouse Accessibility, manual keyboard testing
 - **Screen readers:** VoiceOver (Mac/iOS), NVDA (Windows)
 
-### 9.2 Color Contrast
+### 9.2 Color Contrast (superseded by Part A §2)
 
 | Combination | Ratio | Standard | Status |
 |-------------|-------|----------|--------|
@@ -980,7 +1506,7 @@ v1.0 used 800ms-2200ms delays (users wait 2.2s for last element). **Revised to i
 | White on `surface-dark` | 13.1:1 | 4.5:1 | **PASS** |
 | White on `overlay-dark` | Variable | — | **AUDIT per image** |
 
-### 9.3 Keyboard Navigation
+### 9.3 Keyboard Navigation (focus indicator superseded by Part A §8)
 
 **Global requirements:**
 - All interactive elements reachable via Tab
@@ -1041,7 +1567,7 @@ v1.0 used 800ms-2200ms delays (users wait 2.2s for last element). **Revised to i
 
 ---
 
-## 10. Design Tokens (JSON) — Three-Tier Architecture
+## 10. Design Tokens (JSON) — Three-Tier Architecture (superseded by Part A §2 and §5)
 
 ```json
 {
@@ -1281,7 +1807,7 @@ v1.0 used 800ms-2200ms delays (users wait 2.2s for last element). **Revised to i
 
 ---
 
-## 11. CSS Custom Properties
+## 11. CSS Custom Properties (superseded by Part A §2 and §5)
 
 ```css
 :root {
@@ -1517,7 +2043,7 @@ v1.0 used 800ms-2200ms delays (users wait 2.2s for last element). **Revised to i
 
 ---
 
-## 12. Figma Implementation Guide
+## 12. Figma Implementation Guide (superseded by Part A §2 and §3)
 
 ### 12.1 Text Styles
 

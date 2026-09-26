@@ -207,6 +207,7 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
   let beats = measureBeats();
   let frame = 0;
   let lastPillar = -1;
+  let lastNarrow: boolean | null = null;
   let lastBeat = -2;
 
   const pin = document.querySelector<HTMLElement>('[data-beat="4"] [data-pin]');
@@ -239,17 +240,34 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
     // Below lg the copy runs full width over the object in every beat after
     // the hero, so the Core recedes to a texture there.
     const narrow = window.innerWidth < 1024;
+    // Below lg, from the turning point to the end of the pillars, the beats
+    // carry the curve and the four objects as stills; the live Core fades out
+    // there rather than showing the same object twice behind the copy. The
+    // fade runs on the turning point's own entry, because on a phone that
+    // section is on screen while the timeline is still on the hero and the
+    // short trust strip: it is gone by the time the section is 40 % up.
+    const turning = beats.find((b) => b.beat === 2);
+    const turnEntry = turning ? Math.min(1, Math.max(0, 1 - (turning.top - scrollY) / vh)) : 0;
+    const carryIn = Math.min(1, turnEntry / 0.4);
+    const stillsCarry =
+      narrow && sample.vh < BEAT_START_VH[5] + 30 ? carryIn * carryIn * (3 - 2 * carryIn) : 0;
     store.opacity =
       (narrow && sample.vh > 60
         ? sample.opacity * Math.max(0.35, 1 - (sample.vh - 60) / 60) * (1 - 0.4 * store.askEntry)
-        : sample.opacity) * leaving;
+        : sample.opacity) *
+      leaving *
+      (1 - stillsCarry);
     if (sample.vh > BEAT_START_VH[2]) store.scrolledPastArrival = true;
 
-    if (pin && sample.pillar !== lastPillar) {
+    // Below lg every row is open and none is active, so no link is
+    // "current" there; a screen reader would otherwise hear a state the page
+    // does not show.
+    if (pin && (sample.pillar !== lastPillar || narrow !== lastNarrow)) {
       lastPillar = sample.pillar;
+      lastNarrow = narrow;
       pin.dataset.active = String(sample.pillar);
       pillarLinks.forEach((link, i) => {
-        if (i === sample.pillar) link.setAttribute("aria-current", "true");
+        if (!narrow && i === sample.pillar) link.setAttribute("aria-current", "true");
         else link.removeAttribute("aria-current");
       });
     }

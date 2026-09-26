@@ -78,6 +78,9 @@ const sharedUniforms = (texture: DataTexture, tier: Tier) => ({
   // from. Both are 1 on Tier A.
   uEmberHalo: { value: tier === "A" ? 1 : tierB.emberHalo },
   uGain: { value: tier === "A" ? 1 : tierB.gain },
+  // Lift for the graphite structure of a formed object (the pillars, the
+  // curve); ember is untouched. Written each frame by the scene.
+  uStruct: { value: 1 },
 });
 
 export function buildCore(data: CoreWorkerResult, tier: Tier, dpr: number): CoreHandles {

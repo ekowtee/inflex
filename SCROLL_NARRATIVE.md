@@ -183,7 +183,7 @@ For every beat the specification is the same five things: the question it answer
 - **Question:** Why should I believe you? **Trust is won here.**
 - **Reveal:** (1) eyebrow `02 — Proof`, (2) H2, (3) two case cards side by side, each with its red left border drawing top to bottom, (4) the counter row, (5) exit.
 - **Copy:**
-  - H2: **We have done this at national scale. Twice.** **(new)**
+  - H2: **Trusted with national infrastructure.** (approved, owner, 25 September 2026; replaces "We have done this at national scale. Twice.", which read as two finished projects while Project UBIA is under way)
   - Card A, eyebrow `2014 · Delivered`: **Blu Telecommunications** — "Ghana's new broadband entrant needed a national 4G LTE core network and a Tier III data centre, under startup pressure and aggressive timelines. We led it from scoping and vendor evaluation to a live commercial pilot — at 50 Mbps per device, a national benchmark at launch." (condensed from `data.ts`, id 2)
   - Card B, eyebrow `2026 · In progress · Accra Digital Centre`: **MTN Ghana, Project UBIA** — "Lead independent ICT consultant for a Tier III data centre and Industry 5.0 innovation hub, for the Ministry of Communication, Digital Technology and Innovation. Architecture, data centre design, and delivery oversight — under way on site today." (condensed from `data.ts`, id 1; last clause **new**)
   - Counters, Telemetry style: `2012` Founded in Accra · `80+` Years combined experience · `30+` Enterprise clients (approved figures; 30+ from 23 September 2026)
@@ -215,7 +215,7 @@ For every beat the specification is the same five things: the question it answer
 - **Question:** Why you and not the others I am comparing?
 - **Reveal:** (1) eyebrow `04 — Why Inflexions`, (2) H2, (3) the ledger: three lines on the left that strike through as they enter, three lines on the right that reveal after each strike, (4) the intelligence row, (5) exit.
 - **Copy** (from the brand book's "What we are NOT / What we ARE", currently unused anywhere on the site):
-  - H2: **Not a reseller. Not a generalist. Not a lock-in.** **(new, assembled from approved)**
+  - H2: **What you get when you hire engineers instead of a sales team.** (approved, owner, 25 September 2026; COPY_DECK.md Variant B, replacing "Not a reseller. Not a generalist. Not a lock-in.", which repeated the struck-through ledger lines beneath it)
   - Ledger, left column, struck through as they enter:
     - "A reseller putting logos on boxes."
     - "A generalist that outsources the real work."
@@ -316,7 +316,7 @@ At a typical scroll pace the journey is 75 to 95 seconds. Total copy on the page
 | 2 | Body | Legacy systems drain budget. Threats escalate. Data exists everywhere and informs nothing. Most vendors add products. We integrate — so network, cloud, security and data work as one intelligent system. | Fact |
 | 2 | Exit | How we integrate → | A |
 | 3 | Eyebrow | 02 — Proof | A |
-| 3 | H2 | We have done this at national scale. Twice. | Fact |
+| 3 | H2 | Trusted with national infrastructure. | Fact (approved 25 September 2026) |
 | 3 | Card A | Blu Telecommunications, 2014 · Delivered. A new broadband entrant needed a national 4G LTE core and a Tier III data centre, on startup timelines. We led it from scoping and vendor evaluation to a live commercial pilot — 50 Mbps per device, the national benchmark at launch. | Fact |
 | 3 | Card A footer | Scoping · Vendor evaluation · Core build · NOC and BSS/OSS · Commercial pilot | Fact |
 | 3 | Card B | MTN Ghana, Project UBIA, 2026 · In progress · Accra Digital Centre. Lead independent ICT consultant for a Tier III data centre and Industry 5.0 innovation hub, for the Ministry of Communication, Digital Technology and Innovation. Architecture, data centre design and delivery oversight — under way on site today. | Fact |
@@ -329,7 +329,7 @@ At a typical scroll pace the journey is 75 to 95 seconds. Total copy on the page
 | 4 | Rows | Four value propositions | Approved (brand book Tier 2) |
 | 4 | Partner lines | Per row, from SolutionPartners | Existing data |
 | 5 | Eyebrow | 04 — Why Inflexions | A |
-| 5 | H2 | Not a reseller. Not a generalist. Not a lock-in. | Fact |
+| 5 | H2 | What you get when you hire engineers instead of a sales team. | Approved 25 September 2026 |
 | 5 | Ledger left | A reseller putting logos on boxes. / A generalist that outsources the real work. / A vendor that locks you in and layers on cost. | Approved (brand book 1.2) |
 | 5 | Ledger right | Engineering-led. 80+ years of combined integration experience, and the architects do the work. / Vendor-neutral. The architecture serves your business, not a vendor's quota. / Privately owned. Zero bureaucracy. Personal accountability. Faster than firms five times our size. | Fact |
 | 5 | AI row | AI in every layer · Intelligence is not a feature. It is the fabric. · Predictive Analytics · Process Automation · Data Strategy & Architecture · AI Integration | A; terms existing |

@@ -157,6 +157,7 @@ export const edgesFragment = stripGlsl(/* glsl */ `
   uniform float uEmberPass;
   uniform float uEncodeSRGB;
   uniform float uGain;
+  uniform float uStruct;
 
   out vec4 fragColor;
 
@@ -176,6 +177,9 @@ export const edgesFragment = stripGlsl(/* glsl */ `
     float hot = smoothstep(0.5, 1.0, vHot);
     vec3 color = mix(mix(uGraphite, uSilver300, vShade) * 0.85, uEmber, hot);
     float alpha = mix(0.45, 0.6, hot);
+    // The formed object's structure lifts with its nodes (nodes.ts).
+    color *= mix(1.0, uStruct, 1.0 - hot);
+    alpha *= mix(1.0, 0.5 + 0.5 * uStruct, 1.0 - hot);
     alpha *= 1.0 + 0.6 * vProx * uProximity;
 
     float fog = 1.0 - exp(-uFogDensity * uFogDensity * vDepth * vDepth);

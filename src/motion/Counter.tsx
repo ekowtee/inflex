@@ -2,13 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import { prefersReducedMotion } from "./loadMotion";
+import { duration as motionDuration } from "./tokens";
 
 export interface CounterProps {
   /** The number to count to. */
   value: number;
   prefix?: string;
   suffix?: string;
-  /** Count duration in ms. Defaults to 1200. */
+  /** Count duration in ms. Defaults to the scene token (900). The 1.2 s in
+   *  §8.2 broke §10.2's one-second ceiling and was not a token. */
   duration?: number;
   className?: string;
   /** Decimal places. Defaults to 0. */
@@ -31,7 +33,7 @@ export default function Counter({
   value,
   prefix = "",
   suffix = "",
-  duration = 1200,
+  duration = motionDuration.scene,
   className = "",
   decimals = 0,
 }: CounterProps) {
@@ -81,9 +83,19 @@ export default function Counter({
 
   return (
     <span ref={ref} className={`tabular-nums ${className}`.trim()}>
-      {prefix}
-      {display.toFixed(decimals)}
-      {suffix}
+      {/* A screen reader in browse mode can reach the number before it has
+          scrolled into view, and would read the server-rendered 0. It gets
+          the final value; the count is for the eye only. */}
+      <span aria-hidden="true">
+        {prefix}
+        {display.toFixed(decimals)}
+        {suffix}
+      </span>
+      <span className="sr-only">
+        {prefix}
+        {value.toFixed(decimals)}
+        {suffix}
+      </span>
     </span>
   );
 }

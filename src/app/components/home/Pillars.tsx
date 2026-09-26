@@ -17,7 +17,10 @@
  *
  * Below lg there is no pin and no active row: every row is open, the
  * attribute is ignored, and each is preceded by its formation poster. The
- * posters are captured from the real scene, one per formation.
+ * posters are captured from the real scene, one per formation, and show
+ * whether or not the Core is live: below lg the live Core is only a faint
+ * texture behind the copy, so the posters are what anchor each pillar
+ * (owner, 25 September 2026).
  */
 import Image from "next/image";
 import Link from "next/link";
@@ -100,7 +103,9 @@ export default function Pillars() {
           <div className="lg:grid lg:grid-cols-2 lg:gap-16">
             {/* Left column. The right is the Core's. */}
             <div>
-              <Reveal as="p" className="type-eyebrow text-silver-500">
+              {/* The chapter's heading, set as an eyebrow: the rows below
+                  are its h3s. */}
+              <Reveal as="h2" className="type-eyebrow text-silver-500">
                 Four Pillars. Zero Gaps.
               </Reveal>
 
@@ -116,7 +121,7 @@ export default function Pillars() {
                         (network fabric, shield, nebula, plane). */}
                     <div
                       data-pillar-poster
-                      className="relative mb-6 h-[56vw] w-full overflow-hidden lg:hidden [html[data-core-live]_&]:hidden"
+                      className="relative mb-6 h-[56vw] w-full overflow-hidden lg:hidden [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_100%)]"
                     >
                       <Image
                         src={`/three/posters/f${i + 1}-lit-mobile.webp`}
@@ -137,7 +142,7 @@ export default function Pillars() {
                           href={pillar.href}
                           data-pillar-link={i}
                           aria-current={i === 0 ? "true" : undefined}
-                          className="transition-colors duration-[var(--motion-duration-micro)] ease-[var(--motion-ease-out)] hover:text-white"
+                          className="underline decoration-transparent decoration-1 underline-offset-[6px] transition-[text-decoration-color] duration-[var(--motion-duration-micro)] ease-[var(--motion-ease-out)] hover:decoration-silver-100"
                         >
                           {pillar.name}
                         </Link>
