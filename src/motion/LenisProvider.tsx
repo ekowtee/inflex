@@ -33,6 +33,15 @@ export default function LenisProvider() {
         syncTouch: false,
       });
 
+      // Belt and braces for Lenis's own resize tracking: re-measure whenever
+      // the body changes size and once more when the page has loaded, so its
+      // scroll limit can never lag the real page and stop the wheel short of
+      // the footer (owner report, 26 September 2026; not reproduced).
+      const measure = () => lenis.resize();
+      const bodyObserver = typeof ResizeObserver === "function" ? new ResizeObserver(measure) : null;
+      bodyObserver?.observe(document.body);
+      window.addEventListener("load", measure);
+
       const raf = (time: number) => lenis.raf(time * 1000);
       gsap.ticker.add(raf);
       gsap.ticker.lagSmoothing(0);
@@ -53,6 +62,8 @@ export default function LenisProvider() {
 
       cleanup = () => {
         document.removeEventListener("click", onClick);
+        bodyObserver?.disconnect();
+        window.removeEventListener("load", measure);
         gsap.ticker.remove(raf);
         lenis.destroy();
       };

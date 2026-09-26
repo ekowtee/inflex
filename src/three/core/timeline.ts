@@ -242,11 +242,15 @@ export function attachTimeline(options: TimelineOptions = {}): () => void {
     const narrow = window.innerWidth < 1024;
     // Below lg, from the turning point to the end of the pillars, the beats
     // carry the curve and the four objects as stills; the live Core fades out
-    // there rather than showing the same object twice behind the copy.
+    // there rather than showing the same object twice behind the copy. The
+    // fade runs on the turning point's own entry, because on a phone that
+    // section is on screen while the timeline is still on the hero and the
+    // short trust strip: it is gone by the time the section is 40 % up.
+    const turning = beats.find((b) => b.beat === 2);
+    const turnEntry = turning ? Math.min(1, Math.max(0, 1 - (turning.top - scrollY) / vh)) : 0;
+    const carryIn = Math.min(1, turnEntry / 0.4);
     const stillsCarry =
-      narrow && sample.vh < BEAT_START_VH[5] + 30
-        ? Math.min(1, Math.max(0, (sample.vh - BEAT_START_VH[2]) / 20))
-        : 0;
+      narrow && sample.vh < BEAT_START_VH[5] + 30 ? carryIn * carryIn * (3 - 2 * carryIn) : 0;
     store.opacity =
       (narrow && sample.vh > 60
         ? sample.opacity * Math.max(0.35, 1 - (sample.vh - 60) / 60) * (1 - 0.4 * store.askEntry)
